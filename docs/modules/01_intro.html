@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jelmer Poelstra">
+
+<title>Intro</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">RNAseq data analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Overview</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../modules/01_intro.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Computing skills</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-computing-skills">    
+        <li class="dropdown-header">OSC [TBA]</li>
+        <li class="dropdown-header">VS Code [TBA]</li>
+        <li class="dropdown-header">The Unix shell [TBA]</li>
+        <li class="dropdown-header">Shell scripting [TBA]</li>
+        <li class="dropdown-header">Software at OSC [TBA]</li>
+        <li class="dropdown-header">SLURM compute jobs [TBA]</li>
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-from-reads-to-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">From reads to counts</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-from-reads-to-counts">    
+        <li class="dropdown-header">Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
+        <li class="dropdown-header">Trimming with <code>TrimGalore</code> [TBA]</li>
+        <li class="dropdown-header">rRNA removal with <code>SortMeRNA</code> [TBA]</li>
+        <li class="dropdown-header">Alignment with <code>STAR</code> [TBA]</li>
+        <li class="dropdown-header">Counting with <code>Salmon</code> [TBA]</li>
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-analyzing-the-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Analyzing the counts</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-analyzing-the-counts">    
+        <li class="dropdown-header">Creating a DESeq2 object [TBA]</li>
+        <li class="dropdown-header">PCA [TBA]</li>
+        <li class="dropdown-header">Differential expression analysis [TBA]</li>
+        <li class="dropdown-header">GO enrichment analysis [TBA]</li>
+        <li class="dropdown-header">KEGG enrichment analysis [TBA]</li>
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#rnaseq-data-analysis" id="toc-rnaseq-data-analysis" class="nav-link active" data-scroll-target="#rnaseq-data-analysis">RNAseq data analysis</a>
+  <ul class="collapse">
+  <li><a href="#part-i-from-reads-to-count-table" id="toc-part-i-from-reads-to-count-table" class="nav-link" data-scroll-target="#part-i-from-reads-to-count-table">Part I: From reads to count table</a></li>
+  <li><a href="#part-ii-analyzing-the-count-table" id="toc-part-ii-analyzing-the-count-table" class="nav-link" data-scroll-target="#part-ii-analyzing-the-count-table">Part II: Analyzing the count table</a></li>
+  </ul></li>
+  <li><a href="#what-well-cover" id="toc-what-well-cover" class="nav-link" data-scroll-target="#what-well-cover">What we’ll cover</a>
+  <ul class="collapse">
+  <li><a href="#computing-skills" id="toc-computing-skills" class="nav-link" data-scroll-target="#computing-skills">Computing skills</a></li>
+  <li><a href="#analysis-part-i-from-sequence-reads-to-gene-counts" id="toc-analysis-part-i-from-sequence-reads-to-gene-counts" class="nav-link" data-scroll-target="#analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</a></li>
+  <li><a href="#analysis-part-ii-analyzing-gene-counts-in-r" id="toc-analysis-part-ii-analyzing-gene-counts-in-r" class="nav-link" data-scroll-target="#analysis-part-ii-analyzing-gene-counts-in-r">Analysis part II: Analyzing gene counts in R</a></li>
+  </ul></li>
+  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link" data-scroll-target="#workflow-overview">Workflow overview</a></li>
+  <li><a href="#data-source-and-workflow-variations" id="toc-data-source-and-workflow-variations" class="nav-link" data-scroll-target="#data-source-and-workflow-variations">Data source and workflow variations</a>
+  <ul class="collapse">
+  <li><a href="#reference-based-versus-de-novo-workflows" id="toc-reference-based-versus-de-novo-workflows" class="nav-link" data-scroll-target="#reference-based-versus-de-novo-workflows">Reference-based versus <em>de novo</em> workflows</a></li>
+  <li><a href="#gene-level-versus-transcript-level-counts-and-short-versus-long-reads" id="toc-gene-level-versus-transcript-level-counts-and-short-versus-long-reads" class="nav-link" data-scroll-target="#gene-level-versus-transcript-level-counts-and-short-versus-long-reads">Gene-level versus transcript-level counts, and short versus long reads</a></li>
+  <li><a href="#bulk-versus-single-cell-rnaseq" id="toc-bulk-versus-single-cell-rnaseq" class="nav-link" data-scroll-target="#bulk-versus-single-cell-rnaseq">“Bulk” versus single-cell RNAseq</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/x/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">RNAseq data analysis: introduction</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jelmer Poelstra </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<p><br></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Personal introductions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In our round of personal introductions, please mention:</p>
+<ul>
+<li>Your level of experience, if any, with genomic data</li>
+<li>Your level of experience, if any, with the Unix command line, R, and possibly other programming languages</li>
+<li>Your currently planned or ongoing projects, if any, that involve genomic data</li>
+<li>Your longer-term ambitions, if any, for working with genomic data or using programming skills</li>
+<li>What you’re particularly interested in learning here (if you know!)</li>
+</ul>
+</div>
+</div>
+<p><br></p>
+<section id="rnaseq-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="rnaseq-data-analysis">RNAseq data analysis</h2>
+<p>RNAseq data analysis can be divided into two main parts:</p>
+<ul>
+<li><p>A <em>bioinformatics-heavy part</em> in which you generate <strong>gene counts from the raw reads</strong>.</p></li>
+<li><p>A more <em>statistical part</em> in which you <strong>analyze the count table</strong> to create lists of differentially expressed genes and enriched functional categories.</p></li>
+</ul>
+<p><br></p>
+<section id="part-i-from-reads-to-count-table" class="level3">
+<h3 class="anchored" data-anchor-id="part-i-from-reads-to-count-table">Part I: From reads to count table</h3>
+<p>This part starts with the raw reads from the (typically Illumina) sequencing machine to eventually generate a table with expression counts for each gene by each sample. This part:</p>
+<ul>
+<li><p>Is usually done by <strong>sequentially running a series of programs with a command-line interface (CLI).</strong> Therefore, you typically use the Unix shell (command line) and shell scripts to do this.</p></li>
+<li><p>Processes large amounts of data, and is generally not suitable to be run on a laptop or a desktop computer: you should <strong>use a high-performance computing (HPC) center or cloud computing</strong>. (We will use the Ohio Supercomputer Center, OSC.)</p></li>
+<li><p>Is quite <strong>standardized</strong> and therefore, a “<em>pipeline</em>” written for one dataset can be run for another one with minor changes, even if the datasets are from completely different experiments or different species.</p></li>
+</ul>
+<p><br></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because of the required technical skills and computing infrastructure, in combination with the standardized execution, there are some alternatives available to doing this by yourself step-by-step<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<ul>
+<li><p>Companies and university bioinformatics core facilities may be able to simply <strong>run this part for you</strong>.</p></li>
+<li><p>Services with graphical user interfaces (GUIs) are available, such as <strong><a href="https://usegalaxy.org/">Galaxy</a></strong>.<br>
+These run the same command-line programs, but wrap their execution in a more user-friendly way.</p></li>
+</ul>
+<p><strong>Such options are especially worth considering when you have no plans or ambitions to do much other genomics work in the future – in other words, it may not be worth learning all the required technical skills just for one project.</strong></p>
+<p>When you plan to do multiple genomics projects and/or are generally interested in gaining computing skills, it’s better to go ahead and learn to run these command-line programs yourself.</p>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="part-ii-analyzing-the-count-table" class="level3">
+<h3 class="anchored" data-anchor-id="part-ii-analyzing-the-count-table">Part II: Analyzing the count table</h3>
+<p>In this part, you will analyze the table with gene counts for each sample, for example to test for differential expression among groups (e.g., different treatments) and to test whether certain functional (GO, KEGG) gene categories have distinct expression patterns as a whole.</p>
+<p>This part:</p>
+<ul>
+<li><p>Is typically run entirely in R, using a number of specialized R “packages”.</p></li>
+<li><p>Is not particularly “compute-intensive”: your count table is a text file of typically only a few Mb, and the analyses you’re running do not need much time or computer memory. As such, you can run this on your laptop or desktop computer. (Though we will do it at OSC, mainly for the sake of continuity.)</p></li>
+<li><p>Is much less standardized across projects: the details of the analysis depend a lot on your experimental design and what you’re interested in; in addition, initial results may influence your next steps, and so on.</p></li>
+</ul>
+<p><br><br></p>
+</section>
+</section>
+<section id="what-well-cover" class="level2">
+<h2 class="anchored" data-anchor-id="what-well-cover">What we’ll cover</h2>
+<p><em>Note: we can tweak this based on your interests!</em></p>
+<section id="computing-skills" class="level3">
+<h3 class="anchored" data-anchor-id="computing-skills">Computing skills</h3>
+<p>Many of these computing skills are needed only for part I below.</p>
+<ul>
+<li>Introduction to the Ohio Supercomputer Center (OSC)</li>
+<li>The VS Code (Code Server) text editor / IDE</li>
+<li>Introduction to the Unix shell (“command line” / “Bash”)</li>
+<li>Shell scripts and loops</li>
+<li>The <code>SLURM</code> compute job scheduler</li>
+<li>Using and installing software at OSC</li>
+<li>Project organization and reproducibility</li>
+<li>Introduction to R??</li>
+</ul>
+<p><br></p>
+</section>
+<section id="analysis-part-i-from-sequence-reads-to-gene-counts" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</h3>
+<ul>
+<li>Genomic file formats relevant to RNAseq: FASTA, FASTQ, BAM/SAM, GFF<br>
+</li>
+<li>Raw read QC with <code>FastQC</code> and <code>MultiQC</code></li>
+<li>Read pre-processing with <code>TrimGalore</code> and <code>SortMeRNA</code></li>
+<li>Read alignment to a reference genome with <code>STAR</code></li>
+<li>Alignment QC with (at least) <code>MultiQC</code></li>
+<li>Gene expression counting with <code>Salmon</code></li>
+</ul>
+<p><br></p>
+</section>
+<section id="analysis-part-ii-analyzing-gene-counts-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-part-ii-analyzing-gene-counts-in-r">Analysis part II: Analyzing gene counts in R</h3>
+<ul>
+<li>Getting an overview of sample/group distinctiveness with a PCA</li>
+<li>Differential expression analysis with <code>{DESeq2}</code></li>
+<li>KEGG and GO enrichment analysis with <code>{ClusterProfiler}</code></li>
+</ul>
+<p><br><br></p>
+</section>
+</section>
+<section id="workflow-overview" class="level2">
+<h2 class="anchored" data-anchor-id="workflow-overview">Workflow overview</h2>
+<p align="center">
+<img src="img/workflow.png" width="85%">
+</p>
+<p><br><br></p>
+</section>
+<section id="data-source-and-workflow-variations" class="level2">
+<h2 class="anchored" data-anchor-id="data-source-and-workflow-variations">Data source and workflow variations</h2>
+<section id="reference-based-versus-de-novo-workflows" class="level3">
+<h3 class="anchored" data-anchor-id="reference-based-versus-de-novo-workflows">Reference-based versus <em>de novo</em> workflows</h3>
+<p>We will cover a **“reference-based” RNAseq workflow: one where your focal organism has a reference genome assembly and annotation. “De novo” RNAseq workflows are necessary when you don’t have a reference genome. They are overall similar, but more time-consuming and bioinformatics-heavy, since you will first have to assemble a transcriptome from the RNAseq data itself.</p>
+</section>
+<section id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads" class="level3">
+<h3 class="anchored" data-anchor-id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads">Gene-level versus transcript-level counts, and short versus long reads</h3>
+<p>We will focus on generating and analyzing <strong>gene-level counts</strong> rather than transcript-level counts: that is, for each sample, we will obtain a single count for each gene even if that gene has multiple transcripts (isoforms). However, the program which we’ll use for counting (<code>Salmon</code>) can also generate transcript-level counts, and downstream transcript-level analysis is fairly similar too, though this certainly adds a level of complexity.</p>
+<p>Additionally, we will use short-read (Illumina) sequencing data, for which transcript-level counts have much greater levels of uncertainty, since most reads cannot directly be assigned to a specific transcript. Consider using long reads, such as <a href="https://www.pacb.com/products-and-services/applications/rna-sequencing/">PacBio IsoSeq</a>, if you’re interested in transcript-level inferences.</p>
+</section>
+<section id="bulk-versus-single-cell-rnaseq" class="level3">
+<h3 class="anchored" data-anchor-id="bulk-versus-single-cell-rnaseq">“Bulk” versus single-cell RNAseq</h3>
+<p>We will focus on “bulk” RNAseq, where RNA was extracted from a large mixture of cells and possibly cell types. Single-cell RNAseq analysis is similar for the first part (generating counts), but differs more in the second part (count analysis).</p>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Additionally, you can run standardized pipelines yourself, which wrap many individual steps into a single executable workflow. This especially becomes a time-efficient option once you know the computing basics, and also aids with reproducibility and following best-practices. For example, for RNAseq there is a <a href="https://nf-co.re/rnaseq">Nextflow nf-core RNAseq pipeline</a>. The steps we will run fill follow this pipeline closely – but in my opinion, for initial learning, it is better to go step-by-step without a formalized pipeline.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">2023, Jelmer Poelstra</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/x">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

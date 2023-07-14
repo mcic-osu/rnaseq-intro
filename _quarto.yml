@@ -1,0 +1,50 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "RNAseq data analysis"
+  repo-url: https://github.com/mcic-osu/x
+  repo-actions: [issue]
+  navbar:
+    search: true
+    left:
+      - href: index.qmd
+        text: Overview
+      - href: modules/01_intro.qmd
+        text: Introduction
+      - text: Computing skills
+        menu: 
+          - text: OSC [TBA]
+          - text: VS Code [TBA]
+          - text: The Unix shell [TBA]
+          - text: Shell scripting [TBA]
+          - text: Software at OSC [TBA]
+          - text: SLURM compute jobs [TBA]
+      - text: From reads to counts
+        menu:
+          - text: Read QC with `FastQC` and `MultiQC` [TBA]
+          - text: Trimming with `TrimGalore` [TBA]
+          - text: rRNA removal with `SortMeRNA` [TBA]
+          - text: Alignment with `STAR` [TBA]
+          - text: Counting with `Salmon` [TBA]
+      - text: Analyzing the counts
+        menu:
+          - text: Creating a DESeq2 object [TBA]
+          - text: PCA [TBA]
+          - text: Differential expression analysis [TBA]
+          - text: GO enrichment analysis [TBA]
+          - text: KEGG enrichment analysis [TBA] 
+    right:
+      - about.qmd
+  page-footer:
+    left: "2023, Jelmer Poelstra"
+    right:
+      - icon: github
+        href: https://github.com/mcic-osu/x
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true

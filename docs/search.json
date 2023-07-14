@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "modules/01_intro.html#rnaseq-data-analysis",
+    "href": "modules/01_intro.html#rnaseq-data-analysis",
+    "title": "RNAseq data analysis: introduction",
+    "section": "RNAseq data analysis",
+    "text": "RNAseq data analysis\nRNAseq data analysis can be divided into two main parts:\n\nA bioinformatics-heavy part in which you generate gene counts from the raw reads.\nA more statistical part in which you analyze the count table to create lists of differentially expressed genes and enriched functional categories.\n\n\n\nPart I: From reads to count table\nThis part starts with the raw reads from the (typically Illumina) sequencing machine to eventually generate a table with expression counts for each gene by each sample. This part:\n\nIs usually done by sequentially running a series of programs with a command-line interface (CLI). Therefore, you typically use the Unix shell (command line) and shell scripts to do this.\nProcesses large amounts of data, and is generally not suitable to be run on a laptop or a desktop computer: you should use a high-performance computing (HPC) center or cloud computing. (We will use the Ohio Supercomputer Center, OSC.)\nIs quite standardized and therefore, a “pipeline” written for one dataset can be run for another one with minor changes, even if the datasets are from completely different experiments or different species.\n\n\n\n\n\n\n\n\nNote\n\n\n\nBecause of the required technical skills and computing infrastructure, in combination with the standardized execution, there are some alternatives available to doing this by yourself step-by-step1:\n\nCompanies and university bioinformatics core facilities may be able to simply run this part for you.\nServices with graphical user interfaces (GUIs) are available, such as Galaxy.\nThese run the same command-line programs, but wrap their execution in a more user-friendly way.\n\nSuch options are especially worth considering when you have no plans or ambitions to do much other genomics work in the future – in other words, it may not be worth learning all the required technical skills just for one project.\nWhen you plan to do multiple genomics projects and/or are generally interested in gaining computing skills, it’s better to go ahead and learn to run these command-line programs yourself.\n\n\n\n\n\nPart II: Analyzing the count table\nIn this part, you will analyze the table with gene counts for each sample, for example to test for differential expression among groups (e.g., different treatments) and to test whether certain functional (GO, KEGG) gene categories have distinct expression patterns as a whole.\nThis part:\n\nIs typically run entirely in R, using a number of specialized R “packages”.\nIs not particularly “compute-intensive”: your count table is a text file of typically only a few Mb, and the analyses you’re running do not need much time or computer memory. As such, you can run this on your laptop or desktop computer. (Though we will do it at OSC, mainly for the sake of continuity.)\nIs much less standardized across projects: the details of the analysis depend a lot on your experimental design and what you’re interested in; in addition, initial results may influence your next steps, and so on."
+  },
+  {
+    "objectID": "modules/01_intro.html#what-well-cover",
+    "href": "modules/01_intro.html#what-well-cover",
+    "title": "RNAseq data analysis: introduction",
+    "section": "What we’ll cover",
+    "text": "What we’ll cover\nNote: we can tweak this based on your interests!\n\nComputing skills\nMany of these computing skills are needed only for part I below.\n\nIntroduction to the Ohio Supercomputer Center (OSC)\nThe VS Code (Code Server) text editor / IDE\nIntroduction to the Unix shell (“command line” / “Bash”)\nShell scripts and loops\nThe SLURM compute job scheduler\nUsing and installing software at OSC\nProject organization and reproducibility\nIntroduction to R??\n\n\n\n\nAnalysis part I: From sequence reads to gene counts\n\nGenomic file formats relevant to RNAseq: FASTA, FASTQ, BAM/SAM, GFF\n\nRaw read QC with FastQC and MultiQC\nRead pre-processing with TrimGalore and SortMeRNA\nRead alignment to a reference genome with STAR\nAlignment QC with (at least) MultiQC\nGene expression counting with Salmon\n\n\n\n\nAnalysis part II: Analyzing gene counts in R\n\nGetting an overview of sample/group distinctiveness with a PCA\nDifferential expression analysis with {DESeq2}\nKEGG and GO enrichment analysis with {ClusterProfiler}"
+  },
+  {
+    "objectID": "modules/01_intro.html#workflow-overview",
+    "href": "modules/01_intro.html#workflow-overview",
+    "title": "RNAseq data analysis: introduction",
+    "section": "Workflow overview",
+    "text": "Workflow overview"
+  },
+  {
+    "objectID": "modules/01_intro.html#data-source-and-workflow-variations",
+    "href": "modules/01_intro.html#data-source-and-workflow-variations",
+    "title": "RNAseq data analysis: introduction",
+    "section": "Data source and workflow variations",
+    "text": "Data source and workflow variations\n\nReference-based versus de novo workflows\nWe will cover a **“reference-based” RNAseq workflow: one where your focal organism has a reference genome assembly and annotation. “De novo” RNAseq workflows are necessary when you don’t have a reference genome. They are overall similar, but more time-consuming and bioinformatics-heavy, since you will first have to assemble a transcriptome from the RNAseq data itself.\n\n\nGene-level versus transcript-level counts, and short versus long reads\nWe will focus on generating and analyzing gene-level counts rather than transcript-level counts: that is, for each sample, we will obtain a single count for each gene even if that gene has multiple transcripts (isoforms). However, the program which we’ll use for counting (Salmon) can also generate transcript-level counts, and downstream transcript-level analysis is fairly similar too, though this certainly adds a level of complexity.\nAdditionally, we will use short-read (Illumina) sequencing data, for which transcript-level counts have much greater levels of uncertainty, since most reads cannot directly be assigned to a specific transcript. Consider using long reads, such as PacBio IsoSeq, if you’re interested in transcript-level inferences.\n\n\n“Bulk” versus single-cell RNAseq\nWe will focus on “bulk” RNAseq, where RNA was extracted from a large mixture of cells and possibly cell types. Single-cell RNAseq analysis is similar for the first part (generating counts), but differs more in the second part (count analysis)."
+  },
+  {
+    "objectID": "modules/01_intro.html#footnotes",
+    "href": "modules/01_intro.html#footnotes",
+    "title": "RNAseq data analysis: introduction",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nAdditionally, you can run standardized pipelines yourself, which wrap many individual steps into a single executable workflow. This especially becomes a time-efficient option once you know the computing basics, and also aids with reproducibility and following best-practices. For example, for RNAseq there is a Nextflow nf-core RNAseq pipeline. The steps we will run fill follow this pipeline closely – but in my opinion, for initial learning, it is better to go step-by-step without a formalized pipeline.↩︎"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "RNAseq data analysis using the command line and R",
+    "section": "",
+    "text": "Sessions\n\n\n\nSession nr\nDate\nTopic & link\n\n\n\n\n1\n2023-07-13\nIntroduction"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "This website contains the material for a series of teaching sessions for grad students and postdocs of the Cruz-Monserrate lab in the fall of 2023.\nThese sessions focus on hands-on analysis of (short-read, bulk) RNAseq data with command-line tools and R using the computing resources at the Ohio Supercomputer Center (OSC).\nThis website and the teaching materials have been created by Jelmer Poelstra at the Molecular and Cellular Imaging Center (MCIC) of Ohio State University."
+  }
+]

@@ -1,0 +1,194 @@
+---
+title: "RNAseq data analysis: introduction"
+pagetitle: "Intro"
+highlight-style: github
+author: "Jelmer Poelstra"
+---
+
+-----
+
+<br>
+
+::: {.callout-tip}
+
+## Personal introductions
+
+In our round of personal introductions, please mention:
+
+- Your level of experience, if any, with genomic data
+- Your level of experience, if any, with the Unix command line, R, and possibly other programming languages
+- Your currently planned or ongoing projects, if any, that involve genomic data
+- Your longer-term ambitions, if any, for working with genomic data or using programming skills
+- What you're particularly interested in learning here (if you know!)
+
+:::
+
+<br>
+
+## RNAseq data analysis
+
+RNAseq data analysis can be divided into two main parts:
+
+- A _bioinformatics-heavy part_ in which you generate **gene counts from the raw reads**.
+
+- A more _statistical part_ in which you **analyze the count table**
+  to create lists of differentially expressed genes and enriched functional categories.
+
+<br>
+
+### Part I: From reads to count table
+
+This part starts with the raw reads from the (typically Illumina) sequencing machine
+to eventually generate a table with expression counts for each gene by each sample.
+This part:
+
+  - Is usually done by
+    **sequentially running a series of programs with a command-line interface (CLI).**
+    Therefore, you typically use the Unix shell (command line) and shell scripts to do this.
+
+  - Processes large amounts of data,
+    and is generally not suitable to be run on a laptop or a desktop computer:
+    you should
+    **use a high-performance computing (HPC) center or cloud computing**.
+    (We will use the Ohio Supercomputer Center, OSC.)
+
+  - Is quite **standardized** and therefore,
+    a "_pipeline_" written for one dataset can be run for another one with minor changes,
+    even if the datasets are from completely different experiments or different species.
+
+<br>
+
+::: {.callout-note}
+
+Because of the required technical skills and computing infrastructure,
+in combination with the standardized execution,
+there are some alternatives available to doing this by yourself step-by-step[^1]:
+
+- Companies and university bioinformatics core facilities may be able to simply
+  **run this part for you**.
+
+- Services with graphical user interfaces (GUIs) are available, such as **[Galaxy](https://usegalaxy.org/)**.  
+  These run the same command-line programs, but wrap their execution in  a more
+  user-friendly way.
+
+**Such options are especially worth considering when you have no plans or ambitions
+to do much other genomics work in the future -- in other words,
+it may not be worth learning all the required technical skills just for one project.**
+
+When you plan to do multiple genomics projects and/or are generally interested in
+gaining computing skills, it's better to go ahead and learn to run these command-line
+programs yourself.
+
+[^1]: Additionally, you can run standardized pipelines yourself,
+      which wrap many individual steps into a single executable workflow. 
+      This especially becomes a time-efficient option once you know the computing basics,
+      and also aids with reproducibility and following best-practices.
+      For example, for RNAseq there is a [Nextflow nf-core RNAseq pipeline](https://nf-co.re/rnaseq).
+      The steps we will run fill follow this pipeline closely -- but in my opinion,
+      for initial learning, it is better to go step-by-step without a formalized pipeline.
+
+:::
+
+<br>
+
+### Part II: Analyzing the count table
+
+In this part, you will analyze the table with gene counts for each sample,
+for example to test for differential expression among groups (e.g., different treatments)
+and to test whether certain functional (GO, KEGG) gene categories have distinct expression
+patterns as a whole.
+
+This part:
+
+- Is typically run entirely in R, using a number of specialized R "packages".
+
+- Is not particularly "compute-intensive":
+  your count table is a text file of typically only a few Mb,
+  and the analyses you're running do not need much time or computer memory.
+  As such, you can run this on your laptop or desktop computer.
+  (Though we will do it at OSC, mainly for the sake of continuity.)
+
+- Is much less standardized across projects:
+  the details of the analysis depend a lot on your experimental design and what you're interested in;
+  in addition, initial results may influence your next steps, and so on.
+
+<br><br>
+
+## What we'll cover
+
+_Note: we can tweak this based on your interests!_
+
+### Computing skills
+
+Many of these computing skills are needed only for part I below.
+
+- Introduction to the Ohio Supercomputer Center (OSC)
+- The VS Code (Code Server) text editor / IDE
+- Introduction to the Unix shell ("command line" / "Bash")
+- Shell scripts and loops
+- The `SLURM` compute job scheduler
+- Using and installing software at OSC
+- Project organization and reproducibility
+- Introduction to R??
+
+<br>
+
+### Analysis part I: From sequence reads to gene counts
+
+- Genomic file formats relevant to RNAseq: FASTA, FASTQ, BAM/SAM, GFF  
+- Raw read QC with `FastQC` and `MultiQC`
+- Read pre-processing with `TrimGalore` and `SortMeRNA` 
+- Read alignment to a reference genome with `STAR`
+- Alignment QC with (at least) `MultiQC`
+- Gene expression counting with `Salmon`
+
+<br>
+
+### Analysis part II: Analyzing gene counts in R
+
+- Getting an overview of sample/group distinctiveness with a PCA
+- Differential expression analysis with `{DESeq2}`
+- KEGG and GO enrichment analysis with `{ClusterProfiler}`
+
+<br><br>
+
+## Workflow overview
+
+<p align="center">
+<img src=img/workflow.png width="85%">
+</p>
+
+<br><br>
+
+## Data source and workflow variations
+
+### Reference-based versus _de novo_ workflows
+
+We will cover a **"reference-based" RNAseq workflow:
+one where your focal organism has a reference genome assembly and annotation.
+"De novo" RNAseq workflows are necessary when you don't have a reference genome.
+They are overall similar, but more time-consuming and bioinformatics-heavy,
+since you will first have to assemble a transcriptome from the RNAseq data itself.
+
+### Gene-level versus transcript-level counts, and short versus long reads
+
+We will focus on generating and analyzing **gene-level counts** rather than transcript-level counts:
+that is, for each sample, we will obtain a single count for each gene even
+if that gene has multiple transcripts (isoforms).
+However, the program which we'll use for counting (`Salmon`) can also generate
+transcript-level counts, and downstream transcript-level analysis is fairly similar too,
+though this certainly adds a level of complexity.
+
+Additionally, we will use short-read (Illumina) sequencing data,
+for which transcript-level counts have much greater levels of uncertainty,
+since most reads cannot directly be assigned to a specific transcript. 
+Consider using long reads, such as
+[PacBio IsoSeq](https://www.pacb.com/products-and-services/applications/rna-sequencing/),
+if you're interested in transcript-level inferences.
+
+### "Bulk" versus single-cell RNAseq
+
+We will focus on "bulk" RNAseq, where RNA was extracted from a large mixture of cells
+and possibly cell types.
+Single-cell RNAseq analysis is similar for the first part (generating counts),
+but differs more in the second part (count analysis).
