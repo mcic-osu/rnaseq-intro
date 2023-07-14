@@ -164,7 +164,7 @@ Many of these computing skills are needed only for part I below.
 
 ### Reference-based versus _de novo_ workflows
 
-We will cover a **"reference-based" RNAseq workflow:
+We will cover a **"reference-based"** RNAseq workflow:
 one where your focal organism has a reference genome assembly and annotation.
 "De novo" RNAseq workflows are necessary when you don't have a reference genome.
 They are overall similar, but more time-consuming and bioinformatics-heavy,

@@ -6,6 +6,7 @@ toc: false
 
 ### Sessions
 
-| Session nr  | Date       | Topic & link     |
-|-------------|------------|------------------|
-| 1           | 2023-07-13 | [Introduction](modules/01_intro.qmd)       | 
+| Session nr  | Date       | Topic & link                               |
+|-------------|------------|--------------------------------------------|
+| 1           | 2023-07-14 | [Introduction](modules/01_intro.qmd)       |
+ 
