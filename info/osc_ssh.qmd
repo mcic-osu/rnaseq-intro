@@ -21,14 +21,14 @@ This page will first go through the basics of connecting to OSC with SSH,
 using the `ssh` command.
 
 If you use `ssh` frequently, or plan to do so, the next two sections will show
-you two shortcuts:
+you two useful tricks:
 
-- [Avoid being prompted for your password](#avoid-being-prompted-for-your-osc-password)
+- [Avoid being prompted for your OSC password](#avoid-being-prompted-for-your-osc-password)
 - [Set up a shortcut for your SSH connection name](#use-a-shorter-name-for-your-ssh-connection).
 
 Finally, something more specific but incredibly useful if you like VS Code,
 and have it installed locally, is to
-[SSH-tunnel VS Code to OSC*](#set-up-your-local-vs-code-to-ssh-tunnel-into-osc).
+[SSH-tunnel VS Code to OSC](#set-up-your-local-vs-code-to-ssh-tunnel-into-osc).
 
 ::: {.callout-caution collapse="true"}
 #### SSH and Unix shells on Windows
@@ -40,12 +40,12 @@ operating system,
 you can install either of the following,
 which will enable you to get a terminal program that does run a Unix shell:
 
-- [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/en-us/windows/wsl/install)
+- [**Windows Subsystem for Linux (WSL)**](https://learn.microsoft.com/en-us/windows/wsl/install)
   &mdash; the more involved option, this will basically run a Linux Virtual Machine on your computer.
 
-- [Git for Windows](https://git-scm.com/download/win),
-  which comes with a Unix (Bash) shell.
-  To install this, download it from the link above and 
+- **Git for Windows**,
+  which comes with a Unix (Bash) shell &mdash; "Git Bash".
+  To install this, [download it from this page](https://git-scm.com/download/win) and 
   install it using all the default settings for the installation, except:
 
   - In "*Adjusting Your PATH Environment*", select "*Use Git from Git Bash Only*".
@@ -67,10 +67,10 @@ with Unix shells.
 
 Here, I'll briefly demonstrate how to use the `ssh` command.
 On your own computer,
-open a terminal application and input the command `ssh <username>@<hostname>`, where:
+open a terminal application and input the command `ssh <user>@<host>`, where:
 
-  - `<username>` should be replaced by your OSC username, and
-  - `<hostname>` should be replaced by the name of the computer you want to connect to:
+  - `<user>` should be replaced by your OSC username, and
+  - `<host>` should be replaced by the name of the computer you want to connect to:
     - `pitzer.osc.edu` to connect to the Pitzer cluster
     - `owens.osc.edu` to connect to the Owens cluster
 
@@ -121,7 +121,13 @@ The next two sections will show you how to make this go faster.
 
 ## Avoid being prompted for your OSC password
 
-1.  **_On your own computer_, generate a public-private SSH key-pair:**
+If you take the following steps,
+you will no longer be promoted for your OSC password every time you log in to
+OSC using SSH.
+
+Both steps should be done in a terminal *on your local machine*:
+
+1.  **Generate a public-private SSH key-pair:**
 
     ``` {.bash}
     ssh-keygen -t rsa
@@ -130,7 +136,7 @@ The next two sections will show you how to make this go faster.
     You'll get some output and will then be asked several questions,
     but in each case, you can just press <kbd>Enter</kbd> to select the default answer.
 
-2.  **_On your own computer_, transfer the public key to OSC's clusters:**
+2.  **Transfer the public key to OSC's clusters:**
 
     ```bash
     # Replace <user> by your username, e.g. "ssh-copy-id jelmer@owens.osc.edu"
@@ -149,6 +155,7 @@ ssh <user>@owens.osc.edu
 ```
 
 ::: {.callout-note}
+#### More instructions
 See also this
 [Tecmint post](https://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/)
 in case you're struggling.
@@ -202,7 +209,7 @@ ssh jp
 ```
 
 Perhaps even more conveniently,
-this shortcut will also work with `scp` and `rsync`!
+these shortcuts will also work with `scp` and `rsync`!
 For example:
 
 ```bash
@@ -215,7 +222,7 @@ rsync ~/scripts op:/fs/scratch/PAS0471
 
 If you want to use VS Code to write code, have a shell, and interact with files
 at OSC directly,
-you don't necessarily need to use the VS Code Server in OSC OnDemand.
+you don't necessarily need to use the VS Code (Code Server) in OSC OnDemand.
 You can also make your local VS Code installation "**SSH tunnel**" into OSC.
 
 This is a more convenient way of working because it's quicker to start,
@@ -224,7 +231,8 @@ and because you are not working inside a browser,
 you have more screen space and no keyboard shortcut interferences.
 
 The set-up is pretty simple
-(see also [these instructions](https://code.visualstudio.com/docs/remote/ssh) if you get stuck):
+(see also [these instructions](https://code.visualstudio.com/docs/remote/ssh) if you get stuck),
+and should also work on Windows:
 
 1.  If necessary, install VS Code
     (instructions for [Windows](https://code.visualstudio.com/docs/setup/windows) /

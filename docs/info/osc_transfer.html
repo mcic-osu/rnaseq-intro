@@ -350,19 +350,7 @@ Download directly from the web using commands at OSC
 <section id="remote-transfer-commands" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="remote-transfer-commands"><span class="header-section-number">3</span> Remote transfer commands</h2>
 <p>For small transfers, you can also use a <strong>remote transfer command</strong> like <code>scp</code>, or a more advanced one like <code>rsync</code> or <code>rclone</code>. Such commands can provide a more convenient transfer method than OnDemand if you want to keep certain directories synced between OSC and your computer.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
 <p>The reason you shouldn’t use this for very large transfers is that the transfer will happen using a login node.</p>
-</div>
-</div>
 <section id="scp" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="scp"><span class="header-section-number">3.1</span> <code>scp</code></h3>
 <p>One option is <code>scp</code> (secure copy), which works much like the regular <code>cp</code> command, including that you’ll need <code>-r</code> for recursive transfers.</p>
@@ -372,25 +360,25 @@ Note
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy from local (your computer) to remote (OSC)</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>local-path<span class="op">&gt;</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@pitzer.osc.edu:<span class="op">&lt;</span>remote-path<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here are two examples of copying from OSC to your local computer:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a file from OSC to a local computer - namely, to your current working dir ('.'):</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts/misc/fastqc.sh .</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a directory from OSC to a local computer - namely, to your home dir ('~'):</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts ~</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And two examples of copying from your local computer to OSC:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a file from your computer to OSC --</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># namely, a file in from your current working dir to your home dir at OSC:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> fastqc.sh jelmer@pitzer.osc.edu:~</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a file from my local computer's Desktop to the Scratch dir for PAS0471:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> /Users/poelstra.1/Desktop/fastqc.sh jelmer@pitzer.osc.edu:/fs/scratch/PAS0471</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Some nuances for remote copying:</p>
 <ul>
 <li><p>As the above code implies, in both cases (remote-to-local and local-to-remote), you will <strong>issue the copying commands from your local computer.</strong></p></li>
 <li><p>For the remote computer (OSC), the <strong>path should always be absolute</strong>, whereas that for your local computer can be either relative or absolute.</p></li>
 <li><p>Since all files can be accessed at the same paths at Pitzer and at Owens, it doesn’t matter whether you use <code>@pitzer.osc.edu</code> or <code>@owens.osc.edu</code> in the <code>scp</code> command.</p></li>
 </ul>
-<p>Here are some actual examples:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a file from OSC to a local computer - namely, to your current working dir ('.'):</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts/misc/fastqc.sh .</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a directory from OSC to a local computer - namely, to your home dir ('~'):</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="at">-r</span> jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts ~</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a file from your computer to OSC --</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># namely, a file in from your current working dir to your home dir at OSC:</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> fastqc.sh jelmer@pitzer.osc.edu:~</span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Copy a file from my local computer's Desktop to the Scratch dir for PAS0471:</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> /Users/poelstra.1/Desktop/fastqc.sh jelmer@pitzer.osc.edu:/fs/scratch/PAS0471</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -405,7 +393,7 @@ Transferring directly to and from OneDrive
 <p>For example, the path to my OneDrive files on my laptop is:<br>
 <code>/Users/poelstra.1/Library/CloudStorage/OneDrive-TheOhioStateUniversity</code>.<br>
 So if I had a file called <code>fastqc.sh</code> in my top-level OneDrive dir, I could transfer it to my Home dir at OSC as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> /Users/poelstra.1/Library/CloudStorage/OneDrive-TheOhioStateUniversity jelmer@pitzer.osc.edu:~</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> /Users/poelstra.1/Library/CloudStorage/OneDrive-TheOhioStateUniversity jelmer@pitzer.osc.edu:~</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <p><br></p>
@@ -421,19 +409,31 @@ So if I had a file called <code>fastqc.sh</code> in my top-level OneDrive dir, I
 <li><code>--progress</code> to show transfer progress for individual files.</li>
 </ul>
 <p>The way to refer to remote paths is the same as with <code>scp</code>. For example, I could copy a <code>dir_with_results</code> in my local Home dir to my OSC Home dir as follows:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--progress</span> ~/dir_with_results jelmer@owens.osc.edu:~</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> <span class="at">--progress</span> ~/dir_with_results jelmer@owens.osc.edu:~</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Trailing slashes in <code>rsync</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>One tricky aspect of using <code>rsync</code> is that the presence/absence of a <strong>trailing slash for source directories</strong> makes a difference for its behavior. The following commands work as intended — to create a backup copy of a <code>scripts</code> dir inside a dir called <code>backup</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With trailing slash: copy the *contents* of source "scripts" into target "scripts":</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts/ backup/scripts</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Without trailing slash: copy the source dir "scripts" into target dir "backup"</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts backup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>But these commands don’t:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This would result in a dir 'backup/scripts/scripts':</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts backup/scripts</span>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With trailing slash: copy the *contents* of source "scripts" into target "scripts":</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts/ backup/scripts</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This would copy the files in "scripts" straight into "backup":</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts/ backup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Without trailing slash: copy the source dir "scripts" into target dir "backup"</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts backup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>But these commands don’t:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This would result in a dir 'backup/scripts/scripts':</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts backup/scripts</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This would copy the files in "scripts" straight into "backup":</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> <span class="at">-avz</span> scripts/ backup</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 <p><br></p>
 </section>
 </section>
@@ -456,7 +456,7 @@ SFTP with a GUI
 <section id="logging-in" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="logging-in"><span class="header-section-number">4.1</span> Logging in</h3>
 <p>To log in to OSC’s SFTP server, issue the following command in your local computer’s terminal, substituting <code>&lt;user&gt;</code> by your OSC username:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@sftp.osc.edu   <span class="co"># E.g., 'jelmer@sftp.osc.edu'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@sftp.osc.edu   <span class="co"># E.g., 'jelmer@sftp.osc.edu'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>The authenticity of host 'sftp.osc.edu (192.148.247.136)' can't be established.
 ED25519 key fingerprint is SHA256:kMeb1PVZ1XVDEe2QiSumbM33w0SkvBJ4xeD18a/L0eQ.
 This key is not known by any other names
@@ -480,22 +480,25 @@ officials.
 Connected to sftp.osc.edu.</code></pre>
 <p>Now, you will have an <code>sftp</code> prompt (<code>sftp&gt;</code>) instead of a regular shell prompt.</p>
 <p>Familiar commands like <code>ls</code>, <code>cd</code>, and <code>pwd</code> will operate on the remote computer (OSC, in this case), and there are <strong>local counterparts for them: <code>lls</code>, <code>lcd</code>, <code>lpwd</code></strong> — for example:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: I am prefacing sftp commands with the 'sftp&gt;' prompt to make it explicit</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#       these should be issued in an sftp session; but don't type that part.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Remote working directory: /users/PAS0471/jelmer</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> lpwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> lpwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Local working directory: /Users/poelstra.1/Desktop</code></pre>
 </section>
 <section id="uploading-files-to-osc" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="uploading-files-to-osc"><span class="header-section-number">4.2</span> Uploading files to OSC</h3>
-<p>To <strong>upload files</strong> to OSC, use the <strong><code>put</code></strong> command. The syntax is <code>put &lt;local-path&gt; &lt;remote-path&gt;</code>, and unlike with <code>scp</code> etc., you don’t need to designate the remote with its address and <code>:</code>. Like with <code>cp</code> and <code>scp</code>, you’ll need the <code>-r</code> flag for recursive transfers, i.e.&nbsp;transferring a directory and its contents.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Upload fastqc.sh in a dir 'scripts' on your local computer to the PAS0471 Scratch dir:</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> put scripts/fastqc.sh /fs/scratch/PAS0471/sandbox</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Use -r to transfer directories:</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> put <span class="at">-r</span> scripts /fs/scratch/PAS0471/sandbox</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># You can use wildcards to upload multiple files:</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> put scripts/<span class="pp">*</span>sh /fs/scratch/PAS0471/sandbox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To upload files to OSC, use <code>sftp</code>’s <strong><code>put</code> command</strong>.</p>
+<p>The syntax is <code>put &lt;local-path&gt; &lt;remote-path&gt;</code>, and unlike with <code>scp</code> etc., you don’t need to include the address to the remote (because in an <code>stfp</code> session, you are simultaneously connected to both computers). But like with <code>cp</code> and <code>scp</code>, you’ll need the <code>-r</code> flag for recursive transfers, i.e.&nbsp;transferring a directory and its contents.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Upload fastqc.sh in a dir 'scripts' on your local computer to the PAS0471 Scratch dir:</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> put scripts/fastqc.sh /fs/scratch/PAS0471/sandbox</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Use -r to transfer directories:</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> put <span class="at">-r</span> scripts /fs/scratch/PAS0471/sandbox</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># You can use wildcards to upload multiple files:</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> put scripts/<span class="pp">*</span>sh /fs/scratch/PAS0471/sandbox</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -513,11 +516,11 @@ Connected to sftp.osc.edu.</code></pre>
 </section>
 <section id="downloading-files-from-osc" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="downloading-files-from-osc"><span class="header-section-number">4.3</span> Downloading files from OSC</h3>
-<p>To download files from OSC, use the <code>get</code> command, which has the syntax <code>get &lt;remote-path&gt; &lt;local-path&gt;</code> (note: this is the other way around from <code>put</code> in that the remote path comes first, but the same in that both use the order <code>&lt;source&gt; &lt;target&gt;</code>).</p>
+<p>To download files from OSC, use the <code>get</code> command, which has the syntax <code>get &lt;remote-path&gt; &lt;local-path&gt;</code> (this is the other way around from <code>put</code> in that the remote path comes first, but the same in that both use the order <code>&lt;source&gt; &lt;target&gt;</code>, like <code>cp</code> and so on).</p>
 <p>For example:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> get /fs/scratch/PAS0471/mcic-scripts/misc/fastqc.sh .</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> get <span class="at">-r</span> /fs/scratch/PAS0471/sandbox/ .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> get /fs/scratch/PAS0471/mcic-scripts/misc/fastqc.sh .</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> get <span class="at">-r</span> /fs/scratch/PAS0471/sandbox/ .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="exiting" class="level3" data-number="4.4">
 <h3 data-number="4.4" class="anchored" data-anchor-id="exiting"><span class="header-section-number">4.4</span> Exiting</h3>
@@ -527,13 +530,13 @@ Connected to sftp.osc.edu.</code></pre>
 </section>
 <section id="globus" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="globus"><span class="header-section-number">5</span> Globus</h2>
-<p>The second option for large transfers is <strong>Globus</strong>, which is especially your best bet for very large transfers. Globus has a browser-based GUI. Some advantages of using Globus are that:</p>
+<p>The second option for large transfers is <strong>Globus</strong>, which has a browser-based GUI, and is especially your best bet for very large transfers. Some advantages of using Globus are that:</p>
 <ul>
 <li>It checks whether all files were transferred correctly and completely</li>
-<li>It can pause and resume automatically when you e.g.&nbsp;turn off your computer</li>
+<li>It can pause and resume automatically when you e.g.&nbsp;turn off your computer for a while</li>
 <li>It can be used to share files from OSC directly with collaborators even at different institutions.</li>
 </ul>
-<p>Globus does need some setup including the installation of a piece of software that will run in the background on your computer.</p>
+<p>Globus does need some setup, including the installation of a piece of software that will run in the background on your computer.</p>
 <ul>
 <li>Globus installation and configuration instructions: <a href="https://docs.globus.org/how-to/globus-connect-personal-windows">Windows</a> / <a href="https://docs.globus.org/how-to/globus-connect-personal-mac">Mac</a> / <a href="https://docs.globus.org/how-to/globus-connect-personal-linux">Linux</a></li>
 <li><a href="https://docs.globus.org/how-to/get-started/">Globus transfer instructions</a></li>

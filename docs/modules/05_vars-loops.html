@@ -74,6 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -107,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">RNAseq data analysis</span>
+    <span class="navbar-title">RNAseq analysis</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -118,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Overview</span></a>
+ <span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../modules/01_intro.html" rel="" target="">
@@ -126,56 +128,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Computing skills</span>
+ <span class="menu-text">1. Computing skills</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-computing-skills">    
         <li>
     <a class="dropdown-item" href="../modules/02_osc.html" rel="" target="">
- <span class="dropdown-text">OSC</span></a>
+ <span class="dropdown-text">- OSC</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/03_vscode.html" rel="" target="">
- <span class="dropdown-text">VS Code</span></a>
-  </li>  
-        <li class="dropdown-header">The Unix shell [TBA]</li>
-        <li class="dropdown-header">Shell scripting [TBA]</li>
-        <li class="dropdown-header">Software at OSC [TBA]</li>
-        <li class="dropdown-header">SLURM compute jobs [TBA]</li>
+        <li class="dropdown-header">- VS Code [TBA]</li>
+        <li class="dropdown-header">- The Unix shell [TBA]</li>
+        <li class="dropdown-header">- Shell scripting [TBA]</li>
+        <li class="dropdown-header">- Software at OSC [TBA]</li>
+        <li class="dropdown-header">- SLURM compute jobs [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-from-reads-to-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">From reads to counts</span>
+ <span class="menu-text">2. From reads to counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-from-reads-to-counts">    
-        <li class="dropdown-header">Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
-        <li class="dropdown-header">Trimming with <code>TrimGalore</code> [TBA]</li>
-        <li class="dropdown-header">rRNA removal with <code>SortMeRNA</code> [TBA]</li>
-        <li class="dropdown-header">Alignment with <code>STAR</code> [TBA]</li>
-        <li class="dropdown-header">Counting with <code>Salmon</code> [TBA]</li>
+        <li class="dropdown-header">- Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
+        <li class="dropdown-header">- Trimming with <code>TrimGalore</code> [TBA]</li>
+        <li class="dropdown-header">- rRNA removal with <code>SortMeRNA</code> [TBA]</li>
+        <li class="dropdown-header">- Alignment with <code>STAR</code> [TBA]</li>
+        <li class="dropdown-header">- Counting with <code>Salmon</code> [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-analyzing-the-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Analyzing the counts</span>
+ <span class="menu-text">3. Analyzing the counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-analyzing-the-counts">    
-        <li class="dropdown-header">Creating a DESeq2 object [TBA]</li>
-        <li class="dropdown-header">PCA [TBA]</li>
-        <li class="dropdown-header">Differential expression analysis [TBA]</li>
-        <li class="dropdown-header">GO enrichment analysis [TBA]</li>
-        <li class="dropdown-header">KEGG enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- Creating a DESeq2 object [TBA]</li>
+        <li class="dropdown-header">- PCA [TBA]</li>
+        <li class="dropdown-header">- Differential expression analysis [TBA]</li>
+        <li class="dropdown-header">- GO enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- KEGG enrichment analysis [TBA]</li>
     </ul>
   </li>
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference-material" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference material</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-material">    
+        <li class="dropdown-header">Specific tutorials</li>
+        <li>
+    <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
+ <span class="dropdown-text">- Using OSC with SSH</span></a>
+  </li>  
+        <li class="dropdown-header">General info</li>
+        <li>
+    <a class="dropdown-item" href="../info/resources.html" rel="" target="">
+ <span class="dropdown-text">- Further Resources</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/glossary.html" rel="" target="">
+ <span class="dropdown-text">- Glossary</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="../info/about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../info/resources.html" rel="" target="">
- <span class="menu-text">Further Resources</span></a>
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools">
@@ -266,10 +291,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Click <code>Launch</code>.</li>
 </ul></li>
 <li><p>On the next page, once the top bar of the box is green and says <code>Runnning</code>, click <code>Connect to VS Code</code>.</p></li>
-<li><p>Open a terminal: &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>.</p></li>
+<li><p>Open a terminal: <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>.</p></li>
 <li><p>In the terminal, type <code>bash</code> and press <kbd>Enter</kbd>.</p></li>
 <li><p>Type <code>pwd</code> in the termain to check you are in <code>/fs/ess/scratch/PAS2250</code>.</p>
-<p>If not, click &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> and enter <code>/fs/ess/scratch/PAS2250/&lt;your-folder&gt;</code>.</p></li>
+<p>If not, click <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> and enter <code>/fs/ess/scratch/PAS2250/&lt;your-folder&gt;</code>.</p></li>
 </ol>
 <p><br></p>
 </section>
@@ -552,7 +577,7 @@ At-home reading: Quoting as “escaping” special meaning – and double vs.&nb
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Sun Jul 16 16:14:00 EDT 2023</code></pre>
+<pre class="bash-out"><code>Tue Jul 18 17:42:30 EDT 2023</code></pre>
 </div>
 </div>
 <p>If we try to store the date in a variable directly, it doesn’t work: the literal string “date” is stored, not the output of the command:</p>
@@ -568,7 +593,7 @@ At-home reading: Quoting as “escaping” special meaning – and double vs.&nb
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Sun Jul 16 16:14:00 EDT 2023</code></pre>
+<pre class="bash-out"><code>Tue Jul 18 17:42:30 EDT 2023</code></pre>
 </div>
 </div>
 <hr>
@@ -576,7 +601,7 @@ At-home reading: Quoting as “escaping” special meaning – and double vs.&nb
 <div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +%F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>2023-07-16</code></pre>
+<pre class="bash-out"><code>2023-07-18</code></pre>
 </div>
 </div>
 <p>Let’s use that in a command substitution — but a bit differently than before: we use the command substitution <code>$(date +%F)</code> <em>directly</em> in our <code>touch</code> command, rather than first assigning it to a variable:</p>
@@ -589,7 +614,7 @@ At-home reading: Quoting as “escaping” special meaning – and double vs.&nb
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>README_2023-07-16.txt</code></pre>
+<pre class="bash-out"><code>README_2023-07-18.txt</code></pre>
 </div>
 </div>
 <p>Among many other uses, command substitution is handy when you want your script to report some results, or when a next step in the script depends on a previous result.</p>
@@ -939,15 +964,15 @@ A semicolon <code>;</code> (as used before <code>do</code>) separates two comman
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>In this iteration of the loop, the number is 1
 usage: sleep seconds
-Sun Jul 16 16:14:01 EDT 2023
+Tue Jul 18 17:42:30 EDT 2023
 --------
 In this iteration of the loop, the number is 2
 usage: sleep seconds
-Sun Jul 16 16:14:01 EDT 2023
+Tue Jul 18 17:42:30 EDT 2023
 --------
 In this iteration of the loop, the number is 3
 usage: sleep seconds
-Sun Jul 16 16:14:01 EDT 2023
+Tue Jul 18 17:42:30 EDT 2023
 --------</code></pre>
 </div>
 </div>

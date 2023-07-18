@@ -41,11 +41,10 @@ or desktop:
 - Your analyses require specialized hardware, such as GPUs.
 - Your analyses require software available only for the Linux operating system, but you use Windows.
 
-These kinds of situations can make it hard or simply impossible to solely work
-on your personal workstation,
-depending on the exact amount of data, and so on.
 When you're working RNAseq data or other kinds of genomic data,
 many of these reasons apply.
+This can make it hard or simply impossible to do all your
+work on your personal workstation, and supercomputers provide a solution.
 
 ### The Ohio Supercomputer Center (OSC)
 
@@ -58,7 +57,7 @@ Having such a good HPC resource available at no cost is not something we should 
 for granted &mdash;
 at many institutions,
 academics not only have have to pay for these kinds of resources,
-but those are often not as good.
+but those are often more limited and not as easy to access.
 
 In **upcoming sessions**, we'll continue to work at OSC,
 so you will get a fair bit of experience with using it.
@@ -71,8 +70,8 @@ OSC has **three main websites**:
 
 - <https://osc.edu>: OSC's general website, with lots of information about the
   supercomputers, the software that's installed, and how to use OSC.
-- <https://ondemand.osc.edu>: A web portal to use OSC through your browser (login needed).
-- <https://my.osc.edu>: A site to manage your account and Projects you are an admin for (login needed).
+- <https://ondemand.osc.edu>: A web portal to use OSC resources through your browser (login needed).
+- <https://my.osc.edu>: A site to manage your account and OSC Projects you are an admin for (login needed).
 
 <br>
 
@@ -85,7 +84,8 @@ Let's start with some terminology, going from smaller things to bigger things:
   a computing task like running a bioinformatics program.
   While these terms are not technically all synonyms, we can treat them as such for our purposes.
 - **Node** &mdash;
-  A single computer that is a part of a supercomputer and has dozens of cores.
+  A single computer that is a part of a supercomputer and has dozens of cores
+  (i.e., they tend to be more powerful than a personal laptop or desktop).
 - **Supercomputer / Cluster** &mdash;
   Many computers connected by a high-speed network.
   ("Pitzer" and "Owens" are the two currently active ones at OSC.)
@@ -151,13 +151,14 @@ but to clarify some of the terms and concepts mentioned here:
   **"root" (top-level) directory**,
   and forward slashes are also used to _separate directories_
   (unlike in Windows, which uses backslashes).
-- File and directory locations on a computer are often referred to as "**paths**"
-- `$TMPDIR` is a so-called "**environment variable**" that contains the actual path
+- File and directory locations on a computer are often referred to as "**paths**".
+- `$TMPDIR` is a so-called "**environment variable**" that contains the path
   to the Compute storage directory
   (in the Unix shell, all _variables_ are referenced by putting a `$` before their name,
   and _environment_ variables are in all-caps).
   A variable is useful in this case,
-  because its location will vary depending on the compute node at which it's located.
+  because the location of this storage space will vary depending on the compute
+  node at which it's located.
   Along similar lines, your Home directory's path is stored in `$HOME`.
 :::
 
@@ -179,29 +180,27 @@ you should turn to your _Project_ directories.
 
 If possible,
 I recommend to use your Home directory only for some **general files**
-(like some software, tutorials and practice, general scripts),
+(like some software, tutorials and practice, general scripts and databases),
 and to use Project directories for all your research project data and results.
 
 #### Project Directories
 
 Project directories are linked to OSC projects, which are typically set up by PIs.
-They offer **flexibility** in terms of the amount of storage available
-(requested at the time of set-up, and then easily adjustable after that),
+They offer **flexibility** in terms of the amount of storage available,
 and also in terms of who can access files in the directory.
 
-By default, all members of a project have "read access"
+By default, all members of an OSC Project have "read access"
 (the ability to see and copy files) for all files in a project directory,
 which makes it **suitable for collaborating** on a research project.
 But rest assured:
 except for OSC staff, other people can never move, modify, or delete your files 
 (i.e., they don't have "write access") &mdash;
-this includes the admins (PIs) for the OSC Project in question.
+not even the admins (PIs) for the OSC Project in question.
 
 Like Home directories, Project directories are **backed up** daily.
 You don't have _direct_ access to the backups,
-but if you've, for example,  accidentally deleted some important files
-(Linux has no thrash bin!), you can request them to be restored to the way they were
-on a specific date.
+but if you've accidentally deleted some important files (Linux has no thrash bin!),
+you can request them to be restored to the way they were on a specific date.
 
 ::: {.callout-note}
 #### File Systems are shared among the clusters
@@ -216,8 +215,7 @@ For example, your Home directory can be accessed using the same path
 
 #### Temporary storage: Scratch and Compute
 
-The **Scratch** file system provides temporary storage space, 
-and every Project has a Scratch directory.
+Every OSC Project also has a Scratch directory.
 The two main advantages of Scratch space are that it is **effectively unlimited** and
 that it has **faster** data read and write ("I/O") speed than Home and Project space.
 However, it's not backed up,
@@ -261,9 +259,10 @@ and this is where you run your data processing and analysis.
 
 You can use compute nodes by putting in requests for resources,
 such as the number of nodes, cores, and for how long you will need them.
-As many different users are sending such requests ("compute jobs" or just "**jobs**")
+Because many different users are sending such requests
+--i.e., for "compute jobs" or just "**jobs**"--
 all the time, there is software called a **job scheduler**
-(specifically, _Slurm_ in the case of OSC)
+(specifically, _Slurm_ in case of OSC)
 that considers each request and
 assigns the necessary resources to the job as they become available.
 
@@ -279,17 +278,17 @@ and then RStudio will run on a compute node.
 This is an example of using a compute node **interactively** &mdash;
 "you" are located on a compute node,
 and any R command you type will be executed there.
-Even more commonly for genomics work,
+More commonly for genomics work,
 you'll be using compute nodes **non-interactively, that is, through "batch jobs"**.
 When doing so, you will write a script in advance and send it to the job scheduler,
-which will run it on a compute node that "you" don't go to at all.
+which will run the script on a compute node that "you" don't go to at all.
 
 The session [Compute Jobs with Slurm](08_slurm.qmd) is dedicated to this topic.
 :::
 
 **Compute nodes come in different shapes and sizes.**
 _"Standard nodes"_ are by far the most numerous
-(e.g., Owens has 648 and Pitzer has 564) and even those vary in size,
+(e.g., Owens has 648 and Pitzer has 564 of them) and even those vary in size,
 from 28 cores per node (Owens) to 48 cores per node (the "expansion" part of Pitzer).
 Some examples of other types of nodes are ones with extra memory (`largemem` and `hugemem`)
 and ones that provide access to GPUs (Graphical Processing Units) rather than CPUs.
@@ -312,7 +311,8 @@ Genomics programs sometimes load all of the input data from disk to memory for
 fast access, or hold a huge assembly graph in memory,
 and as such may need a lot of memory as well.
 
-Don't confuse memory with file storage, the data that is on disk.
+Don't confuse memory with file storage, the data that is on disk,
+some of which may have been unused for years.
 :::
 
 <br>
@@ -374,20 +374,22 @@ see the buttons across the top.
 Additionally,
 there are **Upload and Download buttons** for uploading files from your computer to OSC,
 and downloading them from OSC to your computer.
-These are only suitable for relatively small transfers, say below 1 GB.
+These are only suitable for relatively small transfers, roughly below 1 GB.
 Other options to transfer files to and from OSC are remote transfer commands
 like `scp` (also for smaller transfers), and SFTP or Globus for larger transfers.
 To learn more about these options,
 see the [**reference page on OSC file transfer**](../info/osc_transfer.qmd).
 
-<br>
-
-### System Status (in Clusters)
-
+::: {.callout-note}
 We will skip the "**Jobs**" dropdown menu in the blue top bar,
 because in later sessions,
 we will learn to create, submit, and monitor compute jobs at the command line
-instead.
+instead, which quickly becomes more efficient as you get the hang of it.
+:::
+
+<br>
+
+### System Status (in Clusters)
 
 Moving on to "**Clusters**", 
 we'll start with the item at the bottom of that dropdown menu, "**System Status**":
@@ -413,14 +415,14 @@ you can access a Unix shell either on Owens or Pitzer:
 
 <p align="center"><img src=img/ondemand_shell_select.png width="50%"></p>
   
-I'm selecting a Unix shell on the Pitzer supercomputer,
+I'm selecting a shell on the Pitzer supercomputer,
 which will open a new browser tab looking like this:
 
 <p align="center"><img src=img/ondemand_shell2.png width="95%"></p>
 
 We most commonly interact with a supercomputer using a Unix shell,
-and we'll learn about the basics of the Unix shell in an [upcoming session](04_shell.qmd).
-However, we'll mostly be accessing a Unix shell in a different way,
+and we'll learn about the basics of doing so in an [upcoming session](04_shell.qmd).
+However, we'll mostly be accessing a Unix shell in a different manner,
 namely **inside the VS Code text editor**,
 which also gives us some additional functionality in a user-friendly way.
 
@@ -439,7 +441,7 @@ will list the sessions that are currently active as well as finished ones).
 In the list, the "VS Code" program is called "Code Server",
 much like "RStudio" is called "RStudio Server".
 They are the same programs but with minor edits to allow them to run remotely
-rather than on your own computer.
+in a browser rather than as locally installed on your own computer.
 :::
 
 "Interactive Apps" like VS Code and RStudio **run on compute nodes** &mdash;

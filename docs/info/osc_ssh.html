@@ -136,10 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../modules/02_osc.html" rel="" target="">
  <span class="dropdown-text">- OSC</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/03_vscode.html" rel="" target="">
- <span class="dropdown-text">- VS Code</span></a>
-  </li>  
+        <li class="dropdown-header">- VS Code [TBA]</li>
         <li class="dropdown-header">- The Unix shell [TBA]</li>
         <li class="dropdown-header">- Shell scripting [TBA]</li>
         <li class="dropdown-header">- Software at OSC [TBA]</li>
@@ -180,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="dropdown-header">Specific tutorials</li>
         <li>
     <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
- <span class="dropdown-text">- Data transfer to and from OSC</span></a>
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
@@ -267,12 +264,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>This page will first go through the basics of connecting to OSC with SSH, using the <code>ssh</code> command.</p>
-<p>If you use <code>ssh</code> frequently, or plan to do so, the next two sections will show you two shortcuts:</p>
+<p>If you use <code>ssh</code> frequently, or plan to do so, the next two sections will show you two useful tricks:</p>
 <ul>
-<li><a href="#avoid-being-prompted-for-your-osc-password">Avoid being prompted for your password</a></li>
+<li><a href="#avoid-being-prompted-for-your-osc-password">Avoid being prompted for your OSC password</a></li>
 <li><a href="#use-a-shorter-name-for-your-ssh-connection">Set up a shortcut for your SSH connection name</a>.</li>
 </ul>
-<p>Finally, something more specific but incredibly useful if you like VS Code, and have it installed locally, is to <a href="#set-up-your-local-vs-code-to-ssh-tunnel-into-osc">SSH-tunnel VS Code to OSC*</a>.</p>
+<p>Finally, something more specific but incredibly useful if you like VS Code, and have it installed locally, is to <a href="#set-up-your-local-vs-code-to-ssh-tunnel-into-osc">SSH-tunnel VS Code to OSC</a>.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -288,8 +285,8 @@ SSH and Unix shells on Windows
 <p>If you have a Windows computer, you can instead use a GUI-based SSH client like <a href="https://www.putty.org/"><code>PuTTY</code></a>.</p>
 <p>Alternatively, for an experience more similar to that if you did have a Unix-based operating system, you can install either of the following, which will enable you to get a terminal program that does run a Unix shell:</p>
 <ul>
-<li><p><a href="https://learn.microsoft.com/en-us/windows/wsl/install">Windows Subsystem for Linux (WSL)</a> — the more involved option, this will basically run a Linux Virtual Machine on your computer.</p></li>
-<li><p><a href="https://git-scm.com/download/win">Git for Windows</a>, which comes with a Unix (Bash) shell. To install this, download it from the link above and install it using all the default settings for the installation, except:</p>
+<li><p><a href="https://learn.microsoft.com/en-us/windows/wsl/install"><strong>Windows Subsystem for Linux (WSL)</strong></a> — the more involved option, this will basically run a Linux Virtual Machine on your computer.</p></li>
+<li><p><strong>Git for Windows</strong>, which comes with a Unix (Bash) shell — “Git Bash”. To install this, <a href="https://git-scm.com/download/win">download it from this page</a> and install it using all the default settings for the installation, except:</p>
 <ul>
 <li><p>In “<em>Adjusting Your PATH Environment</em>”, select “<em>Use Git from Git Bash Only</em>”.</p></li>
 <li><p>In the prompt “<em>Configuring the Line Ending Conversions</em>”, choose “<em>Checkout as-is, commit as-is</em>”.</p></li>
@@ -303,10 +300,10 @@ SSH and Unix shells on Windows
 <section id="basic-ssh-connection-in-a-terminal" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="basic-ssh-connection-in-a-terminal"><span class="header-section-number">2</span> Basic SSH connection in a terminal</h2>
 <p>To connect to OSC or other remote computers without using a web portal like OnDemand, you can use SSH. You can do so via the <strong><code>ssh</code> command</strong> if you have a Linux or a Mac computer, since these two operating systems are both Unix-based and have built-in terminals with Unix shells.</p>
-<p>Here, I’ll briefly demonstrate how to use the <code>ssh</code> command. On your own computer, open a terminal application and input the command <code>ssh &lt;username&gt;@&lt;hostname&gt;</code>, where:</p>
+<p>Here, I’ll briefly demonstrate how to use the <code>ssh</code> command. On your own computer, open a terminal application and input the command <code>ssh &lt;user&gt;@&lt;host&gt;</code>, where:</p>
 <ul>
-<li><code>&lt;username&gt;</code> should be replaced by your OSC username, and</li>
-<li><code>&lt;hostname&gt;</code> should be replaced by the name of the computer you want to connect to:
+<li><code>&lt;user&gt;</code> should be replaced by your OSC username, and</li>
+<li><code>&lt;host&gt;</code> should be replaced by the name of the computer you want to connect to:
 <ul>
 <li><code>pitzer.osc.edu</code> to connect to the Pitzer cluster</li>
 <li><code>owens.osc.edu</code> to connect to the Owens cluster</li>
@@ -338,11 +335,13 @@ SSH shortcuts
 </section>
 <section id="avoid-being-prompted-for-your-osc-password" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="avoid-being-prompted-for-your-osc-password"><span class="header-section-number">3</span> Avoid being prompted for your OSC password</h2>
+<p>If you take the following steps, you will no longer be promoted for your OSC password every time you log in to OSC using SSH.</p>
+<p>Both steps should be done in a terminal <em>on your local machine</em>:</p>
 <ol type="1">
-<li><p><strong><em>On your own computer</em>, generate a public-private SSH key-pair:</strong></p>
+<li><p><strong>Generate a public-private SSH key-pair:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You’ll get some output and will then be asked several questions, but in each case, you can just press <kbd>Enter</kbd> to select the default answer.</p></li>
-<li><p><strong><em>On your own computer</em>, transfer the public key to OSC’s clusters:</strong></p>
+<li><p><strong>Transfer the public key to OSC’s clusters:</strong></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace &lt;user&gt; by your username, e.g. "ssh-copy-id jelmer@owens.osc.edu"</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@pitzer.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
@@ -359,7 +358,7 @@ SSH shortcuts
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Note
+More instructions
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -391,15 +390,15 @@ Host jo
 <p><br></p>
 <p>Now, you just need to use your, preferably very short, alias to log in — and if you did the previous no-password setup, you won’t even be prompted for your password!</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> jp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Perhaps even more conveniently, this shortcut will also work with <code>scp</code> and <code>rsync</code>! For example:</p>
+<p>Perhaps even more conveniently, these shortcuts will also work with <code>scp</code> and <code>rsync</code>! For example:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> ~/scripts op:/fs/scratch/PAS0471</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 </section>
 <section id="set-up-your-local-vs-code-to-ssh-tunnel-into-osc" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="set-up-your-local-vs-code-to-ssh-tunnel-into-osc"><span class="header-section-number">5</span> Set up your local VS Code to SSH tunnel into OSC</h2>
-<p>If you want to use VS Code to write code, have a shell, and interact with files at OSC directly, you don’t necessarily need to use the VS Code Server in OSC OnDemand. You can also make your local VS Code installation “<strong>SSH tunnel</strong>” into OSC.</p>
+<p>If you want to use VS Code to write code, have a shell, and interact with files at OSC directly, you don’t necessarily need to use the VS Code (Code Server) in OSC OnDemand. You can also make your local VS Code installation “<strong>SSH tunnel</strong>” into OSC.</p>
 <p>This is a more convenient way of working because it’s quicker to start, will never run out of alotted time, and because you are not working inside a browser, you have more screen space and no keyboard shortcut interferences.</p>
-<p>The set-up is pretty simple (see also <a href="https://code.visualstudio.com/docs/remote/ssh">these instructions</a> if you get stuck):</p>
+<p>The set-up is pretty simple (see also <a href="https://code.visualstudio.com/docs/remote/ssh">these instructions</a> if you get stuck), and should also work on Windows:</p>
 <ol type="1">
 <li><p>If necessary, install VS Code (instructions for <a href="https://code.visualstudio.com/docs/setup/windows">Windows</a> / <a href="https://code.visualstudio.com/docs/setup/mac">Mac</a> / <a href="https://code.visualstudio.com/docs/setup/linux">Linux</a>) on your computer, and open it.</p></li>
 <li><p>Install the VS Code <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">“Remote Development extension pack”</a>: open the Extensions side bar (click the icon with the four squared in the far left), search for “Remote Development extension pack”, and click “Install”.</p></li>

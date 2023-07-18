@@ -74,6 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -107,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">RNAseq data analysis</span>
+    <span class="navbar-title">RNAseq analysis</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -118,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Overview</span></a>
+ <span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../modules/01_intro.html" rel="" target="">
@@ -126,56 +128,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Computing skills</span>
+ <span class="menu-text">1. Computing skills</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-computing-skills">    
         <li>
     <a class="dropdown-item" href="../modules/02_osc.html" rel="" target="">
- <span class="dropdown-text">OSC</span></a>
+ <span class="dropdown-text">- OSC</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/03_vscode.html" rel="" target="">
- <span class="dropdown-text">VS Code</span></a>
-  </li>  
-        <li class="dropdown-header">The Unix shell [TBA]</li>
-        <li class="dropdown-header">Shell scripting [TBA]</li>
-        <li class="dropdown-header">Software at OSC [TBA]</li>
-        <li class="dropdown-header">SLURM compute jobs [TBA]</li>
+        <li class="dropdown-header">- VS Code [TBA]</li>
+        <li class="dropdown-header">- The Unix shell [TBA]</li>
+        <li class="dropdown-header">- Shell scripting [TBA]</li>
+        <li class="dropdown-header">- Software at OSC [TBA]</li>
+        <li class="dropdown-header">- SLURM compute jobs [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-from-reads-to-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">From reads to counts</span>
+ <span class="menu-text">2. From reads to counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-from-reads-to-counts">    
-        <li class="dropdown-header">Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
-        <li class="dropdown-header">Trimming with <code>TrimGalore</code> [TBA]</li>
-        <li class="dropdown-header">rRNA removal with <code>SortMeRNA</code> [TBA]</li>
-        <li class="dropdown-header">Alignment with <code>STAR</code> [TBA]</li>
-        <li class="dropdown-header">Counting with <code>Salmon</code> [TBA]</li>
+        <li class="dropdown-header">- Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
+        <li class="dropdown-header">- Trimming with <code>TrimGalore</code> [TBA]</li>
+        <li class="dropdown-header">- rRNA removal with <code>SortMeRNA</code> [TBA]</li>
+        <li class="dropdown-header">- Alignment with <code>STAR</code> [TBA]</li>
+        <li class="dropdown-header">- Counting with <code>Salmon</code> [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-analyzing-the-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Analyzing the counts</span>
+ <span class="menu-text">3. Analyzing the counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-analyzing-the-counts">    
-        <li class="dropdown-header">Creating a DESeq2 object [TBA]</li>
-        <li class="dropdown-header">PCA [TBA]</li>
-        <li class="dropdown-header">Differential expression analysis [TBA]</li>
-        <li class="dropdown-header">GO enrichment analysis [TBA]</li>
-        <li class="dropdown-header">KEGG enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- Creating a DESeq2 object [TBA]</li>
+        <li class="dropdown-header">- PCA [TBA]</li>
+        <li class="dropdown-header">- Differential expression analysis [TBA]</li>
+        <li class="dropdown-header">- GO enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- KEGG enrichment analysis [TBA]</li>
     </ul>
   </li>
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference-material" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference material</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-material">    
+        <li class="dropdown-header">Specific tutorials</li>
+        <li>
+    <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
+ <span class="dropdown-text">- Using OSC with SSH</span></a>
+  </li>  
+        <li class="dropdown-header">General info</li>
+        <li>
+    <a class="dropdown-item" href="../info/resources.html" rel="" target="">
+ <span class="dropdown-text">- Further Resources</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/glossary.html" rel="" target="">
+ <span class="dropdown-text">- Glossary</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="../info/about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../info/resources.html" rel="" target="">
- <span class="menu-text">Further Resources</span></a>
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools">
@@ -285,10 +310,10 @@ Starting a VS Code session with an active terminal (click here)
 <li>Click <code>Launch</code>.</li>
 </ul></li>
 <li><p>On the next page, once the top bar of the box is green and says <code>Runnning</code>, click <code>Connect to VS Code</code>.</p></li>
-<li><p>Open a terminal: &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>.</p></li>
+<li><p>Open a terminal: <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>.</p></li>
 <li><p>In the terminal, type <code>bash</code> and press <kbd>Enter</kbd>.</p></li>
 <li><p>Type <code>pwd</code> in the termain to check you are in <code>/fs/ess/scratch/PAS2250</code>.</p>
-<p>If not, click &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> and enter <code>/fs/ess/scratch/PAS2250/&lt;your-folder&gt;</code>.</p></li>
+<p>If not, click <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> and enter <code>/fs/ess/scratch/PAS2250/&lt;your-folder&gt;</code>.</p></li>
 </ol>
 </div>
 </div>
@@ -412,7 +437,7 @@ Can’t find yesterday’s <code>printname.sh</code> script?
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ul>
-<li>Open a new file in the <code>VS Code</code> editor (&nbsp; &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>New File</code>) and save it as <code>printname.sh</code></li>
+<li>Open a new file in the <code>VS Code</code> editor (&nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>New File</code>) and save it as <code>printname.sh</code></li>
 <li>Copy the code below into the script:</li>
 </ul>
 <div class="cell">
@@ -561,7 +586,7 @@ Last name: Doe</p>
 <section id="a-sleepy-script-for-practice" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="a-sleepy-script-for-practice"><span class="header-section-number">4.1</span> A sleepy script for practice</h3>
 <p>Let’s use the following short script to practice monitoring and managing batch and other compute jobs.</p>
-<p>Open a new file in the <code>VS Code</code> editor (&nbsp; &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>New File</code>) and save it as <code>scripts/sleep.sh</code>, then copy the following into it:</p>
+<p>Open a new file in the <code>VS Code</code> editor (&nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>New File</code>) and save it as <code>scripts/sleep.sh</code>, then copy the following into it:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=PAS2250</span></span>

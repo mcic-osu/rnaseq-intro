@@ -62,10 +62,8 @@ Such commands can provide a more convenient transfer method than OnDemand
 if you want to keep certain
 directories synced between OSC and your computer.
 
-::: {.callout-note}
 The reason you shouldn't use this for very large transfers is that the transfer
 will happen using a login node.
-:::
 
 ### `scp`
 
@@ -84,6 +82,27 @@ scp <user>@pitzer.osc.edu:<remote-path> <local-path>
 scp <local-path> <user>@pitzer.osc.edu:<remote-path>
 ```
 
+Here are two examples of copying from OSC to your local computer:
+
+```bash
+# Copy a file from OSC to a local computer - namely, to your current working dir ('.'):
+scp jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts/misc/fastqc.sh .
+
+# Copy a directory from OSC to a local computer - namely, to your home dir ('~'):
+scp -r jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts ~
+```
+
+And two examples of copying from your local computer to OSC:
+
+```bash
+# Copy a file from your computer to OSC --
+# namely, a file in from your current working dir to your home dir at OSC:
+scp fastqc.sh jelmer@pitzer.osc.edu:~
+
+# Copy a file from my local computer's Desktop to the Scratch dir for PAS0471:
+scp /Users/poelstra.1/Desktop/fastqc.sh jelmer@pitzer.osc.edu:/fs/scratch/PAS0471
+```
+
 Some nuances for remote copying:
 
 - As the above code implies, in both cases (remote-to-local and local-to-remote),
@@ -94,25 +113,8 @@ Some nuances for remote copying:
 
 - Since all files can be accessed at the same paths at Pitzer and at Owens,
   it doesn't matter whether you use `@pitzer.osc.edu` or `@owens.osc.edu` in
-  the `scp` command. 
-
-Here are some actual examples:
-
-```bash
-# Copy a file from OSC to a local computer - namely, to your current working dir ('.'):
-scp jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts/misc/fastqc.sh .
-
-# Copy a directory from OSC to a local computer - namely, to your home dir ('~'):
-scp -r jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts ~
-
-# Copy a file from your computer to OSC --
-# namely, a file in from your current working dir to your home dir at OSC:
-scp fastqc.sh jelmer@pitzer.osc.edu:~
-
-# Copy a file from my local computer's Desktop to the Scratch dir for PAS0471:
-scp /Users/poelstra.1/Desktop/fastqc.sh jelmer@pitzer.osc.edu:/fs/scratch/PAS0471
-```
-
+  the `scp` command.
+ 
 ::: {.callout-note}
 #### Transferring directly to and from OneDrive
 
@@ -155,6 +157,9 @@ OSC Home dir as follows:
 rsync -avz --progress ~/dir_with_results jelmer@owens.osc.edu:~
 ```
 
+::: {.callout-warning}
+#### Trailing slashes in `rsync`
+
 One tricky aspect of using `rsync` is that the presence/absence of a
 **trailing slash for source directories** makes a difference for its behavior.
 The following commands work as intended &mdash;
@@ -180,6 +185,8 @@ rsync -avz scripts backup/scripts
 # This would copy the files in "scripts" straight into "backup":
 rsync -avz scripts/ backup
 ```
+
+:::
 
 <br>
 
@@ -251,6 +258,8 @@ and there are **local counterparts for them: `lls`, `lcd`, `lpwd`** &mdash;
 for example:
 
 ```bash
+# NOTE: I am prefacing sftp commands with the 'sftp>' prompt to make it explicit
+#       these should be issued in an sftp session; but don't type that part.
 sftp> pwd
 ```
 
@@ -268,11 +277,12 @@ Local working directory: /Users/poelstra.1/Desktop
 
 ### Uploading files to OSC
 
-To **upload files** to OSC, use the **`put`** command.
+To upload files to OSC, use `sftp`'s **`put` command**.
+
 The syntax is `put <local-path> <remote-path>`,
-and unlike with `scp` etc., you don't need to designate the remote with its
-address and `:`.
-Like with `cp` and `scp`, you'll need the `-r` flag for recursive transfers,
+and unlike with `scp` etc., you don't need to include the address to the remote
+(because in an `stfp` session, you are simultaneously connected to both computers).
+But like with `cp` and `scp`, you'll need the `-r` flag for recursive transfers,
 i.e. transferring a directory and its contents.
 
 ```bash
@@ -298,8 +308,8 @@ tab completion or the recalling of previous commands with the up arrow.
 
 To download files from OSC, use the `get` command,
 which has the syntax `get <remote-path> <local-path>`
-(note: this is the other way around from `put` in that the remote path comes first,
-but the same in that both use the order `<source> <target>`).
+(this is the other way around from `put` in that the remote path comes first,
+but the same in that both use the order `<source> <target>`, like `cp` and so on).
 
 For example:
 
@@ -319,16 +329,18 @@ to exit the `sftp` prompt.
 ## Globus
 
 The second option for large transfers is **Globus**,
-which is especially your best bet for very large transfers.
-Globus has a browser-based GUI. Some advantages of using Globus are that:
+which has a browser-based GUI,
+and is especially your best bet for very large transfers.
+Some advantages of using Globus are that:
 
 - It checks whether all files were transferred correctly and completely
-- It can pause and resume automatically when you e.g. turn off your computer
+- It can pause and resume automatically when you e.g. turn off your computer for a while
 - It can be used to share files from OSC directly with collaborators even at
   different institutions.
 
-Globus does need some setup including the installation
-of a piece of software that will run in the background on your computer.
+Globus does need some setup,
+including the installation of a piece of software that will run in the
+background on your computer.
 
 - Globus installation and configuration instructions:
   [Windows](https://docs.globus.org/how-to/globus-connect-personal-windows) /

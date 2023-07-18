@@ -74,6 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -107,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">RNAseq data analysis</span>
+    <span class="navbar-title">RNAseq analysis</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -118,7 +120,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Overview</span></a>
+ <span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../modules/01_intro.html" rel="" target="">
@@ -126,56 +128,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Computing skills</span>
+ <span class="menu-text">1. Computing skills</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-computing-skills">    
         <li>
     <a class="dropdown-item" href="../modules/02_osc.html" rel="" target="">
- <span class="dropdown-text">OSC</span></a>
+ <span class="dropdown-text">- OSC</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/03_vscode.html" rel="" target="">
- <span class="dropdown-text">VS Code</span></a>
-  </li>  
-        <li class="dropdown-header">The Unix shell [TBA]</li>
-        <li class="dropdown-header">Shell scripting [TBA]</li>
-        <li class="dropdown-header">Software at OSC [TBA]</li>
-        <li class="dropdown-header">SLURM compute jobs [TBA]</li>
+        <li class="dropdown-header">- VS Code [TBA]</li>
+        <li class="dropdown-header">- The Unix shell [TBA]</li>
+        <li class="dropdown-header">- Shell scripting [TBA]</li>
+        <li class="dropdown-header">- Software at OSC [TBA]</li>
+        <li class="dropdown-header">- SLURM compute jobs [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-from-reads-to-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">From reads to counts</span>
+ <span class="menu-text">2. From reads to counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-from-reads-to-counts">    
-        <li class="dropdown-header">Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
-        <li class="dropdown-header">Trimming with <code>TrimGalore</code> [TBA]</li>
-        <li class="dropdown-header">rRNA removal with <code>SortMeRNA</code> [TBA]</li>
-        <li class="dropdown-header">Alignment with <code>STAR</code> [TBA]</li>
-        <li class="dropdown-header">Counting with <code>Salmon</code> [TBA]</li>
+        <li class="dropdown-header">- Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
+        <li class="dropdown-header">- Trimming with <code>TrimGalore</code> [TBA]</li>
+        <li class="dropdown-header">- rRNA removal with <code>SortMeRNA</code> [TBA]</li>
+        <li class="dropdown-header">- Alignment with <code>STAR</code> [TBA]</li>
+        <li class="dropdown-header">- Counting with <code>Salmon</code> [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-analyzing-the-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Analyzing the counts</span>
+ <span class="menu-text">3. Analyzing the counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-analyzing-the-counts">    
-        <li class="dropdown-header">Creating a DESeq2 object [TBA]</li>
-        <li class="dropdown-header">PCA [TBA]</li>
-        <li class="dropdown-header">Differential expression analysis [TBA]</li>
-        <li class="dropdown-header">GO enrichment analysis [TBA]</li>
-        <li class="dropdown-header">KEGG enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- Creating a DESeq2 object [TBA]</li>
+        <li class="dropdown-header">- PCA [TBA]</li>
+        <li class="dropdown-header">- Differential expression analysis [TBA]</li>
+        <li class="dropdown-header">- GO enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- KEGG enrichment analysis [TBA]</li>
     </ul>
   </li>
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference-material" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference material</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-material">    
+        <li class="dropdown-header">Specific tutorials</li>
+        <li>
+    <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
+ <span class="dropdown-text">- Using OSC with SSH</span></a>
+  </li>  
+        <li class="dropdown-header">General info</li>
+        <li>
+    <a class="dropdown-item" href="../info/resources.html" rel="" target="">
+ <span class="dropdown-text">- Further Resources</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/glossary.html" rel="" target="">
+ <span class="dropdown-text">- Glossary</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="../info/about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../info/resources.html" rel="" target="">
- <span class="menu-text">Further Resources</span></a>
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools">
@@ -281,10 +306,10 @@ Starting a VS Code session with an active terminal (click here)
 <li>Click <code>Launch</code>.</li>
 </ul></li>
 <li><p>On the next page, once the top bar of the box is green and says <code>Runnning</code>, click <code>Connect to VS Code</code>.</p></li>
-<li><p>Open a terminal: &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>.</p></li>
+<li><p>Open a terminal: <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>.</p></li>
 <li><p>In the terminal, type <code>bash</code> and press <kbd>Enter</kbd>.</p></li>
 <li><p>Type <code>pwd</code> in the termain to check you are in <code>/fs/ess/scratch/PAS2250</code>.</p>
-<p>If not, click &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> and enter <code>/fs/ess/scratch/PAS2250/&lt;your-folder&gt;</code>.</p></li>
+<p>If not, click <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> and enter <code>/fs/ess/scratch/PAS2250/&lt;your-folder&gt;</code>.</p></li>
 </ol>
 </div>
 </div>
@@ -361,7 +386,7 @@ The comments above specified the <em>intent</em> we had. What would have actuall
 <p>Let’s go ahead and start a script with the header lines that we have so far discussed.</p>
 <ul>
 <li><p>Inside your personal directory within <code>/fs/ess/scratch/PAS2250/participants</code>, make a directory called <code>scripts</code> and one called <code>sandbox</code> (e.g.&nbsp;<code>mkdir scripts sandbox</code>, or use the VS Code menus.</p></li>
-<li><p>Open a new file in the <code>VS Code</code> editor (&nbsp; &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>New File</code>) and save it as <code>printname.sh</code> within the newly created <code>scripts</code> dir.</p>
+<li><p>Open a new file in the <code>VS Code</code> editor (&nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>New File</code>) and save it as <code>printname.sh</code> within the newly created <code>scripts</code> dir.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -703,7 +728,7 @@ SRR7609474  inland  treatment   3   55728624    78.80</code></pre>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the file exists and was just modified:</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> sandbox/samples_headtail.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>-rw-r--r--@ 1 poelstra.1  staff   197B Jul 16 16:12 sandbox/samples_headtail.txt</code></pre>
+<pre class="bash-out"><code>-rw-r--r--@ 1 poelstra.1  staff   197B Jul 18 17:42 sandbox/samples_headtail.txt</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -769,14 +794,14 @@ SRR7609474  inland  treatment   3   55728624    78.80</code></pre>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/headtail.sh data/meta/meta.tsv sandbox/tmp.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>Starting script scripts/headtail.sh
-Sun Jul 16 16:12:57 EDT 2023
+Tue Jul 18 17:42:34 EDT 2023
 Input file:   data/meta/meta.tsv
 Output file:  sandbox/tmp.txt
 
 Listing the output file:
--rw-r--r--@ 1 poelstra.1  staff   197B Jul 16 16:12 sandbox/tmp.txt
+-rw-r--r--@ 1 poelstra.1  staff   197B Jul 18 17:42 sandbox/tmp.txt
 Done with script scripts/headtail.sh
-Sun Jul 16 16:12:57 EDT 2023</code></pre>
+Tue Jul 18 17:42:34 EDT 2023</code></pre>
 </div>
 </div>
 <p>The script printed some details for the output file, but not its contents (that would have worked here, but is usually not sensible when working with genomics data). Let’s take a look, though, to make sure the script worked:</p>
@@ -884,15 +909,15 @@ head -n "$line_nr" "$input_file" | tail -n 1</code></pre>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printline.sh data/meta/meta.tsv sandbox/meta_line.tsv 4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>Starting script scripts/printline.sh
-Sun Jul 16 16:12:57 EDT 2023
+Tue Jul 18 17:42:34 EDT 2023
 Input file:   data/meta/meta.tsv
 Output file:  sandbox/meta_line.tsv
 Line number:  4
 
 Listing the output file:
--rw-r--r--@ 1 poelstra.1  staff    42B Jul 16 16:12 sandbox/meta_line.tsv
+-rw-r--r--@ 1 poelstra.1  staff    42B Jul 18 17:42 sandbox/meta_line.tsv
 Done with script scripts/printline.sh
-Sun Jul 16 16:12:57 EDT 2023</code></pre>
+Tue Jul 18 17:42:34 EDT 2023</code></pre>
 </div>
 </div>
 </div>

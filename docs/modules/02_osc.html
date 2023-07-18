@@ -102,10 +102,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="../modules/02_osc.html" rel="" target="">
  <span class="dropdown-text">- OSC</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="../modules/03_vscode.html" rel="" target="">
- <span class="dropdown-text">- VS Code</span></a>
-  </li>  
+        <li class="dropdown-header">- VS Code [TBA]</li>
         <li class="dropdown-header">- The Unix shell [TBA]</li>
         <li class="dropdown-header">- Shell scripting [TBA]</li>
         <li class="dropdown-header">- Software at OSC [TBA]</li>
@@ -146,7 +143,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="dropdown-header">Specific tutorials</li>
         <li>
     <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
- <span class="dropdown-text">- Data transfer to and from OSC</span></a>
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
@@ -269,17 +266,17 @@ ul.task-list li input[type="checkbox"] {
 <li>Your analyses require specialized hardware, such as GPUs.</li>
 <li>Your analyses require software available only for the Linux operating system, but you use Windows.</li>
 </ul>
-<p>These kinds of situations can make it hard or simply impossible to solely work on your personal workstation, depending on the exact amount of data, and so on. When you’re working RNAseq data or other kinds of genomic data, many of these reasons apply.</p>
+<p>When you’re working RNAseq data or other kinds of genomic data, many of these reasons apply. This can make it hard or simply impossible to do all your work on your personal workstation, and supercomputers provide a solution.</p>
 </section>
 <section id="the-ohio-supercomputer-center-osc" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="the-ohio-supercomputer-center-osc"><span class="header-section-number">1.2</span> The Ohio Supercomputer Center (OSC)</h3>
-<p>The Ohio Supercomputer Center (OSC) is a facility provided by the state of Ohio (not The Ohio State University). It has two supercomputers, lots of storage space, and an excellent infrastructure for accessing these resources. At least for folks at OSU, using OSC is currently usually <a href="#administrative-miscellaneae"><strong>free in practice</strong></a>. Having such a good HPC resource available at no cost is not something we should take for granted — at many institutions, academics not only have have to pay for these kinds of resources, but those are often not as good.</p>
+<p>The Ohio Supercomputer Center (OSC) is a facility provided by the state of Ohio (not The Ohio State University). It has two supercomputers, lots of storage space, and an excellent infrastructure for accessing these resources. At least for folks at OSU, using OSC is currently usually <a href="#administrative-miscellaneae"><strong>free in practice</strong></a>. Having such a good HPC resource available at no cost is not something we should take for granted — at many institutions, academics not only have have to pay for these kinds of resources, but those are often more limited and not as easy to access.</p>
 <p>In <strong>upcoming sessions</strong>, we’ll continue to work at OSC, so you will get a fair bit of experience with using it. We’ll also have specific sessions dedicated to <a href="../modules/03_vscode.html">using VS Code at OSC</a>, <a href="../modules/07_software.html">loading and installing software at OSC</a> and <a href="../modules/08_slurm.html">using the SLURM job scheduler</a>.</p>
 <p>OSC has <strong>three main websites</strong>:</p>
 <ul>
 <li><a href="https://osc.edu" class="uri">https://osc.edu</a>: OSC’s general website, with lots of information about the supercomputers, the software that’s installed, and how to use OSC.</li>
-<li><a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>: A web portal to use OSC through your browser (login needed).</li>
-<li><a href="https://my.osc.edu" class="uri">https://my.osc.edu</a>: A site to manage your account and Projects you are an admin for (login needed).</li>
+<li><a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>: A web portal to use OSC resources through your browser (login needed).</li>
+<li><a href="https://my.osc.edu" class="uri">https://my.osc.edu</a>: A site to manage your account and OSC Projects you are an admin for (login needed).</li>
 </ul>
 <p><br></p>
 </section>
@@ -289,7 +286,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Let’s start with some terminology, going from smaller things to bigger things:</p>
 <ul>
 <li><strong>Core / Processor / CPU / Thread</strong> — Components of a computer that can each (semi-)indendepently be asked to perform a computing task like running a bioinformatics program. While these terms are not technically all synonyms, we can treat them as such for our purposes.</li>
-<li><strong>Node</strong> — A single computer that is a part of a supercomputer and has dozens of cores.</li>
+<li><strong>Node</strong> — A single computer that is a part of a supercomputer and has dozens of cores (i.e., they tend to be more powerful than a personal laptop or desktop).</li>
 <li><strong>Supercomputer / Cluster</strong> — Many computers connected by a high-speed network. (“Pitzer” and “Owens” are the two currently active ones at OSC.)</li>
 <li><strong>Supercomputer Center</strong> — A facility like OSC that has one or more supercomputers.</li>
 </ul>
@@ -396,8 +393,8 @@ Unix terminology and environment variables
 <ul>
 <li>“<strong>Directory</strong>” (or “<strong>dir</strong>” for short) is a commonly used term in Unix that just means “folder”.</li>
 <li>In the “Located within” column in the table above, the leading forward slash <strong><code>/</code></strong> signifies the system’s <strong>“root” (top-level) directory</strong>, and forward slashes are also used to <em>separate directories</em> (unlike in Windows, which uses backslashes).</li>
-<li>File and directory locations on a computer are often referred to as “<strong>paths</strong>”</li>
-<li><code>$TMPDIR</code> is a so-called “<strong>environment variable</strong>” that contains the actual path to the Compute storage directory (in the Unix shell, all <em>variables</em> are referenced by putting a <code>$</code> before their name, and <em>environment</em> variables are in all-caps). A variable is useful in this case, because its location will vary depending on the compute node at which it’s located. Along similar lines, your Home directory’s path is stored in <code>$HOME</code>.</li>
+<li>File and directory locations on a computer are often referred to as “<strong>paths</strong>”.</li>
+<li><code>$TMPDIR</code> is a so-called “<strong>environment variable</strong>” that contains the path to the Compute storage directory (in the Unix shell, all <em>variables</em> are referenced by putting a <code>$</code> before their name, and <em>environment</em> variables are in all-caps). A variable is useful in this case, because the location of this storage space will vary depending on the compute node at which it’s located. Along similar lines, your Home directory’s path is stored in <code>$HOME</code>.</li>
 </ul>
 </div>
 </div>
@@ -405,13 +402,13 @@ Unix terminology and environment variables
 <h4 data-number="2.1.1" class="anchored" data-anchor-id="home-directory"><span class="header-section-number">2.1.1</span> Home Directory</h4>
 <p>When you initially get an account with OSC, a Home directory is created for you, named with your OSC username. This directory will always be within <code>/users/</code>, and then, somewhat strangely, in a directory containing the name of the OSC Project you were first added to (and this will not change even if you’re no longer a member of that project, or if that project ceases to exist). For example, my Home directory is <code>/users/PAS0471/jelmer</code>.</p>
 <p>You will only ever have <strong>one</strong> Home directory. You also <strong>cannot expand</strong> the standard 500 GB of storage — if you need more space, you should turn to your <em>Project</em> directories.</p>
-<p>If possible, I recommend to use your Home directory only for some <strong>general files</strong> (like some software, tutorials and practice, general scripts), and to use Project directories for all your research project data and results.</p>
+<p>If possible, I recommend to use your Home directory only for some <strong>general files</strong> (like some software, tutorials and practice, general scripts and databases), and to use Project directories for all your research project data and results.</p>
 </section>
 <section id="project-directories" class="level4" data-number="2.1.2">
 <h4 data-number="2.1.2" class="anchored" data-anchor-id="project-directories"><span class="header-section-number">2.1.2</span> Project Directories</h4>
-<p>Project directories are linked to OSC projects, which are typically set up by PIs. They offer <strong>flexibility</strong> in terms of the amount of storage available (requested at the time of set-up, and then easily adjustable after that), and also in terms of who can access files in the directory.</p>
-<p>By default, all members of a project have “read access” (the ability to see and copy files) for all files in a project directory, which makes it <strong>suitable for collaborating</strong> on a research project. But rest assured: except for OSC staff, other people can never move, modify, or delete your files (i.e., they don’t have “write access”) — this includes the admins (PIs) for the OSC Project in question.</p>
-<p>Like Home directories, Project directories are <strong>backed up</strong> daily. You don’t have <em>direct</em> access to the backups, but if you’ve, for example, accidentally deleted some important files (Linux has no thrash bin!), you can request them to be restored to the way they were on a specific date.</p>
+<p>Project directories are linked to OSC projects, which are typically set up by PIs. They offer <strong>flexibility</strong> in terms of the amount of storage available, and also in terms of who can access files in the directory.</p>
+<p>By default, all members of an OSC Project have “read access” (the ability to see and copy files) for all files in a project directory, which makes it <strong>suitable for collaborating</strong> on a research project. But rest assured: except for OSC staff, other people can never move, modify, or delete your files (i.e., they don’t have “write access”) — not even the admins (PIs) for the OSC Project in question.</p>
+<p>Like Home directories, Project directories are <strong>backed up</strong> daily. You don’t have <em>direct</em> access to the backups, but if you’ve accidentally deleted some important files (Linux has no thrash bin!), you can request them to be restored to the way they were on a specific date.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -429,7 +426,7 @@ File Systems are shared among the clusters
 </section>
 <section id="temporary-storage-scratch-and-compute" class="level4" data-number="2.1.3">
 <h4 data-number="2.1.3" class="anchored" data-anchor-id="temporary-storage-scratch-and-compute"><span class="header-section-number">2.1.3</span> Temporary storage: Scratch and Compute</h4>
-<p>The <strong>Scratch</strong> file system provides temporary storage space, and every Project has a Scratch directory. The two main advantages of Scratch space are that it is <strong>effectively unlimited</strong> and that it has <strong>faster</strong> data read and write (“I/O”) speed than Home and Project space. However, it’s not backed up, and files that are unmodified for 90 days are automatically deleted. As such, Scratch storage is mostly useful for intermediate results that are likely not needed again and can be reproduced easily.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>Every OSC Project also has a Scratch directory. The two main advantages of Scratch space are that it is <strong>effectively unlimited</strong> and that it has <strong>faster</strong> data read and write (“I/O”) speed than Home and Project space. However, it’s not backed up, and files that are unmodified for 90 days are automatically deleted. As such, Scratch storage is mostly useful for intermediate results that are likely not needed again and can be reproduced easily.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <p><strong>Compute</strong> storage space is even more fleeting: as soon as the compute “job” in question has stopped (e.g.&nbsp;your script has finished), these files will be deleted. We’ll talk a bit more about this type of storage later, as using them can save time for I/O-intensive analyses.</p>
 <p><br></p>
 </section>
@@ -444,7 +441,7 @@ File Systems are shared among the clusters
 <section id="compute-nodes" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="compute-nodes"><span class="header-section-number">2.3</span> Compute Nodes</h3>
 <p>Compute nodes are really the powerhouse of the supercomputer, and this is where you run your data processing and analysis.</p>
-<p>You can use compute nodes by putting in requests for resources, such as the number of nodes, cores, and for how long you will need them. As many different users are sending such requests (“compute jobs” or just “<strong>jobs</strong>”) all the time, there is software called a <strong>job scheduler</strong> (specifically, <em>Slurm</em> in the case of OSC) that considers each request and assigns the necessary resources to the job as they become available.</p>
+<p>You can use compute nodes by putting in requests for resources, such as the number of nodes, cores, and for how long you will need them. Because many different users are sending such requests –i.e., for “compute jobs” or just “<strong>jobs</strong>”– all the time, there is software called a <strong>job scheduler</strong> (specifically, <em>Slurm</em> in case of OSC) that considers each request and assigns the necessary resources to the job as they become available.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -456,11 +453,11 @@ Interactive and batch use of compute nodes
 </div>
 <div class="callout-body-container callout-body">
 <p>Requests for compute node jobs can be made either through the OnDemand website or with commands like <code>sinteractive</code> and <code>sbatch</code>.</p>
-<p>For instance, when we start an RStudio session at OSC, we first have to fill out a little form with such a request, and then RStudio will run on a compute node. This is an example of using a compute node <strong>interactively</strong> — “you” are located on a compute node, and any R command you type will be executed there. Even more commonly for genomics work, you’ll be using compute nodes <strong>non-interactively, that is, through “batch jobs”</strong>. When doing so, you will write a script in advance and send it to the job scheduler, which will run it on a compute node that “you” don’t go to at all.</p>
+<p>For instance, when we start an RStudio session at OSC, we first have to fill out a little form with such a request, and then RStudio will run on a compute node. This is an example of using a compute node <strong>interactively</strong> — “you” are located on a compute node, and any R command you type will be executed there. More commonly for genomics work, you’ll be using compute nodes <strong>non-interactively, that is, through “batch jobs”</strong>. When doing so, you will write a script in advance and send it to the job scheduler, which will run the script on a compute node that “you” don’t go to at all.</p>
 <p>The session <a href="../modules/08_slurm.html">Compute Jobs with Slurm</a> is dedicated to this topic.</p>
 </div>
 </div>
-<p><strong>Compute nodes come in different shapes and sizes.</strong> <em>“Standard nodes”</em> are by far the most numerous (e.g., Owens has 648 and Pitzer has 564) and even those vary in size, from 28 cores per node (Owens) to 48 cores per node (the “expansion” part of Pitzer). Some examples of other types of nodes are ones with extra memory (<code>largemem</code> and <code>hugemem</code>) and ones that provide access to GPUs (Graphical Processing Units) rather than CPUs.</p>
+<p><strong>Compute nodes come in different shapes and sizes.</strong> <em>“Standard nodes”</em> are by far the most numerous (e.g., Owens has 648 and Pitzer has 564 of them) and even those vary in size, from 28 cores per node (Owens) to 48 cores per node (the “expansion” part of Pitzer). Some examples of other types of nodes are ones with extra memory (<code>largemem</code> and <code>hugemem</code>) and ones that provide access to GPUs (Graphical Processing Units) rather than CPUs.</p>
 <p>Fortunately, you don’t tend to have to think much about node types as you start using OSC, since Standard nodes are automatically picked by default, and those will serve you well for the vast of majority genomics analysis.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -473,7 +470,7 @@ Memory versus storage
 </div>
 <div class="callout-body-container callout-body">
 <p>When we talk about “memory”, this refers to RAM: the data that your computer has actively “loaded” or in use. For example, if you play a computer game or have many browser tabs open, your computer’s memory will be heavily used. Genomics programs sometimes load all of the input data from disk to memory for fast access, or hold a huge assembly graph in memory, and as such may need a lot of memory as well.</p>
-<p>Don’t confuse memory with file storage, the data that is on disk.</p>
+<p>Don’t confuse memory with file storage, the data that is on disk, some of which may have been unused for years.</p>
 </div>
 </div>
 <p><br></p>
@@ -508,12 +505,24 @@ Memory versus storage
 <img src="img/ondemand_projectdir.png" width="90%">
 </p>
 <p>This interface is <strong>much like the file browser on your own computer</strong>, so you can also create, delete, move and copy files and folders: see the buttons across the top.</p>
-<p>Additionally, there are <strong>Upload and Download buttons</strong> for uploading files from your computer to OSC, and downloading them from OSC to your computer. These are only suitable for relatively small transfers, say below 1 GB. Other options to transfer files to and from OSC are remote transfer commands like <code>scp</code> (also for smaller transfers), and SFTP or Globus for larger transfers. To learn more about these options, see the <a href="../info/osc_transfer.html"><strong>reference page on OSC file transfer</strong></a>.</p>
+<p>Additionally, there are <strong>Upload and Download buttons</strong> for uploading files from your computer to OSC, and downloading them from OSC to your computer. These are only suitable for relatively small transfers, roughly below 1 GB. Other options to transfer files to and from OSC are remote transfer commands like <code>scp</code> (also for smaller transfers), and SFTP or Globus for larger transfers. To learn more about these options, see the <a href="../info/osc_transfer.html"><strong>reference page on OSC file transfer</strong></a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We will skip the “<strong>Jobs</strong>” dropdown menu in the blue top bar, because in later sessions, we will learn to create, submit, and monitor compute jobs at the command line instead, which quickly becomes more efficient as you get the hang of it.</p>
+</div>
+</div>
 <p><br></p>
 </section>
 <section id="system-status-in-clusters" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="system-status-in-clusters"><span class="header-section-number">3.2</span> System Status (in Clusters)</h3>
-<p>We will skip the “<strong>Jobs</strong>” dropdown menu in the blue top bar, because in later sessions, we will learn to create, submit, and monitor compute jobs at the command line instead.</p>
 <p>Moving on to “<strong>Clusters</strong>”, we’ll start with the item at the bottom of that dropdown menu, “<strong>System Status</strong>”:</p>
 <p align="center">
 <img src="img/ondemand_systemstatus_select.png" width="50%">
@@ -531,11 +540,11 @@ Memory versus storage
 <p align="center">
 <img src="img/ondemand_shell_select.png" width="50%">
 </p>
-<p>I’m selecting a Unix shell on the Pitzer supercomputer, which will open a new browser tab looking like this:</p>
+<p>I’m selecting a shell on the Pitzer supercomputer, which will open a new browser tab looking like this:</p>
 <p align="center">
 <img src="img/ondemand_shell2.png" width="95%">
 </p>
-<p>We most commonly interact with a supercomputer using a Unix shell, and we’ll learn about the basics of the Unix shell in an <a href="../modules/04_shell.html">upcoming session</a>. However, we’ll mostly be accessing a Unix shell in a different way, namely <strong>inside the VS Code text editor</strong>, which also gives us some additional functionality in a user-friendly way.</p>
+<p>We most commonly interact with a supercomputer using a Unix shell, and we’ll learn about the basics of doing so in an <a href="../modules/04_shell.html">upcoming session</a>. However, we’ll mostly be accessing a Unix shell in a different manner, namely <strong>inside the VS Code text editor</strong>, which also gives us some additional functionality in a user-friendly way.</p>
 </section>
 <section id="interactive-apps" class="level3" data-number="3.4">
 <h3 data-number="3.4" class="anchored" data-anchor-id="interactive-apps"><span class="header-section-number">3.4</span> Interactive Apps</h3>
@@ -553,7 +562,7 @@ Memory versus storage
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In the list, the “VS Code” program is called “Code Server”, much like “RStudio” is called “RStudio Server”. They are the same programs but with minor edits to allow them to run remotely rather than on your own computer.</p>
+<p>In the list, the “VS Code” program is called “Code Server”, much like “RStudio” is called “RStudio Server”. They are the same programs but with minor edits to allow them to run remotely in a browser rather than as locally installed on your own computer.</p>
 </div>
 </div>
 <p>“Interactive Apps” like VS Code and RStudio <strong>run on compute nodes</strong> — therefore, we need to fill out a form and specify some details for our interactive compute job request:</p>
