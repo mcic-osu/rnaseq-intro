@@ -3,25 +3,16 @@ title: "RNAseq data analysis: introduction"
 pagetitle: "Intro"
 highlight-style: github
 author: "Jelmer Poelstra"
+date: 2023-07-14
 ---
 
 -----
 
 <br>
 
-::: {.callout-tip}
+## Workflow overview
 
-## Personal introductions
-
-In our round of personal introductions, please mention:
-
-- Your level of experience, if any, with genomic data
-- Your level of experience, if any, with the Unix command line, R, and possibly other programming languages
-- Your currently planned or ongoing projects, if any, that involve genomic data
-- Your longer-term ambitions, if any, for working with genomic data or using programming skills
-- What you're particularly interested in learning here (if you know!)
-
-:::
+<p align="center"><img src=img/workflow.png width="85%"></p>
 
 <br>
 
@@ -112,11 +103,9 @@ This part:
   the details of the analysis depend a lot on your experimental design and what you're interested in;
   in addition, initial results may influence your next steps, and so on.
 
-<br><br>
+<br>
 
 ## What we'll cover
-
-_Note: we can tweak this based on your interests!_
 
 ### Computing skills
 
@@ -128,10 +117,16 @@ Many of these computing skills are needed only for part I below.
 - Shell scripts and loops
 - The `SLURM` compute job scheduler
 - Using and installing software at OSC
-- Project organization and reproducibility
-- Introduction to R??
 
-<br>
+::: {.callout-note}
+
+- Along the way, we'll also learn about _project organization_ and
+  _ensuring reproducibility_.
+- I won't include a full-blown _introduction to **R**_,
+  but will provide some learning resources for those of you with little R experience
+  before we get to the relevant part of the RNAseq analysis.
+
+:::
 
 ### Analysis part I: From sequence reads to gene counts
 
@@ -142,25 +137,15 @@ Many of these computing skills are needed only for part I below.
 - Alignment QC with (at least) `MultiQC`
 - Gene expression counting with `Salmon`
 
-<br>
-
 ### Analysis part II: Analyzing gene counts in R
 
 - Getting an overview of sample/group distinctiveness with a PCA
 - Differential expression analysis with `{DESeq2}`
 - KEGG and GO enrichment analysis with `{ClusterProfiler}`
 
-<br><br>
+<br>
 
-## Workflow overview
-
-<p align="center">
-<img src=img/workflow.png width="85%">
-</p>
-
-<br><br>
-
-## Data source and workflow variations
+## Data type and workflow variations
 
 ### Reference-based versus _de novo_ workflows
 

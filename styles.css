@@ -1,1 +1,58 @@
 /* css styles */
+
+/*
+    border-style: solid;
+    border-color: #030303;
+*/
+
+.bash-out {
+    background-color: #e4e7ed;
+    padding: 5px 5px 0px 10px;
+    border-radius: 0px;
+    border-style: none;
+    border-width: 1px;
+    border-left-width: 2px;
+    border-left-style: solid;
+    border-left-color: #030303;
+    margin: -18px 0px 15px 0px;
+    font-style: italic;
+}
+
+.exercise {
+  padding: 0.5em;
+  margin: 1.5em;
+  padding-left: 65px;
+  background-size: 45px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  min-height: 80px;
+  color: #1f5386;
+  background-color: #E6D9F1;
+  border: solid 3px #DCCFDE;
+  border-radius: 25px;
+}
+
+.exercise {
+  background-image: url("img/puzzle-div.png");
+}
+
+/* --------------------------------------------------------------------------/*
+/* details sections */
+details > summary {
+  padding: 10px 10px;
+  background-color: #ECE8F0;
+  border: none;
+  border-radius: 25px;
+  /*box-shadow: 3px 3px 4px black;*/
+}
+
+details {
+  border-radius: 25px;
+  background-color: #E6D9F1;
+  padding: 5px 5px;
+  margin-left: 5px;
+  border-left-width: 0px;
+  border-left-style: solid;
+  border-left-color: #DCCFDE;
+  border-radius: 0px;
+}

@@ -3,45 +3,61 @@ project:
   output-dir: docs
 
 website:
-  title: "RNAseq data analysis"
-  repo-url: https://github.com/mcic-osu/x
+  title: "RNAseq analysis"
+  repo-url: https://github.com/mcic-osu/rnaseq-intro
   repo-actions: [issue]
   navbar:
     search: true
     left:
       - href: index.qmd
-        text: Overview
+        text: "{{< fa home >}}"
       - href: modules/01_intro.qmd
         text: Introduction
-      - text: Computing skills
+      - text: "1. Computing skills"
         menu: 
-          - text: OSC [TBA]
-          - text: VS Code [TBA]
-          - text: The Unix shell [TBA]
-          - text: Shell scripting [TBA]
-          - text: Software at OSC [TBA]
-          - text: SLURM compute jobs [TBA]
-      - text: From reads to counts
+          - href: modules/02_osc.qmd
+            text: "- OSC"
+          - text: "- VS Code [TBA]"
+          - text: "- The Unix shell [TBA]"
+          - text: "- Shell scripting [TBA]"
+          - text: "- Software at OSC [TBA]"
+          - text: "- SLURM compute jobs [TBA]"
+      - text: "2. From reads to counts"
         menu:
-          - text: Read QC with `FastQC` and `MultiQC` [TBA]
-          - text: Trimming with `TrimGalore` [TBA]
-          - text: rRNA removal with `SortMeRNA` [TBA]
-          - text: Alignment with `STAR` [TBA]
-          - text: Counting with `Salmon` [TBA]
-      - text: Analyzing the counts
+          - text: "- Read QC with `FastQC` and `MultiQC` [TBA]"
+          - text: "- Trimming with `TrimGalore` [TBA]"
+          - text: "- rRNA removal with `SortMeRNA` [TBA]"
+          - text: "- Alignment with `STAR` [TBA]"
+          - text: "- Counting with `Salmon` [TBA]"
+      - text: "3. Analyzing the counts"
         menu:
-          - text: Creating a DESeq2 object [TBA]
-          - text: PCA [TBA]
-          - text: Differential expression analysis [TBA]
-          - text: GO enrichment analysis [TBA]
-          - text: KEGG enrichment analysis [TBA] 
+          - text: "- Creating a DESeq2 object [TBA]"
+          - text: "- PCA [TBA]"
+          - text: "- Differential expression analysis [TBA]"
+          - text: "- GO enrichment analysis [TBA]"
+          - text: "- KEGG enrichment analysis [TBA]" 
     right:
-      - about.qmd
+      - text: Reference material
+        menu:
+          - text: Specific tutorials
+          - href: info/osc_transfer.qmd
+            text: "- File transfer to and from OSC"
+          - href: info/osc_ssh.qmd
+            text: "- Using OSC with SSH"
+          - text: General info
+          - href: info/resources.qmd
+            text: "- Further Resources"
+          - href: info/glossary.qmd
+            text: "- Glossary"
+      - href: info/about.qmd
+        text: About
+      - icon: github
+        href: https://github.com/mcic-osu/rnaseq-intro
   page-footer:
     left: "2023, Jelmer Poelstra"
     right:
       - icon: github
-        href: https://github.com/mcic-osu/x
+        href: https://github.com/mcic-osu/rnaseq-intro
 
 format:
   html:

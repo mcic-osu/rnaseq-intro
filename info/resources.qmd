@@ -1,0 +1,30 @@
+
+```{r knitr_options, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
+```
+
+-----
+
+::: {.callout-important}
+## Under construction 
+This page is still under construction.
+:::
+
+# Further Resources
+
+For further resources related to individual topics that were covered in these
+sessions (such as OSC, the Unix shell, etc),
+see the bottom of each session page.
+
+## General applied bioinformatics resources
+
+- Buffalo Book
+- Practical Computing for Biologists books
+
+<br>
+
+## RNAseq analysis
+
+### Transcript-level analysis
+
+TBA

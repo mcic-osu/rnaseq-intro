@@ -7,5 +7,44 @@
   },
   "modules/01_intro.qmd": {
     "01_intro.html": "4bcffd98"
+  },
+  "info/about.qmd": {
+    "about.html": "d26eda0b"
+  },
+  "info/resources.qmd": {
+    "resources.html": "742612dd"
+  },
+  "modules/08_slurm.qmd": {
+    "08_slurm.html": "1385e615"
+  },
+  "modules/02_osc.qmd": {
+    "02_osc.html": "26ef3758"
+  },
+  "modules/09_examples.qmd": {
+    "09_examples.html": "6fccd4a8"
+  },
+  "modules/07_software.qmd": {
+    "07_software.html": "4ccd8aed"
+  },
+  "modules/05_vars-loops.qmd": {
+    "05_vars-loops.html": "abda77ef"
+  },
+  "modules/03_vscode.qmd": {
+    "03_vscode.html": "1773fb25"
+  },
+  "modules/06_scripts.qmd": {
+    "06_scripts.html": "93a30a19"
+  },
+  "modules/04_shell.qmd": {
+    "04_shell.html": "ce1a70d5"
+  },
+  "info/glossary.qmd": {
+    "glossary.html": "f423084a"
+  },
+  "info/osc_ssh.qmd": {
+    "osc_ssh.html": "ef78553f"
+  },
+  "info/osc_transfer.qmd": {
+    "osc_transfer.html": "a53e59ca"
   }
 }

@@ -7,6 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jelmer Poelstra">
+<meta name="dcterms.date" content="2023-07-14">
 
 <title>Intro</title>
 <style>
@@ -40,6 +41,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -73,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title">RNAseq data analysis</span>
+    <span class="navbar-title">RNAseq analysis</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -84,7 +87,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Overview</span></a>
+ <span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="../modules/01_intro.html" rel="" target="" aria-current="page">
@@ -92,46 +95,79 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Computing skills</span>
+ <span class="menu-text">1. Computing skills</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-computing-skills">    
-        <li class="dropdown-header">OSC [TBA]</li>
-        <li class="dropdown-header">VS Code [TBA]</li>
-        <li class="dropdown-header">The Unix shell [TBA]</li>
-        <li class="dropdown-header">Shell scripting [TBA]</li>
-        <li class="dropdown-header">Software at OSC [TBA]</li>
-        <li class="dropdown-header">SLURM compute jobs [TBA]</li>
+        <li>
+    <a class="dropdown-item" href="../modules/02_osc.html" rel="" target="">
+ <span class="dropdown-text">- OSC</span></a>
+  </li>  
+        <li class="dropdown-header">- VS Code [TBA]</li>
+        <li class="dropdown-header">- The Unix shell [TBA]</li>
+        <li class="dropdown-header">- Shell scripting [TBA]</li>
+        <li class="dropdown-header">- Software at OSC [TBA]</li>
+        <li class="dropdown-header">- SLURM compute jobs [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-from-reads-to-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">From reads to counts</span>
+ <span class="menu-text">2. From reads to counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-from-reads-to-counts">    
-        <li class="dropdown-header">Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
-        <li class="dropdown-header">Trimming with <code>TrimGalore</code> [TBA]</li>
-        <li class="dropdown-header">rRNA removal with <code>SortMeRNA</code> [TBA]</li>
-        <li class="dropdown-header">Alignment with <code>STAR</code> [TBA]</li>
-        <li class="dropdown-header">Counting with <code>Salmon</code> [TBA]</li>
+        <li class="dropdown-header">- Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
+        <li class="dropdown-header">- Trimming with <code>TrimGalore</code> [TBA]</li>
+        <li class="dropdown-header">- rRNA removal with <code>SortMeRNA</code> [TBA]</li>
+        <li class="dropdown-header">- Alignment with <code>STAR</code> [TBA]</li>
+        <li class="dropdown-header">- Counting with <code>Salmon</code> [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-analyzing-the-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">Analyzing the counts</span>
+ <span class="menu-text">3. Analyzing the counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-analyzing-the-counts">    
-        <li class="dropdown-header">Creating a DESeq2 object [TBA]</li>
-        <li class="dropdown-header">PCA [TBA]</li>
-        <li class="dropdown-header">Differential expression analysis [TBA]</li>
-        <li class="dropdown-header">GO enrichment analysis [TBA]</li>
-        <li class="dropdown-header">KEGG enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- Creating a DESeq2 object [TBA]</li>
+        <li class="dropdown-header">- PCA [TBA]</li>
+        <li class="dropdown-header">- Differential expression analysis [TBA]</li>
+        <li class="dropdown-header">- GO enrichment analysis [TBA]</li>
+        <li class="dropdown-header">- KEGG enrichment analysis [TBA]</li>
     </ul>
   </li>
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference-material" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference material</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-material">    
+        <li class="dropdown-header">Specific tutorials</li>
+        <li>
+    <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
+ <span class="dropdown-text">- Using OSC with SSH</span></a>
+  </li>  
+        <li class="dropdown-header">General info</li>
+        <li>
+    <a class="dropdown-item" href="../info/resources.html" rel="" target="">
+ <span class="dropdown-text">- Further Resources</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/glossary.html" rel="" target="">
+ <span class="dropdown-text">- Glossary</span></a>
+  </li>  
+    </ul>
+  </li>
   <li class="nav-item">
-    <a class="nav-link" href="../about.html" rel="" target="">
+    <a class="nav-link" href="../info/about.html" rel="" target="">
  <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
   </li>  
 </ul>
             <div class="quarto-navbar-tools">
@@ -149,7 +185,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#rnaseq-data-analysis" id="toc-rnaseq-data-analysis" class="nav-link active" data-scroll-target="#rnaseq-data-analysis">RNAseq data analysis</a>
+  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link active" data-scroll-target="#workflow-overview">Workflow overview</a></li>
+  <li><a href="#rnaseq-data-analysis" id="toc-rnaseq-data-analysis" class="nav-link" data-scroll-target="#rnaseq-data-analysis">RNAseq data analysis</a>
   <ul class="collapse">
   <li><a href="#part-i-from-reads-to-count-table" id="toc-part-i-from-reads-to-count-table" class="nav-link" data-scroll-target="#part-i-from-reads-to-count-table">Part I: From reads to count table</a></li>
   <li><a href="#part-ii-analyzing-the-count-table" id="toc-part-ii-analyzing-the-count-table" class="nav-link" data-scroll-target="#part-ii-analyzing-the-count-table">Part II: Analyzing the count table</a></li>
@@ -160,15 +197,14 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#analysis-part-i-from-sequence-reads-to-gene-counts" id="toc-analysis-part-i-from-sequence-reads-to-gene-counts" class="nav-link" data-scroll-target="#analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</a></li>
   <li><a href="#analysis-part-ii-analyzing-gene-counts-in-r" id="toc-analysis-part-ii-analyzing-gene-counts-in-r" class="nav-link" data-scroll-target="#analysis-part-ii-analyzing-gene-counts-in-r">Analysis part II: Analyzing gene counts in R</a></li>
   </ul></li>
-  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link" data-scroll-target="#workflow-overview">Workflow overview</a></li>
-  <li><a href="#data-source-and-workflow-variations" id="toc-data-source-and-workflow-variations" class="nav-link" data-scroll-target="#data-source-and-workflow-variations">Data source and workflow variations</a>
+  <li><a href="#data-type-and-workflow-variations" id="toc-data-type-and-workflow-variations" class="nav-link" data-scroll-target="#data-type-and-workflow-variations">Data type and workflow variations</a>
   <ul class="collapse">
   <li><a href="#reference-based-versus-de-novo-workflows" id="toc-reference-based-versus-de-novo-workflows" class="nav-link" data-scroll-target="#reference-based-versus-de-novo-workflows">Reference-based versus <em>de novo</em> workflows</a></li>
   <li><a href="#gene-level-versus-transcript-level-counts-and-short-versus-long-reads" id="toc-gene-level-versus-transcript-level-counts-and-short-versus-long-reads" class="nav-link" data-scroll-target="#gene-level-versus-transcript-level-counts-and-short-versus-long-reads">Gene-level versus transcript-level counts, and short versus long reads</a></li>
   <li><a href="#bulk-versus-single-cell-rnaseq" id="toc-bulk-versus-single-cell-rnaseq" class="nav-link" data-scroll-target="#bulk-versus-single-cell-rnaseq">“Bulk” versus single-cell RNAseq</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/x/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -189,6 +225,12 @@ ul.task-list li input[type="checkbox"] {
           </div>
   </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 14, 2023</p>
+    </div>
+  </div>
   
     
   </div>
@@ -198,27 +240,13 @@ ul.task-list li input[type="checkbox"] {
 
 <hr>
 <p><br></p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Personal introductions
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In our round of personal introductions, please mention:</p>
-<ul>
-<li>Your level of experience, if any, with genomic data</li>
-<li>Your level of experience, if any, with the Unix command line, R, and possibly other programming languages</li>
-<li>Your currently planned or ongoing projects, if any, that involve genomic data</li>
-<li>Your longer-term ambitions, if any, for working with genomic data or using programming skills</li>
-<li>What you’re particularly interested in learning here (if you know!)</li>
-</ul>
-</div>
-</div>
+<section id="workflow-overview" class="level2">
+<h2 class="anchored" data-anchor-id="workflow-overview">Workflow overview</h2>
+<p align="center">
+<img src="img/workflow.png" width="85%">
+</p>
 <p><br></p>
+</section>
 <section id="rnaseq-data-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="rnaseq-data-analysis">RNAseq data analysis</h2>
 <p>RNAseq data analysis can be divided into two main parts:</p>
@@ -267,12 +295,11 @@ These run the same command-line programs, but wrap their execution in a more use
 <li><p>Is not particularly “compute-intensive”: your count table is a text file of typically only a few Mb, and the analyses you’re running do not need much time or computer memory. As such, you can run this on your laptop or desktop computer. (Though we will do it at OSC, mainly for the sake of continuity.)</p></li>
 <li><p>Is much less standardized across projects: the details of the analysis depend a lot on your experimental design and what you’re interested in; in addition, initial results may influence your next steps, and so on.</p></li>
 </ul>
-<p><br><br></p>
+<p><br></p>
 </section>
 </section>
 <section id="what-well-cover" class="level2">
 <h2 class="anchored" data-anchor-id="what-well-cover">What we’ll cover</h2>
-<p><em>Note: we can tweak this based on your interests!</em></p>
 <section id="computing-skills" class="level3">
 <h3 class="anchored" data-anchor-id="computing-skills">Computing skills</h3>
 <p>Many of these computing skills are needed only for part I below.</p>
@@ -283,10 +310,23 @@ These run the same command-line programs, but wrap their execution in a more use
 <li>Shell scripts and loops</li>
 <li>The <code>SLURM</code> compute job scheduler</li>
 <li>Using and installing software at OSC</li>
-<li>Project organization and reproducibility</li>
-<li>Introduction to R??</li>
 </ul>
-<p><br></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Along the way, we’ll also learn about <em>project organization</em> and <em>ensuring reproducibility</em>.</li>
+<li>I won’t include a full-blown <em>introduction to <strong>R</strong></em>, but will provide some learning resources for those of you with little R experience before we get to the relevant part of the RNAseq analysis.</li>
+</ul>
+</div>
+</div>
 </section>
 <section id="analysis-part-i-from-sequence-reads-to-gene-counts" class="level3">
 <h3 class="anchored" data-anchor-id="analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</h3>
@@ -299,7 +339,6 @@ These run the same command-line programs, but wrap their execution in a more use
 <li>Alignment QC with (at least) <code>MultiQC</code></li>
 <li>Gene expression counting with <code>Salmon</code></li>
 </ul>
-<p><br></p>
 </section>
 <section id="analysis-part-ii-analyzing-gene-counts-in-r" class="level3">
 <h3 class="anchored" data-anchor-id="analysis-part-ii-analyzing-gene-counts-in-r">Analysis part II: Analyzing gene counts in R</h3>
@@ -308,21 +347,14 @@ These run the same command-line programs, but wrap their execution in a more use
 <li>Differential expression analysis with <code>{DESeq2}</code></li>
 <li>KEGG and GO enrichment analysis with <code>{ClusterProfiler}</code></li>
 </ul>
-<p><br><br></p>
+<p><br></p>
 </section>
 </section>
-<section id="workflow-overview" class="level2">
-<h2 class="anchored" data-anchor-id="workflow-overview">Workflow overview</h2>
-<p align="center">
-<img src="img/workflow.png" width="85%">
-</p>
-<p><br><br></p>
-</section>
-<section id="data-source-and-workflow-variations" class="level2">
-<h2 class="anchored" data-anchor-id="data-source-and-workflow-variations">Data source and workflow variations</h2>
+<section id="data-type-and-workflow-variations" class="level2">
+<h2 class="anchored" data-anchor-id="data-type-and-workflow-variations">Data type and workflow variations</h2>
 <section id="reference-based-versus-de-novo-workflows" class="level3">
 <h3 class="anchored" data-anchor-id="reference-based-versus-de-novo-workflows">Reference-based versus <em>de novo</em> workflows</h3>
-<p>We will cover a **“reference-based” RNAseq workflow: one where your focal organism has a reference genome assembly and annotation. “De novo” RNAseq workflows are necessary when you don’t have a reference genome. They are overall similar, but more time-consuming and bioinformatics-heavy, since you will first have to assemble a transcriptome from the RNAseq data itself.</p>
+<p>We will cover a <strong>“reference-based”</strong> RNAseq workflow: one where your focal organism has a reference genome assembly and annotation. “De novo” RNAseq workflows are necessary when you don’t have a reference genome. They are overall similar, but more time-consuming and bioinformatics-heavy, since you will first have to assemble a transcriptome from the RNAseq data itself.</p>
 </section>
 <section id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads" class="level3">
 <h3 class="anchored" data-anchor-id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads">Gene-level versus transcript-level counts, and short versus long reads</h3>
@@ -587,7 +619,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/mcic-osu/x">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro">
       <i class="bi bi-github" role="img">
 </i> 
     </a>

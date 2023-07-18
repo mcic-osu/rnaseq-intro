@@ -1,0 +1,340 @@
+---
+title: "Transferring files to and from OSC"
+pagetitle: "File transfer"
+highlight-style: github
+number-sections: true
+author: Jelmer Poelstra
+date: 2023-07-18
+---
+
+```{r knitr_options, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
+```
+
+-----
+
+<br>
+
+## Introduction
+
+There are several ways of transferring files between your computer and OSC:
+
+| Method                            | Transfer size         | CLI or GUI        | Ease of use   | Flexibility/options   |
+|-----------------------------------|-----------------------|-------------------|---------------|-----------------------|
+| **OnDemand Files menu**           | smaller (<1GB)        | GUI               | Easy          | Limited               |
+| **Remote transfer commands**      | smaller (<1GB)        | CLI               | Moderate      | Extensive             |
+| **SFTP**                          | larger (>1GB)         | Either            | Moderate      | Limited               |
+| **Globus**                        | larger (>1GB)         | GUI               | Moderate [^1] | Extensive             |
+
+[^1]: But the initial setup for Globus is quite involved and a bit counterintuitive.
+
+This page will cover each of those in more detail below.
+
+::: {.callout-tip}
+#### Download directly from the web using commands at OSC
+If you need files that are at a publicly accessible location on the internet
+(for example, NCBI reference genome data),
+you don't need to download these to your computer and _then_ upload them to OSC.
+
+**Instead, you can use commands for downloading files** directly to OSC,
+like `wget` or `curl`.
+This will be covered in one of the main sessions.
+:::
+
+<br>
+
+## OnDemand Files menu
+
+For small transfers (below roughly 1 GB),
+you might find it easiest to use the Upload and Download
+buttons in the **OSC OnDemand** "Files" menu &mdash;
+their usage should be pretty intuitive.
+  
+<p align="center"><img src=img/ondemand_transfer.png width="80%"></p>
+
+<br>
+
+## Remote transfer commands
+
+For small transfers, you can also use a **remote transfer command** like `scp`,
+or a more advanced one like `rsync` or `rclone`.
+Such commands can provide a more convenient transfer method than OnDemand
+if you want to keep certain
+directories synced between OSC and your computer.
+
+::: {.callout-note}
+The reason you shouldn't use this for very large transfers is that the transfer
+will happen using a login node.
+:::
+
+### `scp`
+
+One option is `scp` (secure copy), which works much like the regular `cp` command,
+including that you'll need `-r` for recursive transfers.
+
+The key difference is that we have to somehow refer to a path on a remote computer,
+and we do so by starting with the remote computer's address,
+followed by `:`, and then the path:
+
+```bash
+# Copy from remote (OSC) to local (your computer):
+scp <user>@pitzer.osc.edu:<remote-path> <local-path>
+
+# Copy from local (your computer) to remote (OSC)
+scp <local-path> <user>@pitzer.osc.edu:<remote-path>
+```
+
+Some nuances for remote copying:
+
+- As the above code implies, in both cases (remote-to-local and local-to-remote),
+  you will **issue the copying commands from your local computer.**
+
+- For the remote computer (OSC), the **path should always be absolute**,
+  whereas that for your local computer can be either relative or absolute.
+
+- Since all files can be accessed at the same paths at Pitzer and at Owens,
+  it doesn't matter whether you use `@pitzer.osc.edu` or `@owens.osc.edu` in
+  the `scp` command. 
+
+Here are some actual examples:
+
+```bash
+# Copy a file from OSC to a local computer - namely, to your current working dir ('.'):
+scp jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts/misc/fastqc.sh .
+
+# Copy a directory from OSC to a local computer - namely, to your home dir ('~'):
+scp -r jelmer@pitzer.osc.edu:/fs/ess/PAS0471/jelmer/mcic-scripts ~
+
+# Copy a file from your computer to OSC --
+# namely, a file in from your current working dir to your home dir at OSC:
+scp fastqc.sh jelmer@pitzer.osc.edu:~
+
+# Copy a file from my local computer's Desktop to the Scratch dir for PAS0471:
+scp /Users/poelstra.1/Desktop/fastqc.sh jelmer@pitzer.osc.edu:/fs/scratch/PAS0471
+```
+
+::: {.callout-note}
+#### Transferring directly to and from OneDrive
+
+If your OneDrive is mounted on or synced to your local computer
+(i.e., if you can see it in your computer's file brower),
+you can also transfer directly between OSC and OneDrive.
+
+For example, the path to my OneDrive files on my laptop is:  
+`/Users/poelstra.1/Library/CloudStorage/OneDrive-TheOhioStateUniversity`.  
+So if I had a file called `fastqc.sh` in my top-level OneDrive dir,
+I could transfer it to my Home dir at OSC as follows:
+
+```bash
+scp /Users/poelstra.1/Library/CloudStorage/OneDrive-TheOhioStateUniversity jelmer@pitzer.osc.edu:~
+```
+
+:::
+
+<br>
+
+### `rsync`
+
+Another option, which I can recommend,
+is the `rsync` command,
+especially when you have directories that you repeatedly want to sync:
+**`rsync` won't copy any files that are identical in source and destination**.
+
+A useful combination of options is `-avz --progress`:
+
+- `-a` enables archival mode (among other things, this makes it work recursively).
+- `-v` increases verbosity &mdash; tells you what is being copied.
+- `-z` enables compressed file transfer (=> generally faster).
+- `--progress` to show transfer progress for individual files.
+
+The way to refer to remote paths is the same as with `scp`.
+For example, I could copy a `dir_with_results` in my local Home dir to my
+OSC Home dir as follows:
+
+```bash
+rsync -avz --progress ~/dir_with_results jelmer@owens.osc.edu:~
+```
+
+One tricky aspect of using `rsync` is that the presence/absence of a
+**trailing slash for source directories** makes a difference for its behavior.
+The following commands work as intended &mdash;
+to create a backup copy of a `scripts` dir inside a dir called `backup`[^2]:
+
+[^2]: For simplicity, these commands are copying between local dirs,
+      which is also possible with `rsync`.
+
+```bash
+# With trailing slash: copy the *contents* of source "scripts" into target "scripts":
+rsync -avz scripts/ backup/scripts
+
+# Without trailing slash: copy the source dir "scripts" into target dir "backup"
+rsync -avz scripts backup
+```
+
+But these commands don't:
+
+```bash
+# This would result in a dir 'backup/scripts/scripts':
+rsync -avz scripts backup/scripts
+
+# This would copy the files in "scripts" straight into "backup":
+rsync -avz scripts/ backup
+```
+
+<br>
+
+## SFTP
+
+The first of two options for larger transfers is **SFTP**.
+You can use the **`sftp` command** when you have access to a Unix shell on your computer,
+and this what I'll cover below.
+
+::: {.callout-note}
+#### SFTP with a GUI
+If you have Windows without e.g. [WSL](https://learn.microsoft.com/en-us/windows/wsl/install)
+or Git Bash
+(see the top of the [SSH page on this site](osc_ssh.qmd) for more details),
+you can use a GUI-based SFTP client instead like
+[WinSCP](https://winscp.net/eng/index.php), [Cyberduck](https://cyberduck.io/),
+or [FileZilla](https://filezilla-project.org).
+CyberDuck also works on Mac, and FileZilla works on all operating systems,
+if you prefer to do SFTP transfers with a GUI, but I won't cover their usage here.
+:::
+
+### Logging in
+
+To log in to OSC's SFTP server, issue the following command in your local
+computer's terminal,
+substituting `<user>` by your OSC username:
+
+```bash
+sftp <user>@sftp.osc.edu   # E.g., 'jelmer@sftp.osc.edu'
+```
+
+``` {.bash-out}
+The authenticity of host 'sftp.osc.edu (192.148.247.136)' can't be established.
+ED25519 key fingerprint is SHA256:kMeb1PVZ1XVDEe2QiSumbM33w0SkvBJ4xeD18a/L0eQ.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])?
+```
+
+If this is your first time connecting to OSC SFTP server,
+you'll get a message like the one shown above:
+you should type `yes` to confirm.
+
+Then, you may be asked for your OSC password, and after that,
+you should see a "welcome" message like this:
+
+``` {.bash-out}
+******************************************************************************
+
+This system is for the use of authorized users only.  Individuals using
+this computer system without authority, or in excess of their authority,
+are subject to having all of their activities on this system monitored
+and recorded by system personnel.  In the course of monitoring individuals
+improperly using this system, or in the course of system maintenance,
+the activities of authorized users may also be monitored.  Anyone using
+this system expressly consents to such monitoring and is advised that if
+such monitoring reveals possible evidence of criminal activity, system
+personnel may provide the evidence of such monitoring to law enforcement
+officials.
+
+******************************************************************************
+Connected to sftp.osc.edu.
+```
+
+Now, you will have an `sftp` prompt (`sftp>`) instead of a regular shell prompt.
+
+Familiar commands like `ls`, `cd`, and `pwd` will operate on the remote computer
+(OSC, in this case),
+and there are **local counterparts for them: `lls`, `lcd`, `lpwd`** &mdash;
+for example:
+
+```bash
+sftp> pwd
+```
+
+``` {.bash-out}
+Remote working directory: /users/PAS0471/jelmer
+```
+
+```bash
+sftp> lpwd
+```
+
+``` {.bash-out}
+Local working directory: /Users/poelstra.1/Desktop
+```
+
+### Uploading files to OSC
+
+To **upload files** to OSC, use the **`put`** command.
+The syntax is `put <local-path> <remote-path>`,
+and unlike with `scp` etc., you don't need to designate the remote with its
+address and `:`.
+Like with `cp` and `scp`, you'll need the `-r` flag for recursive transfers,
+i.e. transferring a directory and its contents.
+
+```bash
+# Upload fastqc.sh in a dir 'scripts' on your local computer to the PAS0471 Scratch dir:
+sftp> put scripts/fastqc.sh /fs/scratch/PAS0471/sandbox
+
+# Use -r to transfer directories:
+sftp> put -r scripts /fs/scratch/PAS0471/sandbox
+
+# You can use wildcards to upload multiple files:
+sftp> put scripts/*sh /fs/scratch/PAS0471/sandbox
+```
+
+::: {.callout-warning}
+#### `sftp` is primitive
+The `~` shortcut to your Home directory does not work in `sftp`!
+
+`sftp` is generally quite primitive and you also cannot use, for example,
+tab completion or the recalling of previous commands with the up arrow.
+:::
+
+### Downloading files from OSC
+
+To download files from OSC, use the `get` command,
+which has the syntax `get <remote-path> <local-path>`
+(note: this is the other way around from `put` in that the remote path comes first,
+but the same in that both use the order `<source> <target>`).
+
+For example:
+
+```bash
+sftp> get /fs/scratch/PAS0471/mcic-scripts/misc/fastqc.sh .
+
+sftp> get -r /fs/scratch/PAS0471/sandbox/ .
+```
+
+### Exiting
+
+When you're done, you can type `exit` or press <kbd>Ctrl</kbd>+<kbd>D</kbd>
+to exit the `sftp` prompt.
+
+<br>
+
+## Globus
+
+The second option for large transfers is **Globus**,
+which is especially your best bet for very large transfers.
+Globus has a browser-based GUI. Some advantages of using Globus are that:
+
+- It checks whether all files were transferred correctly and completely
+- It can pause and resume automatically when you e.g. turn off your computer
+- It can be used to share files from OSC directly with collaborators even at
+  different institutions.
+
+Globus does need some setup including the installation
+of a piece of software that will run in the background on your computer.
+
+- Globus installation and configuration instructions:
+  [Windows](https://docs.globus.org/how-to/globus-connect-personal-windows) /
+  [Mac](https://docs.globus.org/how-to/globus-connect-personal-mac) /
+  [Linux](https://docs.globus.org/how-to/globus-connect-personal-linux)
+- [Globus transfer instructions](https://docs.globus.org/how-to/get-started/)
+- [OSC's page on Globus](https://www.osc.edu/resources/getting_started/howto/howto_use_globus_overview)
+
+<br><br>

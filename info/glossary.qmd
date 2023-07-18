@@ -1,0 +1,27 @@
+
+::: {.callout-important}
+## Under construction 
+This page is still under construction.
+:::
+
+# Glossary / Abbreviations
+
+## Computing
+
+- OSC
+- HPC
+- CPU
+- GPU
+- CLI
+- GUI
+- Shell
+- Unix
+- Linux
+
+
+## Genomics
+
+- FASTA
+- FASTQ
+- BAM/SAM
+- GFF
