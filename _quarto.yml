@@ -45,10 +45,8 @@ website:
           - href: info/osc_ssh.qmd
             text: "- Using OSC with SSH"
           - text: General info
-          - href: info/resources.qmd
-            text: "- Further Resources"
-          - href: info/glossary.qmd
-            text: "- Glossary"
+          - text: "- Further Resources"
+          - text: "- Glossary"
       - href: info/about.qmd
         text: About
       - icon: github
@@ -64,3 +62,6 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+
+execute:
+  freeze: auto

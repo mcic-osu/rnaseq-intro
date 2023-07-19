@@ -150,7 +150,13 @@ to which you have all been added, which is `/fs/ess/scratch/PAS2250`.
 Click `Open folder...` in the `Welcome` tab
 (or &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `Open Folder`).
 
-You'll notice that the program completely reloads. 
+You'll notice that the program completely reloads.
+
+You might also see a pop-up like this:
+
+<figure><p align="center"><img src=img/vscode_trust.png width="80%"></p></figure>
+
+Check the box and click yes
 
 :::{.callout-tip}
 ## Taking off where you were

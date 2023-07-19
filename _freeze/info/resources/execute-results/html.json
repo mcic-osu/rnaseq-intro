@@ -1,0 +1,14 @@
+{
+  "hash": "f428d96aeb3695c6b84dc9eaa1312865",
+  "result": {
+    "markdown": "::: {.cell}\n\n:::\n\n\n-----\n\n::: {.callout-important}\n## Under construction \nThis page is still under construction.\n:::\n\n# Further Resources\n\nFor further resources related to individual topics that were covered in these\nsessions (such as OSC, the Unix shell, etc),\nsee the bottom of each session page.\n\n## General applied bioinformatics resources\n\n- Buffalo Book\n- Practical Computing for Biologists books\n\n<br>\n\n## RNAseq analysis\n\n### Transcript-level analysis\n\nTBA\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
