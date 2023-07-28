@@ -17,8 +17,11 @@ website:
         menu: 
           - href: modules/02_osc.qmd
             text: "- OSC"
-          - text: "- VS Code [TBA]"
-          - text: "- The Unix shell [TBA]"
+          - href: "modules/03_vscode.qmd"
+            text: "- VS Code"
+          - href: "modules/04_shell.qmd"
+            text: "- Unix shell I"
+          - text: "- Unix shell II"
           - text: "- Shell scripting [TBA]"
           - text: "- Software at OSC [TBA]"
           - text: "- SLURM compute jobs [TBA]"

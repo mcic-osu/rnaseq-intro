@@ -46,5 +46,8 @@
   },
   "info/osc_transfer.qmd": {
     "osc_transfer.html": "a53e59ca"
+  },
+  "modules/05-shell2.qmd": {
+    "05-shell2.html": "0c42678b"
   }
 }

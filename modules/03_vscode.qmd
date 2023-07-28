@@ -4,6 +4,7 @@ pagetitle: "VS Code"
 highlight-style: github
 number-sections: true
 author: Jelmer Poelstra
+date: 2022-07-28
 ---
 
 ```{r knitr_options, echo=FALSE}
@@ -18,10 +19,9 @@ In this module, we will learn the basics of a fancy text editor called
 _VS Code_ (in full, Visual Studio Code).
 Conveniently, we can use a version of this editor
 (sometimes referred to as _Code Server_)
-in our browser via the OSC OnDemand
-website.
+in our browser via the OSC OnDemand website.
 
-**We will use VS Code throughout the workshop as practically a one-stop**
+**We will use VS Code throughout these sessions as practically a one-stop**
 **solution for our computing activities at OSC**.
 This is also how I use this editor in my daily work.
 
@@ -31,13 +31,15 @@ editors like VS Code are also referred to as "IDEs":
 _Integrated Development Environments_.
 If you've ever worked with R,
 the RStudio program is another good example of an IDE.
+For our purposes, RStudio will be our IDE for R,
+and VS code will be our IDE for shell scripts and code.
 
 <br>
 
-## Starting VS Code at OSC
+## Starting a VS Code session in OSC OnDemand
 
-In the previous module,
-Mike already guided us through starting a VS Code session via OnDemand,
+In the previous session,
+I showed you how to start a VS Code session in OnDemand,
 but for the sake of completeness, instructions to do so are also shown below. 
 
 :::{.callout-note collapse="true"}
@@ -46,16 +48,14 @@ but for the sake of completeness, instructions to do so are also shown below.
 2. In the blue top bar, select `Interactive Apps`
    and then near the bottom of the dropdown menu, click `Code Server`.
 3. In the form that appears on a new page:
-   - Make sure that `Number of hours` is at least `4`
+   - Select an appropriate OSC project (here: `PAS0471`)
+   - The starting directory doesn't matter
+   - Make sure that `Number of hours` is at least `2`
    - Click `Launch`.
 4. On the next page, once the top bar of the box has turned green
    and says `Runnning`, click `Connect to VS Code`.
    
-   <figure>
-   <p align="center">
-   <img src=img/osc-code-launch_ed.png width="80%">
-   </p>
-   </figure>
+   <figure><p align="center"><img src=img/osc-code-launch_ed.png width="80%"></p></figure>
 :::
 
 <br>
@@ -116,19 +116,8 @@ If you've closed the `Welcome` document but want it back, click
 open one by clicking
 &nbsp; {{< fa bars >}} &nbsp; => `Terminal` => `New Terminal`.
 
-In the terminal, the prompt says `Singularity>`.
-This is because in OSC OnDemand, VS Code runs inside a Singularity container
-(for our purposes, it is not important what that means, exactly).
-
-{{< fa user-edit >}} Break out of the Singularity shell to get a regular
-Bash Unix shell:
-**type `bash` and press <kbd>Enter</kbd>**.
-
-In the next module, Mike will teach us how to use the Unix shell.
-
-<p align="center">
-<img src=img/vscode-terminal-editor_ed.png width="90%">
-</p>
+This opens up a terminal with a Unix shell.
+In the next session, we'll start talking about actually using the Unix shell.
 
 <br>
 
@@ -141,34 +130,31 @@ Conveniently, VS Code takes a specific folder (directory) as a
 - In the terminal
 - When saving files in the editor pane.
 
-By default, VS Code via OnDemand will **open your Home directory**.
-But in this workshop,
-we'll work within the scratch directory for the `PAS2250` project,
-to which you have all been added, which is `/fs/ess/scratch/PAS2250`.
+By default, VS Code via OnDemand will open your Home directory.
 
-{{< fa user-edit >}} Let's open that folder.
+Here, we'll change to the project dir for OSC project `PAS0471`,
+which is `/fs/ess/PAS0471`.
+
+{{< fa user-edit >}} **Let's open that folder**.
 Click `Open folder...` in the `Welcome` tab
 (or &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `Open Folder`).
 
 You'll notice that the program completely reloads.
-
-You might also see a pop-up like this:
+And You might also see a pop-up like this -- you can check the box and click Yes:
 
 <figure><p align="center"><img src=img/vscode_trust.png width="80%"></p></figure>
-
-Check the box and click yes
 
 :::{.callout-tip}
 ## Taking off where you were
 
-Additionally, when you reopen a folder later,
-VS Code will to some extent resume where you were before!
+When you reopen a folder you've had open before,
+VS Code will resume where you were before in terms of:
 
-It will reopen any files you had open, and if you had an active terminal,
-it will re-open a terminal.
-This is very convenient, especially when you start working on multiple projects
+- Reopening any files you had open
+- If you had an active terminal, it will re-open a terminal.
+
+This is quite convenient, especially when you start working on multiple projects
 (different folders) in VS Code and frequently switch between those.
-
 :::
 
 <br>
@@ -180,7 +166,7 @@ This is very convenient, especially when you start working on multiple projects
 Since we are using VS Code inside a browser window,
 we are unfortunately losing some screen space.
 Make sure to maximize the browser window and if you have a bookmarks bar,
-try to hide it
+you should consider hiding it
 (for Chrome: <kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>).
 
 You may also opt to hide the side bars using the 
@@ -213,12 +199,6 @@ Then, try out a few themes and see what you like!
 
 (You can also access the Color Themes option via
 &nbsp; <i class="fa fa-cog"></i> &nbsp; => `Color Theme`.)
-
-:::{.callout-tip collapse="true"}
-## "Solution" (click here)
-"*Quiet Light*" is the best one {{< iconify twemoji winking-face >}}
-:::
-
 :::
 
 <br>
@@ -226,9 +206,9 @@ Then, try out a few themes and see what you like!
 
 -----
 
------
+## At-home reading
 
-## Addendum: keyboard shortcuts {-}
+### keyboard shortcuts {-}
 
 Working with keyboard shortcuts (also called "keybindings")
 for common operations can be a lot faster than using your mouse.
@@ -236,7 +216,7 @@ Below are some useful ones for VS Code
 (for Mac, replace <kbd>Ctrl</kbd> with <kbd>⌘</kbd>).
 
 :::{.callout-note}
-## Keyboard shortcut cheatsheet
+#### Keyboard shortcut cheatsheet
 
 For a single-page PDF overview of keyboard shortcuts for your operating system:
 &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `Help` &nbsp; =>
@@ -248,7 +228,7 @@ For a single-page PDF overview of keyboard shortcuts for your operating system:
 
 :::
 
-- *Open a terminal*: <kbd>Ctrl</kbd>+<kbd>\`</kbd> or
+- *Open a terminal*: <kbd>Ctrl</kbd>+<kbd>\`</kbd> (backtick) or
   <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.
 
 - *Toggle between the terminal and the editor pane*:
@@ -276,21 +256,20 @@ For a single-page PDF overview of keyboard shortcuts for your operating system:
    &nbsp; {{< fa bars >}} &nbsp; `View` => `Editor Layout`)
 
 :::{.callout-warning}
-## Browser interference
+#### Browser interference
 
 Unfortunately, some VS Code _and_ terminal keyboard shortcuts don't work
 in this setting where we are using VS Code _inside_ a browser,
 because existing browser keyboard shortcuts take precedence.
 
 If you end up using VS Code a lot in your work,
-it is therefore worth switching to your own installation of the program
-(see [At-home bonus: local installation](#at-home-bonus-local-installation))
-
+it is therefore worth switching to your own installation of the program &mdash;
+see the section below.
 :::
 
 <br>
 
-## At-home bonus: local installation {-}
+### Local VS Code installation {-}
 
 Another nice feature of VS Code is that it is freely available for all operating
 systems (and even though it is made by Microsoft, it is also open source).
@@ -298,7 +277,7 @@ systems (and even though it is made by Microsoft, it is also open source).
 Therefore, if you like the program, you can also install it on your own computer
 and do your local text editing / script writing in the same environment at OSC
 (it is also easy to install on OSU-managed computers,
-because it is available in the Self Service software installer).
+because it is available in the OSU "Self Service" software installer).
 
 Even better, the program can be "tunneled into" OSC,
 so that your working directory for the entire program can be at OSC
@@ -306,13 +285,14 @@ rather than on your local computer.
 This gives the same experience as using VS Code through OSC OnDemand,
 except that you're not working witin a browser window,
 which has some advantages
-(also: no need to fill out a form, or to break out of the Singularity shell).
+(also: no need to fill out a form, and you'll never run out of time).
 
-To install VS Code on your own machine, follow these instructions:
+To install VS Code on your own machine,
+follow these instructions from the VS Code website:
 [Windows](https://code.visualstudio.com/docs/setup/windows) / 
 [Mac](https://code.visualstudio.com/docs/setup/mac) / 
 [Linux](https://code.visualstudio.com/docs/setup/linux).
 
 To SSH-tunnel VS Code into OSC, see
-[these instructions](https://mcic-osu.github.io/pracs-sp21/w06_UA_ssh.html#set-up-your-local-vs-code-to-ssh-tunnel-into-osc)
-(they are a bit rudimentary, ask Jelmer if you get stuck).
+[these instructions on the SSH reference page on this website](../info/osc_ssh.html#set-up-your-local-vs-code-to-ssh-tunnel-into-osc)
+(they are a bit rudimentary, ask me if you get stuck).
