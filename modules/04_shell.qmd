@@ -1,6 +1,5 @@
 ---
 title: "The Unix Shell - Part I"
-subtitle: "And an introduction to FASTQ and FASTA files"
 pagetitle: "Unix Shell"
 highlight-style: github
 number-sections: true
@@ -35,16 +34,16 @@ But there are more **advantages to doing command line computing**
 than just allowing you to work on a supercomputer, such as:
 
   - Working efficiently with large files
-  - Achieving reproducibility in research
-  - Perform general computing tasks more efficiently, once you get the hang of it
+  - Achieving better reproducibility in research
+  - Performing general computing tasks more efficiently, once you get the hang of it
   - Making it much easier to repeat similar tasks across files, samples,
     and projects, with the possibility of true automation
-  - For bioinformatics, being able to use command-line programs directly
+  - For bioinformatics, being able to use (the latest) command-line programs directly
     without having to depend on "GUI wrappers" written by third parties,
-    that often cost money and lag behind in functionality
+    that often cost money and also lag behind in functionality
 
 In these sessions, **we'll use a Unix shell at OSC inside VS Code**.
-Fot this sessio,
+For this session, specifically,
 I will assume you still have an active VS Code session as setup in the
 [previous one](02_osc.qmd), have VS Code located at `/fs/ess/PAS0471`,
 and with an open Terminal &mdash; if not, see the instructions in the dropdown
@@ -57,7 +56,7 @@ or you could connect your local Unix shell to OSC through SSH
 (again, [see this reference page](../info/osc_ssh.qmd)).
 
 :::{.callout-tip collapse="true"}
-## Starting VS Code at OSC - with a Terminal
+## Starting VS Code at OSC - with a Terminal (Click to expand)
 1. Log in to OSC's OnDemand portal at <https://ondemand.osc.edu>.
 2. In the blue top bar, select `Interactive Apps`
    and then near the bottom of the dropdown menu, click `Code Server`.
@@ -164,12 +163,13 @@ date
 
 ::: {.callout-tip}
 #### Copying code from the website, and code output
-When you hover your mouse above the top box with the command,
+When you hover your mouse above the top box with the command
+(sometime you have to click in it first),
 you should see a copy icon appear on the far right,
 which will copy the command to your clipboard:
 for longer expressions, this can be handy so you can paste this right into your shell
 and don't have to type.
-Generally speaking, though, it does help to type the commands yourself!
+Generally speaking, though, learning works better when you type the commands yourself!
 
 Also, the darker gray box below, with italic text,
 is intended to show the _output_ of commands as they are printed to the screen
@@ -217,7 +217,7 @@ A **leading forward slash** in a path indicates the root directory of the comput
 and as such, the path provided by `pwd` is an _absolute path_ (or: _full path_),
 and not a _relative path_ &mdash; more on that later.
 
-While not applicable with `cd`,
+While not shown in the `cd` output,
 if you _happen to see_ a **trailing forward slash** in a path
 (eg. `/fs/ess/PAS0471/`),
 you can be sure that the path points to a directory and not a file.
@@ -237,15 +237,16 @@ But many commands perform an **action** other than printing output.
 For example, the very commonly used command **`cd` (Change Directory)**
 will, you guessed it,
 change your working directory.
-And as it happens, it has no output at all.
+And as it happens, it normally has no output at all.
 
 We start by simply typing `cd`:
 
-```bash
-cd
+``` {.bash-in-nocolor}
+[jelmer@p0080 PAS0471]$ cd
+[jelmer@p0080 ~]$
 ```
 
-Did anything happen? Maybe it failed?
+Did anything happen?
 You might expect a command like `cd` to _report_ what it did, but it does not.
 As a general rule for Unix commands that perform actions,
 and one that also applies to `cd`:
@@ -253,6 +254,8 @@ and one that also applies to `cd`:
 
 So where did we change our working directory to, given that we did not tell
 `cd` where to move?
+Our _prompt_ (as shown in the code box below) actually did give us a clue:
+`PAS0471` was changed to `~` But what does `~` mean?
 
 :::{.exercise}
 #### Your Turn: Check what directory we moved to {-}
@@ -263,8 +266,13 @@ pwd
 ```{.bash-out}
 /users/PAS0471/jelmer
 ```
-It appears that we moved to our home directory!
-(Remember, we were in the project directory `/fs/ess/PAS0471`.)
+It appears that we moved to our Home directory!
+(Remember, we were in the Project directory `/fs/ess/PAS0471`.)
+
+And as it turns out,
+`~` is a shell shortcut to indicate your Home directory &mdash;
+more on that later.
+
 </details>
 :::
 
@@ -279,7 +287,7 @@ We can do so by specifying the _path_ to that directory after the `cd` command
 (make sure to leave a space after `cd`!):
 
 ```bash
-cd demo/202307_rnaseq/
+cd /fs/ess/PAS0471/demo/202307_rnaseq/
 ```
 
 ```bash
@@ -296,7 +304,7 @@ and come at the end of a command line expression.
 There should always be a space between the command and its argument(s)!
 
 ::: {.callout-note collapse="true"}
-#### Tab completion!! (Click here to learn more)
+#### Tab completion!! (Click to expand)
 
 - After typing `/fs/e`, press the <kbd>Tab</kbd> key!
 
@@ -327,17 +335,19 @@ There should always be a space between the command and its argument(s)!
   ```
 
 The tab completion feature will check for files/dirs present in the location
-you're at, and based on the characters you've typed so for, complete the path
-as far as it can.
+you're at,
+and based on the characters you've typed so for,
+complete the path as far as it can.
 
 Sometimes it can't move forward at all because there are multiple files or dirs
 that have the same next character.
 Pressing "Tab-tab" will then show your options,
 though in unusual circumstances like one above, there are so many that it asks
-for confirmation. Then, it's better to just keep typing assuming that you know
+for confirmation.
+In such cases, it's usually better to just keep typing assuming that you know
 where you want to go.
 
-But in general, Tab completion is an incredibly useful feature that you should
+In general, though, Tab completion is an _incredibly_ useful feature that you should
 try to get accustomed to using right away!
 :::
 
@@ -433,7 +443,7 @@ Well, that's not much information, just another dir &mdash;
 so let's look inside that:
 
 ```bash
-ls data/fastq
+ls data/fastq  # These will be shown in red in your output, since they are compressed
 ```
 ```{.bash-out}
 ASPC1_A178V_R1.fastq.gz  ASPC1_G31V_R2.fastq.gz      Miapaca2_G31V_R1.fastq.gz
@@ -483,12 +493,17 @@ drwxr-xr-x 2 jelmer PAS0471 4096 Jul 27 11:54 metadata
 ```
 
 Notice that it lists the same three items as our first `ls` call above,
-but this time, they're printed in a different format:
+but now, they're printed in a different format:
 one item per line, with lots of additional information included.
-For example, the date and time is that when the file was last modified
-(we'll go a bit more into the info in the different columns below).
+For example, the date and time is that **when the file was last modified**,
+and the numbers just to the left of that (e.g., `4096`) show
+the **file sizes** in bytes[^2].
 
-Let's add another option, `-h`:
+[^2]: Though these sizes are only directly useful for files, not dirs!
+      You can also ignore the `total 17` line at the top.
+
+Let's add another option, `-h` &mdash; before reading on,
+can you pick out what it did to modify the output?
 
 ```bash
 ls -l -h
@@ -501,23 +516,50 @@ drwxr-xr-x 2 jelmer PAS0471 4.0K Jul 27 11:54 metadata
 -rw-r--r-- 1 jelmer PAS0471  964 Jul 27 17:48 README.md
 ```
 
-Can you pick out what `-h` did to modify the output?
-Note the difference in the format of the column reporting the sizes of the items listed.
+Note the difference in the format of the column reporting the sizes of the items listed
+&mdash; we now have "human-readable filesizes", 
+where sizes on the scale of kilobytes will be shown in `K`s,
+of megabytes in `M`s,
+and of gigabytes in `G`s.
 
-Options can be pasted together as follows:
+Many options have a "**long option**" counterpart, i.e. a more verbose way of
+specifying the option.
+For example, `-h` can also be specified as `--human-readable`:
+
+```bash
+ls -l --human-readable      # Output not shown, same as above
+```
+
+(And then there are also options that are only available in long format &mdash;
+even with case-sensitivity, one runs out of single-letter abbreviations at some point!)
+
+Despite that **short options** like the `-l` and `-s` we've seen (single-dash, single-letter)
+are very terse and may at times seem impossible to remember,
+they are still often preferred with common Unix commands,
+because they are shorter to type &mdash;
+and keep in mind that you might use, say, `ls -lh` dozens if not hundreds of time
+a day if you work in the Unix shell a lot.
+
+A very useful feature of "short options" is that they can be pasted together as
+follows:
 
 ```bash
 ls -lh   # Output not shown, same as above
 ```
 
-
+::: {.callout-note}
+#### More on the long-format output of `ls`
 The figure below shows what information is shown in each of the columns
 (but note that it shows a different listing of files,
-and uses the new-to-us `-a` option, short for "all", to also show "hidden files"):
+and uses the new-to-us **`-a` option, short for "all"**,
+to also show "hidden files"):
 
-<p align="left"><img src=img/long-ls.png width="80%"></p>
+<p align="center"><img src=img/long-ls.png width="80%"></p>
+:::
 
 <br>
+
+### Combining options and arguments
 
 Finally, we can **combine options and arguments**,
 and let's do so take a closer look at our dir with FASTQ files &mdash;
@@ -540,54 +582,53 @@ total 38M
 -rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_G31V_R2.fastq.gz
 ```
 
-**In summary**, in this section we have learned that:
+(Beginners are often inclined to move to a directory when they just want to
+`ls` its contents, but its often more convenient to stay put and use an
+argument to `ls` instead, like we did above.)
+
+<br>
+
+### Recap of `ls`, arguments, and options
+
+In summary, in this section we have learned that:
 
 - The `ls` command lists files (by default without additional info and non-recursively)
-- Using _arguments_, we tell `ls` (and other commands) what to operate on
-- Using _options_, we can make `ls` show us the resulting dirs and files in different ways.
-  The ones we've seen so far act as "on/off switches",
-  and this is common among Unix commands (but we'll see other kinds of options too!).
+
+- Using _arguments_, we tell `ls` (and other commands) what to operate on.
+  Arguments come at the end of the command line epxression, and are not preceded by
+  a dash or any other "pointer".
+  They are typically names of files or dirs, but can be other things too.
+
+- Using _options_, we can make `ls` (and other commands) show us the results in
+  different ways. They are preceded by at least one dash (`-`, like `-l`).
 
 ::: {.callout-note}
-#### More on arguments and options
+#### Other types of options
 
-Above, we described the general _functional differences between options and arguments_.
-But they are really defined by the differences in the associated syntax:
+The options we've seen so far act as "on/off switches",
+and this is very common among Unix commands.
 
-- **Arguments** come at the _end_ of the command-line expression (i.e., after options)
-  and are not preceded by a dash or any other pointer.
-  They are typically names of files or dirs, but can be other things too.  
-
-- **Options** are preceded by at least one dash (`-`).
-  With Unix commands, we'll most commonly see "short options"
-  like `-h` (as in `ls -h`): single-dash then single-letter.
-  But many options also have "long option" counterparts
-  (and some only exist as long options),
-  such as the `--human-readable` counterpart to `-h`:
-  i.e. double-dash, then a word.
-
-**Short options** are very terse but still often preferred with Unix commands,
-because they are shorter to type,
-and you might use, say, `ls -lh` dozens if not hundreds of time a day if you work
-in the Unix shell a lot.
-
-Conversely, with bioinformatics programs,
-I would recommend to mostly use **long options** whenever they are available,
-so that it's easier you to remember what you did with that option,
-and more likely to be immediately understood by anyone reading the code
-(since an option name like `--human-readable` is mean to be descriptive).
-
-**Some options are not on/off switches and accept values**
+**But some options are not on/off switches and accept values**
 (confusingly, these values can also be called "arguments" to options).
-For example, the `--color` option to `ls` determines how it colorized its output:
+For example, the `--color` option to `ls` determines how it colorizes its output:
 there is `ls --color=never` &mdash; versus, among other possibilities,
 `ls --color=always`.
 
 We'll see _a lot_ of options that take values when running bioinformatics
-programs, such as to set parameters &mdash; for example:
+programs,
+**such as to set specific analysis parameters** &mdash;
+for example:
 `trim_galore --quality 30 --length 50` would set a minimum Phred quality score
 threshold of 30 and a minimum read length threshold of 50 bases for the program
 TrimGalore, which we will later use to quality-trim and adapter-trim FASTQ files.
+(This `--<option> <value>` syntax, i.e. without an `=` is more common than
+the `--<option>=<value>` syntax shown for `ls` above.)
+
+In contrast to when you are using common Unix commands, I would recommend to mostly
+_use **long options** whenever available when running bioinformatics programs like TrimGalore._
+That way, it’s easier for you to remember what you did with that option,
+and more likely to be immediately understood by anyone else reading the code
+(cf. `trim_galore -q 30 -l 50` and `trim_galore --quality 30 --length 50`).
 :::
 
 ::: {.callout-note collapse="true"}
@@ -596,7 +637,7 @@ TrimGalore, which we will later use to quality-trim and adapter-trim FASTQ files
 The `tree` command lists files _recursively_ (i.e., it will also show us what's
 contained in the directories in our working directory),
 and does so in a tree-like fashion &mdash;
-this can be great to quicly get an intuitive overview of files in a dir:
+this can be great to quickly get an intuitive overview of files in a dir:
 
 ```bash
 tree -C     # The -C option will colorize the output
@@ -631,17 +672,19 @@ meta.tsv
 
 ## Paths
 
-"Paths" are specifications of a location on a computer,
+As we've mentioned,
+"paths" are specifications of a location on a computer,
 either of a file or a directory.
 
-We've talked about the commands `cd` and `ls` which operate on paths,
-and without going into detail about it so far, 
-we've also seen two distinct ways of specifying paths:
+We've talked about the commands `cd` and `ls` that operate on paths,
+and without going into much detail about it so far, 
+we've already seen two distinct ways of specifying paths:
 
 - **Absolute (full) paths** always start from the root directory of the computer,
-  which represented by a _**leading `/`**_, such as in `/fs/scratch/PAS0471/`.
-  Absolute paths are like GPS coordinates to specify a geographic location on earth:
-  they will provide location information regardless of where we are ourselves.
+  which is represented by a _**leading `/`**_, such as in `/fs/scratch/PAS0471/`.
+  
+  _(Absolute paths are like GPS coordinates to specify a geographic location on earth:_
+  _they will provide location information regardless of where we are ourselves.)_
 
 - **Relative paths** start from your current location (working directory).
   When we typed `ls data` earlier,
@@ -650,13 +693,14 @@ we've also seen two distinct ways of specifying paths:
   that probably seemed intuitive.
   But be aware that the shell would look absolutely nowhere else for that dir
   than in our current working directory.
-  Relative paths are more like directions to a location that say things like
-  "turn left" &mdash; these instructions depend on our current location.
+
+  (_Relative paths are more like directions to a location that say things like_
+  _"turn left" &mdash; these instructions depend on our current location._)
 
 Absolute paths may seem preferable because they will work regardless of where
 you are located, **but**:
 
-- They are often a bit more typing than we need (or want) to do.
+- They can be a lot more typing than we need (or want) to do.
 - While context-specific, a much more important disadvantage of absolute paths
   is that they can only be expected to work on one specific computer,
   and are guaranteed not to work after you move files around.
@@ -686,13 +730,14 @@ This is something we'll come back to later when talking about reproducibity.
 ### Moving "up" when using relative paths
 
 There are a couple of "shortcuts" available for relative paths.
-First of all, `.` just means the current working directory.
+First of all,
+`.` (a single period) is another way of representing the current working directory.
 Therefore, for instance,
 `ls ./data` is functionally the same as `ls data`,
 and just a more explicit way of saying that the `data` dir is located in your
-current working dir (this syntax is occasionally actually useful).
+current working dir (this syntax is occasionally helpful).
 
-More usefully for our purposes here, **`..` means one directory (one level) up**
+More usefully for our purposes here, **`..` (two periods) means one level up**
 in the directory hierarchy, with "up" meaning towards the root directory
 (I guess the directory tree is best visualized upside down!):
 
@@ -703,8 +748,8 @@ ls ..               # One level up, listing /fs/ess/PAS0471/demo
 202307_rnaseq
 ```
 
-This pattern can be continued all the way to the root,
-so `../..` would list the files too levels up:
+This pattern can be continued all the way to the root of the computer,
+so `../..` would list files two levels up:
 
 ```bash
 ls ../..            # Two levels up, listing /fs/ess/PAS0471
@@ -729,16 +774,14 @@ Along these lines, there are two other shortcuts worth mentioning:
 
 - **`-`** is a `cd`-specific shortcut that it is like the "back" button in your
   browser: it will go to your previous location.
-  (But it only has a memory of 1, so two subsequent `cd -` would move you back
-  to your current working directory.)
+  (But it only has a memory of 1, so subsequent `cd -`s would simply move you
+  back and forth between two directories.)
   
 ::: {.callout-note}
 #### These shortcuts work with all commands
-
 Except for **`-`**,
 all of the above shortcuts are *general shell shortcuts* that work with **any**
-command that takes a path (and with nearly all say bioinformatics programs too).
-
+command that takes a path.
 :::
 
 <br>
@@ -754,14 +797,14 @@ A few key general points to remember are that:
 - Commands that take **actions** like changing directory
   (and the same will be true for commands that copy and move files, for example)
   will by default **not print any output to the screen**,
-  only errors _if_ those occur.[^2]
+  only errors _if_ those occur.[^3]
 
-[^2]: We'll see later on how we can make commands more "verbose" than they are
+[^3]: We'll see later on how we can make commands more "verbose" than they are
       by default, which can certainly be useful.
 
-- Commands whose main function it is to provide us with information
+- Commands whose main function is to provide information
   (think `ls`, `date`, `pwd`) will **print their output to the screen**.
-  We'll learn later how we "redirect" output to a file.
+  We'll learn later how we can "redirect" output to a file or to another command!
 
 - Using **options** (`ls -l`), we can modify the behavior of a command,
   and using **arguments** (`ls data`), we can modify what it operates on in
@@ -778,9 +821,11 @@ should start with the name of a command, or equivalently, a program or script
 
 Therefore, for example, just typing the name of a file,
 even if it exists in your current working directory,
-will not do anything with that file (like printing its contents)
-like you might have expected.
-This is because the name of a file is not a command:
+will return an error.
+(I.e., it won't do anything with that file, such as printing its contents,
+like you had perhaps expected.)
+This is because the first word of a command line expressio should be a command,
+and the name of a file is (usually!) not a command:
 
 ```bash
 README.md
@@ -790,24 +835,27 @@ README.md: command not found
 ```
 :::
 
+::: {.callout-note}
+#### Many bioinformatics programs are basically specialized commands
+In many ways, as mentioned in the box above,
+you can think of using a command-line bioinformatics program as using just another command.
+
+Therefore, our general skills with Unix commands will very much extend to using
+command-line bioinformatics tools!
+:::
+
 We've learned to work with the following truly ubiquitous Unix commands:
 
  - `pwd` &mdash; print your current working directory
  - `cd` &mdash; change your working directory
  - `ls` &mdash; list files and dirs
 
-And have seen a few other simpler utility commands as well
-(`date`, `whoami`).
+And we have seen a few other simpler utility commands as well
+(`date`, `whoami`, and `tree` in a dropdown box).
 
 We'll continue with the basics of the Unix shell in part II (TBA).
 
-::: {.callout-note}
-#### Many bioinformatics programs are basically specialized commands
-In many ways,
-you can think of using a command-line bioinformatics program as using just another command,
-so our general skills with Unix commands will very much extend to using command-line
-bioinformatics tools!
-:::
+
 
 <br>
 
@@ -818,8 +866,8 @@ and that may have left you wondering how you are supposed to know about them.
 
 ### The `--help` option
 
-Many commands have a `--help` option which will primarily describe the
-command's function and "syntax" including many of the available options.
+Many (but not all!) commands have a `--help` option which will primarily describe
+the command's function and "syntax" including many of the available options.
 
 For a very brief example, try:
 
@@ -847,7 +895,7 @@ man pwd
 ```
 
 ::: {.callout-warning}
-#### The man page opens in a "pager" -- type <kbd>q</kbd> to quit!
+#### The man page opens in a "pager" -- try to scroll around and type <kbd>q</kbd> to quit!
 :::
 
 For a much longer example, try:

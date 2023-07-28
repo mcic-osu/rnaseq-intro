@@ -232,6 +232,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-default-behavior-of-ls" id="toc-the-default-behavior-of-ls" class="nav-link" data-scroll-target="#the-default-behavior-of-ls"><span class="header-section-number">4.1</span> The default behavior of <code>ls</code></a></li>
   <li><a href="#first-more-on-arguments" id="toc-first-more-on-arguments" class="nav-link" data-scroll-target="#first-more-on-arguments"><span class="header-section-number">4.2</span> First, more on arguments</a></li>
   <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options"><span class="header-section-number">4.3</span> Options</a></li>
+  <li><a href="#combining-options-and-arguments" id="toc-combining-options-and-arguments" class="nav-link" data-scroll-target="#combining-options-and-arguments"><span class="header-section-number">4.4</span> Combining options and arguments</a></li>
+  <li><a href="#recap-of-ls-arguments-and-options" id="toc-recap-of-ls-arguments-and-options" class="nav-link" data-scroll-target="#recap-of-ls-arguments-and-options"><span class="header-section-number">4.5</span> Recap of <code>ls</code>, arguments, and options</a></li>
   </ul></li>
   <li><a href="#paths" id="toc-paths" class="nav-link" data-scroll-target="#paths"><span class="header-section-number">5</span> Paths</a>
   <ul class="collapse">
@@ -252,7 +254,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">The Unix Shell - Part I</h1>
-<p class="subtitle lead">And an introduction to FASTQ and FASTA files</p>
 </div>
 
 
@@ -287,19 +288,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Working effectively on a remote supercomputer tends to simply <em>require</em> using a command line interface. But there are more <strong>advantages to doing command line computing</strong> than just allowing you to work on a supercomputer, such as:</p>
 <ul>
 <li>Working efficiently with large files</li>
-<li>Achieving reproducibility in research</li>
-<li>Perform general computing tasks more efficiently, once you get the hang of it</li>
+<li>Achieving better reproducibility in research</li>
+<li>Performing general computing tasks more efficiently, once you get the hang of it</li>
 <li>Making it much easier to repeat similar tasks across files, samples, and projects, with the possibility of true automation</li>
-<li>For bioinformatics, being able to use command-line programs directly without having to depend on “GUI wrappers” written by third parties, that often cost money and lag behind in functionality</li>
+<li>For bioinformatics, being able to use (the latest) command-line programs directly without having to depend on “GUI wrappers” written by third parties, that often cost money and also lag behind in functionality</li>
 </ul>
-<p>In these sessions, <strong>we’ll use a Unix shell at OSC inside VS Code</strong>. Fot this sessio, I will assume you still have an active VS Code session as setup in the <a href="../modules/02_osc.html">previous one</a>, have VS Code located at <code>/fs/ess/PAS0471</code>, and with an open Terminal — if not, see the instructions in the dropdown box right below.</p>
+<p>In these sessions, <strong>we’ll use a Unix shell at OSC inside VS Code</strong>. For this session, specifically, I will assume you still have an active VS Code session as setup in the <a href="../modules/02_osc.html">previous one</a>, have VS Code located at <code>/fs/ess/PAS0471</code>, and with an open Terminal — if not, see the instructions in the dropdown box right below.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Starting VS Code at OSC - with a Terminal
+Starting VS Code at OSC - with a Terminal (Click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -386,7 +387,7 @@ How shell code is presented on this website
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Fri Jul 28 09:29:41 EDT 2023</code></pre>
+<pre class="bash-out"><code>Fri Jul 28 13:04:38 EDT 2023</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -399,7 +400,7 @@ Copying code from the website, and code output
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>When you hover your mouse above the top box with the command, you should see a copy icon appear on the far right, which will copy the command to your clipboard: for longer expressions, this can be handy so you can paste this right into your shell and don’t have to type. Generally speaking, though, it does help to type the commands yourself!</p>
+<p>When you hover your mouse above the top box with the command (sometime you have to click in it first), you should see a copy icon appear on the far right, which will copy the command to your clipboard: for longer expressions, this can be handy so you can paste this right into your shell and don’t have to type. Generally speaking, though, learning works better when you type the commands yourself!</p>
 <p>Also, the darker gray box below, with italic text, is intended to show the <em>output</em> of commands as they are printed to the screen in the shell.</p>
 </div>
 </div>
@@ -427,7 +428,7 @@ Working directories, and paths part I
 <p>On Unix systems, all the files on a computer exist within <strong>a single hierarchical system of directories</strong> (folders). When working in the Unix shell, you are always “in” one of these directories. The directory you’re “in” at any given time is referred to as your <strong>working directory</strong>.</p>
 <p>In a <strong>path</strong> (specification of a file or directory location) such as that output by <code>pwd</code>, directories are separated by forward slashes <code>/</code>.</p>
 <p>A <strong>leading forward slash</strong> in a path indicates the root directory of the computer, and as such, the path provided by <code>pwd</code> is an <em>absolute path</em> (or: <em>full path</em>), and not a <em>relative path</em> — more on that later.</p>
-<p>While not applicable with <code>cd</code>, if you <em>happen to see</em> a <strong>trailing forward slash</strong> in a path (eg. <code>/fs/ess/PAS0471/</code>), you can be sure that the path points to a directory and not a file.</p>
+<p>While not shown in the <code>cd</code> output, if you <em>happen to see</em> a <strong>trailing forward slash</strong> in a path (eg. <code>/fs/ess/PAS0471/</code>), you can be sure that the path points to a directory and not a file.</p>
 </div>
 </div>
 <p><br><br></p>
@@ -440,11 +441,12 @@ Working directories, and paths part I
 <li>We merely typed the <em>name of a command and nothing else</em></li>
 <li>The main function of the command was to <em>provide some information</em>, which was the output printed to screen</li>
 </ul>
-<p>But many commands perform an <strong>action</strong> other than printing output. For example, the very commonly used command <strong><code>cd</code> (Change Directory)</strong> will, you guessed it, change your working directory. And as it happens, it has no output at all.</p>
+<p>But many commands perform an <strong>action</strong> other than printing output. For example, the very commonly used command <strong><code>cd</code> (Change Directory)</strong> will, you guessed it, change your working directory. And as it happens, it normally has no output at all.</p>
 <p>We start by simply typing <code>cd</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Did anything happen? Maybe it failed? You might expect a command like <code>cd</code> to <em>report</em> what it did, but it does not. As a general rule for Unix commands that perform actions, and one that also applies to <code>cd</code>: <strong>if the command does not print any output, this means it was successful.</strong></p>
-<p>So where did we change our working directory to, given that we did not tell <code>cd</code> where to move?</p>
+<pre class="bash-in-nocolor"><code>[jelmer@p0080 PAS0471]$ cd
+[jelmer@p0080 ~]$</code></pre>
+<p>Did anything happen? You might expect a command like <code>cd</code> to <em>report</em> what it did, but it does not. As a general rule for Unix commands that perform actions, and one that also applies to <code>cd</code>: <strong>if the command does not print any output, this means it was successful.</strong></p>
+<p>So where did we change our working directory to, given that we did not tell <code>cd</code> where to move? Our <em>prompt</em> (as shown in the code box below) actually did give us a clue: <code>PAS0471</code> was changed to <code>~</code> But what does <code>~</code> mean?</p>
 <section id="your-turn-check-what-directory-we-moved-to" class="level4 unnumbered exercise">
 <h4 class="unnumbered anchored" data-anchor-id="your-turn-check-what-directory-we-moved-to">Your Turn: Check what directory we moved to</h4>
 <details>
@@ -453,12 +455,13 @@ Solution (click here)
 </summary>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>/users/PAS0471/jelmer</code></pre>
-It appears that we moved to our home directory! (Remember, we were in the project directory <code>/fs/ess/PAS0471</code>.)
+<p>It appears that we moved to our Home directory! (Remember, we were in the Project directory <code>/fs/ess/PAS0471</code>.)</p>
+<p>And as it turns out, <code>~</code> is a shell shortcut to indicate your Home directory — more on that later.</p>
 </details>
 </section>
 <p>From this, we can infer that the <strong>default behavior</strong> of <code>cd</code>, i.e.&nbsp;when it is not given any additional information, is to move to a user’s home directory. This is actually a nice trick to remember!</p>
 <p>Now, let’s move to another directory, one that contains some files we can explore to learn our next few commands. We can do so by specifying the <em>path</em> to that directory after the <code>cd</code> command (make sure to leave a space after <code>cd</code>!):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> demo/202307_rnaseq/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /fs/ess/PAS0471/demo/202307_rnaseq/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">pwd</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>/fs/ess/PAS0471/demo/202307_rnaseq</code></pre>
 <p>In more abstract terms, what we did above was to provide <code>cd</code> with an <strong>argument</strong> (namely, the path to the dir to move to). Arguments generally tell commands what file or directory to operate on, and come at the end of a command line expression. There should always be a space between the command and its argument(s)!</p>
@@ -468,7 +471,7 @@ It appears that we moved to our home directory! (Remember, we were in the projec
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Tab completion!! (Click here to learn more)
+Tab completion!! (Click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -486,8 +489,8 @@ Tab completion!! (Click here to learn more)
 <pre class="bash-out-solo"><code>/fs/ess/PAS0471/demo/202307_rnaseq/</code></pre></li>
 </ul>
 <p>The tab completion feature will check for files/dirs present in the location you’re at, and based on the characters you’ve typed so for, complete the path as far as it can.</p>
-<p>Sometimes it can’t move forward at all because there are multiple files or dirs that have the same next character. Pressing “Tab-tab” will then show your options, though in unusual circumstances like one above, there are so many that it asks for confirmation. Then, it’s better to just keep typing assuming that you know where you want to go.</p>
-<p>But in general, Tab completion is an incredibly useful feature that you should try to get accustomed to using right away!</p>
+<p>Sometimes it can’t move forward at all because there are multiple files or dirs that have the same next character. Pressing “Tab-tab” will then show your options, though in unusual circumstances like one above, there are so many that it asks for confirmation. In such cases, it’s usually better to just keep typing assuming that you know where you want to go.</p>
+<p>In general, though, Tab completion is an <em>incredibly</em> useful feature that you should try to get accustomed to using right away!</p>
 </div>
 </div>
 </div>
@@ -555,7 +558,7 @@ In other words, paths (dir and file specifications) are <strong>case-sensitive</
 <div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>fastq</code></pre>
 <p>Well, that’s not much information, just another dir — so let’s look inside that:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/fastq  <span class="co"># These will be shown in red in your output, since they are compressed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>ASPC1_A178V_R1.fastq.gz  ASPC1_G31V_R2.fastq.gz      Miapaca2_G31V_R1.fastq.gz
 ASPC1_A178V_R2.fastq.gz  Miapaca2_A178V_R1.fastq.gz  Miapaca2_G31V_R2.fastq.gz
 ASPC1_G31V_R1.fastq.gz   Miapaca2_A178V_R2.fastq.gz</code></pre>
@@ -578,23 +581,42 @@ meta.tsv</code></pre>
 drwxr-xr-x 3 jelmer PAS0471 4096 Jul 27 11:53 data
 drwxr-xr-x 2 jelmer PAS0471 4096 Jul 27 11:54 metadata
 -rw-r--r-- 1 jelmer PAS0471  963 Jul 27 16:48 README.md</code></pre>
-<p>Notice that it lists the same three items as our first <code>ls</code> call above, but this time, they’re printed in a different format: one item per line, with lots of additional information included. For example, the date and time is that when the file was last modified (we’ll go a bit more into the info in the different columns below).</p>
-<p>Let’s add another option, <code>-h</code>:</p>
+<p>Notice that it lists the same three items as our first <code>ls</code> call above, but now, they’re printed in a different format: one item per line, with lots of additional information included. For example, the date and time is that <strong>when the file was last modified</strong>, and the numbers just to the left of that (e.g., <code>4096</code>) show the <strong>file sizes</strong> in bytes<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Let’s add another option, <code>-h</code> — before reading on, can you pick out what it did to modify the output?</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="at">-h</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>total 17K
 drwxr-xr-x 3 jelmer PAS0471 4.0K Jul 27 11:53 data
 drwxr-xr-x 2 jelmer PAS0471 4.0K Jul 27 11:54 metadata
 -rw-r--r-- 1 jelmer PAS0471  964 Jul 27 17:48 README.md</code></pre>
-<p>Can you pick out what <code>-h</code> did to modify the output? Note the difference in the format of the column reporting the sizes of the items listed.</p>
-<p>Options can be pasted together as follows:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span>   <span class="co"># Output not shown, same as above</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The figure below shows what information is shown in each of the columns (but note that it shows a different listing of files, and uses the new-to-us <code>-a</code> option, short for “all”, to also show “hidden files”):</p>
-<p align="left">
+<p>Note the difference in the format of the column reporting the sizes of the items listed — we now have “human-readable filesizes”, where sizes on the scale of kilobytes will be shown in <code>K</code>s, of megabytes in <code>M</code>s, and of gigabytes in <code>G</code>s.</p>
+<p>Many options have a “<strong>long option</strong>” counterpart, i.e.&nbsp;a more verbose way of specifying the option. For example, <code>-h</code> can also be specified as <code>--human-readable</code>:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="at">--human-readable</span>      <span class="co"># Output not shown, same as above</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>(And then there are also options that are only available in long format — even with case-sensitivity, one runs out of single-letter abbreviations at some point!)</p>
+<p>Despite that <strong>short options</strong> like the <code>-l</code> and <code>-s</code> we’ve seen (single-dash, single-letter) are very terse and may at times seem impossible to remember, they are still often preferred with common Unix commands, because they are shorter to type — and keep in mind that you might use, say, <code>ls -lh</code> dozens if not hundreds of time a day if you work in the Unix shell a lot.</p>
+<p>A very useful feature of “short options” is that they can be pasted together as follows:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span>   <span class="co"># Output not shown, same as above</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+More on the long-format output of <code>ls</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The figure below shows what information is shown in each of the columns (but note that it shows a different listing of files, and uses the new-to-us <strong><code>-a</code> option, short for “all”</strong>, to also show “hidden files”):</p>
+<p align="center">
 <img src="img/long-ls.png" width="80%">
 </p>
+</div>
+</div>
 <p><br></p>
+</section>
+<section id="combining-options-and-arguments" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="combining-options-and-arguments"><span class="header-section-number">4.4</span> Combining options and arguments</h3>
 <p>Finally, we can <strong>combine options and arguments</strong>, and let’s do so take a closer look at our dir with FASTQ files — now the <code>-h</code> option is especially useful because it makes it easy to see that the files vary between 4.1 MB and 5.3 MB in size:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>total 38M
 -rw-r--r-- 1 jelmer PAS0471 4.1M Jul 27 11:53 ASPC1_A178V_R1.fastq.gz
 -rw-r--r-- 1 jelmer PAS0471 4.2M Jul 27 11:53 ASPC1_A178V_R2.fastq.gz
@@ -604,11 +626,16 @@ drwxr-xr-x 2 jelmer PAS0471 4.0K Jul 27 11:54 metadata
 -rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_A178V_R2.fastq.gz
 -rw-r--r-- 1 jelmer PAS0471 5.1M Jul 27 11:53 Miapaca2_G31V_R1.fastq.gz
 -rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_G31V_R2.fastq.gz</code></pre>
-<p><strong>In summary</strong>, in this section we have learned that:</p>
+<p>(Beginners are often inclined to move to a directory when they just want to <code>ls</code> its contents, but its often more convenient to stay put and use an argument to <code>ls</code> instead, like we did above.)</p>
+<p><br></p>
+</section>
+<section id="recap-of-ls-arguments-and-options" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="recap-of-ls-arguments-and-options"><span class="header-section-number">4.5</span> Recap of <code>ls</code>, arguments, and options</h3>
+<p>In summary, in this section we have learned that:</p>
 <ul>
-<li>The <code>ls</code> command lists files (by default without additional info and non-recursively)</li>
-<li>Using <em>arguments</em>, we tell <code>ls</code> (and other commands) what to operate on</li>
-<li>Using <em>options</em>, we can make <code>ls</code> show us the resulting dirs and files in different ways. The ones we’ve seen so far act as “on/off switches”, and this is common among Unix commands (but we’ll see other kinds of options too!).</li>
+<li><p>The <code>ls</code> command lists files (by default without additional info and non-recursively)</p></li>
+<li><p>Using <em>arguments</em>, we tell <code>ls</code> (and other commands) what to operate on. Arguments come at the end of the command line epxression, and are not preceded by a dash or any other “pointer”. They are typically names of files or dirs, but can be other things too.</p></li>
+<li><p>Using <em>options</em>, we can make <code>ls</code> (and other commands) show us the results in different ways. They are preceded by at least one dash (<code>-</code>, like <code>-l</code>).</p></li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -616,23 +643,18 @@ drwxr-xr-x 2 jelmer PAS0471 4.0K Jul 27 11:54 metadata
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-More on arguments and options
+Other types of options
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Above, we described the general <em>functional differences between options and arguments</em>. But they are really defined by the differences in the associated syntax:</p>
-<ul>
-<li><p><strong>Arguments</strong> come at the <em>end</em> of the command-line expression (i.e., after options) and are not preceded by a dash or any other pointer. They are typically names of files or dirs, but can be other things too.</p></li>
-<li><p><strong>Options</strong> are preceded by at least one dash (<code>-</code>). With Unix commands, we’ll most commonly see “short options” like <code>-h</code> (as in <code>ls -h</code>): single-dash then single-letter. But many options also have “long option” counterparts (and some only exist as long options), such as the <code>--human-readable</code> counterpart to <code>-h</code>: i.e.&nbsp;double-dash, then a word.</p></li>
-</ul>
-<p><strong>Short options</strong> are very terse but still often preferred with Unix commands, because they are shorter to type, and you might use, say, <code>ls -lh</code> dozens if not hundreds of time a day if you work in the Unix shell a lot.</p>
-<p>Conversely, with bioinformatics programs, I would recommend to mostly use <strong>long options</strong> whenever they are available, so that it’s easier you to remember what you did with that option, and more likely to be immediately understood by anyone reading the code (since an option name like <code>--human-readable</code> is mean to be descriptive).</p>
-<p><strong>Some options are not on/off switches and accept values</strong> (confusingly, these values can also be called “arguments” to options). For example, the <code>--color</code> option to <code>ls</code> determines how it colorized its output: there is <code>ls --color=never</code> — versus, among other possibilities, <code>ls --color=always</code>.</p>
-<p>We’ll see <em>a lot</em> of options that take values when running bioinformatics programs, such as to set parameters — for example: <code>trim_galore --quality 30 --length 50</code> would set a minimum Phred quality score threshold of 30 and a minimum read length threshold of 50 bases for the program TrimGalore, which we will later use to quality-trim and adapter-trim FASTQ files.</p>
+<p>The options we’ve seen so far act as “on/off switches”, and this is very common among Unix commands.</p>
+<p><strong>But some options are not on/off switches and accept values</strong> (confusingly, these values can also be called “arguments” to options). For example, the <code>--color</code> option to <code>ls</code> determines how it colorizes its output: there is <code>ls --color=never</code> — versus, among other possibilities, <code>ls --color=always</code>.</p>
+<p>We’ll see <em>a lot</em> of options that take values when running bioinformatics programs, <strong>such as to set specific analysis parameters</strong> — for example: <code>trim_galore --quality 30 --length 50</code> would set a minimum Phred quality score threshold of 30 and a minimum read length threshold of 50 bases for the program TrimGalore, which we will later use to quality-trim and adapter-trim FASTQ files. (This <code>--&lt;option&gt; &lt;value&gt;</code> syntax, i.e.&nbsp;without an <code>=</code> is more common than the <code>--&lt;option&gt;=&lt;value&gt;</code> syntax shown for <code>ls</code> above.)</p>
+<p>In contrast to when you are using common Unix commands, I would recommend to mostly <em>use <strong>long options</strong> whenever available when running bioinformatics programs like TrimGalore.</em> That way, it’s easier for you to remember what you did with that option, and more likely to be immediately understood by anyone else reading the code (cf.&nbsp;<code>trim_galore -q 30 -l 50</code> and <code>trim_galore --quality 30 --length 50</code>).</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -641,15 +663,15 @@ The <code>tree</code> command and recursive <code>ls</code> (Click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>The <code>tree</code> command lists files <em>recursively</em> (i.e., it will also show us what’s contained in the directories in our working directory), and does so in a tree-like fashion — this can be great to quicly get an intuitive overview of files in a dir:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tree</span> <span class="at">-C</span>     <span class="co"># The -C option will colorize the output</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>tree</code> command lists files <em>recursively</em> (i.e., it will also show us what’s contained in the directories in our working directory), and does so in a tree-like fashion — this can be great to quickly get an intuitive overview of files in a dir:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tree</span> <span class="at">-C</span>     <span class="co"># The -C option will colorize the output</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p align="left">
 <img src="img/tree_output.png" width="50%">
 </p>
 <p>As an aside: if we want to make <code>ls</code> list files recursively, we can use the <code>-R</code> option:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>.:
 data  metadata  README.md
 
@@ -671,15 +693,17 @@ meta.tsv</code></pre>
 </section>
 <section id="paths" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="paths"><span class="header-section-number">5</span> Paths</h2>
-<p>“Paths” are specifications of a location on a computer, either of a file or a directory.</p>
-<p>We’ve talked about the commands <code>cd</code> and <code>ls</code> which operate on paths, and without going into detail about it so far, we’ve also seen two distinct ways of specifying paths:</p>
+<p>As we’ve mentioned, “paths” are specifications of a location on a computer, either of a file or a directory.</p>
+<p>We’ve talked about the commands <code>cd</code> and <code>ls</code> that operate on paths, and without going into much detail about it so far, we’ve already seen two distinct ways of specifying paths:</p>
 <ul>
-<li><p><strong>Absolute (full) paths</strong> always start from the root directory of the computer, which represented by a <em><strong>leading <code>/</code></strong></em>, such as in <code>/fs/scratch/PAS0471/</code>. Absolute paths are like GPS coordinates to specify a geographic location on earth: they will provide location information regardless of where we are ourselves.</p></li>
-<li><p><strong>Relative paths</strong> start from your current location (working directory). When we typed <code>ls data</code> earlier, we indicated that we wanted to show the contents of the <code>data</code> directory located inside our current working directory — that probably seemed intuitive. But be aware that the shell would look absolutely nowhere else for that dir than in our current working directory. Relative paths are more like directions to a location that say things like “turn left” — these instructions depend on our current location.</p></li>
+<li><p><strong>Absolute (full) paths</strong> always start from the root directory of the computer, which is represented by a <em><strong>leading <code>/</code></strong></em>, such as in <code>/fs/scratch/PAS0471/</code>.</p>
+<p><em>(Absolute paths are like GPS coordinates to specify a geographic location on earth:</em> <em>they will provide location information regardless of where we are ourselves.)</em></p></li>
+<li><p><strong>Relative paths</strong> start from your current location (working directory). When we typed <code>ls data</code> earlier, we indicated that we wanted to show the contents of the <code>data</code> directory located inside our current working directory — that probably seemed intuitive. But be aware that the shell would look absolutely nowhere else for that dir than in our current working directory.</p>
+<p>(<em>Relative paths are more like directions to a location that say things like</em> <em>“turn left” — these instructions depend on our current location.</em>)</p></li>
 </ul>
 <p>Absolute paths may seem preferable because they will work regardless of where you are located, <strong>but</strong>:</p>
 <ul>
-<li>They are often a bit more typing than we need (or want) to do.</li>
+<li>They can be a lot more typing than we need (or want) to do.</li>
 <li>While context-specific, a much more important disadvantage of absolute paths is that they can only be expected to work on one specific computer, and are guaranteed not to work after you move files around.</li>
 </ul>
 <section id="how-might-relative-dirs-work-on-other-computers-or-after-moving-files" class="level4 unnumbered exercise">
@@ -697,12 +721,12 @@ This is something we’ll come back to later when talking about reproducibity.
 <p><br></p>
 <section id="moving-up-when-using-relative-paths" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="moving-up-when-using-relative-paths"><span class="header-section-number">5.1</span> Moving “up” when using relative paths</h3>
-<p>There are a couple of “shortcuts” available for relative paths. First of all, <code>.</code> just means the current working directory. Therefore, for instance, <code>ls ./data</code> is functionally the same as <code>ls data</code>, and just a more explicit way of saying that the <code>data</code> dir is located in your current working dir (this syntax is occasionally actually useful).</p>
-<p>More usefully for our purposes here, <strong><code>..</code> means one directory (one level) up</strong> in the directory hierarchy, with “up” meaning towards the root directory (I guess the directory tree is best visualized upside down!):</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ..               <span class="co"># One level up, listing /fs/ess/PAS0471/demo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There are a couple of “shortcuts” available for relative paths. First of all, <code>.</code> (a single period) is another way of representing the current working directory. Therefore, for instance, <code>ls ./data</code> is functionally the same as <code>ls data</code>, and just a more explicit way of saying that the <code>data</code> dir is located in your current working dir (this syntax is occasionally helpful).</p>
+<p>More usefully for our purposes here, <strong><code>..</code> (two periods) means one level up</strong> in the directory hierarchy, with “up” meaning towards the root directory (I guess the directory tree is best visualized upside down!):</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ..               <span class="co"># One level up, listing /fs/ess/PAS0471/demo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>202307_rnaseq</code></pre>
-<p>This pattern can be continued all the way to the root, so <code>../..</code> would list the files too levels up:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../..            <span class="co"># Two levels up, listing /fs/ess/PAS0471</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This pattern can be continued all the way to the root of the computer, so <code>../..</code> would list files two levels up:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ../..            <span class="co"># Two levels up, listing /fs/ess/PAS0471</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>aarevalo       conroy      frederico       Nisha     osu8947              ross
 acl            containers  hsiangyin       osu10028  osu9207              Saranga
 Almond_Genome  danraywill  jelmer          osu10436  osu9207_Lubell_bkup  Shonna
@@ -716,7 +740,7 @@ Cecilia        Flye        nghi            osu8900   rawalranjana44</code></pre>
 <p>Along these lines, there are two other shortcuts worth mentioning:</p>
 <ul>
 <li><p><strong><code>~</code></strong> represents your Home directory, so <code>cd ~</code> would move there and <code>ls ~</code> would list the files there</p></li>
-<li><p><strong><code>-</code></strong> is a <code>cd</code>-specific shortcut that it is like the “back” button in your browser: it will go to your previous location. (But it only has a memory of 1, so two subsequent <code>cd -</code> would move you back to your current working directory.)</p></li>
+<li><p><strong><code>-</code></strong> is a <code>cd</code>-specific shortcut that it is like the “back” button in your browser: it will go to your previous location. (But it only has a memory of 1, so subsequent <code>cd -</code>s would simply move you back and forth between two directories.)</p></li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -728,7 +752,7 @@ These shortcuts work with all commands
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Except for <strong><code>-</code></strong>, all of the above shortcuts are <em>general shell shortcuts</em> that work with <strong>any</strong> command that takes a path (and with nearly all say bioinformatics programs too).</p>
+<p>Except for <strong><code>-</code></strong>, all of the above shortcuts are <em>general shell shortcuts</em> that work with <strong>any</strong> command that takes a path.</p>
 </div>
 </div>
 <p><br></p>
@@ -739,10 +763,10 @@ These shortcuts work with all commands
 <p>We’ve learned about structure of command line expressions in the Unix shell, which include: the <em>command</em> itself, <em>options</em>, <em>arguments</em>, and <em>output</em> (including, in some cases, error messages).</p>
 <p>A few key general points to remember are that:</p>
 <ul>
-<li>Commands that take <strong>actions</strong> like changing directory (and the same will be true for commands that copy and move files, for example) will by default <strong>not print any output to the screen</strong>, only errors <em>if</em> those occur.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>Commands that take <strong>actions</strong> like changing directory (and the same will be true for commands that copy and move files, for example) will by default <strong>not print any output to the screen</strong>, only errors <em>if</em> those occur.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
 </ul>
 <ul>
-<li><p>Commands whose main function it is to provide us with information (think <code>ls</code>, <code>date</code>, <code>pwd</code>) will <strong>print their output to the screen</strong>. We’ll learn later how we “redirect” output to a file.</p></li>
+<li><p>Commands whose main function is to provide information (think <code>ls</code>, <code>date</code>, <code>pwd</code>) will <strong>print their output to the screen</strong>. We’ll learn later how we can “redirect” output to a file or to another command!</p></li>
 <li><p>Using <strong>options</strong> (<code>ls -l</code>), we can modify the behavior of a command, and using <strong>arguments</strong> (<code>ls data</code>), we can modify what it operates on in the first place.</p></li>
 </ul>
 <div class="callout callout-style-default callout-warning callout-titled">
@@ -757,19 +781,11 @@ Always start with a command
 <div class="callout-body-container callout-body">
 <p>One additional, important thing to realize about the structure of command line expressions is this:</p>
 <p>Everything you type on the command line should start with the name of a command, or equivalently, a program or script (these are all just “programs”).</p>
-<p>Therefore, for example, just typing the name of a file, even if it exists in your current working directory, will not do anything with that file (like printing its contents) like you might have expected. This is because the name of a file is not a command:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="ex">README.md</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Therefore, for example, just typing the name of a file, even if it exists in your current working directory, will return an error. (I.e., it won’t do anything with that file, such as printing its contents, like you had perhaps expected.) This is because the first word of a command line expressio should be a command, and the name of a file is (usually!) not a command:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="ex">README.md</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>README.md: command not found</code></pre>
 </div>
 </div>
-<p>We’ve learned to work with the following truly ubiquitous Unix commands:</p>
-<ul>
-<li><code>pwd</code> — print your current working directory</li>
-<li><code>cd</code> — change your working directory</li>
-<li><code>ls</code> — list files and dirs</li>
-</ul>
-<p>And have seen a few other simpler utility commands as well (<code>date</code>, <code>whoami</code>).</p>
-<p>We’ll continue with the basics of the Unix shell in part II (TBA).</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -780,9 +796,18 @@ Many bioinformatics programs are basically specialized commands
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>In many ways, you can think of using a command-line bioinformatics program as using just another command, so our general skills with Unix commands will very much extend to using command-line bioinformatics tools!</p>
+<p>In many ways, as mentioned in the box above, you can think of using a command-line bioinformatics program as using just another command.</p>
+<p>Therefore, our general skills with Unix commands will very much extend to using command-line bioinformatics tools!</p>
 </div>
 </div>
+<p>We’ve learned to work with the following truly ubiquitous Unix commands:</p>
+<ul>
+<li><code>pwd</code> — print your current working directory</li>
+<li><code>cd</code> — change your working directory</li>
+<li><code>ls</code> — list files and dirs</li>
+</ul>
+<p>And we have seen a few other simpler utility commands as well (<code>date</code>, <code>whoami</code>, and <code>tree</code> in a dropdown box).</p>
+<p>We’ll continue with the basics of the Unix shell in part II (TBA).</p>
 <p><br></p>
 </section>
 <section id="at-home-reading-getting-help" class="level2" data-number="7">
@@ -790,24 +815,24 @@ Many bioinformatics programs are basically specialized commands
 <p>We saw several different <em>options</em> for the <code>ls</code> command, and that may have left you wondering how you are supposed to know about them.</p>
 <section id="the---help-option" class="level3" data-number="7.1">
 <h3 data-number="7.1" class="anchored" data-anchor-id="the---help-option"><span class="header-section-number">7.1</span> The <code>--help</code> option</h3>
-<p>Many commands have a <code>--help</code> option which will primarily describe the command’s function and “syntax” including many of the available options.</p>
+<p>Many (but not all!) commands have a <code>--help</code> option which will primarily describe the command’s function and “syntax” including many of the available options.</p>
 <p>For a very brief example, try:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">whoami</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">whoami</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For a much longer example, try:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="the-man-command" class="level3" data-number="7.2">
 <h3 data-number="7.2" class="anchored" data-anchor-id="the-man-command"><span class="header-section-number">7.2</span> The <code>man</code> command</h3>
 <p>The <code>man</code> command provides manual pages for Unix commands, which is more complete than the <code>--help</code> help, but sometimes overwhelming as well as terse and not always easy to fully understand — Google is your friend as well!</p>
 <p>For a short example, try:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-The man page opens in a “pager” – type <kbd>q</kbd> to quit!
+The man page opens in a “pager” – try to scroll around and type <kbd>q</kbd> to quit!
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -815,7 +840,7 @@ The man page opens in a “pager” – type <kbd>q</kbd> to quit!
 </div>
 </div>
 <p>For a much longer example, try:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br> <br></p>
 
 
@@ -826,7 +851,8 @@ The man page opens in a “pager” – type <kbd>q</kbd> to quit!
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>We’ll see later on how we can make commands more “verbose” than they are by default, which can certainly be useful.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Though these sizes are only directly useful for files, not dirs! You can also ignore the <code>total 17</code> line at the top.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>We’ll see later on how we can make commands more “verbose” than they are by default, which can certainly be useful.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
