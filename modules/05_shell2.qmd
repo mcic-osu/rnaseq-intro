@@ -1,0 +1,1179 @@
+---
+title: "The Unix Shell - Part II"
+subtitle: "Working with dirs and files"
+pagetitle: "Unix shell part II"
+highlight-style: github
+number-sections: true
+engine: knitr
+author: Jelmer Poelstra
+date: 2023-08-04
+---
+
+```{r knitr_options, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE,
+                      class.output = "bash-out")
+```
+
+-------
+
+<br>
+
+## Overview & getting set up {-}
+
+In this session, we will continue learning about the Unix shell.
+Specifically, we will focus on:
+
+- Commands for file and directory organization,
+  such as copying, moving, renaming, and deleting
+- Selecting multiple files with wildcards ("globbing")
+- Redirecting the output of commands to files
+- Viewing text files
+- Keyboard shortcuts, counting lines, and environment variables
+
+As always, we'll be working in VS Code &mdash;
+if you don't already have a session open, see below how to do so.
+
+:::{.callout-tip collapse="true"}
+## Starting VS Code at OSC - with a Terminal (Click to expand)
+1. Log in to OSC's OnDemand portal at <https://ondemand.osc.edu>.
+2. In the blue top bar, select `Interactive Apps`
+   and then near the bottom of the dropdown menu, click `Code Server`.
+3. In the form that appears on a new page:
+   - Select an appropriate OSC project (here: `PAS0471`)
+   - For this session, select `/fs/ess/PAS0471` as the starting directory
+   - Make sure that `Number of hours` is at least `2`
+   - Click `Launch`.
+4. On the next page, once the top bar of the box has turned green
+   and says `Runnning`, click `Connect to VS Code`.
+
+<figure><p align="center"><img src=img/osc-code-launch_ed.png width="80%"></p></figure>
+
+5. Open a Terminal by clicking
+   &nbsp; {{< fa bars >}} &nbsp; => `Terminal` => `New Terminal`.
+   (Or use one of the keyboard shortcuts:
+   <kbd>Ctrl</kbd>+<kbd>\`</kbd> (backtick) or
+   <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.)
+6. For now, your working directory doesn't matter &mdash; we'll change it in a bit.
+:::
+
+<br>
+
+## Some commands and features to get you up to speed
+
+We'll start with a few miscellaneous shell commands and features that we'll
+either use again later on in today's session,
+or that are just good to know about sooner rather than later.
+
+### Counting lines with `wc -l`
+
+The `wc` (short for `w`ord`c`ount) command can count (e.g.) the number of
+characters, words, and lines in a text file.
+Getting a **line count** for files is often especially useful,
+certainly for genomic data files:
+for example, the number of reads in a FASTQ file is simply the number
+of lines divided by 4, and other file types like GFF (an annotation format)
+have one entry per line.
+
+To get just the line count, we should use the **`-l` option** of `wc` &mdash;
+let's count the number of lines in the metadata file in
+`/fs/ess/PAS0471/demo/202307_rnaseq/`:
+
+```bash
+wc -l /fs/ess/PAS0471/demo/202307_rnaseq/metadata/meta.tsv
+```
+```{.bash-out}
+9 /fs/ess/PAS0471/demo/202307_rnaseq/metadata/meta.tsv
+```
+
+<br>
+
+### Keyboard shortcuts
+
+Using keyboard shortcuts can make your life in the Unix shell a lot easier.
+Below, we'll see a couple particularly useful ones.
+For more, see the [reference page](../info/shell_commands.qmd).
+
+#### Command history and moving across the line faster
+
+It's common to want to repeat commands and even more common to make slight
+changes to a previously issued command.
+Besides <kbd>Tab</kbd> for tab completion,
+another ubiquitous pair of shell keyboard shortcuts are
+<kbd>&#8679;</kbd> / <kbd>&#8681;</kbd>
+to cycle through your **command history**.
+
+If you hit the <kbd>&#8679;</kbd> (up arrow) once,you'll get your most recent command,
+and if you keep hitting it, you'll go further back;
+the<kbd>&#8681;</kbd> (down arrow) will go the other way.
+
+For example, say that we wanted to see what the output of the `wc` command is
+when we omit the `-l` option.
+At the prompt, press <kbd>&#8679;</kbd> once to retrieve your previous `wc`
+command.
+Then, edit it to remove the `-l`, and press <kbd>Enter</kbd>:
+
+```bash
+wc /fs/ess/PAS0471/demo/202307_rnaseq/metadata/meta.tsv
+```
+```{.bash-out}
+9  27 236 /fs/ess/PAS0471/demo/202307_rnaseq/metadata/meta.tsv
+```
+
+A few other tips while you're trying this &mdash;
+perhaps practice this a few times:
+
+- To execute a command,
+  **you can press <kbd>Enter</kbd> regardless of where your cursor is**
+  on the line; it does _not_ need to be at the end of the line.
+- After pressing <kbd>&#8679;</kbd>, you needed to move to almost the beginning
+  of the line to make your edit (removing `-l`).
+  **There are two ways to speed up your cursor movements:**
+  - If you keep <kbd>Ctrl</kbd> (Windows) or <kbd>Option</kbd> (Mac) pressed
+    while using the left (and right) arrows to move your cursor on the line,
+    you will move one word, rather than one character, at a time!
+  - If you press <kbd>Ctrl</kbd>+<kbd>A</kbd>, you will move all the way to
+    the beginning of the line
+    (and <kbd>Ctrl</kbd>+<kbd>E</kbd> will move you to the end of the line).
+
+::: {.exercise}
+#### Use `man wc` or `wc --help` to figure out what the three counts mean {-}
+
+<details><summary>Solution</summary>
+The three numbers are the number of lines, words, and bytes, respectively.
+</details>
+
+:::
+
+#### Cancel and kill
+
+It is also common to want to **cancel a running command or get out of a "hanging" prompt**,
+and you can do so with **<kbd>Ctrl</kbd>+<kbd>C</kbd>**.
+
+If you accidentally omit a file name with a command like `wc`
+that _requires_ an argument[^1], something odd happens &mdash;
+you move to a new line in the terminal but don't get your regular prompt
+back; it appears to "hang". Try it:
+
+[^1]: Though we will see later that you can also "pipe in" input to `wc` and
+      many other commands, in which case it does not need a file name as an
+      argument, since you are providing data for it to operate on in a different
+      way.
+
+```bash
+wc
+```
+
+To get out of this, press <kbd>Ctrl</kbd>+<kbd>C</kbd> to cancel the partial
+command, and get your prompt back.
+There are several other ways you might accidentally try to execute incomplete commands,
+such as **forgetting to close parentheses or quotes**, and in some cases,
+you don't even know what the problem is.
+Just press <kbd>Ctrl</kbd>+<kbd>C</kbd> and then take a close look at the command.
+
+Another type of situation where <kbd>Ctrl</kbd>+<kbd>C</kbd> is very handy is
+when you execute a command that does actually run,
+but you realize, for example, that there is a mistake in the command (wrong input file!)
+or that the command will take way too long to run interactively.
+<kbd>Ctrl</kbd>+<kbd>C</kbd> will then **"kill" (cancel) the running process**.
+A somewhat silly example is the sleep command,
+which you can use to make the computer wait between successive commands:
+
+```bash
+# This will "run" for 60 seconds, after which you get your prompt back 
+sleep 60s
+# Press Ctrl + C to get your prompt back sooner!
+```
+```{.bash-out}
+^C
+```
+
+After executing the above command, press <kbd>Ctrl</kbd>+<kbd>C</kbd> to kill it.
+
+<br>
+
+### Environment variables and the `echo` command
+
+In computer languages, "**variables**" store information.
+When we reference a _shell variable_ to retrieve its value,
+we have to put a **`$`** in front of its name
+(unlike in say R or Python) &mdash;
+for instance, we reference a variable with the name `x` as `$x`[^1].
+
+[^1]: The advantage of this is that it makes it very easy to recognize variables
+      inside scripts and so on!
+
+In later sessions, we'll see how we can create our own variables,
+and we will be using these a lot!
+But the Unix shell also has a number of _pre-existing variables_,
+which are called **environment variables** and have ALL-CAPS names.
+For example, the variable **`$HOME`** contains the path to your Home directory,
+and the variable **`$USER`** contains your username.
+
+How can we examine the value of variables?
+Just typing, e.g., `$USER` at the prompt will not work:
+as pointed out in the previous session,
+_every command line expression should start with a command_,
+and a variable is not a command.
+Instead, we should use the **`echo` command**,
+which simply prints whatever text you give it:
+
+```bash
+# You don't have to use quotes (" "), at least here, but it's good practice
+echo "Hello there"    
+```
+``` {.bash-out}
+Hello there
+```
+
+We'll also be using the `echo` command a lot,
+when we have our shell scripts report progress and the values of variables,
+and so on.
+
+If we use echo with a(n environment) variable like `$USER`,
+it will print its value:
+
+```bash
+# The shell will replace $USER by its value, so echo will just see 'jelmer'
+echo "$USER"
+```
+```{.bash-out}
+jelmer
+```
+
+:::{.exercise}
+#### Your Turn {-}
+
+- Print "Hello there \<user\>" to the screen  
+  (i.e., `<user>` should be replaced by your actual username).
+
+- Use an environment variable to move to your Home directory,
+  then move back to where you were.
+
+<details><summary>Hints for the second question (click here)</summary>
+Recall from the previous session that:
+
+- The command `cd` will change your working directory
+- `cd -` will move back to your previous directory
+
+</details>
+
+<details><summary>Solutions (click here)</summary>
+
+- **Print "Hello there \<user\>" to the screen:**
+
+```bash
+# (This would also work without the " " quotes)
+echo "Hello there $USER"
+```
+```{.bash-out}
+Hello there jelmer
+```
+
+<br>
+
+- **Use an environment variable to move to your Home directory,**
+  **check that it worked, then move back to where you were:**
+
+```bash
+# Move to your Home directory
+cd $HOME
+
+# Print the working directory
+pwd
+#> /users/PAS0471/jelmer
+
+# Move back to your previous working directory
+cd -
+```
+</details>
+:::
+
+<br>
+
+## Commands for file organization
+
+Below, we'll learn about the key commands for directory and file organization:
+`mkdir` (create dirs), `cp` (copy), `mv` (move and rename), and `rm` (remove).
+Why do we need to learn this when VS Code and the OnDemand
+website itself have file browsers with this kind of functionality?
+
+- We'll regularly want to use these commands non-interactively in our shell scripts
+- These commands are often a more efficient way to organize files
+- They provide a good way to get more familiar with the Unix shell and how
+  Unix commands work
+- It's good to know these basics and be prepared for situations where you do not
+  have access to OnDemand/VS Code.
+
+### Create dirs with `mkdir`
+
+The `mkdir` command creates new directories:
+you can give it one or more arguments to create one or more directories.
+Create one for yourself, with your username, in `/fs/ess/PAS0471`:
+
+```bash
+mkdir /fs/ess/PAS0471/$USER
+```
+
+Now, move to that directory:
+
+```bash
+cd /fs/ess/PAS0471/$USER
+```
+
+Next, we'll create a directory for these introductory sessions and go there:
+
+```bash
+mkdir rnaseq_intro
+cd rnaseq_intro       # Use Tab completion
+```
+
+Let's switch VS Code to this directory:
+click &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `Open Folder`,
+and select `/fs/ess/PAS0471/<user>/rnaseq_intro`.
+
+::: {.callout-tip}
+`/fs/ess/PAS0471/<user>/rnaseq_intro` (with `<user>` replaced by your username)
+is going to be **your working dir for upcoming sessions too**,
+so you should always open/reload VS Code in that dir.
+:::
+
+Finally, let's make several dirs at once &mdash;
+this is how I usually structure my research project dirs:
+
+```bash
+mkdir data metadata results scripts sandbox
+```
+
+#### Recursive `mkdir`
+
+By default, `mkdir` does not work recursively:
+it will refuse to make a dir inside a dir that does not (yet) exist.
+And if you try to do so, the resulting error might confuse you:
+
+```bash
+mkdir sandbox/2023/08
+```
+```{.bash-out}
+mkdir: cannot create directory ‘sandbox/2023/08’: No such file or directory
+```
+> _Why won't you do your job, `mkdir`!?_
+
+Instead, we need to use the `-p` option to `mkdir`:
+
+```bash
+mkdir -p sandbox/2023/08
+```
+
+In general,
+Unix commands are designed to be powerful and to do exactly what you asked,
+but **non-recursive default behaviors**
+(we will see this with the commands to copy (`cp`) and delete (`rm`) files as well)
+are an exception to this.
+We can assume that the developers thought that recursive default behaviors
+were just too risky.
+
+::: {.callout-note collapse="true"}
+#### When a dir already exists, `-p` will also suppress any errors (Click to expand)
+The `-p` also changes `mkdir`'s behavior when you try to create a dir that
+already exists.
+
+By default, it will give an error:
+
+```bash
+# Note: we (should have) just created this dir above, so it already exists
+mkdir sandbox/2023/08
+```
+```{.bash-out}
+mkdir: cannot create directory ‘sandbox/2023/08’: File exists
+```
+
+With `-p`, it doesn't complain (but won't do anything, like overwriting, either):
+
+```bash
+mkdir -p sandbox/2023/08    # Should not give any output
+```
+
+As we'll see later,
+all of this makes `mkdir -p` ideal for non-interactive usage in shell scripts.
+:::
+
+::: {.callout-note}
+#### Create new _files_ with `touch`
+As we have learned the command to make new dirs,
+you may be wondering what the equivalent command is to make new, empty files:
+it is **`touch`**.
+
+```bash
+# Create three new, empty files:
+touch file1 file2 file3
+```
+
+This command isn't as commonly used because we usually create new files on
+the fly with command output redirection, which we'll learn about below.
+:::
+
+<br>
+
+### Copy files and dirs with `cp`
+
+Above, you created your own directory &mdash;
+now, let's get you a copy of the partial RNAseq dataset in
+`/fs/ess/PAS0471/demo/202307_rnaseq/`
+that we'll be working with throughout these sessions.
+
+The `cp` command copies files and/or directories from one location to another.
+It has **two required arguments**:
+what you want to copy (the _source_), and where you want to copy it to
+(the _destination_).
+So, we can summarize its basic syntax as **`cp <source> <destination>`**.
+
+We'll start by copying the metadata file:
+
+```bash
+cp -v /fs/ess/PAS0471/demo/202307_rnaseq/metadata/meta.tsv metadata/
+```
+```{.bash-out}
+‘/fs/ess/PAS0471/demo/202307_rnaseq/metadata/meta.tsv’ -> ‘metadata/meta.tsv’
+```
+
+This told `cp` to copy the metadata file into the `metadata` dir you created earlier.
+
+::: {.callout-note}
+#### `-v` option for verbose
+We used the **`-v` option**, short for  **v**erbose,
+to make `cp` tell us what it did:
+
+- Recall that by default,
+  Unix commands are generally silent when performing actions like this.
+- But many commands have a verbose option (nearly always `-v`) to make them
+  tell us what they did, which can be very useful.
+:::
+
+Like `mkdir`, **`cp` is not recursive by default**.
+If you want to copy a directory and all of its contents,
+we need to use its `-r` option[^2].
+We'll use that option to copy the dir with FASTQ files:
+
+[^2]: `-r` is a common option name for recursive behaviour among Unix commands
+      (`mkdir` is an exception with its `-p`).
+
+```bash
+cp -rv /fs/ess/PAS0471/demo/202307_rnaseq/data/fastq data/
+```
+```{.bash-out}
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq’ -> ‘data/fastq’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/Miapaca2_A178V_R1.fastq.gz’ -> ‘data/fastq/Miapaca2_A178V_R1.fastq.gz’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/ASPC1_G31V_R2.fastq.gz’ -> ‘data/fastq/ASPC1_G31V_R2.fastq.gz’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/ASPC1_A178V_R2.fastq.gz’ -> ‘data/fastq/ASPC1_A178V_R2.fastq.gz’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/ASPC1_G31V_R1.fastq.gz’ -> ‘data/fastq/ASPC1_G31V_R1.fastq.gz’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/ASPC1_A178V_R1.fastq.gz’ -> ‘data/fastq/ASPC1_A178V_R1.fastq.gz’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/Miapaca2_A178V_R2.fastq.gz’ -> ‘data/fastq/Miapaca2_A178V_R2.fastq.gz’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/Miapaca2_G31V_R1.fastq.gz’ -> ‘data/fastq/Miapaca2_G31V_R1.fastq.gz’
+‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/Miapaca2_G31V_R2.fastq.gz’ -> ‘data/fastq/Miapaca2_G31V_R2.fastq.gz’
+```
+
+<br>
+
+### Moving with `mv`, and general `cp`/`mv` tips
+
+The `mv` command is nearly identical to the `cp` command, except that it:
+
+- **Moves** rather than copies files and/or dirs
+- Works **recursively** by default
+
+We'll use this section to learn a few more things about
+_the usage of both these commands_.
+All the examples use `mv`, but `cp` would work equivalently.
+
+- **Use the `.` notation** for the current working dir if you want to copy/move
+  something there:
+
+  ```bash
+  # This will copy 'meta.tsv' from the 'metadata' dir into the current working dir
+  mv metadata/meta.tsv .
+  ```
+
+- **By default, both `rm` and `cp` will overwrite files without warning!**
+  Use the `-i` option (works for both commands) to make you confirm before
+  overwriting anything.
+
+- There is **no separate command for renaming**,
+  because both `cp` and `mv` allow you to provide a different name for the target.
+  Thus, if used as follows, `mv` functions merely as a renamer:
+
+  ```bash
+  mv meta.tsv meta_version2.tsv
+  ```
+
+  And we can move and rename at the same time as well &mdash;
+  let's do that to restore our original location and name for the metadata file:
+
+  ```bash
+  mv meta_version2.tsv metadata/meta.tsv
+  ```
+
+:::{.callout-note}
+#### Renaming rules for both `cp` and `mv`
+If the destination is:
+
+- **An existing dir**, the file will keep its original name.
+- **Not an existing dir**, the path specifies the new name.
+
+Neither command will create "additional, intermediate" directories,
+so `mv metadata/meta.tsv metadata/misc/meta.tsv` would not work if `metadata/misc`
+doesn't already exist.
+:::
+
+:::{.exercise}
+#### Your Turn {-}
+
+In which directory (in terms of a relative path from your working dir)
+would the FASTQ files end up with each of the following commands?
+
+- `mv data/fastq data/fastq_files`
+- `mv data/fastq fastq`
+- `mv data/fastq .`
+
+What if you wanted to move the FASTQ files _directly_ into your current
+working directory (from `data/fastq`)?  
+_(You should know how to do this 1-by-1 but we have not yet seen the special_
+_character you can use to do this for all files at once &mdash; see the hint.)_
+
+<details><summary>Hints (click here)</summary>
+You can use the asterisk (star) symbol `*` to select all files in a directory.
+
+(We'll learn more about `*` later.
+In short, it is one of a few _shell wildcards_ used to expand to filenames,
+and this one specifically matches any number of any character,
+and as such will match all possible filenames when used by itself.)
+</details>
+
+<details><summary>Solutions (click here)</summary>
+
+_In which directory (in terms of relative path from your working dir)_
+_will the FASTQ files end up with each of the following commands?_
+
+- `mv data/fastq data/fastq_files` &mdash; **in `fastq_files`**
+- `mv data/fastq fastq` &mdash; **in `fastq`**
+- `mv data/fastq .` &mdash; **in `fastq` also!**
+
+_What if you wanted to move the FASTQ files directly into your current_
+_working directory?_
+
+For one file:
+
+```bash
+mv data/fastq/ASPC1_A178V_R1.fastq.gz .
+```
+
+For all files:
+
+```bash
+mv data/fastq/* .
+```
+
+</details>
+
+:::
+
+<br>
+
+### Intermezzo: the trouble with spaces in file names
+
+In the Unix shell, **spaces are essentially special characters**
+that are used to separate commands, options, and arguments,
+with the latter often being one or more file names.
+
+For example, one of our earlier `mkdir` commands,
+`mkdir data metadata results scripts sandbox`,
+created five separate dirs and not one dir with four spaces in it.
+
+Therefore, to create or refer to a _file or directory name with a space in it_,
+you need some special notation.
+Two different methods are available:
+**quoting** the entire file name,
+and "**escaping**" the special meaning of the space:
+
+```bash
+# Method 1: Put quotes around the entire file name:
+mkdir "my new dir"
+
+# Method 2: Escape the special meaning of spaces by preceding them with a backslash
+mkdir my\ new\ dir2
+```
+
+Let's see what we have now:
+
+```bash
+ls -1    # The "-1" (dash one) option to ls lists each entry on its own line
+```
+```{.bash-out}
+data
+metadata
+my new dir
+my new dir2
+README.md
+```
+
+In any context that we want to refer to file or dir names with spaces in them,
+we'll need quotes or escaping:
+
+```bash
+cd my new dir
+```
+```{.bash-out}
+bash: cd: my: No such file or directory
+```
+
+Similarly, `ls` will fail as follows:
+
+```bash
+ls my new dir
+```
+```{.bash-out}
+ls: cannot access my: No such file or directory
+ls: cannot access new: No such file or directory
+ls: cannot access dir: No such file or directory
+```
+
+:::{.exercise}
+#### Why does `cd` produce one error while `ls` produces three?
+
+<details><summary>Solution (click here)</summary>
+
+`cd` tried to move to non-existing dir `my`,
+and _ignored_ the arguments `new` and `dir`, since it only accepts one argument.
+
+`ls` accepts multiple arguments and will try to list all 3 listed items,
+none of which happens to exist. 
+
+</details>
+
+:::
+
+Fortunately, tab completion will insert backspaces for you &mdash;
+type `cd my` and press <kbd>Tab</kbd>:
+
+```sh
+# After typing cd and pressing tab, the line should complete as follows:
+cd my\ new\ dir
+
+# Let's move back up:
+cd ..
+```
+
+Nevertheless, the moral of the story is that you should always
+**avoid spaces in file names** when working at OSC but more generally
+in a project that uses the Unix shell or in fact that uses any coding.
+If you need to separate words, then use underscores (`_`), dashes (`-`),
+and/or capitalization &mdash; for example:
+
+```bash
+mkdir my_new_dir     # "snake" case
+mkdir my-new-dir     # "kebab" case
+mkdir myNewDir       # "camel" case
+```
+
+::: {.callout-note}
+#### More file and dir naming tips
+It's also a good idea to avoid characters other than letters, numbers,
+and underscores (`_`), dashes (`-`), and periods (`.`) in dir and file names.
+
+Ideally, you'd only use the `.` to separate the extension from the file name,
+but it is (unfortunately) also common to use `.` as a "word separator"
+(e.g. `my_file.filtered.sorted.txt`).
+
+Finally, avoid using _a number as the first character_ in a file or dir name.
+:::
+
+<br>
+
+### Removing files with `rm`
+
+Our final command in this series is `rm`,
+which removes (deletes) files and directories.
+
+One important thing to note upfront is that `rm` will
+**permanently and irreversibly delete files**
+without the typical "intermediate step" of placing them in a trash bin,
+like you are used to with your personal computer.
+With a healthy dosis of fear installed, let's dive in.
+
+To remove one or more files, you can simply pass the file names as arguments to `rm`
+as with previous commands.
+We will also use the `-v` (`v`erbose) option to have it tell us what it did:
+
+```bash
+# This assumes you ran `touch file1 file2 file3` earlier on; do so now if needed
+rm -v file1            # Remove 1 file
+```
+```{.bash-out}
+removed ‘file1’
+```
+```bash
+rm -v file2 file3      # Remove 2 files
+```
+```{.bash-out}
+removed ‘file2’
+removed ‘file3’
+```
+
+_(If it seems cumbersome to type a bunch of file names,_
+_we'll see below how you can use a Shell wildcard to select many files at once.)_
+
+<br>
+
+As a safety measure, `rm` will by default only delete files and not directories
+or their contents &mdash; i.e., like `mkdir` and `cp`, it refuses to act
+_recursively_ by default.
+**To remove dirs and their contents, use the `-r` option:**
+
+```bash
+# You should have these from s2.4 (if not, run: mkdir "my new dir" "my new dir2")
+rm -r "my new dir" "my new dir2"
+```
+```{.bash-out}
+removed directory: ‘my new dir’
+removed directory: ‘my new dir2’
+```
+
+You should obviously be quite careful with `rm -r`!
+If you'd run it on say your personal dir within PAS0471,
+`/fs/ess/PAS0471/<user>`, after working in there for months on different projects,
+it would remove all of those files in one fell swoop!
+(Though luckily, OSC does keep backups in the project dirs)
+
+**To make it less likely for bad things to happen**,
+here are some measures you can take as well as a built-in feature worth pointing
+out:
+
+- If you're worried about a specific removal you are about to perform,
+  you could use **`rm -i`** (short for `i`nteractive) to have remove ask you to confirm
+  the removal of every dir and file,
+  though this is not practical for dirs with _lots_ of files:
+
+```bash
+# Make some files for this exercise
+mkdir sandbox/remove_test
+touch sandbox/remove_test/a1 sandbox/remove_test/a2 sandbox/remove_test/a3
+
+# Now remove them interactively, press 'y' (or 'n') for every question
+rm -ri sandbox/remove_test
+```
+```{.bash-out}
+rm: descend into directory sandbox/remove_test? y
+rm: remove regular empty file sandbox/remove_test/a1’? y
+rm: remove regular empty file sandbox/remove_test/a2’? y
+rm: remove regular empty file sandbox/remove_test/a3’? y
+```
+
+- You can **write-protect important files**, as we'll see in the next session.
+
+- You can use **`rmdir`** whenever a dir you want to remove _should_ be empty.
+  That command will only remove empty dirs, and fail on non-empty dirs!
+
+- Finally, it may be assuring to learn that
+  **you will not be able to remove other people's files at OSC**
+  (since you do not have "write permission" for them)[^3].
+  For example, the file below was created by me and you won't be able to remove
+  (or edit) it:
+
+[^3]: At least not by default, the person who created the file can change this.
+
+```bash
+rm /fs/ess/PAS0471/demo/202307_rnaseq/README.md
+```
+```{.bash-out}
+rm: cannot remove ‘/fs/ess/PAS0471/demo/202307_rnaseq/README.md’: Permission denied
+```
+
+<br>
+
+## Globbing with shell wildcard expansion
+
+_Shell wildcard expansion_ is a very useful technique to select files.
+Selecting files with wildcard expansion is called _globbing_.
+
+### Shell wildcards
+
+In the term "wildcard expansion",
+_wildcard_ refers to a few symbols that have a special meaning:
+specifically, they match certain characters in file names.
+We'll see below what _expansion_ refers to. 
+
+Here, we'll only talk about the most-used wildcard, `*`, in detail.
+But for the sake of completeness, I list them all below:
+
+| Wildcard                  | Matches                                                      |
+|---------------------------|--------------------------------------------------------------|
+| **`*`**                   | Any number of any character, including nothing               |
+| **`?`**                   | Any single character                                         |
+| **`[]`** and **`[^]`**    | One or none (`^`) of the "character set" within the brackets |
+
+<br>
+
+### Using the `*` wildcard
+
+Here are some file matching examples with `*` &mdash;
+if we are in our directory `data/fastq`, then:
+
+| Pattern        | Matches files whose name...  | Matches in our dir            |
+|----------------|------------------------------|-------------------------------|
+| `*fastq.gz`    | **Ends in** ".fastq.gz"      | All files (but this patterns is useful to select files by extension) |
+| `A*`           | **Starts with** a capital "A"  | Files for the ASPC1 samples   |
+| `*_R1*`        | **Contains** "_R1"           | Files with forward reads      |
+
+Note also that because `*` matches "zero characters" as well,
+`A*` would also match a file whose name is simply "A".
+
+_Wildcard expansion_
+(e.g., the expansion of `*fastq.gz` to all FASTQ files in the working dir)
+is done by the shell itself, and not by a specific command.
+As such, we can use shell wildcards with any command that takes (one or) multiple
+files as arguments, for example:
+
+```bash
+ls data/fastq/A*R1.fastq.gz
+```
+```{.bash-out}
+data/fastq/ASPC1_A178V_R1.fastq.gz  data/fastq/ASPC1_G31V_R1.fastq.gz
+```
+
+```bash
+# Note that these are line-counts of the compressed file, not reflecting the # of reads
+wc -l data/fastq/A*R1.fastq.gz
+```
+```{.bash-out}
+wc -l data/fastq/A*R1.fastq.gz
+  15358 data/fastq/ASPC1_A178V_R1.fastq.gz
+  14974 data/fastq/ASPC1_G31V_R1.fastq.gz
+  30332 total
+```
+
+`*` matches all files by definition,
+and can for example be useful if you want to move the _contents_ of a directory
+into your working dir:
+
+```bash
+mv data/fastq/* .
+```
+
+:::{.exercise}
+#### Your Turn: practice with `*` {-}
+
+What pattern would you use if you wanted to select:
+
+- FASTQ files for all `A178V` samples in our dir `data/fastq`
+
+- In a fictional example (we don't have plain FASTQ files),
+  all gzipped (`.fastq.gz`) and plain FASTQ files (`.fastq`) at the same time?
+
+<details><summary>Solutions (click here)</summary>
+
+- `data/fastq/*A178V*`
+  _(We'll need a `*` on either side of our pattern, because the file names_
+  _neither start not end with the pattern.)_
+
+- `data/fastq/*.fastq*`
+  _(Recall that the `*` will also match nothing, so this will also match files_
+  _whose name _end_ in `.fastq`, i.e. plain FASTQ files)_
+
+</details>
+
+:::
+
+:::{.callout-warning collapse="true"}
+## Don't confuse shell wildcards with _regular expressions_!
+
+For those of you who know some regular expressions:
+these are conceptually similar to wildcards,
+but the `*` and `?` symbols don't have the same meaning,
+and there are way fewer shell wildcards than regular expression symbols.
+
+In particular, note that `.` is not a shell wildcard and thus represents
+a literal period.
+:::
+
+<br>
+
+### Common uses of globbing
+
+What can we use this for, other than listing matching files?
+
+In next sessions, we'll use globbing a lot to _select files to loop over_.
+It is also very common to use it to move (`mv`), copy (`cp`),
+or remove (`rm`) multiple files at once. For example:
+
+```bash
+cp -v data/fastq/&Miapaca*_R1* .     # Copy 3 FASTQ files to your working dir 
+```
+```{.bash-out}
+‘data/fastq/Miapaca2_A178V_R1.fastq.gz’ -> ‘./Miapaca2_A178V_R1.fastq.gz’
+‘data/fastq/Miapaca2_G31V_R1.fastq.gz’ -> ‘./Miapaca2_G31V_R1.fastq.gz’
+```
+
+```bash
+rm -v *fastq.gz                  # Remove all FASTQ files in your working dir
+```
+```{.bash-out}
+removed ‘Miapaca2_A178V_R1.fastq.gz’
+removed ‘Miapaca2_G31V_R1.fastq.gz’
+```
+
+<br>
+
+## Viewing text files
+
+Here, I'll give a quick overview of the most common commands to view text
+files in the shell.
+
+Several of these commands are especially useful to look at (very) large files,
+such as genomic data files, and we'll talk more about them in the next session.
+
+::: {.callout-note}
+#### Viewing files in VS Code
+For smaller text files,
+you might also choose to open them in the editor pane in VS Code.
+You can do so by finding and clicking on them in the Explorer in the side bar.
+Additionally, when you list files in the shell in VS Code,
+you can hold <kbd>Ctrl</kbd> (Windows) or <kbd>Command</kbd> (Mac) and then
+click on a file name (you should see it being underlined before you click)!
+
+Unlike the shell,
+VS Code is also able to open image files (e.g. `.png`, `.jpg`) and PDFs this
+way &mdash; and as we'll see later,
+you can even render HTML files in the editor pane. 
+:::
+
+### `cat`
+
+The `cat` (short for con`cat`enate) command will print the full contents of a file.
+It is therefore mostly conventient for smaller files,
+since the contents of very large files will just stream by on your screen.
+
+For example, let's take a look at the `README.md` file in your working dir:
+
+```bash
+cat README.md
+```
+```{.bash-out}
+# README for /fs/ess/PAS0471/demo/202307_rnaseq
+
+This directory contains files from an RNAseq project by the Montserrate-Cruz lab,
+meant to demonstrate Unix shell basics.
+
+In the `data/fastq` directory, there are 8 gzipped FASTQ files for 4 samples
+(the sequencing was done in a paired-end fashion and each sample has a file with
+forward reads (`_R1.fastq.gz`) and a file with reverse reads (`_R2.fastq.gz`)).
+
+To be able to demonstrate Unix shell and bioinformatics basics,
+those 8 files do not represent the full dataset for the experiment in question.
+Files are present for only 4 of the 18 samples,
+and the individual files are much smaller than the originals:
+100,000 reads were randomly sub-sampled
+(the original files contained ~30 million reads each).
+
+A very simple metadata TSV (tab-separated values) text file is present in
+`metadata/meta.tsv`, with one row per input file,
+and columns specifying the read direction, sample ID, cell line, and variant.
+```
+
+<br>
+
+### `head` and `tail`
+
+The twin commands `head` and `tail` will print the first and last lines,
+respectively, of a file &mdash;
+this can be very useful to preview the contents of larger files.
+
+By default, `head` and `tail` will print up to 10 lines of a file:
+
+```bash
+head metadata/meta.tsv
+```
+```{.bash-out}
+sample_id       cell_line       variant
+ASPC1_A178V     ASPC1   A178V
+ASPC1_A178V     ASPC1   A178V
+ASPC1_G31V      ASPC1   G31V
+ASPC1_G31V      ASPC1   G31V
+Miapaca2_A178V  Miapaca2        A178V
+Miapaca2_A178V  Miapaca2        A178V
+Miapaca2_G31V   Miapaca2        G31V
+Miapaca2_G31V   Miapaca2        G31V
+```
+
+But `meta.tsv` only has 9 lines, so we got 9 instead.
+We can use the `-n` argument to modify the number of lines:
+
+```bash
+tail -n 3 metadata/meta.tsv
+```
+```{.bash-out}
+Miapaca2_A178V  Miapaca2        A178V
+Miapaca2_G31V   Miapaca2        G31V
+Miapaca2_G31V   Miapaca2        G31V
+```
+
+<br>
+
+### `less`
+
+Another very handy command to view medium to large text files is `less`,
+which opens up a text file within your shell in a "pager".
+That is, you will not get your prompt back until you press <kbd>q</kbd> to quit `less`,
+but you can scroll/move around in the file.
+
+Besides scrolling with your mouse,
+up and down arrows and, if you have them, <kbd>PgUp</kbd> and <kbd>PgDn</kbd> 
+buttons are the easiest to move around
+(also, <kbd>u</kbd> will move up half a page and <kbd>d</kbd> will move down
+half a page).
+
+If you find yourself scrolling down and down looking for the end of the file,
+you can instead press <kbd>G</kbd> to go to the very end right away
+(and <kbd>g</kbd> to go back to the top).
+
+Try it with one of the FASTQ files (we'll go into more detail next time!):
+
+```bash
+less data/fastq/ASPC1_A178V_R1.fastq.gz
+```
+
+<br>
+
+## Command output redirection
+
+As mentioned earlier, Unix commands nearly always print their output to the screen.
+But you can also **"redirect" the output** to a file.
+
+### Plain redirection with `>`
+
+With "**`>`**", we redirect output to a file:
+
+- If the file doesn't exist, it will be *created*.
+- If the file does exist, any contents will be *overwritten*. 
+  
+```bash
+echo "My first line" > test.txt
+```
+```bash
+cat test.txt
+```
+```{.bash-out}
+My first line
+```
+
+Of course, redirection works not just with `echo`, but with every single command
+(or bioinformatics program) that prints output to screen:
+
+```bash
+ls > my_files_on_2023-08-04.txt
+```
+```bash
+cat my_files_on_2023-08-04.txt    # Use tab completion
+```
+```{.bash-out}
+data
+metadata
+my_files_on_20230803.txt
+README.md
+test.txt
+```
+
+<br>
+
+### Appending with `>>`
+
+With "**`>>`**", we **append** the output to a file
+(that is, it won't overwrite any existing content like `>`):
+
+```bash
+echo "My second line" >> test.txt
+```
+```bash
+cat test.txt
+```
+```{.bash-out}
+My first line
+My second line
+```
+
+```bash
+echo "My third line overwrote the first two!" > test.txt
+```
+```bash
+cat test.txt
+```
+```{.bash-out}
+My third line overwrote the first two!
+```
+
+::: {.callout-note}
+#### The pipe
+There is a third way of redirecting command output:
+the **`|` (pipe)**,
+which takes the output of one command and "pipes" it as input for a subsequent
+command.
+
+```bash
+# This will tell us how many files and dirs are in our current working dir
+ls | wc -l
+```
+```{.bash-out}
+6
+```
+
+Pipes avoids the need write/read files &mdash; this saves typing,
+and not writing/reading also makes the operation much quicker.
+
+(One interesting aspect of this is that many commands, like `wc` in the example
+above, accept input in two separate ways, then:
+via a file name given as an argument,
+or as "standard input", of which the pipe is an example.)
+:::
+
+<br>
+
+### The power of the Unix shell
+
+Another example, where we combine shell wildcards with output redirection,
+demonstrates how simple and powerful the Unix shell can be
+(and why the `cat` command is named after concatenation!).
+
+Imagine you had a thousand FASTA files in a dir `fastas`,
+and wanted to combine all of them, back-to-back, into a single file
+("multi-FASTA" files, i.e. FASTA files with multiple sequences,
+indeed just consist of multiple FASTA entries concatenated).
+This simple command would do that &mdash;
+and would be very fast even for really large files:
+
+```bash
+cat fastas/*.fa > combined.fa
+```
+
+Imagine trying to create such a concatenated file in a regular text editor
+with a GUI!
+
+::: {.callout-warning}
+#### Standard out vs Standard error
+TBA
+:::
+
+<br>
+
+## At-home reading: reference pages {-}
+
+- Common shell commands - TBA
+- Shell keyboard shortcuts - TBA
+
+<br>
+
+## Further resources {-}
+
+- [OSC's UNIX Basics](https://www.osc.edu/documentation/tutorials/unix_basics)
+- <https://www.learnenough.com/command-line-tutorial>
+- <https://cvw.cac.cornell.edu/Linux/>
+- <http://www.ee.surrey.ac.uk/Teaching/Unix/>
+- <https://www.udacity.com/course/linux-command-line-basics--ud595>
+- <http://moo.nac.uci.edu/~hjm/How_Programs_Work_On_Linux.html>

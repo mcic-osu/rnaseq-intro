@@ -1,0 +1,73 @@
+---
+title: "Common shell commands"
+highlight-style: github
+number-sections: true
+author: Jelmer Poelstra
+date: 2023-08-04
+---
+
+```{r knitr_options, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
+```
+
+-----
+
+<br>
+
+## At-home reading: Common shell commands and features {-}
+
+Below is a list of common and useful-for-us Unix shell commands and features.
+
+While it's not an exhaustive list, getting a grasp on the commands and
+features above will go a long way in allowing you to work in the Unix shell.
+We should see nearly all of these in action during our sessions.
+
+They are grouped into some general categories,
+with small examples between parentheses:
+
+- **Navigating in the Terminal**
+  - `pwd` &mdash; returns (prints) your working directory
+  - `cd` &mdash; change working directory
+- **Viewing Files**
+  - `cat` &mdash; print the entire contents of a file
+  - `head` &mdash; print the first lines of a file
+  - `tail` &mdash; print the last lines of a file
+  - `less` &mdash; view the contents of a file in a "pager" (press `q` to quit/exit!)
+- **Managing/Organizing Files**
+  - `ls` &mdash; list contents of directory
+  - `mkdir` &mdash; create a new directory
+  - `rm` &mdash; remove/delete a file or directory
+  - `cp` &mdash; copy files/directories to a new location
+  - `mv` &mdash; move/rename files/directories to a new location
+- **Working With Compressed Files**
+  - `gzip`/`gunzip` &mdash; compress/uncompress a file with gzip compression (`.gz`)
+  - `unzip` &mdash; uncompress a zip (`.zip`) file
+  - `zcat` &mdash; print the contents of a compressed file to the screen
+- **Assessing Files**
+  - `md5`/`shasum` &mdash; check file integrity via "checksums" (fingerprints) for a file
+  - `grep` &mdash; search a text file for lines containing a pattern of text
+  - `wc` &mdash; return number of lines, words, characters in a file
+- **Editing Files (or other data)**
+  - `sort` &mdash; Sort data, can sort a file by one or more columns (`sort metadata/meta.tsv`) 
+  - `cut` &mdash; Select one or more columns from a tabular file (`cut -f 1,3 metadata/meta.tsv`)
+  - `uniq` &mdash; Exclude duplicate entries in a list (`cut -f1 metadata/meta.tsv | uniq`)
+  - `tr` &mdash; Substitute a character (class) for another (`echo acgt | tr A-Z a-z`)
+  - `sed` &mdash; A powerful & flexible command, but most often used to find-and-replace text.
+  - `awk` &mdash; A powerful & flexible command, most useful to work with tabular (e.g., CSV, TSV, GFF/GTF) files 
+- **Miscellaneous**
+  - `wget` &mdash; download a file from online (`wget <URL>`)
+  - `man` &mdash; get help (manual) for a command (`man ls`)
+- **Special Notation**
+  - `|` &mdash; The pipe, to use the output of a command as the input for another command (`ls | wc -l`)
+  - `~` &mdash; The path to your Home directory (`cp data/fastq/* ~`)
+  - `.` &mdash; Your current working dir (`cp data/fastq/* .`)
+  - `..` &mdash; One directory up from your current working dir (`cd ..`)
+  - `$USER` &mdash; Your user name  (`echo $USER`)
+  - `$HOME` &mdash; The path to your Home directory (`echo $HOME`)
+- **Shell wildcards**
+  - `*` &mdash; matches any number of any character, including nothing (`ls *fastq.gz`)
+  - `?` &mdash; matches any single character (`ls *fast?`)
+  - `[]` &mdash; matches a single character of those listed between brackets, e.g. `[012]` matches 0, 1, or 2
+  - `[^]` &mdash; matches a single character _**not**_ listed between brackets, e.g. `[0-9]` excludes any numbers
+
+<br>

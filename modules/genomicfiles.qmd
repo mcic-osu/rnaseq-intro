@@ -1,0 +1,230 @@
+---
+title: "Genomic data files"
+subtitle: "And exploring them in the shell"
+pagetitle: "Unix shell part II"
+highlight-style: github
+number-sections: true
+engine: knitr
+author: Jelmer Poelstra
+date: 2023-08-11
+---
+
+```{r knitr_options, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE,
+                      class.output = "bash-out")
+```
+
+-------
+
+<br>
+
+### Add: making data read-only
+
+### Add: checking file integrity
+
+### Compressed Files
+
+Since these are FASTQ files, let's print 8 lines
+(a multiple of 4 -- it will become clear why shortly).
+
+Now let's start to explore our FASTQ files a bit.
+
+```bash
+ls -lh data/fastq
+```
+```{.bash-out}
+total 38M
+-rw-r--r-- 1 jelmer PAS0471 4.1M Jul 27 11:53 ASPC1_A178V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.2M Jul 27 11:53 ASPC1_A178V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.1M Jul 27 11:53 ASPC1_G31V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.3M Jul 27 11:53 ASPC1_G31V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.1M Jul 27 11:53 Miapaca2_A178V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_A178V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.1M Jul 27 11:53 Miapaca2_G31V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_G31V_R2.fastq.gz
+```
+
+The FASTQ files all have a `.gz` extension and are listed in red,
+indicating they are "gzip-compressed".
+This is a common type of compression for large genomic files.
+
+Because they're compressed, means we can't just open them up and look inside --
+we need to uncompress them first.
+The `gunzip` command would allow us to do this:
+it uncompresses the file it's given and writes the uncompressed version to a new file.
+
+We could do this, but there's another approach.
+FASTQ files can get big,
+and sometimes it helps to be able to keep them compressed as much as possible.
+It's a good time for us to explore the pipe.
+
+```bash
+head -n 8 x.fastq.gz
+```
+  
+<p align="left"><img src=img/head2.png width="80%"></p>
+
+This isn't what we want --
+we're seeing the first 8 lines of the compressed files, which is not helpful. 
+
+### `zcat`
+
+The `zcat` function prints human-readable contents of a gzip-compressed file to the screen.
+We can try running it on the file, but remember the file is pretty big --
+there are lots of lines of text in there that will all get printed to the screen.
+Instead, we can pipe the output of `zcat` to the `head` command.
+
+```bash
+zcat x.fastq.gz | head -n 8
+```
+
+<p align="left"><img src=img/head4.png width="80%"></p>
+
+Much better -- this is what the raw RNAseq data look like!
+
+:::{.callout-note}
+#### FASTQ format
+
+If you're not familiar with it,
+FASTQ is a very common format for the raw sequence data output by high-throughput
+machines &mdash;
+certainly when you have Illumina sequencing done,
+you will almost always receive the sequences in this format.
+These are plain text files,
+and each sequence that is read by the sequencer is represented by 4 lines:
+
+1. A name (header) line
+2. The sequence itself
+3. A plus sign (`+`)
+4. Quality scores corresponding to each base position in the sequence
+
+:::
+
+:::{.callout-warning}
+To get the number of lines (= number sequences x 4 -- see below)
+for a gzipped FASTQ file,
+it's important to use  `zcat x.fastq.gz | wc -l` instead of `wc -l x.fastq.gz`,
+because the compressed file does not have the same number of lines!
+:::
+
+<br>
+
+### `wc`
+
+Since each read in a FASTQ file is represented by 4 lines,
+we should expect the number of lines in each of the FASTQ files to be a multiple of 4.
+Let's check one.
+The `wc` command stands for word count, but by default,
+it returns the number of words, lines, and characters in a file.
+The `-l` option tells it to return just the number of lines,
+so we'll use it since that's all we're interested in right now.
+And remember, we'll want to do this on the uncompressed data.
+
+```bash
+zcat x.fastq.gz | wc -l
+```
+
+::: {.callout-note}
+```bash
+wc -l file
+```
+
+```bash
+zcat file | wc -l
+```
+
+```bash
+wc -l < file
+```
+:::
+
+### `grep`
+
+`grep` allows you to search through a file for specific patterns of text and
+returns the matching lines.
+For example, let's say we wanted to see what sequences in sample SRR7609467
+contain the sequence "ACCGATACG":
+
+```bash
+zcat x.fastq.gz | grep "ACCGATACG"
+```
+
+<p align="left"><img src=img/grep2.png width="80%"></p>  
+
+TODO: Mention other "data commands" like `cut`, `sort`, and `uniq` --
+refer to some reference??
+
+:::{.exercise}
+#### On Your Own: Finding a Sequence {-}
+
+How many sequences in sample SRR7609467 contain the sequence "CCAGTA"?
+
+<details><summary>Hint (click here)</summary>
+Pipe the results of the grep to `wc -l`.
+Alternatively, check out the `-c` option to grep in the `man` page.
+</details>
+  
+<details><summary>Solutions (click here)</summary>
+```{bash}
+zcat SRR7609467.fastq.gz | grep 'CCAGTA' | wc -l
+```
+
+**OR**
+  
+```{bash}
+zcat SRR7609467.fastq.gz | grep -c 'CCAGTA'
+```
+
+</details>
+:::   
+
+<br>
+
+## Downloading Files from the web
+
+To download a file to OSC,
+you can't just open a web browser and download it directly to there.
+One way would be to download it to your own computer and then transfer
+it to OSC.
+
+A more direct approach is to use a command in your OSC Unix shell.
+
+To analyze our RNAseq data, we'll need two files related to our reference
+genome &mdash; the genome that we want to map our RNAseq reads to,
+and whose gene annotations will form the basis of the gene counts that we'll get.
+
+Specifically, we'll need the nucleotide FASTA file with the genome assembly itself,
+and a so-called GFF file, a tabular file with the genomic coordinates and other information
+for genes and other genomic features.
+
+### `wget`
+
+`wget` is one command that allows you to download files from the web
+(`curl` is another very commonly used one, with much the same functionality).
+
+To download a file to our working directory,
+all you need is to tell `wget` about the URL (web address) to the file
+you want to download.
+
+```{bash}
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/499/845/GCF_000499845.1_PhaVulg1_0/GCF_000499845.1_PhaVulg1_0_genomic.fna.gz
+```
+
+:::{.exercise}
+#### On Your Own: Preview a FASTA file {-}
+
+Try previewing the contents of the reference genome file you just downloaded.
+
+<details><summary>Hint (click here)</summary>
+Remember, the file is gzip-compressed.
+Use `zcat` and pipe the results to `head`.
+</details>
+  
+<details><summary>Solution (click here)</summary>
+
+```{bash}
+zcat Pvulg.fa.gz | head
+```
+
+</details>
+:::

@@ -21,7 +21,9 @@ website:
             text: "- VS Code"
           - href: "modules/04_shell.qmd"
             text: "- Unix shell I"
-          - text: "- Unix shell II"
+          - href: "modules/05_shell2.qmd"
+            text: "- Unix shell II"
+          - text: "- Genomic data files [TBA]"
           - text: "- Shell scripting [TBA]"
           - text: "- Software at OSC [TBA]"
           - text: "- SLURM compute jobs [TBA]"
@@ -48,6 +50,10 @@ website:
           - href: info/osc_ssh.qmd
             text: "- Using OSC with SSH"
           - text: General info
+          - href: info/shell_commands.qmd
+            text: "- Shell commands overview"
+          - href: info/shell_shortcuts.qmd
+            text: "- Shell keyboard shortcuts"
           - text: "- Further Resources"
           - text: "- Glossary"
       - href: info/about.qmd

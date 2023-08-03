@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jelmer Poelstra">
-<meta name="dcterms.date" content="2023-07-18">
+<meta name="dcterms.date" content="2023-08-11">
 
-<title>Using SSH</title>
+<title>Unix shell part II</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -232,11 +232,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#basic-ssh-connection-in-a-terminal" id="toc-basic-ssh-connection-in-a-terminal" class="nav-link" data-scroll-target="#basic-ssh-connection-in-a-terminal"><span class="header-section-number">2</span> Basic SSH connection in a terminal</a></li>
-  <li><a href="#avoid-being-prompted-for-your-osc-password" id="toc-avoid-being-prompted-for-your-osc-password" class="nav-link" data-scroll-target="#avoid-being-prompted-for-your-osc-password"><span class="header-section-number">3</span> Avoid being prompted for your OSC password</a></li>
-  <li><a href="#use-a-shorter-name-for-your-ssh-connection" id="toc-use-a-shorter-name-for-your-ssh-connection" class="nav-link" data-scroll-target="#use-a-shorter-name-for-your-ssh-connection"><span class="header-section-number">4</span> Use a shorter name for your SSH connection</a></li>
-  <li><a href="#set-up-your-local-vs-code-to-ssh-tunnel-into-osc" id="toc-set-up-your-local-vs-code-to-ssh-tunnel-into-osc" class="nav-link" data-scroll-target="#set-up-your-local-vs-code-to-ssh-tunnel-into-osc"><span class="header-section-number">5</span> Set up your local VS Code to SSH tunnel into OSC</a></li>
+  <li><a href="#add-making-data-read-only" id="toc-add-making-data-read-only" class="nav-link active" data-scroll-target="#add-making-data-read-only"><span class="header-section-number">0.1</span> Add: making data read-only</a></li>
+  <li><a href="#add-checking-file-integrity" id="toc-add-checking-file-integrity" class="nav-link" data-scroll-target="#add-checking-file-integrity"><span class="header-section-number">0.2</span> Add: checking file integrity</a></li>
+  <li><a href="#compressed-files" id="toc-compressed-files" class="nav-link" data-scroll-target="#compressed-files"><span class="header-section-number">0.3</span> Compressed Files</a></li>
+  <li><a href="#zcat" id="toc-zcat" class="nav-link" data-scroll-target="#zcat"><span class="header-section-number">0.4</span> <code>zcat</code></a></li>
+  <li><a href="#wc" id="toc-wc" class="nav-link" data-scroll-target="#wc"><span class="header-section-number">0.5</span> <code>wc</code></a></li>
+  <li><a href="#grep" id="toc-grep" class="nav-link" data-scroll-target="#grep"><span class="header-section-number">0.6</span> <code>grep</code></a></li>
+  <li><a href="#downloading-files-from-the-web" id="toc-downloading-files-from-the-web" class="nav-link" data-scroll-target="#downloading-files-from-the-web"><span class="header-section-number">1</span> Downloading Files from the web</a>
+  <ul class="collapse">
+  <li><a href="#wget" id="toc-wget" class="nav-link" data-scroll-target="#wget"><span class="header-section-number">1.1</span> <code>wget</code></a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -245,7 +250,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Connecting to OSC through SSH</h1>
+<h1 class="title">Genomic data files</h1>
+<p class="subtitle lead">And exploring them in the shell</p>
 </div>
 
 
@@ -262,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 18, 2023</p>
+      <p class="date">August 11, 2023</p>
     </div>
   </div>
   
@@ -274,152 +280,62 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <hr>
 <p><br></p>
-<section id="introduction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>This page will first go through the basics of connecting to OSC with SSH, using the <code>ssh</code> command.</p>
-<p>If you use <code>ssh</code> frequently, or plan to do so, the next two sections will show you two useful tricks:</p>
-<ul>
-<li><a href="#avoid-being-prompted-for-your-osc-password">Avoid being prompted for your OSC password</a></li>
-<li><a href="#use-a-shorter-name-for-your-ssh-connection">Set up a shortcut for your SSH connection name</a>.</li>
-</ul>
-<p>Finally, something more specific but incredibly useful if you like VS Code, and have it installed locally, is to <a href="#set-up-your-local-vs-code-to-ssh-tunnel-into-osc">SSH-tunnel VS Code to OSC</a>.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-SSH and Unix shells on Windows
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>If you have a Windows computer, you can instead use a GUI-based SSH client like <a href="https://www.putty.org/"><code>PuTTY</code></a>.</p>
-<p>Alternatively, for an experience more similar to that if you did have a Unix-based operating system, you can install either of the following, which will enable you to get a terminal program that does run a Unix shell:</p>
-<ul>
-<li><p><a href="https://learn.microsoft.com/en-us/windows/wsl/install"><strong>Windows Subsystem for Linux (WSL)</strong></a> — the more involved option, this will basically run a Linux Virtual Machine on your computer.</p></li>
-<li><p><strong>Git for Windows</strong>, which comes with a Unix (Bash) shell — “Git Bash”. To install this, <a href="https://git-scm.com/download/win">download it from this page</a> and install it using all the default settings for the installation, except:</p>
-<ul>
-<li><p>In “<em>Adjusting Your PATH Environment</em>”, select “<em>Use Git from Git Bash Only</em>”.</p></li>
-<li><p>In the prompt “<em>Configuring the Line Ending Conversions</em>”, choose “<em>Checkout as-is, commit as-is</em>”.</p></li>
-</ul></li>
-</ul>
-</div>
-</div>
-</div>
-<p><br></p>
+<section id="add-making-data-read-only" class="level3" data-number="0.1">
+<h3 data-number="0.1" class="anchored" data-anchor-id="add-making-data-read-only"><span class="header-section-number">0.1</span> Add: making data read-only</h3>
 </section>
-<section id="basic-ssh-connection-in-a-terminal" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="basic-ssh-connection-in-a-terminal"><span class="header-section-number">2</span> Basic SSH connection in a terminal</h2>
-<p>To connect to OSC or other remote computers without using a web portal like OnDemand, you can use SSH. You can do so via the <strong><code>ssh</code> command</strong> if you have a Linux or a Mac computer, since these two operating systems are both Unix-based and have built-in terminals with Unix shells.</p>
-<p>Here, I’ll briefly demonstrate how to use the <code>ssh</code> command. On your own computer, open a terminal application and input the command <code>ssh &lt;user&gt;@&lt;host&gt;</code>, where:</p>
-<ul>
-<li><code>&lt;user&gt;</code> should be replaced by your OSC username, and</li>
-<li><code>&lt;host&gt;</code> should be replaced by the name of the computer you want to connect to:
-<ul>
-<li><code>pitzer.osc.edu</code> to connect to the Pitzer cluster</li>
-<li><code>owens.osc.edu</code> to connect to the Owens cluster</li>
-</ul></li>
-</ul>
-<p>For example, if I (username <code>jelmer</code>) wanted to log in to the Pitzer cluster, I would use:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> jelmer@pitzer.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>The authenticity of host 'pitzer.osc.edu' can't be established.
-RSA key fingerprint is 2a:b6:f6:8d:9d:c2:f8:2b:8c:c5:03:06:a0:f8:59:12.
-Are you sure you want to continue connecting (yes/no)?</code></pre>
-<p>If this is the first time you are connecting to Pitzer via SSH, you’ll encounter a message similar to the one above. While the phrase <em>“The authenticity of host ‘pitzer.osc.edu’ can’t be established.”</em> sounds ominous, you will always get this warning when you attempt to connect to a remote computer for the first time, and you should type <code>yes</code> to proceed (you then won’t see this message again).</p>
-<p>You should now be prompted for your password. Type it in carefully because no characters or even *s will appear on the screen, and then press <kbd>Enter</kbd>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jelmer@pitzer.osc.edu</span><span class="st">'s password:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>If you entered your password correctly, your shell is now connected to OSC rather than operating on your own computer. That is, you’ll have shell access very much in the same way as when using the “Pitzer Shell Access” button on OSC OnDemand. (The key difference between SSH-ing in this way rather than using OnDemand is that the terminal is not running inside your browser, which can be convenient.)</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-SSH shortcuts
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>If you use SSH a lot to connect to OSC, typing <code>ssh &lt;username&gt;@pitzer.osc.edu</code> every time and then providing your password can get pretty tedious. The next two sections will show you how to make this go faster.</p>
-</div>
-</div>
-<p><br></p>
+<section id="add-checking-file-integrity" class="level3" data-number="0.2">
+<h3 data-number="0.2" class="anchored" data-anchor-id="add-checking-file-integrity"><span class="header-section-number">0.2</span> Add: checking file integrity</h3>
 </section>
-<section id="avoid-being-prompted-for-your-osc-password" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="avoid-being-prompted-for-your-osc-password"><span class="header-section-number">3</span> Avoid being prompted for your OSC password</h2>
-<p>If you take the following steps, you will no longer be promoted for your OSC password every time you log in to OSC using SSH.</p>
-<p>Both steps should be done in a terminal <em>on your local machine</em>:</p>
-<ol type="1">
-<li><p><strong>Generate a public-private SSH key-pair:</strong></p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>You’ll get some output and will then be asked several questions, but in each case, you can just press <kbd>Enter</kbd> to select the default answer.</p></li>
-<li><p><strong>Transfer the public key to OSC’s clusters:</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace &lt;user&gt; by your username, e.g. "ssh-copy-id jelmer@owens.osc.edu"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@pitzer.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-</ol>
-<p>Test if it works by runnning:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try connecting to Owens (once again, replace '&lt;user&gt;' by your username):</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Try connecting to Pitzer (once again, replace '&lt;user&gt;' by your username):</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="compressed-files" class="level3" data-number="0.3">
+<h3 data-number="0.3" class="anchored" data-anchor-id="compressed-files"><span class="header-section-number">0.3</span> Compressed Files</h3>
+<p>Since these are FASTQ files, let’s print 8 lines (a multiple of 4 – it will become clear why shortly).</p>
+<p>Now let’s start to explore our FASTQ files a bit.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>total 38M
+-rw-r--r-- 1 jelmer PAS0471 4.1M Jul 27 11:53 ASPC1_A178V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.2M Jul 27 11:53 ASPC1_A178V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.1M Jul 27 11:53 ASPC1_G31V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.3M Jul 27 11:53 ASPC1_G31V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.1M Jul 27 11:53 Miapaca2_A178V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_A178V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.1M Jul 27 11:53 Miapaca2_G31V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_G31V_R2.fastq.gz</code></pre>
+<p>The FASTQ files all have a <code>.gz</code> extension and are listed in red, indicating they are “gzip-compressed”. This is a common type of compression for large genomic files.</p>
+<p>Because they’re compressed, means we can’t just open them up and look inside – we need to uncompress them first. The <code>gunzip</code> command would allow us to do this: it uncompresses the file it’s given and writes the uncompressed version to a new file.</p>
+<p>We could do this, but there’s another approach. FASTQ files can get big, and sometimes it helps to be able to keep them compressed as much as possible. It’s a good time for us to explore the pipe.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 8 x.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p align="left">
+<img src="img/head2.png" width="80%">
+</p>
+<p>This isn’t what we want – we’re seeing the first 8 lines of the compressed files, which is not helpful.</p>
+</section>
+<section id="zcat" class="level3" data-number="0.4">
+<h3 data-number="0.4" class="anchored" data-anchor-id="zcat"><span class="header-section-number">0.4</span> <code>zcat</code></h3>
+<p>The <code>zcat</code> function prints human-readable contents of a gzip-compressed file to the screen. We can try running it on the file, but remember the file is pretty big – there are lots of lines of text in there that will all get printed to the screen. Instead, we can pipe the output of <code>zcat</code> to the <code>head</code> command.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> x.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p align="left">
+<img src="img/head4.png" width="80%">
+</p>
+<p>Much better – this is what the raw RNAseq data look like!</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-More instructions
+FASTQ format
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>See also this <a href="https://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/">Tecmint post</a> in case you’re struggling.</p>
+<p>If you’re not familiar with it, FASTQ is a very common format for the raw sequence data output by high-throughput machines — certainly when you have Illumina sequencing done, you will almost always receive the sequences in this format. These are plain text files, and each sequence that is read by the sequencer is represented by 4 lines:</p>
+<ol type="1">
+<li>A name (header) line</li>
+<li>The sequence itself</li>
+<li>A plus sign (<code>+</code>)</li>
+<li>Quality scores corresponding to each base position in the sequence</li>
+</ol>
 </div>
 </div>
-<p><br></p>
-</section>
-<section id="use-a-shorter-name-for-your-ssh-connection" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="use-a-shorter-name-for-your-ssh-connection"><span class="header-section-number">4</span> Use a shorter name for your SSH connection</h2>
-<p>You can easily set up alternative ways of referring to you SSH connection (i.e., “aliases”), such as shortening <code>jelmer@pitzer.osc.edu</code> to <code>jp</code>, by saving these aliases in a text file <code>~/.ssh/config</code>, as shown below.</p>
-<p>These two steps should both be done <em>on your local machine</em>:</p>
-<ol type="1">
-<li><p><strong>Create a file called <code>~/.ssh/config</code>:</strong></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> ~/.ssh/config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p><strong>Open the file in a text editor and add your alias(es) in the following format:</strong></p>
-<pre><code>Host &lt;arbitrary-alias-name&gt;    
-    HostName &lt;remote-address&gt;
-    User &lt;username&gt;</code></pre>
-<p>For instance, my file contains the following so as to connect to Pizer with <code>jp</code> and to Owens with <code>jo</code>:</p>
-<pre><code>Host jp
-    HostName pitzer.osc.edu
-    User jelmer
-
-Host jo
-    HostName owens.osc.edu
-    User jelmer</code></pre></li>
-</ol>
-<p><br></p>
-<p>Now, you just need to use your, preferably very short, alias to log in — and if you did the previous no-password setup, you won’t even be prompted for your password!</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> jp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Perhaps even more conveniently, these shortcuts will also work with <code>scp</code> and <code>rsync</code>! For example:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> ~/scripts op:/fs/scratch/PAS0471</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><br></p>
-</section>
-<section id="set-up-your-local-vs-code-to-ssh-tunnel-into-osc" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="set-up-your-local-vs-code-to-ssh-tunnel-into-osc"><span class="header-section-number">5</span> Set up your local VS Code to SSH tunnel into OSC</h2>
-<p>If you want to use VS Code to write code, have a shell, and interact with files at OSC directly, you don’t necessarily need to use the VS Code (Code Server) in OSC OnDemand. You can also make your local VS Code installation “<strong>SSH tunnel</strong>” into OSC.</p>
-<p>This is a more convenient way of working because it’s quicker to start, will never run out of alotted time, and because you are not working inside a browser, you have more screen space and no keyboard shortcut interferences.</p>
-<p>The set-up is pretty simple (see also <a href="https://code.visualstudio.com/docs/remote/ssh">these instructions</a> if you get stuck), and should also work on Windows:</p>
-<ol type="1">
-<li><p>If necessary, install VS Code (instructions for <a href="https://code.visualstudio.com/docs/setup/windows">Windows</a> / <a href="https://code.visualstudio.com/docs/setup/mac">Mac</a> / <a href="https://code.visualstudio.com/docs/setup/linux">Linux</a>) on your computer, and open it.</p></li>
-<li><p>Install the VS Code <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">“Remote Development extension pack”</a>: open the Extensions side bar (click the icon with the four squared in the far left), search for “Remote Development extension pack”, and click “Install”.</p></li>
-<li><p>Open the Command Palette (<kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd><kbd>P</kbd>) and start typing “<em>Remote SSH</em>”.</p>
-<p>Then, select <code>Remote-SSH: Connect to Host…</code> and specify your SSH connection: e.g.&nbsp;<code>ssh jelmer@pitzer.osc.edu</code> (you’ll have to do this separately for Pitzer and Owens if you want to be able to connect to both).</p></li>
-<li><p>If you did the <a href="#avoid-being-prompted-for-your-osc-password">no-password setup described above</a> (recommended!), you shouldn’t be prompted for a password and VS Code will connect to OSC!</p>
-<p>If you’re asked about the operating system of the host, <strong>select Linux</strong>, which is the operating system of the OSC clusters.</p></li>
-</ol>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -430,12 +346,97 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Just be aware that you’ll now be on a Login node (and not on a Compute node like when you use VS Code through OnDemand), so avoid running analyses directly in the terminal, and so on.</p>
+<p>To get the number of lines (= number sequences x 4 – see below) for a gzipped FASTQ file, it’s important to use <code>zcat x.fastq.gz | wc -l</code> instead of <code>wc -l x.fastq.gz</code>, because the compressed file does not have the same number of lines!</p>
 </div>
 </div>
-<p><br> <br></p>
+<p><br></p>
+</section>
+<section id="wc" class="level3" data-number="0.5">
+<h3 data-number="0.5" class="anchored" data-anchor-id="wc"><span class="header-section-number">0.5</span> <code>wc</code></h3>
+<p>Since each read in a FASTQ file is represented by 4 lines, we should expect the number of lines in each of the FASTQ files to be a multiple of 4. Let’s check one. The <code>wc</code> command stands for word count, but by default, it returns the number of words, lines, and characters in a file. The <code>-l</code> option tells it to return just the number of lines, so we’ll use it since that’s all we’re interested in right now. And remember, we’ll want to do this on the uncompressed data.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> x.fastq.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> file <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> <span class="op">&lt;</span> file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="grep" class="level3" data-number="0.6">
+<h3 data-number="0.6" class="anchored" data-anchor-id="grep"><span class="header-section-number">0.6</span> <code>grep</code></h3>
+<p><code>grep</code> allows you to search through a file for specific patterns of text and returns the matching lines. For example, let’s say we wanted to see what sequences in sample SRR7609467 contain the sequence “ACCGATACG”:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> x.fastq.gz <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"ACCGATACG"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p align="left">
+<img src="img/grep2.png" width="80%">
+</p>
+<p>TODO: Mention other “data commands” like <code>cut</code>, <code>sort</code>, and <code>uniq</code> – refer to some reference??</p>
+<section id="on-your-own-finding-a-sequence" class="level4 unnumbered exercise">
+<h4 class="unnumbered anchored" data-anchor-id="on-your-own-finding-a-sequence">On Your Own: Finding a Sequence</h4>
+<p>How many sequences in sample SRR7609467 contain the sequence “CCAGTA”?</p>
+<details>
+<summary>
+Hint (click here)
+</summary>
+Pipe the results of the grep to <code>wc -l</code>. Alternatively, check out the <code>-c</code> option to grep in the <code>man</code> page.
+</details>
+<details>
+<summary>
+Solutions (click here)
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> SRR7609467.fastq.gz <span class="kw">|</span> <span class="fu">grep</span> <span class="st">'CCAGTA'</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>OR</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> SRR7609467.fastq.gz <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="st">'CCAGTA'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+</section>
+<p><br></p>
+</section>
+<section id="downloading-files-from-the-web" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="downloading-files-from-the-web"><span class="header-section-number">1</span> Downloading Files from the web</h2>
+<p>To download a file to OSC, you can’t just open a web browser and download it directly to there. One way would be to download it to your own computer and then transfer it to OSC.</p>
+<p>A more direct approach is to use a command in your OSC Unix shell.</p>
+<p>To analyze our RNAseq data, we’ll need two files related to our reference genome — the genome that we want to map our RNAseq reads to, and whose gene annotations will form the basis of the gene counts that we’ll get.</p>
+<p>Specifically, we’ll need the nucleotide FASTA file with the genome assembly itself, and a so-called GFF file, a tabular file with the genomic coordinates and other information for genes and other genomic features.</p>
+<section id="wget" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="wget"><span class="header-section-number">1.1</span> <code>wget</code></h3>
+<p><code>wget</code> is one command that allows you to download files from the web (<code>curl</code> is another very commonly used one, with much the same functionality).</p>
+<p>To download a file to our working directory, all you need is to tell <code>wget</code> about the URL (web address) to the file you want to download.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/499/845/GCF_000499845.1_PhaVulg1_0/GCF_000499845.1_PhaVulg1_0_genomic.fna.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="on-your-own-preview-a-fasta-file" class="level4 unnumbered exercise">
+<h4 class="unnumbered anchored" data-anchor-id="on-your-own-preview-a-fasta-file">On Your Own: Preview a FASTA file</h4>
+<p>Try previewing the contents of the reference genome file you just downloaded.</p>
+<details>
+<summary>
+Hint (click here)
+</summary>
+Remember, the file is gzip-compressed. Use <code>zcat</code> and pipe the results to <code>head</code>.
+</details>
+<details>
+<summary>
+Solution (click here)
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> Pvulg.fa.gz <span class="kw">|</span> <span class="fu">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+</section>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

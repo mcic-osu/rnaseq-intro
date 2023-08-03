@@ -20,6 +20,17 @@ mkdir -p scripts sandbox
 
 -----
 
+::: {.callout-note}
+
+**Add keyboard shortcut to run shell commands from the editor:**
+
+- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
+
+- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
+  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
+
+:::
+
 Shell scripts (or to be slightly more precise, Bash scripts)
 enable us to **run sets of commands non-interactively**.
 This is especially beneficial or necessary when a set of commands:

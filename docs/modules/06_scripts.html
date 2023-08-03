@@ -143,7 +143,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../modules/04_shell.html" rel="" target="">
  <span class="dropdown-text">- Unix shell I</span></a>
   </li>  
-        <li class="dropdown-header">- Unix shell II</li>
+        <li>
+    <a class="dropdown-item" href="../modules/05_shell2.html" rel="" target="">
+ <span class="dropdown-text">- Unix shell II</span></a>
+  </li>  
+        <li class="dropdown-header">- Genomic data files [TBA]</li>
         <li class="dropdown-header">- Shell scripting [TBA]</li>
         <li class="dropdown-header">- Software at OSC [TBA]</li>
         <li class="dropdown-header">- SLURM compute jobs [TBA]</li>
@@ -190,6 +194,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">- Using OSC with SSH</span></a>
   </li>  
         <li class="dropdown-header">General info</li>
+        <li>
+    <a class="dropdown-item" href="../info/shell_commands.html" rel="" target="">
+ <span class="dropdown-text">- Shell commands overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/shell_shortcuts.html" rel="" target="">
+ <span class="dropdown-text">- Shell keyboard shortcuts</span></a>
+  </li>  
         <li class="dropdown-header">- Further Resources</li>
         <li class="dropdown-header">- Glossary</li>
     </ul>
@@ -271,6 +283,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <hr>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Add keyboard shortcut to run shell commands from the editor:</strong></p>
+<ul>
+<li><p>Click the <i class="fa fa-cog"></i> (bottom-left) =&gt; <code>Keyboard Shortcuts</code>.</p></li>
+<li><p>Find <code>Terminal: Run Selected Text in Active Terminal</code>, click on it, then add a shortcut, e.g.&nbsp;<kbd>Ctrl</kbd>+<kbd>Enter</kbd>.</p></li>
+</ul>
+</div>
+</div>
 <p>Shell scripts (or to be slightly more precise, Bash scripts) enable us to <strong>run sets of commands non-interactively</strong>. This is especially beneficial or necessary when a set of commands:</p>
 <ul>
 <li>Takes a long time to run and/or</li>
@@ -286,7 +315,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="setup" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="setup"><span class="header-section-number">1</span> Setup</h2>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -295,7 +324,7 @@ Starting a VS Code session with an active terminal (click here)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>Log in to OSC at <a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>.</p></li>
@@ -343,7 +372,7 @@ Starting a VS Code session with an active terminal (click here)
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> <span class="va">$tmpdir</span>/<span class="pp">*</span>      <span class="co"># DON'T TRY THIS!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -352,7 +381,7 @@ The comments above specified the <em>intent</em> we had. What would have actuall
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In both examples, there is a similar typo: <code>temp</code> vs.&nbsp;<code>tmp</code>, which means that we are referencing a (likely) non-existent variable.</p>
 <ul>
@@ -449,7 +478,7 @@ Shell scripts, including Bash scripts, most commonly have the extension <code>.s
 <p>Inside the script, any command-line arguments are <em>automatically available</em> in placeholder variables.</p>
 <p>A first argument will be assigned to the variable <strong><code>$1</code></strong>, any second argument will be assigned to <strong><code>$2</code></strong>, any third argument will be assigned to <strong><code>$3</code></strong>, and so on.</p>
 <div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -458,7 +487,7 @@ In the calls to fastqc.sh and printname.sh above, what are the placeholder varia
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In <code>bash fastqc.sh data/sampleA.fastq.gz</code>, a single argument, <code>data/sampleA.fastq.gz</code>, is passed to the script, and will be assigned to <code>$1</code>.</p>
 <p>In <code>bash scripts/printname.sh John Doe</code>, two arguments are passed to the script: the first one (<code>John</code>) will be stored in <code>$1</code>, and the second one (<code>Doe</code>) in <code>$2</code>.</p>
@@ -507,7 +536,7 @@ Last name: Doe</code></pre>
 </ol>
 <p>To get back to where we were, remove the <code>#</code> you inserted in the script in step 2 above.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -516,7 +545,7 @@ Solutions
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li>The script will error out because we are referencing variables that don’t exist: since we didn’t pass command-line arguments to the script, the <code>$1</code> and <code>$2</code> have not been set.</li>
@@ -601,7 +630,7 @@ Other variables that are automatically available inside scripts
 <li>Test the script by printing line 4 from <code>data/meta/meta.tsv</code>.</li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -610,7 +639,7 @@ Solution: how to print a specific line number
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>For example, to print line 4 of <code>data/meta/meta.tsv</code> directly:</p>
 <div class="cell">
@@ -627,7 +656,7 @@ Solution: how to print a specific line number
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -636,7 +665,7 @@ Full solution
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
@@ -729,7 +758,7 @@ SRR7609474  inland  treatment   3   55728624    78.80</code></pre>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the file exists and was just modified:</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> sandbox/samples_headtail.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>-rw-r--r--@ 1 poelstra.1  staff   197B Jul 19 12:15 sandbox/samples_headtail.txt</code></pre>
+<pre class="bash-out"><code>-rw-r--r--@ 1 poelstra.1  staff   197B Aug  3 12:38 sandbox/samples_headtail.txt</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -795,14 +824,14 @@ SRR7609474  inland  treatment   3   55728624    78.80</code></pre>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/headtail.sh data/meta/meta.tsv sandbox/tmp.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>Starting script scripts/headtail.sh
-Wed Jul 19 12:15:57 EDT 2023
+Thu Aug  3 12:38:16 EDT 2023
 Input file:   data/meta/meta.tsv
 Output file:  sandbox/tmp.txt
 
 Listing the output file:
--rw-r--r--@ 1 poelstra.1  staff   197B Jul 19 12:15 sandbox/tmp.txt
+-rw-r--r--@ 1 poelstra.1  staff   197B Aug  3 12:38 sandbox/tmp.txt
 Done with script scripts/headtail.sh
-Wed Jul 19 12:15:57 EDT 2023</code></pre>
+Thu Aug  3 12:38:16 EDT 2023</code></pre>
 </div>
 </div>
 <p>The script printed some details for the output file, but not its contents (that would have worked here, but is usually not sensible when working with genomics data). Let’s take a look, though, to make sure the script worked:</p>
@@ -841,7 +870,7 @@ SRR7609474  inland  treatment   3   55728624    78.80</code></pre>
 <li>Add some comments to describe what the code in the script is doing</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -850,7 +879,7 @@ The original <code>printline.sh</code> script
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><br></p>
 <div class="cell">
@@ -868,7 +897,7 @@ head -n "$line_nr" "$input_file" | tail -n 1</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -877,7 +906,7 @@ head -n "$line_nr" "$input_file" | tail -n 1</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
@@ -910,15 +939,15 @@ head -n "$line_nr" "$input_file" | tail -n 1</code></pre>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printline.sh data/meta/meta.tsv sandbox/meta_line.tsv 4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>Starting script scripts/printline.sh
-Wed Jul 19 12:15:57 EDT 2023
+Thu Aug  3 12:38:16 EDT 2023
 Input file:   data/meta/meta.tsv
 Output file:  sandbox/meta_line.tsv
 Line number:  4
 
 Listing the output file:
--rw-r--r--@ 1 poelstra.1  staff    42B Jul 19 12:15 sandbox/meta_line.tsv
+-rw-r--r--@ 1 poelstra.1  staff    42B Aug  3 12:38 sandbox/meta_line.tsv
 Done with script scripts/printline.sh
-Wed Jul 19 12:15:57 EDT 2023</code></pre>
+Thu Aug  3 12:38:16 EDT 2023</code></pre>
 </div>
 </div>
 </div>

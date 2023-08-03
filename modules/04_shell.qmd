@@ -1,6 +1,6 @@
 ---
 title: "The Unix Shell - Part I"
-pagetitle: "Unix Shell"
+pagetitle: "Unix shell part I"
 highlight-style: github
 number-sections: true
 engine: knitr
@@ -80,7 +80,6 @@ or you could connect your local Unix shell to OSC through SSH
    click `Open folder...` in the `Welcome` tab,
    or &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `Open Folder`,
    then type/select `/fs/ess/PAS0471` and press Ok.
-
 :::
 
 ::: {.callout-note}

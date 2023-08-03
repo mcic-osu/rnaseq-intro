@@ -49,5 +49,20 @@
   },
   "modules/05-shell2.qmd": {
     "05-shell2.html": "0c42678b"
+  },
+  "modules/05_shell2.qmd": {
+    "05_shell2.html": "db5d3379"
+  },
+  "modules/11_trimgalore.qmd": {
+    "11_trimgalore.html": "12889d36"
+  },
+  "modules/genomicfiles.qmd": {
+    "genomicfiles.html": "1024a58f"
+  },
+  "info/shell_commands.qmd": {
+    "shell_commands.html": "4139afa9"
+  },
+  "info/shell_shortcuts.qmd": {
+    "shell_shortcuts.html": "70f6231f"
   }
 }
