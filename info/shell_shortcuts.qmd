@@ -27,6 +27,7 @@ PAGE STILL UNDER CONSTRUCTION
 | <kbd>Ctrl</kbd> + <kbd>C</kbd>                    | Abort (kill) current process |
 | **<kbd>Alt/Escape</kbd>+<kbd>.</kbd>**            | Paste last argument of last command |
 | <kbd>Ctrl</kbd> + <kbd>D</kbd>                    | Exit the current shell (/ interactive job) (`exit`) |
+| <kbd>Ctrl</kbd> + <kbd>L</kbd>                    | Clear your screen (`clear`) |
 | <kbd>Ctrl/Command</kbd>+<kbd>C</kbd>     | Copy (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>)    |
 | <kbd>Ctrl/Command</kbd>++<kbd>V</kbd>     | Paste (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>)   |
 | <kbd>Ctrl</kbd>+<kbd>A</kbd>                      | Go to beginning of line |
