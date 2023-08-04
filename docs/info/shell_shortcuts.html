@@ -307,7 +307,7 @@ Caution
 </tr>
 <tr class="odd">
 <td><kbd>Ctrl</kbd> + <kbd>C</kbd></td>
-<td>Abort (kill) current process</td>
+<td>Cancel/abort/kill current process or “incomplete command” (get prompt back)</td>
 </tr>
 <tr class="even">
 <td><strong><kbd>Alt/Escape</kbd>+<kbd>.</kbd></strong></td>
@@ -323,27 +323,27 @@ Caution
 </tr>
 <tr class="odd">
 <td><kbd>Ctrl/Command</kbd>+<kbd>C</kbd></td>
-<td>Copy (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>)</td>
+<td>Copy selected text (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>)</td>
 </tr>
 <tr class="even">
 <td><kbd>Ctrl/Command</kbd>++<kbd>V</kbd></td>
-<td>Paste (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>)</td>
+<td>Paste copied text (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>)</td>
 </tr>
 <tr class="odd">
 <td><kbd>Ctrl</kbd>+<kbd>A</kbd></td>
-<td>Go to beginning of line</td>
+<td>Move cursor to beginning of line</td>
 </tr>
 <tr class="even">
 <td><kbd>Ctrl</kbd>+<kbd>E</kbd></td>
-<td>Go to end of line</td>
+<td>Move cursor to end of line</td>
 </tr>
 <tr class="odd">
 <td><kbd>Ctrl</kbd>+<kbd>U</kbd></td>
-<td>Cut to beginning of line</td>
+<td>Cut text to beginning of line</td>
 </tr>
 <tr class="even">
 <td><kbd>Ctrl</kbd>+<kbd>K</kbd></td>
-<td>Cut to end of line</td>
+<td>Cut text to end of line</td>
 </tr>
 <tr class="odd">
 <td><kbd>Ctrl</kbd>+<kbd>W</kbd></td>
@@ -351,7 +351,7 @@ Caution
 </tr>
 <tr class="even">
 <td><kbd>Ctrl</kbd>+<kbd>Y</kbd></td>
-<td>Paste (“yank”) previously cut element</td>
+<td>Paste (“<code>y</code>ank”) previously cut element</td>
 </tr>
 <tr class="odd">
 <td><kbd>Ctrl</kbd> + <kbd>R</kbd></td>
@@ -360,37 +360,19 @@ Caution
 </tbody>
 </table>
 <ul>
-<li><p><kbd>Ctrl</kbd>+<kbd>C</kbd> to kill the currently running command. Try this:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each, see what happens, then press Ctrl + C</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sleep 60s</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> echo <span class="st">"Missing quote"</span>  <span class="co"># Omit closing quote!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Press <kbd>Ctrl</kbd>+<kbd>A</kbd> to move to the beginning of the line,<br>
-and add <strong><code>ls</code></strong> to the beginning: <code>ls /fs/project/PAS1855</code>.</p>
-<p>Press <kbd>Enter</kbd> (anywhere on the line!).</p></li>
-<li><p>Press <kbd>⇧</kbd> to get the previous command back on the prompt,<br>
-and then press <kbd>Ctrl+U</kbd> to delete until the beginning of the line.</p></li>
-<li><p><kbd>Ctrl</kbd>+<kbd>U</kbd> actually <em>cut</em> the text: “Yank” it back with <kbd>Ctrl</kbd>+<kbd>Y</kbd>.</p></li>
-<li><p>Create a directory for yourself using <code>mkdir</code>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> mkdir /fs/ess/PAS1855/users/<span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Move into this dir using <code>cd</code> – after typing <code>cd</code> and a space, press <kbd>Alt</kbd>+<kbd>.</kbd>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd /fs/ess/PAS1855/users/<span class="va">$USER</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><kbd>Ctrl</kbd>+<kbd>U</kbd> actually <em>cut</em> the text: “Yank” it back with <kbd>Ctrl</kbd>+<kbd>Y</kbd>.</li>
 </ul>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Keyboard shortcut
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>After typing <code>cd</code> and a space for the command shown below, try pressing <strong><kbd>Alt</kbd>+<kbd>.</kbd></strong> (Windows) or <strong><kbd>Esc</kbd>+<kbd>.</kbd></strong> (Mac). This will recall the last argument of the previous command line expression, in this case the dir you just made. Super handy!</p>
-</div>
-</div>
+<section id="getting-the-last-word-from-the-previous-command" class="level4">
+<h4 class="anchored" data-anchor-id="getting-the-last-word-from-the-previous-command">Getting the last word from the previous command</h4>
+<p>This is (perhaps surprisingly) very useful!</p>
+<p>Create a directory for yourself using <code>mkdir</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> /fs/ess/PAS1855/users/<span class="va">$USER</span>/rnaseq_intro/sandbox/testdir</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Move into this dir using <code>cd</code> – after typing <code>cd</code> and a space, press <strong><kbd>Alt</kbd>+<kbd>.</kbd></strong> on Windows or <strong><kbd>Esc</kbd>+<kbd>.</kbd></strong> on a Mac:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /fs/ess/PAS1855/users/<span class="va">$USER</span>/rnaseq_intro/sandbox/testdir</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Another press will go back to the last word of the second-to-last command, and so on. On Windows, you can keep <kbd>Alt</kbd> pressed while repeatedly pressing <kbd>.</kbd> (convenient), but on a Mac, you’ll need to release <kbd>Esc</kbd> in between successive presses.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

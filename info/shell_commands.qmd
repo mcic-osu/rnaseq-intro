@@ -14,7 +14,7 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 
 <br>
 
-## At-home reading: Common shell commands and features {-}
+## Common shell commands and notation {-}
 
 Below is a list of common and useful-for-us Unix shell commands and features.
 

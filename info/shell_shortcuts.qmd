@@ -1,7 +1,7 @@
 ---
 title: "Shell keyboard shortcuts"
 highlight-style: github
-number-sections: true
+number-sections: false
 author: Jelmer Poelstra
 date: 2023-08-04
 ---
@@ -22,59 +22,46 @@ PAGE STILL UNDER CONSTRUCTION
 
 | Shortcut | Command | Function
 |-----------------|------------------------------------------------|
-| <kbd>Tab</kbd>                                    | Tab completion (double <kbd>Tab</kbd> shows options when there are multiple) |
-| <kbd>&#8679;</kbd> / <kbd>&#8681;</kbd>           | Cycle through command history |
-| <kbd>Ctrl</kbd> + <kbd>C</kbd>                    | Abort (kill) current process |
-| **<kbd>Alt/Escape</kbd>+<kbd>.</kbd>**            | Paste last argument of last command |
-| <kbd>Ctrl</kbd> + <kbd>D</kbd>                    | Exit the current shell (/ interactive job) (`exit`) |
-| <kbd>Ctrl</kbd> + <kbd>L</kbd>                    | Clear your screen (`clear`) |
-| <kbd>Ctrl/Command</kbd>+<kbd>C</kbd>     | Copy (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>)    |
-| <kbd>Ctrl/Command</kbd>++<kbd>V</kbd>     | Paste (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>)   |
-| <kbd>Ctrl</kbd>+<kbd>A</kbd>                      | Go to beginning of line |
-| <kbd>Ctrl</kbd>+<kbd>E</kbd>                      | Go to end of line |
-| <kbd>Ctrl</kbd>+<kbd>U</kbd>                      | Cut to beginning of line |
-| <kbd>Ctrl</kbd>+<kbd>K</kbd>                      | Cut to end of line |
-| <kbd>Ctrl</kbd>+<kbd>W</kbd>                      | Cut previous word |
-| <kbd>Ctrl</kbd>+<kbd>Y</kbd>                      | Paste ("yank") previously cut element |
+| <kbd>Tab</kbd>                                    | Tab completion (double <kbd>Tab</kbd> shows options when there are multiple)  |
+| <kbd>&#8679;</kbd> / <kbd>&#8681;</kbd>           | Cycle through command history                                                 |
+| <kbd>Ctrl</kbd> + <kbd>C</kbd>                    | Cancel/abort/kill current process or "incomplete command" (get prompt back)   |
+| **<kbd>Alt/Escape</kbd>+<kbd>.</kbd>**            | Paste last argument of last command                                           |
+| <kbd>Ctrl</kbd> + <kbd>D</kbd>                    | Exit the current shell (/ interactive job) (`exit`)                           |
+| <kbd>Ctrl</kbd> + <kbd>L</kbd>                    | Clear your screen (`clear`)                                                   |
+| <kbd>Ctrl/Command</kbd>+<kbd>C</kbd>              | Copy selected text (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>) |
+| <kbd>Ctrl/Command</kbd>++<kbd>V</kbd>             | Paste copied text (can also be <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd>) |
+| <kbd>Ctrl</kbd>+<kbd>A</kbd>                      | Move cursor to beginning of line                                              |
+| <kbd>Ctrl</kbd>+<kbd>E</kbd>                      | Move cursor to end of line                                                    |
+| <kbd>Ctrl</kbd>+<kbd>U</kbd>                      | Cut text to beginning of line                                                 |
+| <kbd>Ctrl</kbd>+<kbd>K</kbd>                      | Cut text to end of line                                                       |
+| <kbd>Ctrl</kbd>+<kbd>W</kbd>                      | Cut previous word                                                             |
+| <kbd>Ctrl</kbd>+<kbd>Y</kbd>                      | Paste ("`y`ank") previously cut element                                       |
 | <kbd>Ctrl</kbd> + <kbd>R</kbd>                    | Enter characters to search for in the history (repeat <kbd>CTRL</kbd> + <kbd>R</kbd> to keep going back, <kbd>ENTER</kbd> to put command in prompt) |
 
-- <kbd>Ctrl</kbd>+<kbd>C</kbd> to kill the currently running command.
-  Try this:
-    
-    ```sh
-    # For each, see what happens, then press Ctrl + C
-    $ sleep 60s
-    
-    $ echo "Missing quote"  # Omit closing quote!
-    ```
-  
-- Press <kbd>Ctrl</kbd>+<kbd>A</kbd> to move to the beginning of the line,   
-  and add **`ls`** to the beginning: `ls /fs/project/PAS1855`.  
-  
-  Press <kbd>Enter</kbd> (anywhere on the line!).
 
-- Press <kbd>&#8679;</kbd> to get the previous command back on the prompt,  
-  and then press <kbd>Ctrl+U</kbd> to delete until the beginning of the line.
-  
 - <kbd>Ctrl</kbd>+<kbd>U</kbd> actually *cut* the text:
   "Yank" it back with <kbd>Ctrl</kbd>+<kbd>Y</kbd>.
 
-- Create a directory for yourself using `mkdir`:
-  ```sh
-  $ mkdir /fs/ess/PAS1855/users/$USER
-  ```
-  
-  Move into this dir using `cd` &ndash; after typing `cd` and a space,
-  press <kbd>Alt</kbd>+<kbd>.</kbd>:
-  ```sh
-  $ cd /fs/ess/PAS1855/users/$USER
-  ```
+#### Getting the last word from the previous command
 
-::: {.callout-tip}
-#### Keyboard shortcut
-After typing `cd` and a space for the command shown below,
-try pressing **<kbd>Alt</kbd>+<kbd>.</kbd>** (Windows) or
-**<kbd>Esc</kbd>+<kbd>.</kbd>** (Mac).
-This will recall the last argument of the previous command line expression,
-in this case the dir you just made. Super handy!
-:::
+This is (perhaps surprisingly) very useful!
+
+Create a directory for yourself using `mkdir`:
+
+```bash
+mkdir /fs/ess/PAS1855/users/$USER/rnaseq_intro/sandbox/testdir
+```
+  
+Move into this dir using `cd` &ndash; after typing `cd` and a space,
+press **<kbd>Alt</kbd>+<kbd>.</kbd>** on Windows or
+**<kbd>Esc</kbd>+<kbd>.</kbd>** on a Mac:
+
+```bash
+cd /fs/ess/PAS1855/users/$USER/rnaseq_intro/sandbox/testdir
+```
+
+Another press will go back to the last word of the second-to-last command,
+and so on.
+On Windows, you can keep <kbd>Alt</kbd> pressed while repeatedly pressing <kbd>.</kbd>
+(convenient), but on a Mac, you'll need to release <kbd>Esc</kbd> in between
+successive presses.
