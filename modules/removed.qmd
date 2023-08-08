@@ -1,0 +1,42 @@
+::: {.callout-note collapse="true"}
+#### Checking the checksums for the downloaded FASTA and GTF (Click to expand)
+
+The [NCBI FTP directory for the human genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/)
+also contains a file with checksums, `md5checksums.txt`.
+
+Let's download it &mdash;
+we'll use the `-P` option to tell `wget` to put it directly in the `data/ref` dir:
+
+```bash
+wget -P data/ref https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/md5checksums.txt
+```
+
+It's a little harder to check the file integrity in these cases because we
+only have two out of the several dozen files listed in this `md5checksums.txt`
+file (namely, all those in the FTP dir),
+and to make matters worse, we renamed them.
+
+```bash
+cd data/ref
+
+grep "GCF_000001405.40_GRCh38.p14_genomic.gtf.gz" md5checksums.txt
+```
+```{.bash-out}
+f573144e507a9fd85150cf6a3c8f8471  ./GCF_000001405.40_GRCh38.p14_genomic.gtf.gz
+```
+```bash
+grep "GCF_000001405.40_GRCh38.p14_genomic.fna.gz" md5checksums.txt
+```
+```{.bash-out}
+c30471567037b2b2389d43c908c653e1  ./GCF_000001405.40_GRCh38.p14_genomic.fna.gz
+```
+
+```bash
+md5sum GCF*
+```
+```{.bash-out}
+689762f267eafe361b6ee4b21638eb51  GCF_000001405.40_GRCh38.p14_genomic.fna
+a5274984906df2cc65319dfc1b307a01  GCF_000001405.40_GRCh38.p14_genomic.gtf
+```
+
+:::

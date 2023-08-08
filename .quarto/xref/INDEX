@@ -64,5 +64,14 @@
   },
   "info/shell_shortcuts.qmd": {
     "shell_shortcuts.html": "70f6231f"
+  },
+  "modules/06_genomicfiles.qmd": {
+    "06_genomicfiles.html": "5055d674"
+  },
+  "modules/x_vars-loops.qmd": {
+    "x_vars-loops.html": "854a1e5e"
+  },
+  "modules/removed.qmd": {
+    "removed.html": "1b66025c"
   }
 }

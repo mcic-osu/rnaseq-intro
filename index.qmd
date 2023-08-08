@@ -6,13 +6,13 @@ toc: false
 
 ### Sessions
 
-| Session nr | Date       | Topic & link                                                           | Part  
-|------------|------------|------------------------------------------------------------------------|---------------------------|
-| 1          | 2023-07-14 | [Introduction](modules/01_intro.qmd)                                   | 1. Computing Skills       |
-| 2          | 2023-07-21 | [The Ohio Supercomputer Center (OSC)](modules/02_osc.qmd)              | 1. Computing Skills       |
-| 3          | 2023-07-28 | [VS Code](modules/03_vscode.qmd) & [Unix shell I](modules/04_shell.qmd)  | 1. Computing Skills       |
-| 4          | 2023-08-04 | [Unix shell II](modules/05_shell2.qmd)                                 | 1. Computing Skills       |
-| 5          | 2023-08-11 | Genomic data files                                                     | 1. Computing Skills       |
-| 6          | 2023-08-18 | Shell scripts                                                          | 1. Computing Skills       |
-| 7          | 2023-08-25 | Shell scripts (cont.) & software at OSC                                | 1. Computing Skills       |
-| 8          | 2023-09-01 | Slurm jobs                                                             | 1. Computing Skills       |
+| Session nr | Date       | Topic & link                                                            | Part  
+|------------|------------|-------------------------------------------------------------------------|---------------------------|
+| 1          | 2023-07-14 | [Introduction](modules/01_intro.qmd)                                    | A. Computing Skills       |
+| 2          | 2023-07-21 | [The Ohio Supercomputer Center (OSC)](modules/02_osc.qmd)               | A. Computing Skills       |
+| 3          | 2023-07-28 | [VS Code](modules/03_vscode.qmd) & [Unix shell I](modules/04_shell.qmd) | A. Computing Skills       |
+| 4          | 2023-08-04 | [Unix shell II](modules/05_shell2.qmd)                                  | A. Computing Skills       |
+| 5          | 2023-08-11 | [Genomic data files](modules/06_genomicfiles.qmd)                       | A. Computing Skills       |
+| 6          | 2023-08-18 | Shell scripts                                                           | A. Computing Skills       |
+| 7          | 2023-08-25 | Shell scripts (cont.) & software at OSC                                 | A. Computing Skills       |
+| 8          | 2023-09-01 | Slurm jobs                                                              | A. Computing Skills       |

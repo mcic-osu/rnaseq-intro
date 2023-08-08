@@ -852,9 +852,7 @@ We've learned to work with the following truly ubiquitous Unix commands:
 And we have seen a few other simpler utility commands as well
 (`date`, `whoami`, and `tree` in a dropdown box).
 
-We'll continue with the basics of the Unix shell in part II (TBA).
-
-
+We'll continue with the basics of the Unix shell in [part II](./05_shell2.qmd05_).
 
 <br>
 

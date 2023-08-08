@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jelmer Poelstra">
+<meta name="dcterms.date" content="2023-08-11">
+
+<title>Genomic data files</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">RNAseq analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../modules/01_intro.html" rel="" target="">
+ <span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-a.-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">A. Computing skills</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-a.-computing-skills">    
+        <li>
+    <a class="dropdown-item" href="../modules/02_osc.html" rel="" target="">
+ <span class="dropdown-text">A1. OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/03_vscode.html" rel="" target="">
+ <span class="dropdown-text">A2. VS Code</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/04_shell.html" rel="" target="">
+ <span class="dropdown-text">A3. Unix shell I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/05_shell2.html" rel="" target="">
+ <span class="dropdown-text">A4. Unix shell II</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/06_genomicfiles.html" rel="" target="">
+ <span class="dropdown-text">A5. Genomic data files</span></a>
+  </li>  
+        <li class="dropdown-header">A6. Shell scripting [TBA]</li>
+        <li class="dropdown-header">A7. Software at OSC [TBA]</li>
+        <li class="dropdown-header">A8. SLURM compute jobs [TBA]</li>
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-b.-from-reads-to-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">B. From reads to counts</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-b.-from-reads-to-counts">    
+        <li class="dropdown-header">B1. Read QC with <code>FastQC</code> and <code>MultiQC</code> [TBA]</li>
+        <li class="dropdown-header">B2. Trimming with <code>TrimGalore</code> [TBA]</li>
+        <li class="dropdown-header">B3. rRNA removal with <code>SortMeRNA</code> [TBA]</li>
+        <li class="dropdown-header">B4. Alignment with <code>STAR</code> [TBA]</li>
+        <li class="dropdown-header">B5. Counting with <code>Salmon</code> [TBA]</li>
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-c.-analyzing-the-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">C. Analyzing the counts</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-c.-analyzing-the-counts">    
+        <li class="dropdown-header">C1. Creating a DESeq2 object [TBA]</li>
+        <li class="dropdown-header">C2. PCA [TBA]</li>
+        <li class="dropdown-header">C3. Differential expression analysis [TBA]</li>
+        <li class="dropdown-header">C4. GO enrichment analysis [TBA]</li>
+        <li class="dropdown-header">C5. KEGG enrichment analysis [TBA]</li>
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference-material" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference material</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-material">    
+        <li class="dropdown-header">Specific tutorials</li>
+        <li>
+    <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
+ <span class="dropdown-text">- Using OSC with SSH</span></a>
+  </li>  
+        <li class="dropdown-header">General info</li>
+        <li>
+    <a class="dropdown-item" href="../info/shell_commands.html" rel="" target="">
+ <span class="dropdown-text">- Shell commands overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/shell_shortcuts.html" rel="" target="">
+ <span class="dropdown-text">- Shell keyboard shortcuts</span></a>
+  </li>  
+        <li class="dropdown-header">- Further Resources</li>
+        <li class="dropdown-header">- Glossary</li>
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../info/about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview-getting-started" id="toc-overview-getting-started" class="nav-link active" data-scroll-target="#overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</a>
+  <ul class="collapse">
+  <li><a href="#start-vs-code-and-open-your-folder" id="toc-start-vs-code-and-open-your-folder" class="nav-link" data-scroll-target="#start-vs-code-and-open-your-folder">Start VS Code and open your folder</a></li>
+  </ul></li>
+  <li><a href="#fastq-compressed-files-grep" id="toc-fastq-compressed-files-grep" class="nav-link" data-scroll-target="#fastq-compressed-files-grep"><span class="header-section-number">2</span> FASTQ, compressed files, &amp; <code>grep</code></a>
+  <ul class="collapse">
+  <li><a href="#the-fastq-format" id="toc-the-fastq-format" class="nav-link" data-scroll-target="#the-fastq-format"><span class="header-section-number">2.1</span> The FASTQ format</a></li>
+  <li><a href="#looking-at-compressed-fastq-files" id="toc-looking-at-compressed-fastq-files" class="nav-link" data-scroll-target="#looking-at-compressed-fastq-files"><span class="header-section-number">2.2</span> Looking at compressed (FASTQ) files</a></li>
+  </ul></li>
+  <li><a href="#downloading-reference-genome-files" id="toc-downloading-reference-genome-files" class="nav-link" data-scroll-target="#downloading-reference-genome-files"><span class="header-section-number">3</span> Downloading reference genome files</a>
+  <ul class="collapse">
+  <li><a href="#finding-genome-files-at-ncbi" id="toc-finding-genome-files-at-ncbi" class="nav-link" data-scroll-target="#finding-genome-files-at-ncbi"><span class="header-section-number">3.1</span> Finding genome files at NCBI</a></li>
+  <li><a href="#downloading-files-to-osc-with-wget" id="toc-downloading-files-to-osc-with-wget" class="nav-link" data-scroll-target="#downloading-files-to-osc-with-wget"><span class="header-section-number">3.2</span> Downloading files to OSC with <code>wget</code></a></li>
+  <li><a href="#unzipping-and-renaming-the-genome-files" id="toc-unzipping-and-renaming-the-genome-files" class="nav-link" data-scroll-target="#unzipping-and-renaming-the-genome-files"><span class="header-section-number">3.3</span> Unzipping and renaming the genome files</a></li>
+  </ul></li>
+  <li><a href="#fasta" id="toc-fasta" class="nav-link" data-scroll-target="#fasta"><span class="header-section-number">4</span> FASTA</a>
+  <ul class="collapse">
+  <li><a href="#the-fasta-format" id="toc-the-fasta-format" class="nav-link" data-scroll-target="#the-fasta-format"><span class="header-section-number">4.1</span> The FASTA format</a></li>
+  <li><a href="#exploring-our-fasta-file" id="toc-exploring-our-fasta-file" class="nav-link" data-scroll-target="#exploring-our-fasta-file"><span class="header-section-number">4.2</span> Exploring our FASTA file</a></li>
+  </ul></li>
+  <li><a href="#annotation-files-gtfgff-cutsortuniq" id="toc-annotation-files-gtfgff-cutsortuniq" class="nav-link" data-scroll-target="#annotation-files-gtfgff-cutsortuniq"><span class="header-section-number">5</span> Annotation files (GTF/GFF) &amp; <code>cut</code>/<code>sort</code>/<code>uniq</code></a>
+  <ul class="collapse">
+  <li><a href="#the-gtf-format" id="toc-the-gtf-format" class="nav-link" data-scroll-target="#the-gtf-format"><span class="header-section-number">5.1</span> The GTF format</a></li>
+  <li><a href="#exploring-our-gtf-file" id="toc-exploring-our-gtf-file" class="nav-link" data-scroll-target="#exploring-our-gtf-file"><span class="header-section-number">5.2</span> Exploring our GTF file</a></li>
+  <li><a href="#intermezzo-cut-uniq-and-sort" id="toc-intermezzo-cut-uniq-and-sort" class="nav-link" data-scroll-target="#intermezzo-cut-uniq-and-sort"><span class="header-section-number">5.3</span> Intermezzo: <code>cut</code>, <code>uniq</code>, and <code>sort</code></a></li>
+  <li><a href="#getting-some-stats-with-cut-uniq-and-grep" id="toc-getting-some-stats-with-cut-uniq-and-grep" class="nav-link" data-scroll-target="#getting-some-stats-with-cut-uniq-and-grep"><span class="header-section-number">5.4</span> Getting some stats with <code>cut</code>, <code>uniq</code>, and <code>grep</code></a></li>
+  </ul></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">6</span> Recap</a></li>
+  <li><a href="#at-home-reading-raw-data-management" id="toc-at-home-reading-raw-data-management" class="nav-link" data-scroll-target="#at-home-reading-raw-data-management">At-home reading: raw data management</a>
+  <ul class="collapse">
+  <li><a href="#making-your-valuable-data-read-only" id="toc-making-your-valuable-data-read-only" class="nav-link" data-scroll-target="#making-your-valuable-data-read-only"><span class="header-section-number">6.1</span> Making your valuable data read-only</a></li>
+  <li><a href="#checking-file-integrity-after-transfer" id="toc-checking-file-integrity-after-transfer" class="nav-link" data-scroll-target="#checking-file-integrity-after-transfer"><span class="header-section-number">6.2</span> Checking file integrity after transfer</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Genomic data files &amp; data downloading</h1>
+<p class="subtitle lead">And exploring them in the shell, including with <code>grep</code>, <code>cut</code>, <code>sort</code>, <code>uniq</code></p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jelmer Poelstra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 11, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<p><br></p>
+<section id="overview-getting-started" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</h2>
+<p>In this session, you’ll be introduced to three very common types of genomic data files, all of which you should have <em>when you start</em> your reference-based RNAseq data analysis.</p>
+<p>You’ll also learn a number of new shell concepts and commands, such as commands to work with gzip-compressed files, <code>grep</code> to search for text, <code>cut</code>, <code>sort</code>, and <code>uniq</code> to summarize tabular data, and <code>wget</code> to download files from the internet (and the at-home reading describes <code>md5sum</code> to check data integrity, and <code>chmod</code> to make your valuable data read-only.)</p>
+<p>We’ll talk about the following three types of genomic data file:</p>
+<ul>
+<li><strong>FASTQ</strong> files: When you get your sequence data back, it will be in this format, which contains one entry per read, and has <em>quality scores along with the sequence itself</em>.</li>
+<li><strong>FASTA</strong> files: These are very simple sequence files, where each entry is just a header and a DNA or protein sequence. Your reference genome assembly will be in this format.</li>
+<li><strong>GTF</strong> (&amp; <strong>GFF</strong>) files: These are files that contain annotations in a tabular format, such as the start and stop positions of each gene.</li>
+</ul>
+<p>You already have some FASTQ files in your practice directory (if not, see the instructions below), but we do not yet have the reference genome FASTA and GFF files and will download those in this session.</p>
+<section id="start-vs-code-and-open-your-folder" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h3>
+<p>As always, we’ll be working in VS Code — if you don’t already have a session open, see below how to do so.</p>
+<p><strong>Make sure to open your <code>/fs/ess/PAS0471/&lt;user&gt;/rnaseq_intro</code> dir</strong>, either by using the <code>Open Folder</code> menu item, or by clicking on this dir when it appears in the <code>Welcome</code> tab.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Starting VS Code at OSC - with a Terminal (Click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Log in to OSC’s OnDemand portal at <a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>.</li>
+<li>In the blue top bar, select <code>Interactive Apps</code> and then near the bottom of the dropdown menu, click <code>Code Server</code>.</li>
+<li>In the form that appears on a new page:
+<ul>
+<li>Select an appropriate OSC project (here: <code>PAS0471</code>)</li>
+<li>For this session, select <code>/fs/ess/PAS0471</code> as the starting directory</li>
+<li>Make sure that <code>Number of hours</code> is at least <code>2</code></li>
+<li>Click <code>Launch</code>.</li>
+</ul></li>
+<li>On the next page, once the top bar of the box has turned green and says <code>Runnning</code>, click <code>Connect to VS Code</code>.</li>
+</ol>
+<figure class="figure">
+<p align="center">
+<img src="img/osc-code-launch_ed.png" width="80%" class="figure-img">
+</p>
+</figure>
+<ol start="5" type="1">
+<li>Open a Terminal by clicking &nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>. (Or use one of the keyboard shortcuts: <kbd>Ctrl</kbd>+<kbd>`</kbd> (backtick) or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.)</li>
+<li>In the <code>Welcome</code> tab under <code>Recent</code>, you should see your <code>/fs/ess/PAS0471/&lt;user&gt;/rnaseq_intro</code> dir listed: click on that. Alternatively, use &nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> to open that dir in VS Code.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Don’t have your own dir with (e.g.) FASTQ files? (Click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If you missed the last session, or deleted your <code>rnaseq_intro</code> dir entirely, run these commands to get a (fresh) copy of all files:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /fs/ess/PAS0471/demo/202307_rnaseq /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And if you do have an <code>rnaseq_intro</code> dir, but you want to start over because you moved or removed some of the files while practicing, then delete the dir before your run the commands above:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p><br></p>
+</section>
+</section>
+<section id="fastq-compressed-files-grep" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="fastq-compressed-files-grep"><span class="header-section-number">2</span> FASTQ, compressed files, &amp; <code>grep</code></h2>
+<section id="the-fastq-format" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="the-fastq-format"><span class="header-section-number">2.1</span> The FASTQ format</h3>
+<p>FASTQ is a very common format for the raw sequence data output by high-throughput machines — at least when you have Illumina sequencing done, you will almost always receive the sequences in this format. <em>Like most genomic data files, these are plain text files</em>, and each sequence that is read by the sequencer (i.e., each “read”) forms <strong>one FASTQ entry which is represented by four lines</strong>. The lines contain, respectively:</p>
+<ol type="1">
+<li>A <strong>header</strong> that starts with <code>@</code> and e.g.&nbsp;uniquely identifies the read</li>
+<li>The <strong>sequence</strong> itself</li>
+<li>A <strong><code>+</code></strong> (plus sign)</li>
+<li>One-character <strong>quality scores</strong> for each base in the sequence</li>
+</ol>
+<figure class="figure">
+<p align="center">
+<img src="img/fastq_header.png" width="85%" class="figure-img">
+</p><figcaption class="figure-caption">
+One entry (read) in a FASTQ file covers 4 lines. <br>Several components of the header line are annotated.
+</figcaption>
+<p></p>
+</figure>
+<p>The “Q” in FASTQ stands for “<em>quality</em>”, to contrast this file type with FASTA, a more basic and generic format that does not include base quality scores. FASTQ files have the extension <code>.fastq</code> or <code>.fq</code>, but they are very commonly gzip-compressed, in which case their name ends in <code>.fastq.gz</code> or <code>.fq.gz</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Understanding FASTQ quality scores (Click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The bottom line (starting with <code>JJJJ</code>) in the figure above contains a quality score for each base of the sequence in the second line. Specifically, this is a Phred quality score (Q), defined as:</p>
+<blockquote class="blockquote">
+<p><strong>Q = -10 * log10(P)</strong></p>
+</blockquote>
+<p>In the equation above, P is the estimated probability that a base call is erroneous — see the table below for some specific probabilities and their rough qualitative interpretation for Illumina data:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Phred quality score</th>
+<th>Error probability</th>
+<th>Rough interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>10</strong></td>
+<td>1 in 10</td>
+<td>terrible</td>
+</tr>
+<tr class="even">
+<td><strong>20</strong></td>
+<td>1 in 100</td>
+<td>bad</td>
+</tr>
+<tr class="odd">
+<td><strong>30</strong></td>
+<td>1 in 1,000</td>
+<td>good</td>
+</tr>
+<tr class="even">
+<td><strong>40</strong></td>
+<td>1 in 10,000</td>
+<td>excellent</td>
+</tr>
+</tbody>
+</table>
+<p>With Illumina data, these Phred quality scores can go up to 62. This numeric quality score is represented in FASTQ files not by its number, but by an “ASCII character”, which <strong>allows for a single-character representation</strong> of each possible score.</p>
+<p>As a consequence, each quality score character can conveniently correspond to (i.e., line up with) a base in the sequence: e.g., the 30th base number in a FASTQ line with a DNA sequence will correspond to the 30th quality score character in that line.</p>
+<p>In practice, you almost never have to check the individual quality scores of bases in FASTQ files, but if you do want to know which character corresponds to which quality, <a href="https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm">this Illumina webpage has a table</a>.</p>
+</div>
+</div>
+</div>
+<p>Illumina sequencing is by far the most common for RNAseq<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, and can be done in two “modes”: <strong><em>single-end</em></strong> and <strong><em>paired-end</em></strong>. With paired-end sequencing, each individual (c)DNA fragment is sequenced from two ends in opposite directions (with the total size of the fragment –“insert size”– determining whether these two reads will overlap). The resulting two, “paired”, reads for each fragment are inextricably linked, with the first called the <strong>forward read</strong> and the second called the <strong>reverse read</strong>.</p>
+<figure class="figure">
+<p align="center">
+<img src="img/forward-reverse-reads.png" width="85%" class="figure-img">
+</p><figcaption class="figure-caption">
+How a DNA fragment prepared for paired-end Illumina sequencing will be sequenced. <br>In this example, the insert size is such that the forward and reverse reads do not overlap.
+</figcaption>
+<p></p>
+</figure>
+<p>Most commonly for paired-end data, forward and reverse reads are placed in separate files<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. As such, you’ll usually have two files<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for each sample that was sequenced:</p>
+<ul>
+<li>The file with <strong>forward reads has <code>_R1</code></strong> (or sometimes <code>_1</code>) in its name, e.g.&nbsp;<code>ASPC1_A178V_R1.fastq.gz</code></li>
+<li>The file with <strong>reverse reads has <code>_R2</code></strong> (or sometimes <code>_2</code>) in its name, e.g.&nbsp;<code>ASPC1_A178V_R2.fastq.gz</code> (i.e., the name should be identical to that for the forward read, except for the read direction identifier).</li>
+</ul>
+<p>Because the forward and reverse reads are so tightly linked, R1 and R2 files for one sample <em>should always contain the same number of reads</em>. (It is possible to end up with “orphan” reads, such as after one member of the pair is removed by quality filtering, but these are either discarded or saved in separate files.)</p>
+<p><br></p>
+</section>
+<section id="looking-at-compressed-fastq-files" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="looking-at-compressed-fastq-files"><span class="header-section-number">2.2</span> Looking at compressed (FASTQ) files</h3>
+<p>Let’s start by reminding ourselves about our own FASTQ files — recall that this is a subset of the full dataset, with way fewer reads reads per file than the originals, and with files for only four of the samples:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>total 38M
+-rw-r--r-- 1 jelmer PAS0471 4.1M Jul 27 11:53 ASPC1_A178V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.2M Jul 27 11:53 ASPC1_A178V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.1M Jul 27 11:53 ASPC1_G31V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 4.3M Jul 27 11:53 ASPC1_G31V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.1M Jul 27 11:53 Miapaca2_A178V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_A178V_R2.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.1M Jul 27 11:53 Miapaca2_G31V_R1.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_G31V_R2.fastq.gz</code></pre>
+<p>The FASTQ files all have a <code>.gz</code> extension (and are listed in red), indicating they are “gzip-compressed”. This is a common type of compression for large genomic files.</p>
+<p>Next, we’ll take a peak inside one of these files. I should note that during actual FASTQ analysis (QC, trimming, alignment), you never <em>have to</em> interact with or know the details of the raw contents of the file, since we will use bioinformatics programs that take care of this for us. That said, it is good to at least have a rough idea what a FASTQ file looks like, and how you might get some quick stats on them using basic shell commands.</p>
+<p>Let’s consider our options look inside one of these files. <code>cat</code> will print the contents of the entire file to screen, which doesn’t sound like a good idea for such a large file. Other than <code>less</code>, perhaps <code>head</code> will work well here? We’ll try to print 8 lines, which should show us two reads:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 8 data/fastq/ASPC1_A178V_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p align="left">
+<img src="img/head2.png" width="80%">
+</p>
+<p>Ouch, what was that?! What happened here is that we are directly seeing the contents of the <em>compressed</em> file, which is simply not human-readable.</p>
+<p>Other shell commands, like those that count the number of lines (<code>wc -l</code>), or search for text (<code>grep</code>, see below), would also run into trouble — and in a possibly worse way because you might overlook the problem: <code>wc -l</code> <em>will</em> return a count yet this is not the number of lines for the uncompressed file, whereas a text search may “falsely” return nothing while that text <em>is</em> present in the uncompressed file.</p>
+<p>To get around all of this, we might be inclined to <strong>uncompress</strong> these files, which we could do with the <strong><code>gunzip</code> command</strong>. However, uncompressed files take up several times as much disk storage space as compressed ones, and this can add up to a lot when we’re talking about FASTQ files. Fortunately, there are other approaches available. First of all, any bioinformatics tool worth its salt will accept compressed FASTQ files. Additionally, the following commands and strategies should help you to do some basic exploration of your FASTQ files without uncompressing them.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Concatenating compressed data
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>When it is okay to concatenate files (losing information about the original file origin of the data), this can be done very easily in the shell.</p>
+<p>Particularly useful is the following, for instance if we have two gzipped FASTQ file for the same sample but from different Illumina lanes:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> sampleA_L001_R1.fastq.gz sampleA_L002_R1.fastq.gz <span class="op">&gt;</span> sampleA_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or, to add a second FASTQ file to an existing gzipped file, we can simply use <code>&gt;&gt;</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fictional example, say we a compressed FASTQ and a second uncompressed one:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; in.fastq.gz in2.fastq</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">gzip</span> <span class="at">-c</span> in2.fastq <span class="op">&gt;&gt;</span> in.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<section id="less-zless" class="level4" data-number="2.2.1">
+<h4 data-number="2.2.1" class="anchored" data-anchor-id="less-zless"><span class="header-section-number">2.2.1</span> <code>less</code> / <code>zless</code></h4>
+<p>As you may recall from the previous session, we were actually able to directly view a compressed FASTQ file with <code>less</code>! <code>less</code> also has a <code>zless</code> counterpart that is explicitly meant to display gzip-compressed files, but at least at OSC, <code>less</code> itself will also work:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> data/fastq/ASPC1_A178V_R1.fastq.gz</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Recall, press 'q' to quit less)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Avoid line-wrapping by <code>less</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Depending on your zoom level and the length of reads in your FASTQ file, some lines may contain too many characters to fit on your screen. If that’s the case, <code>less</code> will by default “wrap” those lines onto the next line on your screen, so characters won’t run off the screen on the right-hand side. That may be useful when the file contains text you’re trying to read in full, but it is often confusing for files like FASTQ as well as for tabular files.</p>
+<p>To turn off line-wrapping, call <code>less</code> with the <code>-S</code> option:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> <span class="at">-S</span> data/fastq/ASPC1_A178V_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="zcat-and-grep" class="level4" data-number="2.2.2">
+<h4 data-number="2.2.2" class="anchored" data-anchor-id="zcat-and-grep"><span class="header-section-number">2.2.2</span> <code>zcat</code> (and <code>grep</code>)</h4>
+<p>Like the <code>less</code>/<code>zless</code> pair, <code>cat</code> has a counterpart that will print the uncompressed contents of a compressed file: <strong><code>zcat</code></strong>.</p>
+<p>Of course, we just established that <code>cat</code>’s behavior of printing all the contents of a file isn’t great for large FASTQ files. But <code>zcat</code> is nevertheless very useful for FASTQ files when we combine it with the pipe, <code>|</code>.</p>
+<p>For example, we can pipe the output of <code>zcat</code> to the <code>head</code> command to view the first 8 lines as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>@A00195:432:HC7JWDRX3:2:1241:25093:24627 1:N:0:CCGATCGT+GACTGTTT
+GAACTAACCAAAGTGTGCTGAACATTATTAGGCTCTCCAGACATGTCTAGTTTATACTGGTAAATGCATATCAATTGTAAATATAAAAATAAAATTTGCAT
++
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF:FFFFFFFFFFF:FFFFFFFFFFFFFFFF:FFFFFFFFFFFFFFFFF:F:F,F:FF
+@A00195:432:HC7JWDRX3:1:1232:30716:27226 1:N:0:CCGATCGT+GACTGTTT
+GTCCGGACCTTCTTGACGTAAGTGACATCTGGGTGGTGTTTGGGCGGCATGAGCAGCAGATGCAGCCGCTCATAGAACTGGATCCCGTTAAGGGAGGTGAC
++
+FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</code></pre>
+<p>Along the same lines, we can count the number of lines in a FASTQ file like so:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>400000</code></pre>
+</section>
+<section id="your-turn-the-number-of-reads-in-a-fastq-file" class="level4 exercise" data-number="2.2.3">
+<h4 data-number="2.2.3" class="anchored" data-anchor-id="your-turn-the-number-of-reads-in-a-fastq-file"><span class="header-section-number">2.2.3</span> Your Turn: The number of reads in a FASTQ file</h4>
+<ul>
+<li><p>How many reads are in the above FASTQ file?</p></li>
+<li><p>What line count do you get when you run <code>wc -l</code> directly on the compressed file?</p></li>
+</ul>
+<details>
+<summary>
+Solutions
+</summary>
+<ul>
+<li><p>There are 400,000 / 4 = 100,000 reads in this file</p></li>
+<li><p>You’ll get a line count of 15,358, quite a ways off from the 400,000 lines in the uncompressed file! So, don’t do this when you want to count lines/reads!</p></li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> data/fastq/ASPC1_A178V_R1.fastq.gz </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>15358 data/fastq/ASPC1_A178V_R1.fastq.gz</code></pre>
+</details>
+</section>
+<section id="your-turn-getting-the-read-length-advanced" class="level4 exercise" data-number="2.2.4">
+<h4 data-number="2.2.4" class="anchored" data-anchor-id="your-turn-getting-the-read-length-advanced"><span class="header-section-number">2.2.4</span> Your Turn: Getting the read length (advanced)</h4>
+<p>What is the read length for these FASTQ files? Can you get the answer using the commands we have covered so far?</p>
+<p><em>Two extra pieces of information:</em></p>
+<ul>
+<li><em><code>wc -c</code> will return the number of characters in its input.</em></li>
+<li><em>Nearly all reads in Illumina FASTQ files have the same length,</em> <em>so you can examine the length of a single read to get your answer.</em></li>
+</ul>
+<details>
+<summary>
+Hints
+</summary>
+<ul>
+<li><p>Recall that the number of characters in e.g.&nbsp;the second (and the fourth) line of a FASTQ file corresponds to the read length.</p></li>
+<li><p>Think about how you might be able to use <code>head</code> and <code>tail</code>, each with the <code>-n</code> option, and back-to-back, to get a specific line from a file.</p></li>
+<li><p>String all four commands together in a single line using the pipe <code>|</code>.</p></li>
+</ul>
+</details>
+<details>
+<summary>
+Solution
+</summary>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 2 <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1 <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>102</code></pre>
+<p>You can extract any line from a text file by its line number <code>N</code> using <code>head -n N | tail -n 1</code>: the last line from <code>head</code>’s output will be the line of interest, which you can then isolate with <code>tail -n 1</code>.</p>
+<p>One (annoying) little twist here is that <code>wc -c</code> will include the newline “character” in its count: as such, the read length is 102 - 1 = <strong>101</strong>.</p>
+</details>
+</section>
+<hr>
+<p><strong><code>grep</code> allows you to search a file for any text or text patterns.</strong> By default, it will <em>return the entire line</em> whenever it finds a match, and it is often set up (including at OSC) to <em>highlight the matching text itself</em> in bold red in its output.</p>
+<p>For example, let’s say we wanted to see which reads in our FASTQ file contain the sequence “ACCGATACG”:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"ACCGATACG"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p align="left">
+<img src="img/grep_on_fastq.png" width="98%">
+</p>
+<p>If we wanted to know <em>how many</em> reads contain a certain sequence (e.g, the shorter and therefore more common “CCAGTA”), we can simply pipe <code>grep</code>’s output into <code>wc -l</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"CCAGTA"</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>1118</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+More <code>grep</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>grep</code> has <em>many</em> options — one of those is <code>-c</code>, which will directly <em>count</em> matching lines instead of printing them (i.e., the command below is an alternative to the command above where we piped <code>grep</code>s output into <code>wc -l</code>):</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="st">"CCAGTA"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>1118</code></pre>
+<p><code>grep</code> even has a <code>zgrep</code> counterpart for gzip-compressed files, so the above can be further shortened by omitting <code>zcat</code> and passing the FASTQ file name as an argument to <code>zgrep</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zgrep</span> <span class="at">-c</span> <span class="st">"CCAGTA"</span> data/fastq/ASPC1_A178V_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>1118</code></pre>
+<p>We could also create a new FASTQ file whose sequences match our search by printing one line before each match (<code>-B1</code>) and two lines after it (<code>-A2</code>):</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zgrep</span> <span class="at">-B1</span> <span class="at">-A2</span> <span class="at">--no-group-separator</span> <span class="st">"CCAGTA"</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="op">&gt;</span> CCAGTA.fastq </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>grep</code> can also search multiple files at once (simply pass multiple filenames as arguments like with other commands, e.g.&nbsp;using a glob pattern to select them), and it can even search directories recursively using the <code>-R</code> flag.</p>
+</div>
+</div>
+<p><br></p>
+</section>
+</section>
+<section id="downloading-reference-genome-files" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="downloading-reference-genome-files"><span class="header-section-number">3</span> Downloading reference genome files</h2>
+<section id="finding-genome-files-at-ncbi" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="finding-genome-files-at-ncbi"><span class="header-section-number">3.1</span> Finding genome files at NCBI</h3>
+<p>To analyze our RNAseq data, we’ll need two files related to our <strong>reference genome</strong>, which is the genome that we want to align our reads to, and whose gene annotations will form the basis of the gene counts that we’ll get.</p>
+<p>Specifically, we’ll need the <strong>nucleotide FASTA</strong> file with the genome assembly itself, and a <strong>GTF file</strong>, which is a tabular file with the genomic coordinates and other information for genes and other so-called genomic “features”.</p>
+<p>We can download these files from NCBI. For human, many genome assemblies are available on NCBI, but the current reference genome is “<em>GRCh38.p14</em>” (<a href="https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=9606">see this overview</a>). There are several ways to download genomes from the NCBI — here, we will keep it simple and directly download just the two files that we need from the <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/">FTP site for this genome</a>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Getting to the FTP site
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can get to this FTP site by clicking on the link for “GRCh38.p14” on the <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=9606">overview page</a>, which will bring you <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001405.40/">here</a>, then clicking on “View the legacy Assembly page”, which will bring you <a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.40/?shouldredirect=false">here</a>, and then clicking on “FTP directory for RefSeq assembly” on the right-hand side of the page.</p>
+</div>
+</div>
+<p>On the <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/">FTP site</a>, we can first right-click on “GCF_000001405.40_GRCh38.p14_genomic.fna.gz” and then click “Copy link address.” (The URL is also shown in the command box below.)</p>
+<p><br></p>
+</section>
+<section id="downloading-files-to-osc-with-wget" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="downloading-files-to-osc-with-wget"><span class="header-section-number">3.2</span> Downloading files to OSC with <code>wget</code></h3>
+<p>To download a file to OSC, you can’t just open a web browser and download it directly to there. You <em>could</em> download it to your own computer and then transfer it to OSC. A more direct approach is to use a download command in your OSC shell. <strong><code>wget</code> is one command that allows you to download files from the web</strong> (<code>curl</code> is another very commonly used one, with much the same functionality).</p>
+<p><strong>To download a file to your working directory</strong>, you just need to tell <code>wget</code> about the URL (web address) to that file — type “wget”, press <kbd>Space</kbd>, and paste the address you copied:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.fna.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre class="bash-out"><code>--2023-08-08 13:46:35--  https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.fna.gz
+Resolving ftp.ncbi.nlm.nih.gov (ftp.ncbi.nlm.nih.gov)... 130.14.250.11, 130.14.250.10, 2607:f220:41e:250::12, ...
+Connecting to ftp.ncbi.nlm.nih.gov (ftp.ncbi.nlm.nih.gov)|130.14.250.11|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 972898531 (928M) [application/x-gzip]
+Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
+65% [============================================================================================&gt;                                                   ] 633,806,848 97.7MB/s </code></pre>
+<p>The <code>wget</code> command is quite chatty, as you can see above and as you should see in your shell when you execute the command, and its output to the screen includes a progress bar for the download.</p>
+<p>Next, let’s download one of the annotation files. On the NCBI genome assembly FTP page, both a GFF and a GTF file is available. These are two very similar formats that contain the same data. For our specific analysis workflow, the GTF format is preferred, so we will download the GTF file — right-click on “GCF_000001405.40_GRCh38.p14_genomic.gtf.gz” and copy the link address.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Command output not shown)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, let’s see if the files are indeed in our current working dir:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code># Output should include:
+-rw-r--r-- 1 jelmer PAS0471 928M Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.fna.gz
+-rw-r--r-- 1 jelmer PAS0471  49M Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</code></pre>
+<p><br></p>
+</section>
+<section id="unzipping-and-renaming-the-genome-files" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="unzipping-and-renaming-the-genome-files"><span class="header-section-number">3.3</span> Unzipping and renaming the genome files</h3>
+<p>Both the FASTA and the GTF file are gzip-compressed. While it’s preferable to keep FASTQ files compressed, since they are especially large and there are typically many of them, it’s often more convenient to store your reference genome files as uncompressed files.</p>
+<p>We can unzip them simply as follows (notice the subsequent increase in file size in the <code>ls</code> output):</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Will take several seconds, esp. for the first file, and not print output to screen</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> GCF_000001405.40_GRCh38.p14_genomic.fna.gz</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code># Output should include:
+-rw-r--r-- 1 jelmer PAS0471 3.2G Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.fna
+-rw-r--r-- 1 jelmer PAS0471 1.6G Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.gtf</code></pre>
+<p>We’ll also want to move these files to a dedicated directory. And while this is not necessary, it will be convenient for our purposes to shorten their file names while retaining the necessary identifying information (the RefSeq (GCF) number).</p>
+<p>After creating a directory, we can move and rename at once as follows:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/ref</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> GCF_000001405.40_GRCh38.p14_genomic.fna data/ref/GCF_000001405.40.fna</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> GCF_000001405.40_GRCh38.p14_genomic.gtf data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>‘GCF_000001405.40_GRCh38.p14_genomic.fna’ -&gt; ‘data/ref/GCF_000001405.40.fna’
+‘GCF_000001405.40_GRCh38.p14_genomic.gtf’ -&gt; ‘data/ref/GCF_000001405.40.gtf’</code></pre>
+<p><br></p>
+</section>
+</section>
+<section id="fasta" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="fasta"><span class="header-section-number">4</span> FASTA</h2>
+<p>Our reference genome assembly is stored in the FASTA format, so we’ll learn more about this format and take a look at our own file.</p>
+<section id="the-fasta-format" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="the-fasta-format"><span class="header-section-number">4.1</span> The FASTA format</h3>
+<p>The FASTA format is in essence simpler than FASTQ, but it is also less standardized and more generic.</p>
+<pre class="bash-out-solo"><code>&gt;unique_sequence_ID Optional description (free form!)
+ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAAAA
+&gt;unique_sequence_ID2
+ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAATG</code></pre>
+<p>Like FASTQ files, each entry contains a <strong>header</strong> and the <strong>sequence</strong> itself, but:</p>
+<ul>
+<li><strong>Header lines start with a <code>&gt;</code></strong>, and are otherwise basically “free form”, but they usually provide some sort of identifier (and sometimes some metadata) for the sequence in the entry.</li>
+<li>There are no quality scores, and there is no <code>+</code> line.</li>
+<li>The sequences can be DNA, RNA, or amino acids.</li>
+<li>Each sequence can represent e.g.&nbsp;a read, a contig/scaffold, a chromosome, or a gene, as well as an <em>aligned</em> sequence with gaps in it.</li>
+<li>Because the individual sequences in a FASTA file can be very long, <strong>sequences are often not on a single line</strong>, but may be spread across multiple/many lines with some fixed width, say 50 or 80 characters. (As such, line counts are not that informative.)</li>
+</ul>
+<p><em>Generic</em> FASTA file extensions are <code>.fasta</code> and <code>.fa</code>, but also used are extensions that explicitly indicate whether the sequences are <em>nucleotides</em> (<code>.fna</code>, like our downloaded genome assembly file) or <em>amino acids</em> (<code>.faa</code>).</p>
+<p><br></p>
+</section>
+<section id="exploring-our-fasta-file" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="exploring-our-fasta-file"><span class="header-section-number">4.2</span> Exploring our FASTA file</h3>
+<p>Let’s take a look at our reference genome nucleotide FASTA file:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> data/ref/GCF_000001405.40.fna</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>&gt;NC_000001.11 Homo sapiens chromosome 1, GRCh38.p14 Primary Assembly
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN</code></pre>
+<p>Well … apparently not all bases have been determined: as you probably know, an <code>N</code> represents an unknown base. We can also see that the sequence for each entry is spread across multiple lines, with a line width of 80 characters:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 2 data/ref/GCF_000001405.40.fna <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1 <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>81              # 81 - 1 = 80 characters</code></pre>
+<p>Let’s take a more extensive look at the file with <code>less</code>:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> data/ref/GCF_000001405.40.fna</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Remember: press 'q' to quit less)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, we can check how many sequences we have in this file by simply counting the number of lines with a <code>&gt;</code> (which is only allowed in the headers):</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (This will take several seconds)</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">"&gt;"</span> data/ref/GCF_000001405.40.fna</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>705</code></pre>
+<p>Does this match with what the NCBI website told us?</p>
+<p><br></p>
+</section>
+</section>
+<section id="annotation-files-gtfgff-cutsortuniq" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="annotation-files-gtfgff-cutsortuniq"><span class="header-section-number">5</span> Annotation files (GTF/GFF) &amp; <code>cut</code>/<code>sort</code>/<code>uniq</code></h2>
+<p>Our reference genome <em>annotation</em> is stored in the GTF format, so we’ll also learn more about this format and take a look at our own file.</p>
+<section id="the-gtf-format" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="the-gtf-format"><span class="header-section-number">5.1</span> The GTF format</h3>
+<p>The GTF format and the <em>very</em> similar GFF format<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> are <strong>tabular</strong> files, with one row for each individual “genomic feature” (gene, exon, intron, etc.) that has been annotated in the genome, and with columns that contain information like the genomic coordinates of the features.</p>
+<p>See the small sample below, where a header line with column names has been manually added for educational purposes:</p>
+<pre class="bash-out-solo"><code>seqname     source  feature start   end     score  strand  frame    attributes
+NC_000001   RefSeq  gene    11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id ""; db_xref "GeneID:100287102"; db_xref "HGNC:HGNC:37102"; description "DEAD/H-box helicase 11 like 1 (pseudogene)"; gbkey "Gene"; gene "DDX11L1"; gene_biotype "transcribed_pseudogene"; pseudo "true"; 
+NC_000001   RefSeq  exon    11874   12227   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; </code></pre>
+<p>Here are some more details on what’s in each column, with the more important/interesting columns in bold:</p>
+<ul>
+<li><strong><em>seqname</em></strong> — Name (ID) of the chromosome, scaffold, or contig</li>
+<li><em>source</em> — Name of the program that generated this feature, or the data source (database or project name)</li>
+<li><strong><em>feature</em></strong> — Name of the feature type name, e.g.&nbsp;gene, exon, intron, CDS</li>
+<li><strong><em>start</em></strong> — Start position of the feature (with sequence numbering starting at 1)</li>
+<li><strong><em>end</em></strong> — End position of the feature (with sequence numbering starting at 1)</li>
+<li><em>score</em> — A confidence score for the feature, often absent (<code>.</code>)</li>
+<li><strong><em>strand</em></strong> — Whether the feature is on the <code>+</code> (forward) or <code>-</code> (reverse) strand</li>
+<li><em>frame</em> — <code>0</code>, <code>1</code> or <code>2</code> (or <code>.</code> for no frame). <code>0</code> means the 1st base of the feature is the 1st base of a codon, etc.</li>
+<li><strong><em>attribute</em></strong> — A semicolon-separated list of tag-value pairs with additional information about each feature.</li>
+</ul>
+<p>They also contain a <strong>header section</strong>, whose lines start with a <code>#</code> and contain some metadata for the file.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because GTF/GFF files contain genomic coordinates, it is key that the FASTA and GTF/GFF you are working with correspond to the same assembly. For example, if you want to use an updated assembly FASTA for your focal genome, you’re going to need an updated annotion file as well. On the other hand, it is possible to update just the annotation for the same assembly.</p>
+</div>
+</div>
+</section>
+<section id="exploring-our-gtf-file" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="exploring-our-gtf-file"><span class="header-section-number">5.2</span> Exploring our GTF file</h3>
+<p>Let’s take a look at the first lines of the file with <code>head</code>, which will show us there are five header lines, followed by the tabular part of the file:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>#gtf-version 2.2
+#!genome-build GRCh38.p14
+#!genome-build-accession NCBI_Assembly:GCF_000001405.40
+#!annotation-date 03/15/2023
+#!annotation-source NCBI RefSeq GCF_000001405.40-RS_2023_03
+NC_000001.11    BestRefSeq      gene    11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id ""; db_xref "GeneID:100287102"; db_xref "HGNC:HGNC:37102"; description "DEAD/H-box helicase 11 like 1 (pseudogene)"; gbkey "Gene"; gene "DDX11L1"; gene_biotype "transcribed_pseudogene"; pseudo "true"; 
+NC_000001.11    BestRefSeq      transcript      11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gbkey "misc_RNA"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; 
+NC_000001.11    BestRefSeq      exon    11874   12227   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "1"; 
+NC_000001.11    BestRefSeq      exon    12613   12721   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "2"; 
+NC_000001.11    BestRefSeq      exon    13221   14409   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "3"; </code></pre>
+<p>The final column (“attributes”) contains lots of data so the line width will almost certainly exceed your screen width, and the output you should see in your shell will be line-wrapped.</p>
+<p>It’s easier to see what’s going on on this website, where we get one line for each line of the file and can scroll sideways, or with <code>less -S</code>:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> <span class="at">-S</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<hr>
+<p>One nice trick for if we only want to see the tabular lines (for some files, the header can be quite long), or if we wanted to summarize the data in the tabular lines, is to <strong>omit the header lines using <code>grep -v</code></strong>. The <code>-v</code> option will invert <code>grep</code>’s behavior and only print <strong>non-matching</strong> lines — since only the header lines contain a <code>#</code>, we can use that as the pattern to search for:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"#"</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>NC_000001.11    BestRefSeq      gene    11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id ""; db_xref "GeneID:100287102"; db_xref "HGNC:HGNC:37102"; description "DEAD/H-box helicase 11 like 1 (pseudogene)"; gbkey "Gene"; gene "DDX11L1"; gene_biotype "transcribed_pseudogene"; pseudo "true"; 
+NC_000001.11    BestRefSeq      transcript      11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gbkey "misc_RNA"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; 
+NC_000001.11    BestRefSeq      exon    11874   12227   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "1";</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-cv</span> <span class="st">"#"</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>4684284</code></pre>
+<p>So, there are 4,684,284 annotated features in this file.</p>
+<hr>
+<p>Let’s see if we can find a gene of interest, “RASD1” in this annotation:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"RASD1"</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>NC_000017.11    BestRefSeq      gene    17494437        17496395        .       -       .       gene_id "RASD1"; transcript_id ""; db_xref "GeneID:51655"; db_xref "HGNC:HGNC:15828"; db_xref "MIM:605550"; description "ras related dexamethasone induced 1"; gbkey "Gene"; gene "RASD1"; gene_biotype "protein_coding"; gene_synonym "AGS1"; gene_synonym "DEXRAS1"; gene_synonym "MGC:26290"; 
+NC_000017.11    BestRefSeq      transcript      17494437        17496395        .       -       .       gene_id "RASD1"; transcript_id "NM_001199989.2"; db_xref "GeneID:51655"; gbkey "mRNA"; gene "RASD1"; product "ras related dexamethasone induced 1, transcript variant 2"; transcript_biotype "mRNA"; 
+NC_000017.11    BestRefSeq      exon    17495896        17496395        .       -       .       gene_id "RASD1"; transcript_id "NM_001199989.2"; db_xref "GeneID:51655"; gene "RASD1"; product "ras related dexamethasone induced 1, transcript variant 2"; transcript_biotype "mRNA"; exon_number "1"; 
+NC_000017.11    BestRefSeq      exon    17494437        17495610        .       -       .       gene_id "RASD1"; transcript_id "NM_001199989.2"; db_xref "GeneID:51655"; gene "RASD1"; product "ras related dexamethasone induced 1, transcript variant 2"; transcript_biotype "mRNA"; exon_number "2"; 
+NC_000017.11    BestRefSeq      CDS     17495896        17496181        .       -       0       gene_id "RASD1"; transcript_id "NM_001199989.2"; db_xref "CCDS:CCDS58519.1"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 2 is encoded by transcript variant 2"; product "dexamethasone-induced Ras-related protein 1 isoform 2"; protein_id "NP_001186918.1"; exon_number "1"; 
+NC_000017.11    BestRefSeq      CDS     17495531        17495610        .       -       2       gene_id "RASD1"; transcript_id "NM_001199989.2"; db_xref "CCDS:CCDS58519.1"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 2 is encoded by transcript variant 2"; product "dexamethasone-induced Ras-related protein 1 isoform 2"; protein_id "NP_001186918.1"; exon_number "2"; 
+NC_000017.11    BestRefSeq      start_codon     17496179        17496181        .       -       0       gene_id "RASD1"; transcript_id "NM_001199989.2"; db_xref "CCDS:CCDS58519.1"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 2 is encoded by transcript variant 2"; product "dexamethasone-induced Ras-related protein 1 isoform 2"; protein_id "NP_001186918.1"; exon_number "1"; 
+NC_000017.11    BestRefSeq      stop_codon      17495528        17495530        .       -       0       gene_id "RASD1"; transcript_id "NM_001199989.2"; db_xref "CCDS:CCDS58519.1"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 2 is encoded by transcript variant 2"; product "dexamethasone-induced Ras-related protein 1 isoform 2"; protein_id "NP_001186918.1"; exon_number "2"; 
+NC_000017.11    BestRefSeq      transcript      17494437        17496395        .       -       .       gene_id "RASD1"; transcript_id "NM_016084.5"; db_xref "Ensembl:ENST00000225688.4"; db_xref "GeneID:51655"; gbkey "mRNA"; gene "RASD1"; product "ras related dexamethasone induced 1, transcript variant 1"; tag "MANE Select"; transcript_biotype "mRNA"; 
+NC_000017.11    BestRefSeq      exon    17495896        17496395        .       -       .       gene_id "RASD1"; transcript_id "NM_016084.5"; db_xref "Ensembl:ENST00000225688.4"; db_xref "GeneID:51655"; gene "RASD1"; product "ras related dexamethasone induced 1, transcript variant 1"; tag "MANE Select"; transcript_biotype "mRNA"; exon_number "1"; 
+NC_000017.11    BestRefSeq      exon    17494437        17495684        .       -       .       gene_id "RASD1"; transcript_id "NM_016084.5"; db_xref "Ensembl:ENST00000225688.4"; db_xref "GeneID:51655"; gene "RASD1"; product "ras related dexamethasone induced 1, transcript variant 1"; tag "MANE Select"; transcript_biotype "mRNA"; exon_number "2"; 
+NC_000017.11    BestRefSeq      CDS     17495896        17496181        .       -       0       gene_id "RASD1"; transcript_id "NM_016084.5"; db_xref "CCDS:CCDS11185.1"; db_xref "Ensembl:ENSP00000225688.3"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 1 proprotein is encoded by transcript variant 1"; product "dexamethasone-induced Ras-related protein 1 isoform 1 proprotein"; protein_id "NP_057168.1"; tag "MANE Select"; exon_number "1"; 
+NC_000017.11    BestRefSeq      CDS     17495128        17495684        .       -       2       gene_id "RASD1"; transcript_id "NM_016084.5"; db_xref "CCDS:CCDS11185.1"; db_xref "Ensembl:ENSP00000225688.3"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 1 proprotein is encoded by transcript variant 1"; product "dexamethasone-induced Ras-related protein 1 isoform 1 proprotein"; protein_id "NP_057168.1"; tag "MANE Select"; exon_number "2"; 
+NC_000017.11    BestRefSeq      start_codon     17496179        17496181        .       -       0       gene_id "RASD1"; transcript_id "NM_016084.5"; db_xref "CCDS:CCDS11185.1"; db_xref "Ensembl:ENSP00000225688.3"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 1 proprotein is encoded by transcript variant 1"; product "dexamethasone-induced Ras-related protein 1 isoform 1 proprotein"; protein_id "NP_057168.1"; tag "MANE Select"; exon_number "1"; 
+NC_000017.11    BestRefSeq      stop_codon      17495125        17495127        .       -       0       gene_id "RASD1"; transcript_id "NM_016084.5"; db_xref "CCDS:CCDS11185.1"; db_xref "Ensembl:ENSP00000225688.3"; db_xref "GeneID:51655"; gbkey "CDS"; gene "RASD1"; note "isoform 1 proprotein is encoded by transcript variant 1"; product "dexamethasone-induced Ras-related protein 1 isoform 1 proprotein"; protein_id "NP_057168.1"; tag "MANE Select"; exon_number "2"; </code></pre>
+<p>That worked! We are getting quite a few lines, but these are all features for one single gene (e.g., there is only a single <code>gene</code> feature, in the first line).</p>
+<p><br></p>
+</section>
+<section id="intermezzo-cut-uniq-and-sort" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="intermezzo-cut-uniq-and-sort"><span class="header-section-number">5.3</span> Intermezzo: <code>cut</code>, <code>uniq</code>, and <code>sort</code></h3>
+<p>Use <code>grep</code> and a few new shell commands, we can quickly get some useful information about the GTF file. Let’s learn about <code>cut</code>, <code>sort</code>, and <code>uniq</code> using our metadata file, which has the following content:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Column -t can nicely display tabular files</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="ex">column</span> <span class="at">-t</span> metadata/meta.tsv </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>sample_id       cell_line  variant
+ASPC1_A178V     ASPC1      A178V
+ASPC1_A178V     ASPC1      A178V
+ASPC1_G31V      ASPC1      G31V
+ASPC1_G31V      ASPC1      G31V
+Miapaca2_A178V  Miapaca2   A178V
+Miapaca2_A178V  Miapaca2   A178V
+Miapaca2_G31V   Miapaca2   G31V
+Miapaca2_G31V   Miapaca2   G31V</code></pre>
+<p>First, the <strong><code>cut</code> command can extract columns</strong> from tabular files, and you can use its <code>-f</code> option to specify the column(s) you want to extract — for example, <code>-f 3</code> extracts column 3 and <code>-f 3,5</code> extracts columns 3 and 5:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 3 metadata/meta.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>variant
+A178V
+A178V
+G31V
+G31V
+A178V
+A178V
+G31V
+G31V</code></pre>
+<p>Second, the <code>sort</code> command will sort its input:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 3 metadata/meta.tsv <span class="kw">|</span> <span class="fu">sort</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>A178V
+A178V
+A178V
+A178V
+G31V
+G31V
+G31V
+G31V
+variant</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Other <code>sort</code> functionality
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>While in the example below, we’re sorting a single column, <code>sort</code> can also sort multi-column files on one or more columns, <em>while keeping the rows intact</em>. Additionally, it can sort numerically, in reverse, and much more.</p>
+</div>
+</div>
+<p>Hmmm… maybe it isn’t appropriate to include the header line (<code>variant</code> in the output above). A nice little trick to exclude the first line of a file is <code>tail -n+2</code>:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n+2</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 metadata/meta.tsv <span class="kw">|</span> <span class="fu">sort</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>A178V
+A178V
+A178V
+A178V
+G31V
+G31V
+G31V
+G31V</code></pre>
+<p>Third, <code>uniq</code> will remove <em>consecutive</em> duplicate lines — for that reason, we need to have the entries sorted if we want to remove all duplicates:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n+2</span> metadata/meta.tsv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>A178V
+G31V</code></pre>
+<p>For large input files, it’s most often useful to either simply get a count of the unique values in a column, or a count table showing how many times each value in a column occurs:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n+2</span> metadata/meta.tsv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>2               # (There are 2 unique values in this column)</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This will show how many time each value occurs</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n+2</span> metadata/meta.tsv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>      4 A178V
+      4 G31V</code></pre>
+<p><br></p>
+</section>
+<section id="getting-some-stats-with-cut-uniq-and-grep" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="getting-some-stats-with-cut-uniq-and-grep"><span class="header-section-number">5.4</span> Getting some stats with <code>cut</code>, <code>uniq</code>, and <code>grep</code></h3>
+<p>How many “RASD” genes are in the annotation?</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'gene_id "RASD'</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="st">"gene"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>2</code></pre>
+<p>How many snRNAs are in the annotation?</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">'gene_biotype "snRNA"'</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>172</code></pre>
+<p>How many exon features are in the annotation for lincRNAs?</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"lincRNA"</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="st">"exon"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>8</code></pre>
+<p>Which feature types are present and what are their counts?</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^#"</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f3</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>1835339 CDS
+2291763 exon
+  67127 gene
+ 145185 start_codon
+ 144753 stop_codon
+ 200121 transcript</code></pre>
+<p>How are these features distributed across strands?</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^#"</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f3,7</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code> 916540 CDS     -
+ 918799 CDS     +
+1143757 exon    -
+1148006 exon    +
+  33435 gene    -
+  33692 gene    +
+  71561 start_codon     -
+  73624 start_codon     +
+  71473 stop_codon      -
+  73280 stop_codon      +
+  98976 transcript      -
+ 101145 transcript      +</code></pre>
+<p><br></p>
+</section>
+</section>
+<section id="recap" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="recap"><span class="header-section-number">6</span> Recap</h2>
+<p>TBA</p>
+<p><br></p>
+</section>
+<section id="at-home-reading-raw-data-management" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="at-home-reading-raw-data-management">At-home reading: raw data management</h2>
+<section id="making-your-valuable-data-read-only" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="making-your-valuable-data-read-only"><span class="header-section-number">6.1</span> Making your valuable data read-only</h3>
+<p>Your raw FASTQ data is extremely invaluable as it contains the result of your experiment and was produced by an expensive sequencing process. Even after you’ve produced “clean versions” of these files after quality and adapter trimming, or after you have generated your final gene count tables, you’ll always want to keep these files around. For example, these are the foremost files you need to <strong>make publicly available</strong> when you publish your results (they are typically deposited at the <strong><a href="https://www.ncbi.nlm.nih.gov/sra">NCBI’s SRA</a></strong>), they ensure that your results can be reproduced by yourself and others, and they allow for a modified re-analysis of the data after e.g.&nbsp;new methods or relevant data become available.</p>
+<p>You should therefore keep at least one copy of your FASTQ files in a Project dir (as opposed to a Scratch dir) at OSC — recall that these dirs are being backed up daily by OSC! You’ll also want to keep at least one copy of the data outside of OSC.</p>
+<p>Even with those automatic back-ups and extra copies, it’s still good practice to be careful with your (main) copy of the data at OSC. In the previous session, we learned that file removal with (e.g.) <code>rm</code> is permanent and irreversible, and performing an accidental removal of some of your FASTQ files or the entire dir with a wrong command is not <em>that</em> far-fetched. To make this much less likely to happen, <strong>it’s a good idea to “write-protect” your FASTQ files</strong>.</p>
+<p>First, let’s briefly recap and expand our knowledge of file permissions:</p>
+<ul>
+<li>Having <strong>write permissions</strong> for a file means that you can move, rename, modify, overwrite, or delete it</li>
+<li><strong>Read permissions</strong> allow you to read and copy,</li>
+<li><strong>Execute permissions</strong> allow you to directly execute (run) a file, (e.g.&nbsp;running a script as a command).</li>
+</ul>
+<p>These permissions can be most easily set for three different groups of people:</p>
+<ul>
+<li>The <strong>owner (or “user”)</strong> of the file or dir, which is by default the person that created it. After you have copied or downloaded some FASTQ files, you are the owner of these copies.</li>
+<li>The <strong>group</strong>. When you create a file in the PAS0471 project dir, its “group” will include all members of the OSC project PAS0471.</li>
+<li><strong>Everyone else (“other”)</strong> In the example above, this is all people that can access OSC but are not a member of PAS0471.</li>
+</ul>
+<p>We can see what these permissions are for any file or dir by looking at the <strong>first column of the output of <code>ls -l</code></strong>. Let’s practice write-protection and its consequences with a dummy file — first, we create the dummy file and check the default permissions:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> permission_test_file</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> permission_test_file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code># (Note, the very first dash below is about file _type_, not permissions:)
+ -rw-r--r-- 1 jelmer PAS0471 0 Aug  7 16:27 permission_test_file</code></pre>
+<figure class="figure">
+<p align="left">
+<img src="img/permissions.svg" width="80%" class="figure-img">
+</p>
+</figure>
+<p>The command to set these permissions (read/write/execute) for these groups of people (user/group/others, or everyone together) is <code>chmod</code>. There are multiple ways of using this command, but a common one is along the lines of <code>&lt;who&gt;&lt;operation&gt;&lt;permission&gt;</code>, with e.g.&nbsp;<code>a-w</code> meaning <em>“all minus write”</em> (remove write-permissions for all) and <code>o+r</code> meaning <em>“others plus read”</em> (add read-permissions for others).</p>
+<p>To remove write permission for everyone, including yourself, we would use:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> a-w permission_test_file</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> permission_test_file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code># (Notice that there is no longer a 'w' in the sequence below:)
+-r--r--r-- 1 jelmer PAS0471 0 Aug  7 16:27 permission_test_file</code></pre>
+<p>Now, let’s see what happens when we try to remove this file:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="ex">rm:</span> remove write-protected regular empty file ‘permission_test_file’<span class="pp">?</span> n</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Note that we can <em>still</em> remove this file by answering <code>y</code>, but we will hopefully not act <em>that</em> stupid, and the question will make us reconsider and press <code>n</code> (also, if you made a mistake in a script that you run non-interactively, it will fail to remove write-protected files).</p>
+<p>Finally, let’s actually write-protect our FASTQ files, and the reference genome files:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> a-w data/fastq/<span class="pp">*</span> data/ref/<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Access permissions for directories (Click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>One tricky aspects of file permissions is that to list a directory’s content, you need <em>execute</em> permissions for the dir! This is something to take into account when you want to grant others access to your project e.g.&nbsp;at OSC.</p>
+<p>To set execute permissions <em>only for dirs</em> throughout a dir hierarchy:</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> a+X my_large_dir       <span class="co"># Note the *uppercase* X</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="checking-file-integrity-after-transfer" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="checking-file-integrity-after-transfer"><span class="header-section-number">6.2</span> Checking file integrity after transfer</h3>
+<p>When you receive your FASTQ files from a sequencing facility, a small text file so-called <strong>checksum</strong> will usually accompany your FASTQ files, and have a name along the lines of <code>md5.txt</code>, <code>md5checksums.txt</code>, or <code>shasums.txt</code>. These files contain a sort of digital fingerprints for your FASTQ files, and can be used to check whether your copy of these files is completely intact.</p>
+<p>For example, in the dir with the original FASTQ files for our focal project, the following <code>md5.txt</code> file is present:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /fs/ess/PAS0471/hsiangyin/ILMN_1753\ hsiang\ human\ data <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>total 48G
+-rw-r--r-x 1 hsiangyin0214 PAS2250 3.4K Jul 18 19:12 md5.txt
+-rw-r--r-x 1 hsiangyin0214 PAS2250 1.2G Jul 18 19:11 X10784_Cruz-MonserrateZ_ASPC1_vec_V1N_1_S25_R1_001.fastq.gz
+-rw-r--r-x 1 hsiangyin0214 PAS2250 1.2G Jul 18 19:12 X10784_Cruz-MonserrateZ_ASPC1_vec_V1N_1_S25_R2_001.fastq.gz
+-rw-r--r-x 1 hsiangyin0214 PAS2250 1.3G Jul 18 19:11 X10785_Cruz-MonserrateZ_ASPC1_RASD1_V1N_1_S26_R1_001.fastq.gz
+-rw-r--r-x 1 hsiangyin0214 PAS2250 1.4G Jul 18 19:11 X10785_Cruz-MonserrateZ_ASPC1_RASD1_V1N_1_S26_R2_001.fastq.gz</code></pre>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+More on checksums
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Checksums are extremely compact summaries of files, computed so that even if just one character is changed in the data, the checksum will be different.</p>
+<p>Several algorithms and their associated shell commands can compute checksums. Like in our case, you’ll most often see <em>md5sums</em> checksums accompanying genomic data files, which can be computed and checked with the <code>md5sum</code> command. (The newer <em>SHA-1</em> checksums can be computer and checked with the very similar <code>shasum</code> command.) The checksums contain <em>hexadecimal</em> characters: numbers and the letters a-f.</p>
+<p>We typically compute or check checksums for a file, but we can even do it for a string — the example below demonstrates that the slightest change in a string (or file alike) will generate a completely different checksum:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"bioinformatics is fun"</span> <span class="kw">|</span> <span class="fu">md5sum</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>010b5ebf7e207330de0e3fb0ff17a85a  -</code></pre>
+<div class="sourceCode" id="cb88"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"bioinformatic is fun"</span> <span class="kw">|</span> <span class="fu">md5sum</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>45cc2b76c02b973494954fd664fc0456  -</code></pre>
+</div>
+</div>
+<p>Let’s take a look at our checksums — the file has one row per file and two columns, the first with the checksum and the second with the corresponding file name:</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> /fs/ess/PAS0471/hsiangyin/ILMN_1753\ hsiang\ human\ data/md5.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>54224841f172e016245843d4a8dbd9fd        X10790_Cruz-MonserrateZ_Panc1_vec_V1N_1_S31_R2_001.fastq.gz
+cf22012ae8c223a309cff4b6182c7d62        X10790_Cruz-MonserrateZ_Panc1_vec_V1N_1_S31_R1_001.fastq.gz
+647a4a15c0d55e56dd347cf295723f22        X10797_Cruz-MonserrateZ_Miapaca2_RASD1_V1N_1_S38_R2_001.fastq.gz
+ce5d444f8f9d87d325dbe9bc09ef0470        X10797_Cruz-MonserrateZ_Miapaca2_RASD1_V1N_1_S38_R1_001.fastq.gz
+51bfea4ee102a3ac57520028bf654f01        X10798_Cruz-MonserrateZ_Miapaca2_G31V_V1N_1_S39_R2_001.fastq.gz</code></pre>
+<p>This file was created by the folks at the sequencing facility, and now that we have the data at OSC and are ready to analyze it, we can check if they are still fully intact and didn’t -for example- get incompletely transferred.</p>
+<p>I have done this check for the original files, but this takes a little while, and we can now do so with the subsampled FASTQ files we are working with in these sessions. First, let’s copy a file <code>md5.txt</code> from the <code>demo</code> directory, which has the checksums for the subsampled FASTQ files as I created them:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/md5sums.txt data/fastq/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To check whether the checksums for one or more files in a file correspond to those for the files, we can run <code>mdsum -c &lt;mdsum-file&gt;</code>, and should almost always do so <em>while inside the dir with the files of interest</em>. For example:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> data/fastq</span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="fu">md5sum</span> <span class="at">-c</span> md5sums.txt </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>ASPC1_A178V_R1.fastq.gz: OK
+ASPC1_A178V_R2.fastq.gz: OK
+ASPC1_G31V_R1.fastq.gz: OK
+ASPC1_G31V_R2.fastq.gz: OK
+Miapaca2_A178V_R1.fastq.gz: OK
+Miapaca2_A178V_R2.fastq.gz: OK
+Miapaca2_G31V_R1.fastq.gz: OK
+Miapaca2_G31V_R2.fastq.gz: OK</code></pre>
+<p>If there were any differences, the <code>md5sum</code> command would clearly warn you about them, as you can see in the exercise below.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Making the checksum check fail (Click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Let’s compute a checksum for the <code>README.md</code> file and save it in a file:</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming you went into data/fastq above;</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="co"># you need to be in /fs/ess/PAS0471/$USER/rnaseq-intro</span></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../..</span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a><span class="fu">md5sum</span> README.md <span class="op">&gt;</span> md5sum_for_README.txt</span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> md5sum_for_README.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>d4c4a8df4870f68808553ac0f5484aa3  README.md</code></pre>
+<p>Now, let’s add a line to our <code>README.md</code> that says where the reference genome files are:</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (You'll need single quotes like below, or the shell will interpret the backticks)</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'Files for the GRCh38.p14 human genome are in the `data/ref` dir'</span> <span class="op">&gt;&gt;</span> README.md</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-4"><a href="#cb97-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n3</span> README.md</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>and columns specifying the read direction, sample ID, cell line, and variant.
+
+Files for the GRCh38.p14 human genome are in the `data/ref` dir</code></pre>
+<div class="sourceCode" id="cb99"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">md5sum</span> <span class="at">-c</span> md5sum_for_README.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, let’s check the checksum, and watch it fail:</p>
+<pre class="bash-out"><code>README.md: FAILED
+md5sum: WARNING: 1 computed checksum did NOT match</code></pre>
+</div>
+</div>
+</div>
+<p><br> <br></p>
+
+
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Though long-read technologies like Oxford Nanopore Technologies and especially PacBio are picking up steam, since these can sequence transcripts <em>in full</em>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>These two files <em>can</em> be merged and the resulting FASTQ format is called “interleaved”, but this is not very common practice.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>In some cases, most often when you simply do a lot of sequencing for each sample, you’ll get more than one pair of files: one pair for each “lane” of the sequencer on which the sample was sequenced.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In fact, GTF is identical to GFF v2. But the current GFF version is the slightly different GFF v3, which sometimes has the extension <code>.gff3</code> to make that clear.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">2023, Jelmer Poelstra</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

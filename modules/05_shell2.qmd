@@ -252,7 +252,7 @@ jelmer
 ```
 
 :::{.exercise}
-#### Your Turn {-}
+#### Your Turn: `echo` and environment variables {-}
 
 - Print "Hello there \<user\>" to the screen  
   (i.e., `<user>` should be replaced by your actual username).
@@ -572,7 +572,7 @@ If the destination is:
 :::
 
 :::{.exercise}
-#### Your Turn {-}
+#### Your Turn: Practice with `mv` {-}
 
 In which directory (in terms of a relative path from your working dir)
 would the FASTQ files end up with each of the following commands?
@@ -1020,7 +1020,7 @@ The `cat` (short for con`cat`enate) command will print the full contents of a fi
 It is therefore mostly conventient for smaller files,
 since the contents of very large files will just stream by on your screen.
 
-For example, let's take a look at the `README.md` file[^7] in your working dir:
+For example, let's take a look at the `README.md` file in your working dir:
 
 ```bash
 cat README.md
@@ -1309,3 +1309,5 @@ redirection for Slurm batch jobs.
 - <http://www.ee.surrey.ac.uk/Teaching/Unix/>
 - <https://www.udacity.com/course/linux-command-line-basics--ud595>
 - <http://moo.nac.uci.edu/~hjm/How_Programs_Work_On_Linux.html>
+
+<br> <br>
