@@ -73,5 +73,20 @@
   },
   "modules/removed.qmd": {
     "removed.html": "1b66025c"
+  },
+  "modules/10_examples.qmd": {
+    "10_examples.html": "ffe1ec4b"
+  },
+  "modules/B02_trimgalore.qmd": {
+    "B02_trimgalore.html": "da45b8ef"
+  },
+  "modules/07_scripts.qmd": {
+    "07_scripts.html": "9b5ca586"
+  },
+  "modules/09_slurm.qmd": {
+    "09_slurm.html": "56f9385e"
+  },
+  "modules/08_software.qmd": {
+    "08_software.html": "a63d64d3"
   }
 }

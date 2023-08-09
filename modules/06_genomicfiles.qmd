@@ -20,9 +20,10 @@ knitr::opts_chunk$set(eval = FALSE,
 
 ## Overview & Getting started
 
-In this session, you'll be introduced to three very common types of genomic data
-files, all of which you should have _when you start_ your reference-based RNAseq
-data analysis.
+In this session,
+you'll be introduced to three very common types of genomic data files,
+all of which you should have _when you start_ your analysis of, for example,
+a reference-based RNAseq dataset.
 
 You'll also learn a number of new shell concepts and commands,
 such as commands to work with gzip-compressed files,
@@ -30,21 +31,21 @@ such as commands to work with gzip-compressed files,
 `cut`, `sort`, and `uniq` to summarize tabular data,
 and `wget` to download files from the internet
 (and the at-home reading describes `md5sum` to check data integrity,
-and `chmod` to make your valuable data read-only.)
+and `chmod` to make your valuable data read-only).
 
 We'll talk about the following three types of genomic data file:
 
 - **FASTQ** files:
   When you get your sequence data back, it will be in this format,
   which contains one entry per read,
-  and has _quality scores along with the sequence itself_.
+  and has per-base quality scores along with the sequence itself.
 - **FASTA** files:
-  These are very simple sequence files, where each entry is just
-  a header and a DNA or protein sequence.
+  Simpler sequence files,
+  where each entry contains just a header and a DNA or protein sequence.
   Your reference genome assembly will be in this format.
 - **GTF** (& **GFF**) files:
-  These are files that contain annotations in a tabular format,
-  such as the start and stop positions of each gene.
+  These contain annotations in a tabular format,
+  e.g. the start & stop position of each gene.
 
 You already have some FASTQ files in your practice directory
 (if not, see the instructions below),
@@ -63,13 +64,16 @@ or by clicking on this dir when it appears in the `Welcome` tab.
 :::{.callout-tip collapse="true"}
 ## Starting VS Code at OSC - with a Terminal (Click to expand)
 1. Log in to OSC's OnDemand portal at <https://ondemand.osc.edu>.
+
 2. In the blue top bar, select `Interactive Apps`
    and then near the bottom of the dropdown menu, click `Code Server`.
+
 3. In the form that appears on a new page:
    - Select an appropriate OSC project (here: `PAS0471`)
    - For this session, select `/fs/ess/PAS0471` as the starting directory
    - Make sure that `Number of hours` is at least `2`
    - Click `Launch`.
+
 4. On the next page, once the top bar of the box has turned green
    and says `Runnning`, click `Connect to VS Code`.
 
@@ -80,16 +84,17 @@ or by clicking on this dir when it appears in the `Welcome` tab.
    (Or use one of the keyboard shortcuts:
    <kbd>Ctrl</kbd>+<kbd>\`</kbd> (backtick) or
    <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.)
+
 6. In the `Welcome` tab under `Recent`,
    you should see your `/fs/ess/PAS0471/<user>/rnaseq_intro` dir listed:
-   click on that.
+   click on that to open it.
    Alternatively, use
    &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `Open Folder`
    to open that dir in VS Code.
 :::
 
 :::{.callout-warning collapse="true"}
-#### Don't have your own dir with (e.g.) FASTQ files? (Click to expand)
+#### Don't have your own dir with the data? (Click to expand)
 If you missed the last session, or deleted your `rnaseq_intro` dir entirely,
 run these commands to get a (fresh) copy of all files:
 
@@ -105,6 +110,26 @@ while practicing, then delete the dir before your run the commands above:
 ```bash
 rm -r /fs/ess/PAS0471/$USER/rnaseq_intro
 ```
+
+You should have at least the following files in this dir:
+
+```{.bash-out}
+/fs/ess/PAS0471/demo/202307_rnaseq
+├── data
+│   └── fastq
+│       ├── ASPC1_A178V_R1.fastq.gz
+│       ├── ASPC1_A178V_R2.fastq.gz
+│       ├── ASPC1_G31V_R1.fastq.gz
+│       ├── ASPC1_G31V_R2.fastq.gz
+│       ├── Miapaca2_A178V_R1.fastq.gz
+│       ├── Miapaca2_A178V_R2.fastq.gz
+│       ├── Miapaca2_G31V_R1.fastq.gz
+│       └── Miapaca2_G31V_R2.fastq.gz
+├── metadata
+│   └── meta.tsv
+└── README.md
+```
+
 :::
 
 <br>
@@ -113,13 +138,12 @@ rm -r /fs/ess/PAS0471/$USER/rnaseq_intro
 
 ### The FASTQ format
 
-FASTQ is a very common format for the raw sequence data output by high-throughput
-machines &mdash;
-at least when you have Illumina sequencing done,
+FASTQ is a very common output format of high-throughput sequencing machines &mdash;
+at least from Illumina sequencing,
 you will almost always receive the sequences in this format.
 _Like most genomic data files, these are plain text files_,
 and each sequence that is read by the sequencer (i.e., each "read")
-forms **one FASTQ entry which is represented by four lines**.
+forms **one FASTQ entry represented by four lines**.
 The lines contain, respectively:
 
 1. A **header** that starts with `@` and e.g. uniquely identifies the read
@@ -129,10 +153,12 @@ The lines contain, respectively:
 
 <figure><p align="center">
 <img src=img/fastq_header.png width="85%">
-<figcaption>One entry (read) in a FASTQ file covers 4 lines. <br>Several components of the header line are annotated.</figcaption>
+<figcaption>One entry (read) in a FASTQ file covers 4 lines.
+<br>The header line is annotated, with some of the more useful components highlighted in red.
+<br>For viewing purposes, this read (at only 56 bp) is shorter than regular Illumina read lengths.</figcaption>
 </p></figure>
 
-The "Q" in FASTQ stands for "_quality_", to contrast this file type with FASTA,
+The "Q" in FASTQ stands for "_quality_", to contrast this format with FASTA,
 a more basic and generic format that does not include base quality scores.
 FASTQ files have the extension `.fastq` or `.fq`,
 but they are very commonly gzip-compressed,
@@ -143,7 +169,8 @@ in which case their name ends in `.fastq.gz` or `.fq.gz`.
 
 The bottom line (starting with `JJJJ`) in the figure above contains a
 quality score for each base of the sequence in the second line.
-Specifically, this is a Phred quality score (Q), defined as:
+Specifically, the characters on that line correspond to a numeric Phred quality
+score (Q), which is defined as:
 
 >    **Q = -10 * log10(P)**
 
@@ -159,22 +186,26 @@ interpretation for Illumina data:
 | **30**    | 1 in 1,000   | good      |
 | **40**    | 1 in 10,000  | excellent |
 
-With Illumina data, these Phred quality scores can go up to 62.
-This numeric quality score is represented in FASTQ files not by its number,
-but by an "ASCII character",
-which **allows for a single-character representation** of each possible score.
+With Illumina data, these Phred quality scores typically go up to 42
+(though newer platforms like NovaSeq used _binned_ quality scores).
+**This numeric quality score is represented in FASTQ files _not by the number itself_,**
+**but by a corresponding "ASCII character",**
+**which _allows for a single-character representation_ of each possible score.**
 
 As a consequence, each quality score character can conveniently correspond to 
 (i.e., line up with) a base in the sequence:
-e.g., the 30th base number in a FASTQ line with a DNA sequence will correspond
-to the 30th quality score character in that line.
+e.g., the 30th base number in a DNA sequence line corresponds to the 30th quality
+score character two lines below that.
   
-In practice, you almost never have to check the individual quality scores of bases
+In practice, you almost never have to manually check the quality scores of bases
 in FASTQ files,
 but if you do want to know which character corresponds to which quality,
-[this Illumina webpage has a table](https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm).
+[this Illumina webpage has a table](https://support.illumina.com/help/BaseSpace_OLH_009008/Content/Source/Informatics/BS/QualityScoreEncoding_swBS.htm)
+(though note that Q41 = `J` and Q42 = `K` are missing).
 
 :::
+
+----
 
 Illumina sequencing is by far the most common for RNAseq[^1],
 and can be done in two "modes": **_single-end_** and **_paired-end_**.
@@ -192,14 +223,14 @@ with the first called the **forward read** and the second called the
 </p></figure>
 
 Most commonly for paired-end data,
-forward and reverse reads are placed in separate files[^2].
-As such, you'll usually have two files[^3] for each sample that was sequenced:
+forward and reverse reads are placed in separate files.
+As such, you'll usually have two files[^2] for each sample that was sequenced:
 
 - The file with **forward reads has `_R1`** (or sometimes `_1`) in its name,
   e.g. `ASPC1_A178V_R1.fastq.gz`
 - The file with **reverse reads has `_R2`** (or sometimes `_2`) in its name,
   e.g. `ASPC1_A178V_R2.fastq.gz`
-  (i.e., the name should be identical to that for the forward read,
+  (i.e., the file name should be identical to that for the forward read,
   except for the read direction identifier).
   
 Because the forward and reverse reads are so tightly linked,
@@ -211,10 +242,7 @@ but these are either discarded or saved in separate files.)
 [^1]: Though long-read technologies like Oxford Nanopore Technologies and especially
       PacBio are picking up steam, since these can sequence transcripts _in full_.
 
-[^2]: These two files _can_ be merged and the resulting FASTQ format
-      is called "interleaved", but this is not very common practice.
-
-[^3]: In some cases, most often when you simply do a lot of sequencing for each
+[^2]: In some cases, most often when you simply do a lot of sequencing for each
       sample, you'll get more than one pair of files:
       one pair for each "lane" of the sequencer on which the sample was sequenced.
 
@@ -242,18 +270,21 @@ total 38M
 -rw-r--r-- 1 jelmer PAS0471 5.3M Jul 27 11:53 Miapaca2_G31V_R2.fastq.gz
 ```
 
-The FASTQ files all have a `.gz` extension (and are listed in red),
+The FASTQ files all have a `.gz` extension
+(and should listed in red in your terminal),
 indicating they are "gzip-compressed".
 This is a common type of compression for large genomic files.
 
 Next, we'll take a peak inside one of these files.
-I should note that during actual FASTQ analysis (QC, trimming, alignment),
-you never _have to_ interact with or know the details of the raw contents of the
-file, since we will use bioinformatics programs that take care of this for us.
-That said, it is good to at least have a rough idea what a FASTQ file looks like,
-and how you might get some quick stats on them using basic shell commands.
+It's worth mentioning that during actual FASTQ file analysis (QC, trimming, alignment),
+you're at most very rarely interacting with the raw contents of the file,
+since bioinformatics programs take care of the details.
+While it is therefore possible to run your analyis while treating FASTQ 
+(and other genomic) files as "black boxes",
+_it is helpful to at least have a rough idea of what a FASTQ file looks like_,
+_and how you can get some quick stats on them using basic shell commands_.
 
-Let's consider our options look inside one of these files.
+Let's consider our options to look inside one of these files.
 `cat` will print the contents of the entire file to screen,
 which doesn't sound like a good idea for such a large file.
 Other than `less`, perhaps `head` will work well here?
@@ -268,52 +299,57 @@ head -n 8 data/fastq/ASPC1_A178V_R1.fastq.gz
 Ouch, what was that?!
 What happened here is that we are directly seeing the contents of the
 _compressed_ file, which is simply not human-readable.
+Other shell commands,
+like those that count the number of lines (`wc -l`), or search for text
+(`grep`, see below),
+would also run into trouble with compressed files[^3].
 
-Other shell commands, like those that count the number of lines (`wc -l`),
-or search for text (`grep`, see below), would also run into trouble &mdash;
-and in a possibly worse way because you might overlook the problem:
-`wc -l` _will_ return a count
-yet this is not the number of lines for the uncompressed file,
-whereas a text search may "falsely" return nothing while that text _is_ present
-in the uncompressed file.
+[^3]: And they would fail in a possibly worse way because you might overlook the
+      problem: `wc -l` _will_ return a count yet this is not the number of lines
+      for the uncompressed file,
+      whereas a text search with `grep` may "falsely" return nothing while that
+      text _is_ present in the uncompressed file.
 
 To get around all of this,
 we might be inclined to **uncompress** these files,
 which we could do with the **`gunzip` command**.
 However, uncompressed files take up several times as much disk storage space as
-compressed ones, and this can add up to a lot when we're talking about FASTQ files.
+compressed ones, and this can add up to a lot when we're talking about FASTQ files
+in particular.
 Fortunately, there are other approaches available.
-First of all, any bioinformatics tool worth its salt will accept compressed
-FASTQ files.
+First of all, almost any bioinformatics tool will accept compressed FASTQ files.
 Additionally, the following commands and strategies should help you to do some
 basic exploration of your FASTQ files without uncompressing them.
 
 
 ::: {.callout-note collapse="true"}
-#### Concatenating compressed data
+#### Concatenating compressed files (Click to expand)
 
-When it is okay to concatenate files
-(losing information about the original file origin of the data),
-this can be done very easily in the shell.
+Like with FASTA files,
+multiple FASTQ files can simply be concatenated to produce a valid,
+larger FASTQ file.
 
-Particularly useful is the following,
-for instance if we have two gzipped FASTQ file for the same sample but from
-different Illumina lanes:
+It generally doesn't make sense to concatenate files from different samples,
+but a relatively common situation in which you might want to concatenate FASTQs
+is when you have multiple files for each sample,
+originating _from different Illumina "lanes"_.
+
+In the previous session,
+we saw that it is very easy to concatenate files in the shell using `cat`,
+even if there are many of them and/or the files are very large.
+
+Concatenating _compressed files_ is also really straightforward &mdash;
+the example below would concatenate two files from different Illumina lanes
+(`L001` and `L002`), separately for the forward and reverse reads: 
 
 ```bash
+# Fictional example; note that we concatenate the R1 and R2 files separately
 cat sampleA_L001_R1.fastq.gz sampleA_L002_R1.fastq.gz > sampleA_R1.fastq.gz
-```
-
-Or, to add a second FASTQ file to an existing gzipped file,
-we can simply use `>>`:
-
-```bash
-# Fictional example, say we a compressed FASTQ and a second uncompressed one:
-ls
-#> in.fastq.gz in2.fastq
-gzip -c in2.fastq >> in.fastq.gz
+cat sampleA_L001_R2.fastq.gz sampleA_L002_R2.fastq.gz > sampleA_R2.fastq.gz
 ```
 :::
+
+<br>
 
 #### `less` / `zless`
 
@@ -345,6 +381,8 @@ less -S data/fastq/ASPC1_A178V_R1.fastq.gz
 ```
 :::
 
+<br>
+
 #### `zcat` (and `grep`)
 
 Like the `less`/`zless` pair,
@@ -355,9 +393,8 @@ Of course, we just established that `cat`'s behavior of printing all the content
 of a file isn't great for large FASTQ files.
 But `zcat` is nevertheless very useful for FASTQ files 
 when we combine it with the pipe, `|`.
-
 For example, we can pipe the output of `zcat` to the `head` command to view
-the first 8 lines as follows:
+the first 8 lines (2 reads) as follows:
 
 ```bash
 zcat data/fastq/ASPC1_A178V_R1.fastq.gz | head -n 8
@@ -383,9 +420,9 @@ zcat data/fastq/ASPC1_A178V_R1.fastq.gz | wc -l
 ```
 
 ::: {.exercise}
-#### Your Turn: The number of reads in a FASTQ file
+#### Your Turn: The number of reads in a FASTQ file {-}
 
-- How many reads are in the above FASTQ file?
+- Given the output of the command above, how many reads are in this FASTQ file?
 
 - What line count do you get when you run `wc -l` directly on the compressed file? 
 
@@ -406,14 +443,14 @@ wc -l data/fastq/ASPC1_A178V_R1.fastq.gz
 :::
 
 ::: {.exercise}
-#### Your Turn: Getting the read length (advanced)
+#### Your Turn: Getting the read length (advanced) {-}
 
 What is the read length for these FASTQ files?
 Can you get the answer using the commands we have covered so far?
 
 _Two extra pieces of information:_
 
-- _`wc -c` will return the number of characters in its input._
+- _`wc -c` will return the number of **characters** in its input._
 - _Nearly all reads in Illumina FASTQ files have the same length,_
   _so you can examine the length of a single read to get your answer._
 
@@ -424,7 +461,7 @@ _Two extra pieces of information:_
 
 - Think about how you might be able to use `head` and `tail`,
   each with the `-n` option, and back-to-back,
-  to get a specific line from a file.
+  to get a single, specific line from a file.
 
 - String all four commands together in a single line using the pipe `|`.
 
@@ -454,11 +491,13 @@ One (annoying) little twist here is that `wc -c` will include the newline
 
 **`grep` allows you to search a file for any text or text patterns.**
 By default, it will _return the entire line_ whenever it finds a match,
-and it is often set up (including at OSC) to
-_highlight the matching text itself_ in bold red in its output.
+and it is often set up (including at OSC) to highlight, within that line,
+the matching text in
+<span style="color:red"><b>bold red</b></span> in its output.
 
-For example, let's say we wanted to see which reads in our FASTQ file contain
-the sequence "ACCGATACG":
+For example,
+let's say we wanted to print the sequences in our FASTQ file that contain
+"ACCGATACG":
 
 ```bash
 zcat data/fastq/ASPC1_A178V_R1.fastq.gz | grep "ACCGATACG"
@@ -477,9 +516,6 @@ zcat data/fastq/ASPC1_A178V_R1.fastq.gz | grep "CCAGTA" | wc -l
 1118
 ```
 
-::: {.callout-note}
-#### More `grep`
-
 `grep` has _many_ options &mdash; one of those is `-c`,
 which will directly _count_ matching lines instead of printing them
 (i.e., the command below is an alternative to the command above where we piped
@@ -491,6 +527,11 @@ zcat data/fastq/ASPC1_A178V_R1.fastq.gz | grep -c "CCAGTA"
 ```{.bash-out}
 1118
 ```
+
+<br>
+
+::: {.callout-note}
+#### `zgrep` and other `grep` options
 
 `grep` even has a `zgrep` counterpart for gzip-compressed files,
 so the above can be further shortened by omitting `zcat` and passing the FASTQ
@@ -510,11 +551,11 @@ printing one line before each match (`-B1`) and two lines after it (`-A2`):
 zgrep -B1 -A2 --no-group-separator "CCAGTA" data/fastq/ASPC1_A178V_R1.fastq.gz > CCAGTA.fastq 
 ```
 
+Among many other options,
 `grep` can also search multiple files at once
 (simply pass multiple filenames as arguments like with other commands,
 e.g. using a glob pattern to select them),
 and it can even search directories recursively using the `-R` flag.
-
 :::
 
 <br>
@@ -524,9 +565,10 @@ and it can even search directories recursively using the `-R` flag.
 ### Finding genome files at NCBI
 
 To analyze our RNAseq data,
-we'll need two files related to our **reference genome**,
-which is the genome that we want to align our reads to,
-and whose gene annotations will form the basis of the gene counts that we'll get.
+we'll need two files related to our **reference genome**.
+This is the genome that we will align our reads to,
+and whose gene annotations will form the basis of the gene counts we'll
+eventually get.
 
 Specifically, we'll need the **nucleotide FASTA** file with the genome assembly itself,
 and a **GTF file**,
@@ -554,8 +596,8 @@ of the page.
 
 On the [FTP site](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/),
 we can first right-click on 
-"GCF_000001405.40_GRCh38.p14_genomic.fna.gz" and then click "Copy link address."
-(The URL is also shown in the command box below.)
+`GCF_000001405.40_GRCh38.p14_genomic.fna.gz` and then click "_Copy link address_".
+(The URL to this file is also shown in the command box below.)
 
 <br>
 
@@ -585,17 +627,16 @@ Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
 65% [============================================================================================>                                                   ] 633,806,848 97.7MB/s 
 ```
 
-The `wget` command is quite chatty,
-as you can see above and as you should see in your shell when you execute the command,
+The `wget` command is quite chatty, as you can see above,
 and its output to the screen includes a progress bar for the download.
 
 Next, let's download one of the annotation files.
-On the NCBI genome assembly FTP page, both a GFF and a GTF file is available.
+On the NCBI genome assembly FTP page, both a GFF and a GTF file are available.
 These are two very similar formats that contain the same data.
 For our specific analysis workflow, the GTF format is preferred,
 so we will download the GTF file &mdash;
-right-click on "GCF_000001405.40_GRCh38.p14_genomic.gtf.gz" and copy the link
-address.
+right-click on `GCF_000001405.40_GRCh38.p14_genomic.gtf.gz`
+and copy the link address.
 
 ```bash
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.gtf.gz
@@ -608,22 +649,24 @@ Next, let's see if the files are indeed in our current working dir:
 ls -lh 
 ```
 ```{.bash-out}
-# Output should include:
+# (Output should include:)
 -rw-r--r-- 1 jelmer PAS0471 928M Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.fna.gz
 -rw-r--r-- 1 jelmer PAS0471  49M Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.gtf.gz
 ```
 
 <br>
 
-### Unzipping and renaming the genome files
+### Uncompressing and renaming the genome files
 
 Both the FASTA and the GTF file are gzip-compressed.
-While it's preferable to keep FASTQ files compressed,
-since they are especially large and there are typically many of them,
+While it's preferable to keep FASTQ files compressed (as mentioned above),
 it's often more convenient to store your reference genome files as uncompressed
-files.
+files[^4].
 
-We can unzip them simply as follows
+[^4]: They don't take up as much space, and bioinformatics tools regularly
+      expect them be uncompressed.
+
+We can uncompress/unzip them simply as follows
 (notice the subsequent increase in file size in the `ls` output):
 
 ```bash
@@ -634,7 +677,7 @@ gunzip GCF_000001405.40_GRCh38.p14_genomic.gtf.gz
 ls -lh
 ```
 ```{.bash-out}
-# Output should include:
+# (Output should include:)
 -rw-r--r-- 1 jelmer PAS0471 3.2G Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.fna
 -rw-r--r-- 1 jelmer PAS0471 1.6G Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.gtf
 ```
@@ -642,12 +685,13 @@ ls -lh
 We'll also want to move these files to a dedicated directory.
 And while this is not necessary,
 it will be convenient for our purposes to shorten their file names while
-retaining the necessary identifying information (the RefSeq (GCF) number).
+retaining the necessary identifying information (the "GCF_" RefSeq number).
 
-After creating a directory, we can move and rename at once as follows:
+After creating a directory, we can move and rename the files at once as follows:
 
 ```bash
 mkdir -p data/ref
+
 mv -v GCF_000001405.40_GRCh38.p14_genomic.fna data/ref/GCF_000001405.40.fna
 mv -v GCF_000001405.40_GRCh38.p14_genomic.gtf data/ref/GCF_000001405.40.gtf
 ```
@@ -687,9 +731,9 @@ Like FASTQ files, each entry contains a **header** and the **sequence** itself, 
 - Because the individual sequences in a FASTA file can be very long,
   **sequences are often not on a single line**,
   but may be spread across multiple/many lines with some fixed width,
-  say 50 or 80 characters. (As such, line counts are not that informative.)
+  say 50 or 80 characters. (As such, line counts are not that informative!)
 
-_Generic_ FASTA file extensions are `.fasta` and `.fa`,
+_Generic_ FASTA file **extensions** are `.fasta` and `.fa`,
 but also used are extensions that explicitly indicate whether the sequences are
 _nucleotides_ (`.fna`, like our downloaded genome assembly file)
 or _amino acids_ (`.faa`).
@@ -698,7 +742,7 @@ or _amino acids_ (`.faa`).
 
 ### Exploring our FASTA file
  
-Let's take a look at our reference genome nucleotide FASTA file:
+Let's take a look at the first lines of our reference genome FASTA:
 
 ```bash
 head data/ref/GCF_000001405.40.fna
@@ -722,6 +766,7 @@ We can also see that the sequence for each entry is spread across multiple lines
 with a line width of 80 characters:
 
 ```bash
+# 'head -n 2 | tail -n 1' prints the second line; 'wc -c' counts characters
 head -n 2 data/ref/GCF_000001405.40.fna | tail -n 1 | wc -c
 ```
 ```{.bash-out}
@@ -735,8 +780,30 @@ less data/ref/GCF_000001405.40.fna
 # (Remember: press 'q' to quit less)
 ```
 
-Finally, we can check how many sequences we have in this file by
-simply counting the number of lines with a `>` (which is only allowed in the headers):
+-----
+
+We can also look at all or some of the entry headers by `grep`ing for `>`
+(which is only allowed in the header) &mdash;
+in this file, these represent the scaffolds:
+
+```bash
+grep ">" data/ref/GCF_000001405.40.fna | head
+```
+```{.bash-out}
+>NC_000001.11 Homo sapiens chromosome 1, GRCh38.p14 Primary Assembly
+>NT_187361.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG1_UNLOCALIZED
+>NT_187362.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG2_UNLOCALIZED
+>NT_187363.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG3_UNLOCALIZED
+>NT_187364.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG4_UNLOCALIZED
+>NT_187365.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG5_UNLOCALIZED
+>NT_187366.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG6_UNLOCALIZED
+>NT_187367.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG7_UNLOCALIZED
+>NT_187368.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG8_UNLOCALIZED
+>NT_187369.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG9_UNLOCALIZED
+```
+
+Finally, let's count the number of scaffolds
+simply by counting the number of lines with a `>`:
 
 ```bash
 # (This will take several seconds)
@@ -753,13 +820,12 @@ Does this match with what the NCBI website told us?
 ## Annotation files (GTF/GFF) & `cut`/`sort`/`uniq`
 
 Our reference genome _annotation_ is stored in the GTF format,
-so we'll also learn more about this format and take a look at our own file.
+so we'll learn about this format, too, and take a look at our own file.
 
 ### The GTF format
 
-The GTF format and the _very_ similar GFF format[^5]
-are **tabular** files,
-with one row for each individual "genomic feature"
+The GTF format and the very similar GFF format[^5] are **tabular** files,
+with one row for each individual "**genomic feature**"
 (gene, exon, intron, etc.)
 that has been annotated in the genome,
 and with columns that contain information like the genomic coordinates of the 
@@ -769,8 +835,8 @@ features.
       But the current GFF version is the slightly different GFF v3,
       which sometimes has the extension `.gff3` to make that clear.
 
-See the small sample below, where a header line with column names has been
-manually added for educational purposes:
+See the small sample below,
+with an added header line with column names for clarity:
 
 ```{.bash-out-solo}
 seqname     source  feature start   end     score  strand  frame    attributes
@@ -781,12 +847,12 @@ NC_000001   RefSeq  exon    11874   12227   .       +       .       gene_id "DDX
 Here are some more details on what's in each column,
 with the more important/interesting columns in bold:
 
-- **_seqname_** &mdash; Name (ID) of the chromosome, scaffold, or contig
-- _source_ &mdash; Name of the program that generated this feature, or the data source (database or project name)
-- **_feature_** &mdash; Name of the feature type name, e.g. gene, exon, intron, CDS
-- **_start_** &mdash; Start position of the feature (with sequence numbering starting at 1)
-- **_end_** &mdash; End position of the feature (with sequence numbering starting at 1)
-- _score_ &mdash; A confidence score for the feature, often absent (`.`)
+- **_seqname_** &mdash; Name of the chromosome, scaffold, or contig
+- _source_ &mdash; Name of the program that generated this feature, or the data source (e.g. database)
+- **_feature_** &mdash; Name of the feature type, e.g. "gene", "exon", "intron", "CDS"
+- **_start_** &mdash; Start position of the feature (sequence numbering starts at 1; start position is included)
+- **_end_** &mdash; End position of the feature (end position is also included)
+- _score_ &mdash; A confidence score for the feature, often absent (in which case it is `.`)
 - **_strand_** &mdash; Whether the feature is on the `+` (forward) or `-` (reverse) strand
 - _frame_ &mdash; `0`, `1` or `2` (or `.` for no frame). `0` means the 1st base of the feature is the 1st base of a codon, etc.
 - **_attribute_** &mdash; A semicolon-separated list of tag-value pairs with additional information about each feature.
@@ -795,19 +861,22 @@ They also contain a **header section**,
 whose lines start with a `#` and contain some metadata for the file.
 
 ::: {.callout-warning}
+#### Annotation and assembly versions
 Because GTF/GFF files contain genomic coordinates,
-it is key that the FASTA and GTF/GFF you are working with correspond to the same
-assembly.
+it is essential that the FASTA and GTF/GFF you are working with correspond
+to the same assembly.
 For example, if you want to use an updated assembly FASTA for your focal genome,
-you're going to need an updated annotion file as well.
-On the other hand, it is possible to update just the annotation for the same
-assembly.
+you're going to need an updated annotation file as well.
+(On the other hand, it is possible to update just the annotation for the same
+assembly.)
 :::
+
+<br>
 
 ### Exploring our GTF file
 
 Let's take a look at the first lines of the file with `head`,
-which will show us there are five header lines,
+which shows us that there are five header lines,
 followed by the tabular part of the file:
 
 ```bash
@@ -829,9 +898,8 @@ NC_000001.11    BestRefSeq      exon    13221   14409   .       +       .       
 The final column ("attributes") contains lots of data so the line width will almost
 certainly exceed your screen width,
 and the output you should see in your shell will be line-wrapped.
-
-It's easier to see what's going on on this website,
-where we get one line for each line of the file and can scroll sideways,
+It's easier to see what's going on on this website
+(where we get one line for each line of the file and can scroll sideways),
 or with `less -S`:
 
 ```bash
@@ -857,14 +925,15 @@ NC_000001.11    BestRefSeq      transcript      11874   14409   .       +       
 NC_000001.11    BestRefSeq      exon    11874   12227   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "1";
 ```
 
+This will also allow us to count the number of annotated features in the genome
+(4,684,284):
+
 ```bash
 grep -cv "#" data/ref/GCF_000001405.40.gtf
 ```
 ```{.bash-out}
 4684284
 ```
-
-So, there are 4,684,284 annotated features in this file.
 
 -----
 
@@ -893,19 +962,19 @@ NC_000017.11    BestRefSeq      stop_codon      17495125        17495127        
 
 That worked!
 We are getting quite a few lines, but these are all features for one single 
-gene (e.g., there is only a single `gene` feature, in the first line).
+gene (there is only a single `gene` feature, in the first line).
 
 <br>
 
 ### Intermezzo: `cut`, `uniq`, and `sort`
 
-Use `grep` and a few new shell commands,
+Using more `grep` as well as a few new shell commands,
 we can quickly get some useful information about the GTF file.
 Let's learn about `cut`, `sort`, and `uniq` using our metadata file,
 which has the following content:
 
 ```bash
-# Column -t can nicely display tabular files
+# (Column -t is useful for displaying tabular files with columns aligned)
 column -t metadata/meta.tsv 
 ```
 ```{.bash-out}
@@ -920,7 +989,7 @@ Miapaca2_G31V   Miapaca2   G31V
 Miapaca2_G31V   Miapaca2   G31V
 ```
 
-First, the **`cut` command can extract columns** from tabular files,
+First, **the `cut` command** can extract columns from tabular files,
 and you can use its `-f` option to specify the column(s) you want to extract
 &mdash; for example,
 `-f 3` extracts column 3 and `-f 3,5` extracts columns 3 and 5:
@@ -940,7 +1009,7 @@ G31V
 G31V
 ```
 
-Second, the `sort` command will sort its input:
+Second, **the `sort` command** will sort its input:
 
 ```bash
 cut -f 3 metadata/meta.tsv | sort
@@ -967,10 +1036,10 @@ Additionally, it can sort numerically, in reverse, and much more.
 
 Hmmm... maybe it isn't appropriate to include the header line
 (`variant` in the output above).
-A nice little trick to exclude the first line of a file is `tail -n+2`:
+A nice little trick to exclude the first line of a file is `tail -n +2`:
 
 ```bash
-tail -n+2 | cut -f 3 metadata/meta.tsv | sort
+tail -n +2 | cut -f 3 metadata/meta.tsv | sort
 ```
 ```{.bash-out}
 A178V
@@ -983,31 +1052,34 @@ G31V
 G31V
 ```
 
-Third, `uniq` will remove _consecutive_ duplicate lines &mdash;
+Third, **the `uniq` command** will remove _consecutive_ duplicate lines &mdash;
 for that reason, we need to have the entries sorted if we want to remove all
 duplicates:
 
 ```bash
-tail -n+2 metadata/meta.tsv | cut -f 3 | sort | uniq
+tail -n +2 metadata/meta.tsv | cut -f 3 | sort | uniq
 ```
 ```{.bash-out}
 A178V
 G31V
 ```
 
-For large input files, it's most often useful to either simply get a count of
-the unique values in a column,
-or a count table showing how many times each value in a column occurs:
+For large input files, it's most often useful to either:
+
+- Simply get the number of unique values in a column by piping into `wc -l`:
 
 ```bash
-tail -n+2 metadata/meta.tsv | cut -f 3 | sort | uniq | wc -l
+tail -n +2 metadata/meta.tsv | cut -f 3 | sort | uniq | wc -l
 ```
 ```{.bash-out}
-2               # (There are 2 unique values in this column)
+2
 ```
+
+- Get a "count table" showing how many times each value in a column occurs
+  using `uniq`'s `-c` option:
+
 ```bash
-# This will show how many time each value occurs
-tail -n+2 metadata/meta.tsv | cut -f 3 | sort | uniq -c
+tail -n +2 metadata/meta.tsv | cut -f 3 | sort | uniq -c
 ```
 ```{.bash-out}
       4 A178V
@@ -1016,7 +1088,7 @@ tail -n+2 metadata/meta.tsv | cut -f 3 | sort | uniq -c
 
 <br>
 
-### Getting some stats with `cut`, `uniq`, and `grep`
+### Getting GTF summary stats with `cut`, `uniq`, and `grep`
 
 How many "RASD" genes are in the annotation?
 
@@ -1036,15 +1108,6 @@ grep -c 'gene_biotype "snRNA"' data/ref/GCF_000001405.40.gtf
 172
 ```
 
-How many exon features are in the annotation for lincRNAs?
-
-```bash
-grep "lincRNA" data/ref/GCF_000001405.40.gtf | grep -c "exon"
-```
-```{.bash-out}
-8
-```
-
 Which feature types are present and what are their counts?
 
 ```bash
@@ -1059,7 +1122,37 @@ grep -v "^#" data/ref/GCF_000001405.40.gtf | cut -f3 | sort | uniq -c
  200121 transcript
 ```
 
-How are these features distributed across strands?
+:::{.exercise}
+#### Your turn: more GTF exploration {-}
+
+- How many features are derived from each of the annotation sources (column 2)?
+
+<details><summary>Solution</summary>
+
+```bash
+grep -v "^#" $gtf | cut -f 2 | sort | uniq -c
+```
+```{.bash-out}
+2141089 BestRefSeq
+  11308 BestRefSeq%2CGnomon
+   2955 cmsearch
+  21999 Curated Genomic
+2504737 Gnomon
+    150 RefSeq
+   2050 tRNAscan-SE
+```
+</details>
+
+- Above, we got counts of features by type (gene, exon, etc., in column 3).
+  Now, get separate counts of each feature type on each _strand_.
+
+<details><summary>Hint</summary>
+The only thing you need to do differently compared to a single-column summary
+is to select two columns in your `cut` command
+(`uniq` will then automatically process the two columns).
+</details>
+
+<details><summary>Solution</summary>
 
 ```bash
 grep -v "^#" data/ref/GCF_000001405.40.gtf | cut -f3,7 | sort | uniq -c
@@ -1078,11 +1171,26 @@ grep -v "^#" data/ref/GCF_000001405.40.gtf | cut -f3,7 | sort | uniq -c
   98976 transcript      -
  101145 transcript      +
 ```
+</details>
+:::
+
 <br>
 
 ## Recap
 
-TBA
+We covered a lot of ground on this page &mdash;
+now, you hopefully:
+
+- Understand the purpose and structure of FASTQ, FASTA, and GTF/GFF files.
+- Know how you can download reference genome files from NCBI directly to OSC
+  (or elsewhere, with `wget`)
+- Know how to view gzip-compressed files and how to uncompress them 
+- Know how to use shell commands for some quick explorations of the contents of
+  these genomic files.
+
+The at-home reading below will cover how you can make important data read-only,
+and how you can check whether your data files were not accidentally modified
+upon transfer.
 
 <br>
 
@@ -1115,28 +1223,28 @@ we learned that file removal with (e.g.) `rm` is permanent and irreversible,
 and performing an accidental removal of some of your FASTQ files or the entire dir
 with a wrong command is not _that_ far-fetched.
 To make this much less likely to happen,
-**it's a good idea to "write-protect" your FASTQ files**.
+**it's a good idea to "write-protect" your FASTQ files**
+(or, phrased differently, to make them "read-only").
 
 First, let's briefly recap and expand our knowledge of file permissions:
 
-- Having **write permissions** for a file means that you can move, rename, modify,
-  overwrite, or delete it
-- **Read permissions** allow you to read and copy,
-- **Execute permissions** allow you to directly execute (run) a file,
+- **Read permissions** allow you to read and copy files/dirs
+- **Write permissions** allow you to move, rename, modify, overwrite, or delete
+- _Execute permissions_ allow you to directly execute (run) a file,
   (e.g. running a script as a command).
 
 These permissions can be most easily set for three different groups of people:
 
-- The **owner (or "user")** of the file or dir,
-  which is by default the person that created it.
-  After you have copied or downloaded some FASTQ files,
+- **Owner (or "user")** &mdash;
+  By default, this the person that created the file or dir.
+  Also, after you have copied or downloaded some FASTQ files, for example,
   you are the owner of these copies.
-- The **group**.
+- **Group** &mdash;
   When you create a file in the PAS0471 project dir, its "group" will include
   all members of the OSC project PAS0471.
-- **Everyone else ("other")**
+- **Other** &mdash;
   In the example above,
-  this is all people that can access OSC but are not a member of PAS0471.
+  anyone with access to OSC that is not a member of PAS0471.
 
 We can see what these permissions are for any file or dir by looking at the
 **first column of the output of `ls -l`**.
@@ -1155,14 +1263,16 @@ ls -l permission_test_file
 
 <figure><p align="left"><img src=img/permissions.svg width="80%"></p></figure>
 
-The command to set these permissions (read/write/execute) for these groups
-of people (user/group/others, or everyone together) is `chmod`.
+The command to set (read/write/execute) permissions for these categories of people
+(user/group/others, or everyone together) is `chmod`.
 There are multiple ways of using this command,
-but a common one is along the lines of `<who><operation><permission>`,
-with e.g. `a-w` meaning _"all minus write"_ (remove write-permissions for all)
-and `o+r` meaning _"others plus read"_ (add read-permissions for others).
+but a common one is along the lines of `chmod <who><operation><permission>`,
+with e.g.:
 
-To remove write permission for everyone, including yourself, we would use:
+- `chmod a-w` meaning _"all minus write"_: remove write-permissions for all
+- `chmod o+r` meaning _"others plus read"_: add read-permissions for others.
+
+To remove write-permission for everyone, including yourself, we would use:
 
 ```bash
 chmod a-w permission_test_file
@@ -1177,13 +1287,16 @@ ls -l permission_test_file
 Now, let's see what happens when we try to remove this file:
 
 ```bash
+rm permission_test_file
+```
+```{.bash-out}
 rm: remove write-protected regular empty file ‘permission_test_file’? n
 ```
 
 Note that we can _still_ remove this file by answering `y`,
-but we will hopefully not act _that_ stupid,
+but we will hopefully not act _that_ carelessly,
 and the question will make us reconsider and press `n`
-(also, if you made a mistake in a script that you run non-interactively,
+(also, if you made a mistake in a script that you run _non-interactively_,
 it will fail to remove write-protected files).
 
 Finally, let's actually write-protect our FASTQ files,
@@ -1196,9 +1309,10 @@ chmod a-w data/fastq/* data/ref/*
 ::: {.callout-warning collapse="true"}
 #### Access permissions for directories (Click to expand)
 One tricky aspects of file permissions is that to list a directory's content,
-you need *execute* permissions for the dir!
+you need *execute* permissions for the dir
+(and not read permissions as you might have expected)!
 This is something to take into account when you want to grant others
-access to your project e.g. at OSC.
+access to a directory at OSC.
 
 To set execute permissions *only for dirs* throughout a dir hierarchy:
 ```sh
@@ -1211,11 +1325,16 @@ chmod -R a+X my_large_dir       # Note the *uppercase* X
 ### Checking file integrity after transfer
 
 When you receive your FASTQ files from a sequencing facility,
-a small text file so-called **checksum** will usually accompany your FASTQ files,
-and have a name along the lines of
+a small text file will usually accompany your FASTQ files,
+and will have a name along the lines of
 `md5.txt`, `md5checksums.txt`, or `shasums.txt`.
-These files contain a sort of digital fingerprints for your FASTQ files,
-and can be used to check whether your copy of these files is completely intact.
+
+Such a file contains so-called **checksums**,
+a sort of digital fingerprints for your FASTQ files,
+which can be used to **check whether your copy of these files is completely intact**.
+Checksums are extremely compact summaries of files,
+computed so that even if just one character is changed in the data,
+the checksum will be different.
 
 For example, in the dir with the original FASTQ files for our focal project,
 the following `md5.txt` file is present:
@@ -1234,17 +1353,14 @@ total 48G
 
 ::: {.callout-note}
 #### More on checksums
-Checksums are extremely compact summaries of files,
-computed so that even if just one character is changed in the data,
-the checksum will be different.
-
 Several algorithms and their associated shell commands can compute checksums.
 Like in our case, you'll most often see _md5sums_ checksums accompanying
 genomic data files,
-which can be computed and checked with the `md5sum` command.
-(The newer _SHA-1_ checksums can be computer and checked with the very
-similar `shasum` command.)
-The checksums contain _hexadecimal_ characters: numbers and the letters a-f.
+which can be computed and checked with the `md5sum` command
+(the newer _SHA-1_ checksums can be computer and checked with the very
+similar `shasum` command).
+
+Checksums consist of _hexadecimal_ characters: numbers and the letters a-f.
 
 We typically compute or check checksums for a file,
 but we can even do it for a string &mdash;
@@ -1283,12 +1399,11 @@ ce5d444f8f9d87d325dbe9bc09ef0470        X10797_Cruz-MonserrateZ_Miapaca2_RASD1_V
 This file was created by the folks at the sequencing facility,
 and now that we have the data at OSC and are ready to analyze it,
 we can check if they are still fully intact
-and didn't -for example- get incompletely transferred.
+and didn't &ndash;for example&ndash; get incompletely transferred.
 
 I have done this check for the original files,
-but this takes a little while,
-and we can now do so with the subsampled FASTQ files we are working with in these
-sessions.
+but this takes a little while, and for a quick exercise,
+we can now do so with our subsampled FASTQ files.
 First, let's copy a file `md5.txt` from the `demo` directory,
 which has the checksums for the subsampled FASTQ files as I created them:
 
@@ -1346,19 +1461,19 @@ files are:
 # (You'll need single quotes like below, or the shell will interpret the backticks)
 echo 'Files for the GRCh38.p14 human genome are in the `data/ref` dir' >> README.md
 
-tail -n3 README.md
+tail -n 3 README.md
 ```
 ```{.bash-out}
 and columns specifying the read direction, sample ID, cell line, and variant.
 
 Files for the GRCh38.p14 human genome are in the `data/ref` dir
 ```
-```bash
-md5sum -c md5sum_for_README.txt
-```
 
 Finally, let's check the checksum, and watch it fail:
 
+```bash
+md5sum -c md5sum_for_README.txt
+```
 ```{.bash-out}
 README.md: FAILED
 md5sum: WARNING: 1 computed checksum did NOT match
