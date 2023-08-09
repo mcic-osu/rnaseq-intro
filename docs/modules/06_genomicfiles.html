@@ -276,8 +276,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Genomic data files &amp; data downloading</h1>
-<p class="subtitle lead">And exploring them in the shell, including with <code>grep</code>, <code>cut</code>, <code>sort</code>, <code>uniq</code></p>
+<h1 class="title">Genomic data files</h1>
+<p class="subtitle lead">Downloading &amp; exploring FASTQ, FASTA, and GTF files in the shell, <br> including with <code>grep</code>, <code>cut</code>, <code>sort</code>, and <code>uniq</code></p>
 </div>
 
 
@@ -1030,16 +1030,16 @@ Solution
 <h3 data-number="6.1" class="anchored" data-anchor-id="making-your-valuable-data-read-only"><span class="header-section-number">6.1</span> Making your valuable data read-only</h3>
 <p>Your raw FASTQ data is extremely invaluable as it contains the result of your experiment and was produced by an expensive sequencing process. Even after you’ve produced “clean versions” of these files after quality and adapter trimming, or after you have generated your final gene count tables, you’ll always want to keep these files around. For example, these are the foremost files you need to <strong>make publicly available</strong> when you publish your results (they are typically deposited at the <strong><a href="https://www.ncbi.nlm.nih.gov/sra">NCBI’s SRA</a></strong>), they ensure that your results can be reproduced by yourself and others, and they allow for a modified re-analysis of the data after e.g.&nbsp;new methods or relevant data become available.</p>
 <p>You should therefore keep at least one copy of your FASTQ files in a Project dir (as opposed to a Scratch dir) at OSC — recall that these dirs are being backed up daily by OSC! You’ll also want to keep at least one copy of the data outside of OSC.</p>
-<p>Even with those automatic back-ups and extra copies, it’s still good practice to be careful with your (main) copy of the data at OSC. In the previous session, we learned that file removal with (e.g.) <code>rm</code> is permanent and irreversible, and performing an accidental removal of some of your FASTQ files or the entire dir with a wrong command is not <em>that</em> far-fetched. To make this much less likely to happen, <strong>it’s a good idea to “write-protect” your FASTQ files</strong> (or, phrased differently, to make them “read-only”).</p>
+<p>Even with those automatic back-ups and extra copies, it’s still good practice to be careful with your copy of the data at OSC. In the previous session, we learned that file removal with (e.g.) <code>rm</code> is permanent and irreversible, and performing an accidental removal of some of your FASTQ files or the entire dir with a wrong command is not <em>that</em> far-fetched. To make this much less likely to happen, <strong>it’s a good idea to “write-protect” your FASTQ files</strong> (or, phrased differently, to make them “read-only”).</p>
 <p>First, let’s briefly recap and expand our knowledge of file permissions:</p>
 <ul>
 <li><strong>Read permissions</strong> allow you to read and copy files/dirs</li>
 <li><strong>Write permissions</strong> allow you to move, rename, modify, overwrite, or delete</li>
-<li><em>Execute permissions</em> allow you to directly execute (run) a file, (e.g.&nbsp;running a script as a command).</li>
+<li><em>Execute permissions</em> allow you to directly execute a file (e.g.&nbsp;running a program, or a script as a command).</li>
 </ul>
 <p>These permissions can be most easily set for three different groups of people:</p>
 <ul>
-<li><strong>Owner (or “user”)</strong> — By default, this the person that created the file or dir. Also, after you have copied or downloaded some FASTQ files, for example, you are the owner of these copies.</li>
+<li><strong>Owner (or “user”)</strong> — By default, this the person that created the file or dir. After you have copied or downloaded some FASTQ files, for example, you are the owner of these copies.</li>
 <li><strong>Group</strong> — When you create a file in the PAS0471 project dir, its “group” will include all members of the OSC project PAS0471.</li>
 <li><strong>Other</strong> — In the example above, anyone with access to OSC that is not a member of PAS0471.</li>
 </ul>
@@ -1059,7 +1059,7 @@ Solution
 <li><code>chmod a-w</code> meaning <em>“all minus write”</em>: remove write-permissions for all</li>
 <li><code>chmod o+r</code> meaning <em>“others plus read”</em>: add read-permissions for others.</li>
 </ul>
-<p>To remove write-permission for everyone, including yourself, we would use:</p>
+<p>To remove write-permission for everyone, including yourself, we will use:</p>
 <div class="sourceCode" id="cb81"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> a-w permission_test_file</span>
 <span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> permission_test_file</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1083,9 +1083,10 @@ Access permissions for directories (Click to expand)
 </div>
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>One tricky aspects of file permissions is that to list a directory’s content, you need <em>execute</em> permissions for the dir (and not read permissions as you might have expected)! This is something to take into account when you want to grant others access to a directory at OSC.</p>
+<p>One tricky aspects of file permissions is that to <strong>list</strong> a directory’s content, or to <strong><code>cd</code> into it</strong>, you need <em>execute</em> permissions for the dir (and not read permissions as you might have expected)! This is something to take into account when you want to grant others access to a directory at OSC.</p>
 <p>To set execute permissions <em>only for dirs</em> throughout a dir hierarchy:</p>
 <div class="sourceCode" id="cb86"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-R</span> a+X my_large_dir       <span class="co"># Note the *uppercase* X</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>More intuitive is that when you don’t have write-permissions for a dir, it’s not just that you can’t delete or modify any of the files in it, but you’re also not able to create or copy your own files there. Therefore, if you want someone to obtain their own copy of one of your files, you’ll typically have to get <em>them</em> to run the <code>cp</code> command.</p>
 </div>
 </div>
 </div>
@@ -1096,13 +1097,13 @@ Access permissions for directories (Click to expand)
 <p>When you receive your FASTQ files from a sequencing facility, a small text file will usually accompany your FASTQ files, and will have a name along the lines of <code>md5.txt</code>, <code>md5checksums.txt</code>, or <code>shasums.txt</code>.</p>
 <p>Such a file contains so-called <strong>checksums</strong>, a sort of digital fingerprints for your FASTQ files, which can be used to <strong>check whether your copy of these files is completely intact</strong>. Checksums are extremely compact summaries of files, computed so that even if just one character is changed in the data, the checksum will be different.</p>
 <p>For example, in the dir with the original FASTQ files for our focal project, the following <code>md5.txt</code> file is present:</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /fs/ess/PAS0471/hsiangyin/ILMN_1753\ hsiang\ human\ data <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> /fs/ess/PAS0471/jelmer/assist/2023-08_hy/data/fastq <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>total 48G
--rw-r--r-x 1 hsiangyin0214 PAS2250 3.4K Jul 18 19:12 md5.txt
--rw-r--r-x 1 hsiangyin0214 PAS2250 1.2G Jul 18 19:11 X10784_Cruz-MonserrateZ_ASPC1_vec_V1N_1_S25_R1_001.fastq.gz
--rw-r--r-x 1 hsiangyin0214 PAS2250 1.2G Jul 18 19:12 X10784_Cruz-MonserrateZ_ASPC1_vec_V1N_1_S25_R2_001.fastq.gz
--rw-r--r-x 1 hsiangyin0214 PAS2250 1.3G Jul 18 19:11 X10785_Cruz-MonserrateZ_ASPC1_RASD1_V1N_1_S26_R1_001.fastq.gz
--rw-r--r-x 1 hsiangyin0214 PAS2250 1.4G Jul 18 19:11 X10785_Cruz-MonserrateZ_ASPC1_RASD1_V1N_1_S26_R2_001.fastq.gz</code></pre>
+-rw-r--r-- 1 jelmer PAS0471 3.4K Aug  9 16:33 md5.txt
+-rw-r--r-- 1 jelmer PAS0471 1.2G Aug  9 16:33 X10784_Cruz-MonserrateZ_ASPC1_vec_V1N_1_S25_R1_001.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 1.2G Aug  9 16:33 X10784_Cruz-MonserrateZ_ASPC1_vec_V1N_1_S25_R2_001.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 1.3G Aug  9 16:33 X10785_Cruz-MonserrateZ_ASPC1_RASD1_V1N_1_S26_R1_001.fastq.gz
+-rw-r--r-- 1 jelmer PAS0471 1.4G Aug  9 16:33 X10785_Cruz-MonserrateZ_ASPC1_RASD1_V1N_1_S26_R2_001.fastq.gz</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1113,9 +1114,9 @@ More on checksums
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Several algorithms and their associated shell commands can compute checksums. Like in our case, you’ll most often see <em>md5sums</em> checksums accompanying genomic data files, which can be computed and checked with the <code>md5sum</code> command (the newer <em>SHA-1</em> checksums can be computer and checked with the very similar <code>shasum</code> command).</p>
-<p>Checksums consist of <em>hexadecimal</em> characters: numbers and the letters a-f.</p>
-<p>We typically compute or check checksums for a file, but we can even do it for a string — the example below demonstrates that the slightest change in a string (or file alike) will generate a completely different checksum:</p>
+<p>Several algorithms and their associated shell commands can compute checksums. Like in our case, you’ll most often see <em>md5</em> checksums accompany genomic data files, which can be computed and checked with the <code>md5sum</code> command (the newer <em>SHA-1</em> checksums can be computer and checked with the very similar <code>shasum</code> command).</p>
+<p>Checksums consist of <em>hexadecimal</em> characters only: numbers and the letters a-f.</p>
+<p>We typically compute or check checksums for one or more <em>files</em>, but we can even do it for a <em>string of text</em> — the example below demonstrates that the slightest change in a string (or file alike) will generate a completely different checksum:</p>
 <div class="sourceCode" id="cb89"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"bioinformatics is fun"</span> <span class="kw">|</span> <span class="fu">md5sum</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>010b5ebf7e207330de0e3fb0ff17a85a  -</code></pre>
 <div class="sourceCode" id="cb91"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"bioinformatic is fun"</span> <span class="kw">|</span> <span class="fu">md5sum</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1123,16 +1124,15 @@ More on checksums
 </div>
 </div>
 <p>Let’s take a look at our checksums — the file has one row per file and two columns, the first with the checksum and the second with the corresponding file name:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> /fs/ess/PAS0471/hsiangyin/ILMN_1753\ hsiang\ human\ data/md5.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 4 /fs/ess/PAS0471/jelmer/assist/2023-08_hy/data/fastq/md5.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>54224841f172e016245843d4a8dbd9fd        X10790_Cruz-MonserrateZ_Panc1_vec_V1N_1_S31_R2_001.fastq.gz
 cf22012ae8c223a309cff4b6182c7d62        X10790_Cruz-MonserrateZ_Panc1_vec_V1N_1_S31_R1_001.fastq.gz
 647a4a15c0d55e56dd347cf295723f22        X10797_Cruz-MonserrateZ_Miapaca2_RASD1_V1N_1_S38_R2_001.fastq.gz
-ce5d444f8f9d87d325dbe9bc09ef0470        X10797_Cruz-MonserrateZ_Miapaca2_RASD1_V1N_1_S38_R1_001.fastq.gz
-51bfea4ee102a3ac57520028bf654f01        X10798_Cruz-MonserrateZ_Miapaca2_G31V_V1N_1_S39_R2_001.fastq.gz</code></pre>
+ce5d444f8f9d87d325dbe9bc09ef0470        X10797_Cruz-MonserrateZ_Miapaca2_RASD1_V1N_1_S38_R1_001.fastq.gz</code></pre>
 <p>This file was created by the folks at the sequencing facility, and now that we have the data at OSC and are ready to analyze it, we can check if they are still fully intact and didn’t –for example– get incompletely transferred.</p>
 <p>I have done this check for the original files, but this takes a little while, and for a quick exercise, we can now do so with our subsampled FASTQ files. First, let’s copy a file <code>md5.txt</code> from the <code>demo</code> directory, which has the checksums for the subsampled FASTQ files as I created them:</p>
 <div class="sourceCode" id="cb95"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/md5sums.txt data/fastq/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To check whether the checksums for one or more files in a file correspond to those for the files, we can run <code>mdsum -c &lt;mdsum-file&gt;</code>, and should almost always do so <em>while inside the dir with the files of interest</em>. For example:</p>
+<p>To check whether the checksums for one or more files in a file correspond to those for the files, we can run <code>mdsum -c &lt;mdsum-file&gt;</code>, and should do so <em>while inside the dir with the files of interest</em><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. For example:</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> data/fastq</span>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">md5sum</span> <span class="at">-c</span> md5sums.txt </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>ASPC1_A178V_R1.fastq.gz: OK
@@ -1195,6 +1195,7 @@ md5sum: WARNING: 1 computed checksum did NOT match</code></pre>
 <li id="fn3"><p>And they would fail in a possibly worse way because you might overlook the problem: <code>wc -l</code> <em>will</em> return a count yet this is not the number of lines for the uncompressed file, whereas a text search with <code>grep</code> may “falsely” return nothing while that text <em>is</em> present in the uncompressed file.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>They don’t take up as much space, and bioinformatics tools regularly expect them be uncompressed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>In fact, GTF is identical to GFF v2. But the current GFF version is the slightly different GFF v3, which sometimes has the extension <code>.gff3</code> to make that clear.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>This technically depends on how the file names are shown in the text file with the checksums: if there are just file names without directories (or <code>./&lt;filename&gt;</code>, etc.), you’ll have to be in the dir with the files to run <code>md5sum -c</code>. (This in turn depends on from where the checksums were <em>generated</em>: if you generate them while in the dir with the focal files, which is the only sensible way to do this, that’s how they will be displayed.)<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
