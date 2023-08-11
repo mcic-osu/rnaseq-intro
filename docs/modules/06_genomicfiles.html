@@ -243,6 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#the-fastq-format" id="toc-the-fastq-format" class="nav-link" data-scroll-target="#the-fastq-format"><span class="header-section-number">2.1</span> The FASTQ format</a></li>
   <li><a href="#looking-at-compressed-fastq-files" id="toc-looking-at-compressed-fastq-files" class="nav-link" data-scroll-target="#looking-at-compressed-fastq-files"><span class="header-section-number">2.2</span> Looking at compressed (FASTQ) files</a></li>
+  <li><a href="#finding-text-with-grep-zgrep" id="toc-finding-text-with-grep-zgrep" class="nav-link" data-scroll-target="#finding-text-with-grep-zgrep"><span class="header-section-number">2.3</span> Finding text with <code>grep</code> / <code>zgrep</code></a></li>
   </ul></li>
   <li><a href="#downloading-reference-genome-files" id="toc-downloading-reference-genome-files" class="nav-link" data-scroll-target="#downloading-reference-genome-files"><span class="header-section-number">3</span> Downloading reference genome files</a>
   <ul class="collapse">
@@ -554,8 +555,8 @@ Avoid line-wrapping by <code>less</code>
 </div>
 <p><br></p>
 </section>
-<section id="zcat-and-grep" class="level4" data-number="2.2.2">
-<h4 data-number="2.2.2" class="anchored" data-anchor-id="zcat-and-grep"><span class="header-section-number">2.2.2</span> <code>zcat</code> (and <code>grep</code>)</h4>
+<section id="zcat" class="level4" data-number="2.2.2">
+<h4 data-number="2.2.2" class="anchored" data-anchor-id="zcat"><span class="header-section-number">2.2.2</span> <code>zcat</code></h4>
 <p>Like the <code>less</code>/<code>zless</code> pair, <code>cat</code> has a counterpart that will print the uncompressed contents of a compressed file: <strong><code>zcat</code></strong>.</p>
 <p>Of course, we just established that <code>cat</code>’s behavior of printing all the contents of a file isn’t great for large FASTQ files. But <code>zcat</code> is nevertheless very useful for FASTQ files when we combine it with the pipe, <code>|</code>. For example, we can pipe the output of <code>zcat</code> to the <code>head</code> command to view the first 8 lines (2 reads) as follows:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 8</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -617,7 +618,10 @@ Solution
 <p>One (annoying) little twist here is that <code>wc -c</code> will include the newline “character” in its count: as such, the read length is 102 - 1 = <strong>101</strong>.</p>
 </details>
 </section>
-<hr>
+<p><br></p>
+</section>
+<section id="finding-text-with-grep-zgrep" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="finding-text-with-grep-zgrep"><span class="header-section-number">2.3</span> Finding text with <code>grep</code> / <code>zgrep</code></h3>
 <p><strong><code>grep</code> allows you to search a file for any text or text patterns.</strong> By default, it will <em>return the entire line</em> whenever it finds a match, and it is often set up (including at OSC) to highlight, within that line, the matching text in <span style="color:red"><b>bold red</b></span> in its output.</p>
 <p>For example, let’s say we wanted to print the sequences in our FASTQ file that contain “ACCGATACG”:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"ACCGATACG"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1193,7 +1197,7 @@ md5sum: WARNING: 1 computed checksum did NOT match</code></pre>
 <li id="fn1"><p>Though long-read technologies like Oxford Nanopore Technologies and especially PacBio are picking up steam, since these can sequence transcripts <em>in full</em>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>In some cases, most often when you simply do a lot of sequencing for each sample, you’ll get more than one pair of files: one pair for each “lane” of the sequencer on which the sample was sequenced.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>And they would fail in a possibly worse way because you might overlook the problem: <code>wc -l</code> <em>will</em> return a count yet this is not the number of lines for the uncompressed file, whereas a text search with <code>grep</code> may “falsely” return nothing while that text <em>is</em> present in the uncompressed file.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>They don’t take up as much space, and bioinformatics tools regularly expect them be uncompressed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>They don’t take up as much space, and bioinformatics tools regularly expect them to be uncompressed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>In fact, GTF is identical to GFF v2. But the current GFF version is the slightly different GFF v3, which sometimes has the extension <code>.gff3</code> to make that clear.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>This technically depends on how the file names are shown in the text file with the checksums: if there are just file names without directories (or <code>./&lt;filename&gt;</code>, etc.), you’ll have to be in the dir with the files to run <code>md5sum -c</code>. (This in turn depends on from where the checksums were <em>generated</em>: if you generate them while in the dir with the focal files, which is the only sensible way to do this, that’s how they will be displayed.)<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>

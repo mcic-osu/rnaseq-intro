@@ -383,7 +383,7 @@ less -S data/fastq/ASPC1_A178V_R1.fastq.gz
 
 <br>
 
-#### `zcat` (and `grep`)
+#### `zcat`
 
 Like the `less`/`zless` pair,
 `cat` has a counterpart that will print the uncompressed contents of a compressed
@@ -487,7 +487,9 @@ One (annoying) little twist here is that `wc -c` will include the newline
 </details>
 :::
 
------
+<br>
+
+### Finding text with `grep` / `zgrep`
 
 **`grep` allows you to search a file for any text or text patterns.**
 By default, it will _return the entire line_ whenever it finds a match,
@@ -664,7 +666,7 @@ it's often more convenient to store your reference genome files as uncompressed
 files[^4].
 
 [^4]: They don't take up as much space, and bioinformatics tools regularly
-      expect them be uncompressed.
+      expect them to be uncompressed.
 
 We can uncompress/unzip them simply as follows
 (notice the subsequent increase in file size in the `ls` output):

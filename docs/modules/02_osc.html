@@ -287,7 +287,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="the-ohio-supercomputer-center-osc" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="the-ohio-supercomputer-center-osc"><span class="header-section-number">1.2</span> The Ohio Supercomputer Center (OSC)</h3>
 <p>The Ohio Supercomputer Center (OSC) is a facility provided by the state of Ohio (not The Ohio State University). It has two supercomputers, lots of storage space, and an excellent infrastructure for accessing these resources. At least for folks at OSU, using OSC is currently usually <a href="#administrative-miscellaneae"><strong>free in practice</strong></a>. Having such a good HPC resource available at no cost is not something we should take for granted — at many institutions, academics not only have have to pay for these kinds of resources, but those are often more limited and not as easy to access.</p>
-<p>In <strong>upcoming sessions</strong>, we’ll continue to work at OSC, so you will get a fair bit of experience with using it. We’ll also have specific sessions dedicated to <a href="../modules/03_vscode.html">using VS Code at OSC</a>, <a href="../modules/07_software.html">loading and installing software at OSC</a> and <a href="../modules/08_slurm.html">using the SLURM job scheduler</a>.</p>
+<p>In <strong>upcoming sessions</strong>, we’ll continue to work at OSC, so you will get a fair bit of experience with using it. We’ll also have specific sessions dedicated to <a href="../modules/03_vscode.html">using VS Code at OSC</a>, <a href="07_software.qmd">loading and installing software at OSC</a> and <a href="08_slurm.qmd">using the SLURM job scheduler</a>.</p>
 <p>OSC has <strong>three main websites</strong>:</p>
 <ul>
 <li><a href="https://osc.edu" class="uri">https://osc.edu</a>: OSC’s general website, with lots of information about the supercomputers, the software that’s installed, and how to use OSC.</li>
@@ -470,7 +470,7 @@ Interactive and batch use of compute nodes
 <div class="callout-body-container callout-body">
 <p>Requests for compute node jobs can be made either through the OnDemand website or with commands like <code>sinteractive</code> and <code>sbatch</code>.</p>
 <p>For instance, when we start an RStudio session at OSC, we first have to fill out a little form with such a request, and then RStudio will run on a compute node. This is an example of using a compute node <strong>interactively</strong> — “you” are located on a compute node, and any R command you type will be executed there. More commonly for genomics work, you’ll be using compute nodes <strong>non-interactively, that is, through “batch jobs”</strong>. When doing so, you will write a script in advance and send it to the job scheduler, which will run the script on a compute node that “you” don’t go to at all.</p>
-<p>The session <a href="../modules/08_slurm.html">Compute Jobs with Slurm</a> is dedicated to this topic.</p>
+<p>The session <a href="08_slurm.qmd">Compute Jobs with Slurm</a> is dedicated to this topic.</p>
 </div>
 </div>
 <p><strong>Compute nodes come in different shapes and sizes.</strong> <em>“Standard nodes”</em> are by far the most numerous (e.g., Owens has 648 and Pitzer has 564 of them) and even those vary in size, from 28 cores per node (Owens) to 48 cores per node (the “expansion” part of Pitzer). Some examples of other types of nodes are ones with extra memory (<code>largemem</code> and <code>hugemem</code>) and ones that provide access to GPUs (Graphical Processing Units) rather than CPUs.</p>
@@ -632,8 +632,8 @@ OSC will bill OSC Projects (not individual users), and only for the following tw
 <li><a href="../modules/03_vscode.html"><em>VS Code</em></a></li>
 <li><em>RStudio</em> (TBA)</li>
 </ul></li>
-<li><a href="../modules/07_software.html">Loading and installing command-line software at OSC</a></li>
-<li><a href="../modules/08_slurm.html">Submitting batch jobs using the SLURM scheduler</a></li>
+<li><a href="07_software.qmd">Loading and installing command-line software at OSC</a></li>
+<li><a href="08_slurm.qmd">Submitting batch jobs using the SLURM scheduler</a></li>
 </ul>
 <p>Additionally, there are pages with reference material (see the right side of the top menu bar of this side) on:</p>
 <ul>

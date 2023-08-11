@@ -254,7 +254,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#shell-wildcards" id="toc-shell-wildcards" class="nav-link" data-scroll-target="#shell-wildcards"><span class="header-section-number">3.1</span> Shell wildcards</a></li>
   <li><a href="#using-the-wildcard" id="toc-using-the-wildcard" class="nav-link" data-scroll-target="#using-the-wildcard"><span class="header-section-number">3.2</span> Using the <code>*</code> wildcard</a></li>
-  <li><a href="#common-uses-of-globbing" id="toc-common-uses-of-globbing" class="nav-link" data-scroll-target="#common-uses-of-globbing"><span class="header-section-number">3.3</span> Common uses of globbing</a></li>
+  <li><a href="#everyday-usage-of-globbing" id="toc-everyday-usage-of-globbing" class="nav-link" data-scroll-target="#everyday-usage-of-globbing"><span class="header-section-number">3.3</span> Everyday usage of globbing</a></li>
   </ul></li>
   <li><a href="#viewing-text-files" id="toc-viewing-text-files" class="nav-link" data-scroll-target="#viewing-text-files"><span class="header-section-number">4</span> Viewing text files</a>
   <ul class="collapse">
@@ -266,7 +266,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#plain-redirection-with" id="toc-plain-redirection-with" class="nav-link" data-scroll-target="#plain-redirection-with"><span class="header-section-number">5.1</span> Plain redirection with <code>&gt;</code></a></li>
   <li><a href="#appending-with" id="toc-appending-with" class="nav-link" data-scroll-target="#appending-with"><span class="header-section-number">5.2</span> Appending with <code>&gt;&gt;</code></a></li>
-  <li><a href="#the-power-of-the-unix-shell" id="toc-the-power-of-the-unix-shell" class="nav-link" data-scroll-target="#the-power-of-the-unix-shell"><span class="header-section-number">5.3</span> The power of the Unix shell</a></li>
+  <li><a href="#the-pipe" id="toc-the-pipe" class="nav-link" data-scroll-target="#the-pipe"><span class="header-section-number">5.3</span> The pipe</a></li>
   </ul></li>
   <li><a href="#at-home-reading-reference-pages" id="toc-at-home-reading-reference-pages" class="nav-link" data-scroll-target="#at-home-reading-reference-pages">At-home reading: reference pages</a></li>
   <li><a href="#further-resources" id="toc-further-resources" class="nav-link" data-scroll-target="#further-resources">Further resources</a></li>
@@ -830,46 +830,55 @@ rm: remove regular empty file sandbox/remove_test/a3’? y</code></pre>
 <table class="table">
 <colgroup>
 <col style="width: 20%">
-<col style="width: 38%">
-<col style="width: 40%">
+<col style="width: 39%">
+<col style="width: 39%">
 </colgroup>
 <thead>
 <tr class="header">
 <th>Pattern</th>
-<th>Matches files whose name…</th>
+<th>Matches files whose names…</th>
 <th>Matches in our dir</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td><code>*fastq.gz</code></td>
-<td><strong>Ends in</strong> “.fastq.gz”</td>
+<td><strong>End in</strong> “.fastq.gz”</td>
 <td>All files (but this patterns is useful to select files by extension)</td>
 </tr>
 <tr class="even">
 <td><code>A*</code></td>
-<td><strong>Starts with</strong> a capital “A”</td>
+<td><strong>Start with</strong> a capital “A”</td>
 <td>Files for the ASPC1 samples</td>
 </tr>
 <tr class="odd">
 <td><code>*_R1*</code></td>
-<td><strong>Contains</strong> “_R1”</td>
+<td><strong>Contain</strong> “_R1”</td>
 <td>Files with forward reads</td>
+</tr>
+<tr class="even">
+<td><code>*</code></td>
+<td>Anything<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></td>
+<td>All files</td>
 </tr>
 </tbody>
 </table>
-<p>Note also that because <code>*</code> matches “zero characters” as well, <code>A*</code> would also match a file whose name is simply “A”.</p>
-<p><em>Wildcard expansion</em> (e.g., the expansion of <code>*fastq.gz</code> to all FASTQ files in the working dir) <strong>is done by the shell itself</strong>, and not by a specific command. Try to think about what that means for a second. As a consequence, we can use shell wildcards with any command that takes file names as arguments — for example:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/fastq/A<span class="pp">*</span>R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the above, note that:</p>
+<ul>
+<li><p>Because <code>*</code> matches “zero characters” as well, <code>A*</code> also matches a file whose name is just <code>A</code>, <code>*fastq.gz</code> also matches just <code>fastq.gz</code>, and <code>*_R1*</code> also matches just <code>_R1</code>.</p></li>
+<li><p>As a whole, the expressions with a wildcard need to match the <em>entire</em> filename, which is why, for example, you need <code>*</code>s on <em>both sides</em> of <code>_R1</code> in the last example to match any file that <em>contains</em> this string.</p></li>
+</ul>
+<p>It’s also useful to realize that <em>wildcard expansion</em> (e.g., the expansion of <code>*fastq.gz</code> to all FASTQ files in the working dir) <strong>is done by the shell itself, and not by any specific command.</strong> As a consequence, we can use shell wildcards with any command that takes file names as arguments — for example:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> data/fastq/A<span class="pp">*</span>R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>data/fastq/ASPC1_A178V_R1.fastq.gz  data/fastq/ASPC1_G31V_R1.fastq.gz</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that these are line-counts of the compressed file, not reflecting the # of reads</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> data/fastq/A<span class="pp">*</span>R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/fastq/A<span class="pp">*</span>R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>data/fastq/ASPC1_A178V_R1.fastq.gz  data/fastq/ASPC1_G31V_R1.fastq.gz</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that these are line-counts of the compressed file, not reflecting the # of reads</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="fu">wc</span> <span class="at">-l</span> data/fastq/A<span class="pp">*</span>R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>wc -l data/fastq/A*R1.fastq.gz
   15358 data/fastq/ASPC1_A178V_R1.fastq.gz
   14974 data/fastq/ASPC1_G31V_R1.fastq.gz
   30332 total</code></pre>
-<p>When used in isolation, <code>*</code> matches all files by definition, and can for example be useful if you want to copy the entire <em>contents</em> of a directory into your working dir (recall the exercise in 2.3):</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> data/fastq/<span class="pp">*</span> .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="your-turn-practice-with" class="level4 unnumbered exercise">
 <h4 class="unnumbered anchored" data-anchor-id="your-turn-practice-with">Your Turn: practice with <code>*</code></h4>
 <p>What pattern would you use if you wanted to select:</p>
@@ -887,8 +896,21 @@ Solutions (click here)
 </ul>
 </details>
 </section>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Recursive globbing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>TBA</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -897,25 +919,27 @@ Don’t confuse shell wildcards with <em>regular expressions</em>! (Click to exp
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>For those of you who know some regular expressions from coding in e.g.&nbsp;R, Python, or advanced usage of GUI-based text editors like jEdit: wildcards are <em>conceptually</em> similar, but the <code>*</code> and <code>?</code> symbols don’t have the same meaning, and there are way fewer shell wildcards than regular expression symbols.</p>
-<p>In particular, note that <code>.</code> is not a shell wildcard and thus represents a literal period.</p>
-<p>We <em>can</em> also use regular expressions in the Shell but this is functionality that is built in to several specific commands, like <code>grep</code> and <code>sed</code>, and is not a form of shell expansion.</p>
+<p>For those of you who know some <em><strong>regular expressions</strong></em> from coding in e.g.&nbsp;R, Python, or from advanced usage of GUI-based text editors like jEdit: wildcards are <em>conceptually</em> similar to these, but the <code>*</code> and <code>?</code> symbols don’t have the same meaning, and there are way fewer shell wildcards than regular expression symbols.</p>
+<p>In particular, note that <code>.</code> is not a shell wildcard and thus represents a literal period when globbing.</p>
+<p>We <em>can</em> also use regular expressions in the Shell, but this is functionality included in several specific commands, like <code>grep</code> and <code>sed</code>, and is not a form of shell expansion.</p>
 </div>
 </div>
 </div>
 <p><br></p>
 </section>
-<section id="common-uses-of-globbing" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="common-uses-of-globbing"><span class="header-section-number">3.3</span> Common uses of globbing</h3>
-<p>What can we use this functionality for, other than listing matching files?</p>
-<p>We already saw one <code>cp</code> example above, and indeed, it is very common to use globbing to move (<code>mv</code>), copy (<code>cp</code>), or remove (<code>rm</code>) multiple files at once.</p>
-<p>A few more examples:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-v</span> data/fastq/<span class="pp">*</span>Miapaca<span class="pp">*</span>_R1<span class="pp">*</span> .     <span class="co"># Copy 3 FASTQ files to your working dir </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="everyday-usage-of-globbing" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="everyday-usage-of-globbing"><span class="header-section-number">3.3</span> Everyday usage of globbing</h3>
+<p>It is very common to use globbing to move (<code>mv</code>), copy (<code>cp</code>), or remove (<code>rm</code>) multiple files at once.</p>
+<p>Because a <code>*</code> by itself matches all files, it can for example be useful if you want to copy the entire <em>contents</em> of a directory into your working dir (recall the exercise in 2.3):</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># You can run this if you want, but then remove the copied FASTQ files afterwards</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> data/fastq/<span class="pp">*</span> .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A few more globbing examples:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-v</span> data/fastq/<span class="pp">*</span>Miapaca<span class="pp">*</span>_R1<span class="pp">*</span> .     <span class="co"># Copy 3 FASTQ files to your working dir </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>‘data/fastq/Miapaca2_A178V_R1.fastq.gz’ -&gt; ‘./Miapaca2_A178V_R1.fastq.gz’
 ‘data/fastq/Miapaca2_G31V_R1.fastq.gz’ -&gt; ‘./Miapaca2_G31V_R1.fastq.gz’</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-v</span> <span class="pp">*</span>fastq.gz                  <span class="co"># Remove all FASTQ files in your working dir</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-v</span> <span class="pp">*</span>fastq.gz                  <span class="co"># Remove all FASTQ files in your working dir</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>removed ‘Miapaca2_A178V_R1.fastq.gz’
 removed ‘Miapaca2_G31V_R1.fastq.gz’</code></pre>
 <p>In next sessions, we’ll also use globbing a lot to <em>select files to loop over</em>.</p>
@@ -938,13 +962,14 @@ Viewing files in VS Code
 <div class="callout-body-container callout-body">
 <p>For smaller text files, you might also choose to <strong>open them in the editor pane in VS Code</strong>. You can do so by finding and clicking on them in the Explorer in the side bar. Additionally, when you list files <em>in the shell</em> in VS Code, you can hold <kbd>Ctrl</kbd> (Windows) or <kbd>Command</kbd> (Mac) and then click on a file name (you should see it being underlined before you click)!</p>
 <p>Unlike the shell, VS Code is also able to open image files (e.g.&nbsp;<code>.png</code>, <code>.jpg</code>) and PDFs this way — and as we’ll see later, you can even render HTML files in the editor pane.</p>
+<p>VS Code also handles the viewing of large text files better than most visual text editors, but I would still recommend to mostly view genomic-scale data files in the shell instead.</p>
 </div>
 </div>
 <section id="cat" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="cat"><span class="header-section-number">4.1</span> <code>cat</code></h3>
 <p>The <code>cat</code> (short for con<code>cat</code>enate) command will print the full contents of a file. It is therefore mostly conventient for smaller files, since the contents of very large files will just stream by on your screen.</p>
 <p>For example, let’s take a look at the <code>README.md</code> file in your working dir:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> README.md</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> README.md</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code># README for /fs/ess/PAS0471/demo/202307_rnaseq
 
 This directory contains files from an RNAseq project by the Montserrate-Cruz lab,
@@ -965,7 +990,7 @@ A very simple metadata TSV (tab-separated values) text file is present in
 `metadata/meta.tsv`, with one row per input file,
 and columns specifying the read direction, sample ID, cell line, and variant.</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -974,7 +999,7 @@ and columns specifying the read direction, sample ID, cell line, and variant.</c
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>.md</code> is the extension for “Markdown” files. Markdown is a very simple but still quite powerful text “Markup language” (e.g.&nbsp;HTML and LaTeX being much more complicated ones). This website is also made with a file type that is a Markdown variant.</p>
 <p>But because of Markdown’s simplicity, a Markdown file can look very similar to a plain text file. The only Markdown features used in the README file are backticks around file names, so they will show up in <code>code font</code>, and <code>#</code>, which will create a Level 1 header.</p>
@@ -987,7 +1012,7 @@ and columns specifying the read direction, sample ID, cell line, and variant.</c
 <h3 data-number="4.2" class="anchored" data-anchor-id="head-and-tail"><span class="header-section-number">4.2</span> <code>head</code> and <code>tail</code></h3>
 <p>The twin commands <code>head</code> and <code>tail</code> will print the first and last lines, respectively, of a file — this can be very useful to preview the contents of larger files.</p>
 <p>By default, <code>head</code> and <code>tail</code> will print up to 10 lines of a file:</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> metadata/meta.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> metadata/meta.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>sample_id       cell_line       variant
 ASPC1_A178V     ASPC1   A178V
 ASPC1_A178V     ASPC1   A178V
@@ -998,7 +1023,7 @@ Miapaca2_A178V  Miapaca2        A178V
 Miapaca2_G31V   Miapaca2        G31V
 Miapaca2_G31V   Miapaca2        G31V</code></pre>
 <p>But <code>meta.tsv</code> only has 9 lines, so we got 9 instead. We can use the <code>-n</code> argument to modify the number of lines that is being printed:</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 3 metadata/meta.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 3 metadata/meta.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Miapaca2_A178V  Miapaca2        A178V
 Miapaca2_G31V   Miapaca2        G31V
 Miapaca2_G31V   Miapaca2        G31V</code></pre>
@@ -1010,13 +1035,13 @@ Miapaca2_G31V   Miapaca2        G31V</code></pre>
 <p>Besides scrolling with your mouse, its easiest to move around with up and down arrows and, if you have them, <kbd>PgUp</kbd> and <kbd>PgDn</kbd> (also, <kbd>u</kbd> will move up half a page and <kbd>d</kbd> will move down half a page).</p>
 <p>If you find yourself scrolling down and down to try and reach the end of the file, you can instead press <kbd>G</kbd> to go to the very end right away (and <kbd>g</kbd> to go back to the top).</p>
 <p>Try it with one of the FASTQ files (we’ll go into more detail next time!):</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> data/fastq/ASPC1_A178V_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> data/fastq/ASPC1_A178V_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 </section>
 </section>
 <section id="command-output-redirection" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="command-output-redirection"><span class="header-section-number">5</span> Command output redirection</h2>
-<p>As mentioned earlier, Unix commands nearly always print their output to the screen. But you can also <strong>“redirect” the output</strong> to a file.</p>
+<p>As mentioned earlier, Unix commands nearly always print their output to the screen. But you can also <strong>“redirect” the output</strong> to a file or to another command.</p>
 <section id="plain-redirection-with" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="plain-redirection-with"><span class="header-section-number">5.1</span> Plain redirection with <code>&gt;</code></h3>
 <p>With “<strong><code>&gt;</code></strong>”, we redirect output to a file:</p>
@@ -1024,12 +1049,12 @@ Miapaca2_G31V   Miapaca2        G31V</code></pre>
 <li>If the file doesn’t exist, it will be <em>created</em>.</li>
 <li>If the file does exist, any contents will be <em>overwritten</em>.</li>
 </ul>
-<div class="sourceCode" id="cb72"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"My first line"</span> <span class="op">&gt;</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb73"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"My first line"</span> <span class="op">&gt;</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>My first line</code></pre>
 <p>Of course, redirection works not just with <code>echo</code>, but with every single command (or bioinformatics program) that prints output to screen:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="op">&gt;</span> my_files_on_2023-08-04.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb76"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> my_files_on_2023-08-04.txt    <span class="co"># Use tab completion</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="op">&gt;</span> my_files_on_2023-08-04.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> my_files_on_2023-08-04.txt    <span class="co"># Use tab completion</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>data
 metadata
 my_files_on_20230803.txt
@@ -1040,68 +1065,76 @@ test.txt</code></pre>
 <section id="appending-with" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="appending-with"><span class="header-section-number">5.2</span> Appending with <code>&gt;&gt;</code></h3>
 <p>With “<strong><code>&gt;&gt;</code></strong>”, we <strong>append</strong> the output to a file (that is, it won’t overwrite any existing content like <code>&gt;</code>):</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"My second line"</span> <span class="op">&gt;&gt;</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb79"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"My second line"</span> <span class="op">&gt;&gt;</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>My first line
 My second line</code></pre>
 <p>And to circle back to <code>&gt;</code>, demonstrating how this will overwrite contents:</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"My third line overwrote the first two!"</span> <span class="op">&gt;</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode" id="cb82"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"My third line overwrote the first two!"</span> <span class="op">&gt;</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> test.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>My third line overwrote the first two!</code></pre>
-<div class="callout callout-style-default callout-note callout-titled">
+<p><br></p>
+</section>
+<section id="the-pipe" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="the-pipe"><span class="header-section-number">5.3</span> The pipe</h3>
+<p>A third way of redirecting command output is quite different from the previous two — the <strong><code>|</code> (pipe)</strong> takes the output of one command and “pipes” it as input for a subsequent command.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This will tell us how many files and dirs are in our current working dir</span></span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>6</code></pre>
+<p>In the example above, the output of the <code>ls</code> command (i.e., a list of files and dirs) was not printed to screen but piped to the <code>wc -l</code> command, which then counted the number of lines in the input it received through the pipe.</p>
+<p>This also reveals, then, that <code>wc</code> accepts input in two ways:</p>
+<ol type="1">
+<li>One ore more files, whose names are passed as arguments (<code>wc -l README.md</code>)</li>
+<li>So-called “standard input”, a “stream” of input directly passed to the command, most commonly via the pipe (<code>cat README.md | wc -l</code>).</li>
+</ol>
+<p>And this is true not just for <code>wc</code>, but for almost any shell command that accepts input data to operate on.</p>
+<p>Pipes are incredibly useful because they avoid the need write/read intermediate files — this saves typing and also makes the operation much quicker.</p>
+<p><br></p>
+<div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-The pipe
+The power of the Unix shell
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>There is a third way of redirecting command output: the <strong><code>|</code> (pipe)</strong>, which takes the output of one command and “pipes” it as input for a subsequent command.</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This will tell us how many files and dirs are in our current working dir</span></span>
-<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>6</code></pre>
-<p>Pipes avoids the need write/read files — this saves typing, and not writing/reading also makes the operation much quicker.</p>
-</div>
-</div>
-<p><br></p>
-</section>
-<section id="the-power-of-the-unix-shell" class="level3" data-number="5.3">
-<h3 data-number="5.3" class="anchored" data-anchor-id="the-power-of-the-unix-shell"><span class="header-section-number">5.3</span> The power of the Unix shell</h3>
 <p>Another example, where we combine shell wildcards with output redirection, demonstrates how simple and powerful the Unix shell can be (and why the <code>cat</code> command is named after concatenation).</p>
 <p>Imagine you had a thousand FASTA files in a dir <code>fastas</code>, and wanted to combine all of them, back-to-back, into a single file (“multi-FASTA” files, i.e.&nbsp;FASTA files with multiple sequences, indeed just consist of multiple FASTA entries concatenated). This simple command would do that — and would be very fast even for really large files:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (Fictitious example, you don't have a dir 'fastas')</span></span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> fastas/<span class="pp">*</span>.fa <span class="op">&gt;</span> combined.fa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (Fictitious example, you don't have a dir 'fastas')</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> fastas/<span class="pp">*</span>.fa <span class="op">&gt;</span> combined.fa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Imagine trying to create such a concatenated file in a regular text editor with a graphical user interface!</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Standard out vs standard error (Click to expand)
+“Standard output” vs “standard error” (Click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>While we have not noticed it so far, Unix commands (and many bioinformatics command-line tools alike) actually separate “regular” output (called “<strong>standard out</strong>”) from error messages (“<strong>standard error</strong>”).</p>
-<p>Without redirection, both are printed to screen, so we might never notice. But look what happens when we run <code>ls</code> with a non-existing file name as an argument, and redirect the output:</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> non_existent_file <span class="op">&gt;</span> my_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>While we have not noticed it so far, Unix commands –and many bioinformatics command-line tools alike– actually separate “regular” output (called “<strong>standard output</strong>”) from error messages (“<strong>standard error</strong>”).</p>
+<p>Without redirection, this is not obvious because both types of output are then printed to screen. But look what happens when we run <code>ls</code> with a non-existing file name as an argument, and redirect the output:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> non_existent_file <span class="op">&gt;</span> my_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>ls: cannot access non_existent_file: No such file or directory</code></pre>
-<div class="sourceCode" id="cb89"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> my_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> my_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code> </code></pre>
-<p><strong>The error message was not redirected to the output file at all,</strong> <strong>but only to the screen!</strong></p>
-<p>Or:</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> README.md non_existent_file <span class="op">&gt;</span> another_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>The error message (standard error) was <em>not</em> redirected to the output file,</strong> but printed to the screen!</p>
+<p>Or consider this example:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> README.md non_existent_file <span class="op">&gt;</span> another_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>ls: cannot access non_existent_file: No such file or directory</code></pre>
-<div class="sourceCode" id="cb93"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> another_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> another_file_list.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>-rw-r--r-- 1 jelmer PAS0471 964 Jul 27 17:48 README.md</code></pre>
-<p>In the example above, we had both standard out (the file listing of <code>README.md</code>) and standard error (the error message for <code>non_existent_file</code>), and:</p>
+<p>In the example above, the <code>ls</code> command produced both standard out (the successful file listing of <code>README.md</code>) and standard error (the error message for <code>non_existent_file</code>), and:</p>
 <ul>
-<li>Standard out was redirected to the file</li>
-<li>Standard error was still printed to screen.</li>
+<li>Standard output was redirected to the file</li>
+<li>Standard error was printed to screen.</li>
 </ul>
 <p>Of course, there <em>is</em> also a way to redirect standard error. We’ll at least see this in the context of standard out and standard error redirection for Slurm batch jobs.</p>
 </div>
@@ -1143,6 +1176,7 @@ Standard out vs standard error (Click to expand)
 <li id="fn4"><p>When you use <code>touch</code> on <em>existing</em> files, all it will do is change the timestamp that the file was most recently modified: hence the name of this command.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p><code>-r</code> is a common option name for recursive behaviour among Unix commands (<code>mkdir</code> is an exception with its <code>-p</code>).<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>At least not by default, the person who created the file can change this.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>However, it will not match so-called “hidden files” whose names start with a <code>.</code>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
