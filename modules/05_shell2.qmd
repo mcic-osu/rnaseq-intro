@@ -94,7 +94,7 @@ Below, we'll see a couple particularly useful ones.
 For more, see
 [the keyboard shortcuts reference page on this website](../info/shell_shortcuts.qmd).
 
-#### Command history & faster cursor movement
+#### Command history & faster cursor movement {-}
 
 It's common to re-execute command line expressions,
 and even more common to make slight changes to a previously executed one.
@@ -157,7 +157,7 @@ with `wc -c`.
 </details>
 :::
 
-#### Cancel and kill
+#### Cancel and kill {-}
 
 It is also common to want to **cancel a running command or get out of a "hanging" prompt**,
 and you can do so with **<kbd>Ctrl</kbd>+<kbd>C</kbd>**.
@@ -356,7 +356,7 @@ this is how I usually structure my research project directories:
 mkdir data metadata results scripts sandbox
 ```
 
-#### Recursive `mkdir`
+#### Recursive `mkdir` {-}
 
 By default, `mkdir` does not work recursively:
 it will refuse to make a dir inside a dir that does not (yet) exist.
@@ -409,7 +409,7 @@ As we'll see later,
 all of this makes `mkdir -p` ideal for non-interactive usage in shell scripts.
 :::
 
-#### Create new _files_ with `touch`
+#### Create new _files_ with `touch` {-}
 
 As we have learned the command to make new dirs,
 you may be wondering what the equivalent command is to make new, empty files:
@@ -443,7 +443,7 @@ what you want to copy (the _source_), and where you want to copy it to
 (the _destination_).
 So, we can summarize its basic syntax as **`cp <source> <destination>`**.
 
-We'll start by copying the metadata file:
+We'll start by copying a file with some metadata on the RNAseq samples:
 
 ```bash
 cp -v /fs/ess/PAS0471/demo/202307_rnaseq/metadata/meta.tsv metadata/
@@ -527,15 +527,6 @@ The `mv` command is nearly identical to the `cp` command, except that it:
 
 We'll use this section to learn a few more things about
 _the usage of both these commands_.
-All the examples use `mv`, but `cp` would work equivalently.
-
-- **Use the `.` notation** for the current working dir if you want to copy/move
-  something there:
-
-  ```bash
-  # This will copy 'meta.tsv' from the 'metadata' dir into the current working dir
-  mv metadata/meta.tsv .
-  ```
 
 - **By default, both `mv` and `cp` will overwrite files without warning!**
   Use the `-i` (for `i`nteractive) option to make it let you confirm before
@@ -555,6 +546,16 @@ All the examples use `mv`, but `cp` would work equivalently.
 
   ```bash
   mv meta_version2.tsv metadata/meta.tsv
+  ```
+
+- **Use the `.` notation** for the current working dir if you want to copy/move
+  something there:
+
+  ```bash
+  cp -v /fs/ess/PAS0471/demo/202307_rnaseq/README.md .
+  ```
+  ```{.bash-out}
+  ‘/fs/ess/PAS0471/demo/202307_rnaseq/README.md’ -> ‘README.md’
   ```
 
 :::{.callout-note}
@@ -665,7 +666,6 @@ data
 metadata
 my new dir
 my new dir2
-README.md
 ```
 
 In any situation where we refer to file or dir names that contain spaces,
@@ -690,7 +690,7 @@ ls: cannot access dir: No such file or directory
 ```
 
 :::{.exercise}
-#### Why does `cd` produce one error while `ls` produces three?
+#### Why does `cd` produce one error while `ls` produces three?  {-}
 
 <details><summary>Solution (click here)</summary>
 
@@ -777,7 +777,7 @@ removed ‘file3’
 _(If it seems cumbersome to type a bunch of file names,_
 _we'll see below how you can use a Shell wildcard to select many files at once.)_
 
-#### Recursive `rm`
+#### Recursive `rm` {-}
 
 As a safety measure, `rm` will by default only delete files and not directories
 or their contents &mdash; i.e., like `mkdir` and `cp`, it refuses to act
@@ -799,7 +799,7 @@ If you'd run it on say your personal dir within PAS0471,
 it would remove all of those files in one fell swoop!
 (Though luckily, OSC does keep backups in the project dirs.)
 
-#### Preventing disaster
+#### Preventing disaster {-}
 
 **To make it less likely for bad things to happen**,
 here are some measures you can take as well as a built-in feature worth pointing
@@ -947,12 +947,6 @@ What pattern would you use if you wanted to select:
   _whose name _end_ in `.fastq`, i.e. plain FASTQ files)_
 
 </details>
-
-:::
-
-:::{.callout-note}
-#### Recursive globbing
-TBA
 :::
 
 :::{.callout-warning collapse="true"}
@@ -1009,6 +1003,64 @@ removed ‘Miapaca2_G31V_R1.fastq.gz’
 
 In next sessions, we'll also use globbing a lot to _select files to loop over_.
 
+:::{.callout-note collapse="true"}
+#### Recursive globbing (Click to expand)
+
+Globbing does not work recursively by default, so `ls *fastq.gz` would only
+return gzipped FASTQ files in your current working dir.
+
+After running some bionformatics program, it's relatively common to have FASTQ
+files in a separate directory for each sample.
+In cases like that, you can use `**` to match any directory.
+For example, in the pattern below,
+the `**` would "traverse" the `fastq` dir within the `data` dir:
+
+```bash
+ls data/**/*fastq.gz
+```
+```{.bash-out}
+data/fastq/ASPC1_A178V_R1.fastq.gz  data/fastq/ASPC1_G31V_R1.fastq.gz  data/fastq/Miapaca2_A178V_R1.fastq.gz  data/fastq/Miapaca2_G31V_R1.fastq.gz
+data/fastq/ASPC1_A178V_R2.fastq.gz  data/fastq/ASPC1_G31V_R2.fastq.gz  data/fastq/Miapaca2_A178V_R2.fastq.gz  data/fastq/Miapaca2_G31V_R2.fastq.gz
+```
+
+But `**` itself is not recursive either by default and only "traverses a single level",
+so you'd need the following to list any FASTQ files that are exactly two
+levels deep from your current working dir:
+
+```bash
+ls **/**/*fastq.gz
+```
+```{.bash-out}
+data/fastq/ASPC1_A178V_R1.fastq.gz  data/fastq/ASPC1_G31V_R1.fastq.gz  data/fastq/Miapaca2_A178V_R1.fastq.gz  data/fastq/Miapaca2_G31V_R1.fastq.gz
+data/fastq/ASPC1_A178V_R2.fastq.gz  data/fastq/ASPC1_G31V_R2.fastq.gz  data/fastq/Miapaca2_A178V_R2.fastq.gz  data/fastq/Miapaca2_G31V_R2.fastq.gz
+```
+
+While this would not find them:
+
+```bash
+ls **/*fastq.gz
+```
+```{.bash-out}
+ls: cannot access **/*fastq.gz: No such file or directory
+```
+
+However, you can make `**` recursive by turning on the `globstar` option:
+
+```bash
+shopt -s globstar     # Turn on 'globstar'
+
+ls **/*fastq.gz
+```
+```{.bash-out}
+data/fastq/ASPC1_A178V_R1.fastq.gz  data/fastq/ASPC1_G31V_R1.fastq.gz  data/fastq/Miapaca2_A178V_R1.fastq.gz  data/fastq/Miapaca2_G31V_R1.fastq.gz
+data/fastq/ASPC1_A178V_R2.fastq.gz  data/fastq/ASPC1_G31V_R2.fastq.gz  data/fastq/Miapaca2_A178V_R2.fastq.gz  data/fastq/Miapaca2_G31V_R2.fastq.gz
+```
+
+With `globstar` turned on,
+the pattern above would find gzipped FASTQ files no matter how many dir levels
+deep they are (including when they are in your current working dir).
+:::
+
 <br>
 
 ## Viewing text files
@@ -1047,6 +1099,8 @@ since the contents of very large files will just stream by on your screen.
 For example, let's take a look at the `README.md` file in your working dir:
 
 ```bash
+# If you don't have this file, first run:
+# cp -v /fs/ess/PAS0471/demo/202307_rnaseq/README.md .
 cat README.md
 ```
 ```{.bash-out}
