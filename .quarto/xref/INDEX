@@ -88,5 +88,44 @@
   },
   "modules/08_software.qmd": {
     "08_software.html": "a63d64d3"
+  },
+  "modules/A09_slurm.qmd": {
+    "A09_slurm.html": "0278114d"
+  },
+  "modules/A07_scripts.qmd": {
+    "A07_scripts.html": "5c9f801a"
+  },
+  "modules/intro.qmd": {
+    "intro.html": "569c2874"
+  },
+  "modules/B03_trimgalore.qmd": {
+    "B03_trimgalore.html": "19c3bd8f"
+  },
+  "modules/A06_overview.qmd": {
+    "A06_overview.html": "0da461f6"
+  },
+  "modules/A03_shell1.qmd": {
+    "A03_shell1.html": "514f5e50"
+  },
+  "modules/A08_software.qmd": {
+    "A08_software.html": "bce3a8a4"
+  },
+  "modules/A05_genomicfiles.qmd": {
+    "A05_genomicfiles.html": "e6c2b87b"
+  },
+  "modules/x_examples.qmd": {
+    "x_examples.html": "4a8e25ed"
+  },
+  "modules/B01_fastqc.qmd": {
+    "B01_fastqc.html": "306b6ee5"
+  },
+  "modules/A02_vscode.qmd": {
+    "A02_vscode.html": "129d9bef"
+  },
+  "modules/A01_osc.qmd": {
+    "A01_osc.html": "8514820e"
+  },
+  "modules/A04_shell2.qmd": {
+    "A04_shell2.html": "d0ef8be4"
   }
 }

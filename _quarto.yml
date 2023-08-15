@@ -11,33 +11,39 @@ website:
     left:
       - href: index.qmd
         text: "{{< fa home >}}"
-      - href: modules/01_intro.qmd
+      - href: modules/intro.qmd
         text: Introduction
       - text: "A. Computing skills"
         menu: 
-          - href: modules/02_osc.qmd
+          - href: modules/A01_osc.qmd
             text: "A1. OSC"
-          - href: "modules/03_vscode.qmd"
+          - href: "modules/A02_vscode.qmd"
             text: "A2. VS Code"
-          - href: "modules/04_shell.qmd"
+          - href: "modules/A03_shell1.qmd"
             text: "A3. Unix shell I"
-          - href: "modules/05_shell2.qmd"
+          - href: "modules/A04_shell2.qmd"
             text: "A4. Unix shell II"
-          - href: "modules/06_genomicfiles.qmd"
+          - href: "modules/A05_genomicfiles.qmd"
             text: "A5. Genomic data files"
-          - text: "A6. Shell scripting [TBA]"
-          - text: "A7. Software at OSC [TBA]"
-          - text: "A8. SLURM compute jobs [TBA]"
+          - href: "modules/A06_overview.qmd"
+            text: "A6. Overview, variables & loops"
+          - href: "modules/A07_scripts.qmd"
+            text: "A7. Shell scripts"
+          - href: "modules/A08_software.qmd"
+            text: "A8. Software at OSC"
+          - href: "modules/A09_slurm.qmd"
+            text: "A9. SLURM compute jobs"
       - text: "B. From reads to counts"
         menu:
-          - text: "B1. Read QC with `FastQC` and `MultiQC` [TBA]"
-          - text: "B2. Trimming with `TrimGalore` [TBA]"
-          - text: "B3. rRNA removal with `SortMeRNA` [TBA]"
-          - text: "B4. Alignment with `STAR` [TBA]"
-          - text: "B5. Counting with `Salmon` [TBA]"
+          - text: "B1. Read QC with _FastQC_ [TBA]"
+          - text: "B2. Summarizing QC results with _MultiQC_ [TBA]"
+          - text: "B2. Trimming with _TrimGalore_ [TBA]"
+          - text: "B3. rRNA removal with _SortMeRNA_ [TBA]"
+          - text: "B4. Alignment with _STAR_ [TBA]"
+          - text: "B5. Counting with _Salmon_ [TBA]"
       - text: "C. Analyzing the counts"
         menu:
-          - text: "C1. Creating a DESeq2 object [TBA]"
+          - text: "C1. Creating a _DESeq2_ object [TBA]"
           - text: "C2. PCA [TBA]"
           - text: "C3. Differential expression analysis [TBA]"
           - text: "C4. GO enrichment analysis [TBA]"

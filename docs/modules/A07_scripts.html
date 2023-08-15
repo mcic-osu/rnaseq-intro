@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jelmer Poelstra">
+<meta name="dcterms.date" content="2023-09-01">
+
+<title>Shell Scripting</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/all.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/fontawesome6-0.1.0/latex-fontsize.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">RNAseq analysis</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../modules/intro.html" rel="" target="">
+ <span class="menu-text">Introduction</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-a.-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">A. Computing skills</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-a.-computing-skills">    
+        <li>
+    <a class="dropdown-item" href="../modules/A01_osc.html" rel="" target="">
+ <span class="dropdown-text">A1. OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A02_vscode.html" rel="" target="">
+ <span class="dropdown-text">A2. VS Code</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A03_shell1.html" rel="" target="">
+ <span class="dropdown-text">A3. Unix shell I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A04_shell2.html" rel="" target="">
+ <span class="dropdown-text">A4. Unix shell II</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A05_genomicfiles.html" rel="" target="">
+ <span class="dropdown-text">A5. Genomic data files</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A06_overview.html" rel="" target="">
+ <span class="dropdown-text">A6. Overview, variables &amp; loops</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A07_scripts.html" rel="" target="">
+ <span class="dropdown-text">A7. Shell scripts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A08_software.html" rel="" target="">
+ <span class="dropdown-text">A8. Software at OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A09_slurm.html" rel="" target="">
+ <span class="dropdown-text">A9. SLURM compute jobs</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-b.-from-reads-to-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">B. From reads to counts</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-b.-from-reads-to-counts">    
+        <li class="dropdown-header">B1. Read QC with <em>FastQC</em> [TBA]</li>
+        <li class="dropdown-header">B2. Summarizing QC results with <em>MultiQC</em> [TBA]</li>
+        <li class="dropdown-header">B2. Trimming with <em>TrimGalore</em> [TBA]</li>
+        <li class="dropdown-header">B3. rRNA removal with <em>SortMeRNA</em> [TBA]</li>
+        <li class="dropdown-header">B4. Alignment with <em>STAR</em> [TBA]</li>
+        <li class="dropdown-header">B5. Counting with <em>Salmon</em> [TBA]</li>
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-c.-analyzing-the-counts" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">C. Analyzing the counts</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-c.-analyzing-the-counts">    
+        <li class="dropdown-header">C1. Creating a <em>DESeq2</em> object [TBA]</li>
+        <li class="dropdown-header">C2. PCA [TBA]</li>
+        <li class="dropdown-header">C3. Differential expression analysis [TBA]</li>
+        <li class="dropdown-header">C4. GO enrichment analysis [TBA]</li>
+        <li class="dropdown-header">C5. KEGG enrichment analysis [TBA]</li>
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-reference-material" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Reference material</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-reference-material">    
+        <li class="dropdown-header">Specific tutorials</li>
+        <li>
+    <a class="dropdown-item" href="../info/osc_transfer.html" rel="" target="">
+ <span class="dropdown-text">- File transfer to and from OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
+ <span class="dropdown-text">- Using OSC with SSH</span></a>
+  </li>  
+        <li class="dropdown-header">General info</li>
+        <li>
+    <a class="dropdown-item" href="../info/shell_commands.html" rel="" target="">
+ <span class="dropdown-text">- Shell commands overview</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../info/shell_shortcuts.html" rel="" target="">
+ <span class="dropdown-text">- Shell keyboard shortcuts</span></a>
+  </li>  
+        <li class="dropdown-header">- Further Resources</li>
+        <li class="dropdown-header">- Glossary</li>
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../info/about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro" rel="" target=""><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview-getting-started" id="toc-overview-getting-started" class="nav-link active" data-scroll-target="#overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</a>
+  <ul class="collapse">
+  <li><a href="#start-vs-code-and-open-your-folder" id="toc-start-vs-code-and-open-your-folder" class="nav-link" data-scroll-target="#start-vs-code-and-open-your-folder">Start VS Code and open your folder</a></li>
+  </ul></li>
+  <li><a href="#script-header-lines-and-zombie-scripts" id="toc-script-header-lines-and-zombie-scripts" class="nav-link" data-scroll-target="#script-header-lines-and-zombie-scripts"><span class="header-section-number">2</span> Script header lines and zombie scripts</a>
+  <ul class="collapse">
+  <li><a href="#shebang-line" id="toc-shebang-line" class="nav-link" data-scroll-target="#shebang-line"><span class="header-section-number">2.1</span> Shebang line</a></li>
+  <li><a href="#bash-script-settings" id="toc-bash-script-settings" class="nav-link" data-scroll-target="#bash-script-settings"><span class="header-section-number">2.2</span> Bash script settings</a></li>
+  <li><a href="#our-header-lines-as-a-rudimentary-script" id="toc-our-header-lines-as-a-rudimentary-script" class="nav-link" data-scroll-target="#our-header-lines-as-a-rudimentary-script"><span class="header-section-number">2.3</span> Our header lines as a rudimentary script</a></li>
+  </ul></li>
+  <li><a href="#command-line-arguments-for-scripts" id="toc-command-line-arguments-for-scripts" class="nav-link" data-scroll-target="#command-line-arguments-for-scripts"><span class="header-section-number">3</span> Command-line arguments for scripts</a>
+  <ul class="collapse">
+  <li><a href="#calling-a-script-with-arguments" id="toc-calling-a-script-with-arguments" class="nav-link" data-scroll-target="#calling-a-script-with-arguments"><span class="header-section-number">3.1</span> Calling a script with arguments</a></li>
+  <li><a href="#placeholder-variables" id="toc-placeholder-variables" class="nav-link" data-scroll-target="#placeholder-variables"><span class="header-section-number">3.2</span> Placeholder variables</a></li>
+  <li><a href="#on-your-own-command-line-arguments" id="toc-on-your-own-command-line-arguments" class="nav-link" data-scroll-target="#on-your-own-command-line-arguments">On Your Own: Command-line arguments</a></li>
+  <li><a href="#descriptive-variable-names" id="toc-descriptive-variable-names" class="nav-link" data-scroll-target="#descriptive-variable-names"><span class="header-section-number">3.3</span> Descriptive variable names</a></li>
+  <li><a href="#on-your-own-a-script-to-print-a-specific-line" id="toc-on-your-own-a-script-to-print-a-specific-line" class="nav-link" data-scroll-target="#on-your-own-a-script-to-print-a-specific-line">On Your Own: A script to print a specific line</a></li>
+  </ul></li>
+  <li><a href="#script-variations-and-improvements" id="toc-script-variations-and-improvements" class="nav-link" data-scroll-target="#script-variations-and-improvements"><span class="header-section-number">4</span> Script variations and improvements</a>
+  <ul class="collapse">
+  <li><a href="#a-script-to-serve-as-a-starting-point" id="toc-a-script-to-serve-as-a-starting-point" class="nav-link" data-scroll-target="#a-script-to-serve-as-a-starting-point"><span class="header-section-number">4.1</span> A script to serve as a starting point</a></li>
+  <li><a href="#redirecting-output-to-a-file" id="toc-redirecting-output-to-a-file" class="nav-link" data-scroll-target="#redirecting-output-to-a-file"><span class="header-section-number">4.2</span> Redirecting output to a file</a></li>
+  <li><a href="#report-whats-happening" id="toc-report-whats-happening" class="nav-link" data-scroll-target="#report-whats-happening"><span class="header-section-number">4.3</span> Report what’s happening</a></li>
+  <li><a href="#on-your-own-a-fanciful-script" id="toc-on-your-own-a-fanciful-script" class="nav-link" data-scroll-target="#on-your-own-a-fanciful-script">On Your Own: A fanciful script</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Shell Scripting</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jelmer Poelstra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 1, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<p><br></p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Under construction
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page is still under construction.</p>
+</div>
+</div>
+<section id="overview-getting-started" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</h2>
+<p>Shell scripts (or to be slightly more precise, Bash scripts) enable us to <strong>run sets of commands non-interactively</strong>. This is especially beneficial or necessary when a set of commands:</p>
+<ul>
+<li>Takes a long time to run and/or</li>
+<li>Should be run many times, e.g.&nbsp;for different samples</li>
+</ul>
+<p>Scripts form the basis for <em>analysis pipelines</em> and if we code things cleverly, it should be straightforward to rerun much of our project workflow:</p>
+<ul>
+<li>After removing or adding a sample</li>
+<li>For different parameter settings</li>
+<li>And possibly even for an entirely different dataset.</li>
+</ul>
+<p><br></p>
+<section id="start-vs-code-and-open-your-folder" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h3>
+<p>As always, we’ll be working in VS Code — if you don’t already have a session open, see below how to do so.</p>
+<p><strong>Make sure to open your <code>/fs/ess/PAS0471/&lt;user&gt;/rnaseq_intro</code> dir</strong>, either by using the <code>Open Folder</code> menu item, or by clicking on this dir when it appears in the <code>Welcome</code> tab.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Starting VS Code at OSC - with a Terminal (Click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Log in to OSC’s OnDemand portal at <a href="https://ondemand.osc.edu" class="uri">https://ondemand.osc.edu</a>.</p></li>
+<li><p>In the blue top bar, select <code>Interactive Apps</code> and then near the bottom of the dropdown menu, click <code>Code Server</code>.</p></li>
+<li><p>In the form that appears on a new page:</p>
+<ul>
+<li>Select an appropriate OSC project (here: <code>PAS0471</code>)</li>
+<li>For this session, select <code>/fs/ess/PAS0471</code> as the starting directory</li>
+<li>Make sure that <code>Number of hours</code> is at least <code>2</code></li>
+<li>Click <code>Launch</code>.</li>
+</ul></li>
+<li><p>On the next page, once the top bar of the box has turned green and says <code>Runnning</code>, click <code>Connect to VS Code</code>.</p></li>
+</ol>
+<figure class="figure">
+<p align="center">
+<img src="img/osc-code-launch_ed.png" width="80%" class="figure-img">
+</p>
+</figure>
+<ol start="5" type="1">
+<li><p>Open a Terminal by clicking &nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; <code>Terminal</code> =&gt; <code>New Terminal</code>. (Or use one of the keyboard shortcuts: <kbd>Ctrl</kbd>+<kbd>`</kbd> (backtick) or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.)</p></li>
+<li><p>In the <code>Welcome</code> tab under <code>Recent</code>, you should see your <code>/fs/ess/PAS0471/&lt;user&gt;/rnaseq_intro</code> dir listed: click on that to open it. Alternatively, use &nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>Open Folder</code> to open that dir in VS Code.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Don’t have your own dir with the data? (Click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If you missed the last session, or deleted your <code>rnaseq_intro</code> dir entirely, run these commands to get a (fresh) copy of all files you should have so far:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> <span class="at">-r</span> /fs/ess/PAS0471/demo/202307_rnaseq /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And if you do have an <code>rnaseq_intro</code> dir, but you want to start over because you moved or removed some of the files while practicing, then delete the dir before your run the commands above:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should have at least the following files in this dir:</p>
+<pre class="bash-out"><code>/fs/ess/PAS0471/demo/202307_rnaseq
+├── data
+│   └── fastq
+│       ├── ASPC1_A178V_R1.fastq.gz
+│       ├── ASPC1_A178V_R2.fastq.gz
+│       ├── ASPC1_G31V_R1.fastq.gz
+│       ├── ASPC1_G31V_R2.fastq.gz
+│       ├── md5sums.txt
+│       ├── Miapaca2_A178V_R1.fastq.gz
+│       ├── Miapaca2_A178V_R2.fastq.gz
+│       ├── Miapaca2_G31V_R1.fastq.gz
+│       └── Miapaca2_G31V_R2.fastq.gz
+├── metadata
+│   └── meta.tsv
+└── README.md
+│   └── ref
+│       ├── GCF_000001405.40.fna
+│       ├── GCF_000001405.40.gtf</code></pre>
+</div>
+</div>
+</div>
+<p><br></p>
+</section>
+</section>
+<section id="script-header-lines-and-zombie-scripts" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="script-header-lines-and-zombie-scripts"><span class="header-section-number">2</span> Script header lines and zombie scripts</h2>
+<section id="shebang-line" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="shebang-line"><span class="header-section-number">2.1</span> Shebang line</h3>
+<p>We use a so-called “<em>shebang</em>” line as the first line of a script to <strong>indicate which language our script uses</strong>. More specifically, this line tell the computer where to find the binary (executable) that will run our script.</p>
+<p>Such a line starts with <strong><code>#!</code></strong>, basically marking it as a special type of comment. After that, we provide the location to the relevant program: in our case Bash, which is located at <code>/bin/bash</code> on Linux and Mac computers.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Adding a shebang line is good practice in general, and is necessary when we want to submit our script to OSC’s Slurm queue, which we’ll do tomorrow.</p>
+<p><br></p>
+</section>
+<section id="bash-script-settings" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="bash-script-settings"><span class="header-section-number">2.2</span> Bash script settings</h3>
+<p>Another line that is good practice to add to your Bash scripts changes some default settings to safer alternatives. The following two Bash default settings are bad ideas inside scripts:</p>
+<p><em>First</em>, and as we’ve seen in the previous module, Bash does not complain when you <strong>reference a variable that does not exist</strong> (in other words, it does not consider that an error).</p>
+<p>In scripts, this can lead to all sorts of downstream problems, because you very likely tried and failed to do something with an actual variable. Even more problematically, it can lead to potentially very destructive file removal:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a variable, we try to remove some temporary files whose names start with tmp_</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="va">temp_prefix</span><span class="op">=</span><span class="st">"temp_"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="st">"</span><span class="va">$tmp_prefix</span><span class="st">"</span><span class="pp">*</span>     <span class="co"># DON'T TRY THIS!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using a variable, we try to remove a temporary directory</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="va">tempdir</span><span class="op">=</span>output/tmp</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-rf</span> <span class="va">$tmpdir</span>/<span class="pp">*</span>      <span class="co"># DON'T TRY THIS!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The comments above specified the <em>intent</em> we had. What would have actually happened?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In both examples, there is a similar typo: <code>temp</code> vs.&nbsp;<code>tmp</code>, which means that we are referencing a (likely) non-existent variable.</p>
+<ul>
+<li><p>In the first example, <code>rm "$tmp_prefix"*</code> would have been interpreted as <code>rm *</code>, because the non-existent variable is simply ignored. Therefore, we would have <strong>removed all files in the current working directory</strong>.</p></li>
+<li><p>In the second example, along similar lines, <code>rm -rf $tmpdir/*</code> would have been interpreted as <code>rm -rf /*</code>. Horrifyingly, this would <strong>attempt to remove the entire filesystem</strong> (recall that a leading <code>/</code> in a path is a computer’s root directory).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> (<code>-r</code> makes the removal <em>recursive</em> and <code>-f</code> makes <em>forces</em> removal).</p></li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+<p><em>Second</em>, a Bash script <strong>keeps running after encountering errors</strong>. That is, if an error is encountered when running line 2 of a script, any remaining lines in the script will nevertheless be executed.</p>
+<p>In the best case, this is a waste of computer resources, and in worse cases, it can lead to all kinds of unintended consequences. Additionally, if your script prints a lot of output, you might not notice an error somewhere in the middle if it doesn’t produce more errors downstream. But the downstream results from what we at that point might call a “<strong>zombie script</strong>” may still be completely wrong.</p>
+<hr>
+<p>The following three settings will make your Bash scripts more robust and safer. With these settings, the script terminates, with an appropriate error message, if:</p>
+<ul>
+<li><code>set -u</code> — An unset (non-existent) variable is referenced.</li>
+<li><code>set -e</code> — Almost any error occurs.</li>
+<li><code>set -o pipefail</code> — An error occurs in a shell “pipeline” (e.g., <code>sort | uniq</code>).</li>
+</ul>
+<p>We can change all of these settings in one line in a script:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-u</span> <span class="at">-e</span> <span class="at">-o</span> pipefail     <span class="co"># (For in a script - don't run in the terminal)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Or even more concisely:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail         <span class="co"># (For in a script - don't run in the terminal)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br></p>
+</section>
+<section id="our-header-lines-as-a-rudimentary-script" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="our-header-lines-as-a-rudimentary-script"><span class="header-section-number">2.3</span> Our header lines as a rudimentary script</h3>
+<p>Let’s go ahead and start a script with the header lines that we have so far discussed.</p>
+<ul>
+<li><p>Inside your personal directory within <code>/fs/ess/scratch/PAS2250/participants</code>, make a directory called <code>scripts</code> and one called <code>sandbox</code> (e.g.&nbsp;<code>mkdir scripts sandbox</code>, or use the VS Code menus.</p></li>
+<li><p>Open a new file in the <code>VS Code</code> editor (&nbsp; <i class="fa-solid fa-bars" aria-label="bars"></i> &nbsp; =&gt; &nbsp; <code>File</code> &nbsp; =&gt; &nbsp; <code>New File</code>) and save it as <code>printname.sh</code> within the newly created <code>scripts</code> dir.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Shell scripts, including Bash scripts, most commonly have the extension <code>.sh</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div></li>
+<li><p>Type the following lines in that script (not in your terminal!):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+<p>At this point, we could already <em>run</em> (execute) the script. One way of doing this is calling the <code>bash</code> command followed by the name of the script<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printname.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Doing this won’t print anything to screen (or file). Since our script doesn’t have any output, that makes sense — no output can be a good sign, because it means that no errors were encountered.</p>
+<p><br></p>
+</section>
+</section>
+<section id="command-line-arguments-for-scripts" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="command-line-arguments-for-scripts"><span class="header-section-number">3</span> Command-line arguments for scripts</h2>
+<section id="calling-a-script-with-arguments" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="calling-a-script-with-arguments"><span class="header-section-number">3.1</span> Calling a script with arguments</h3>
+<p>When you call a script, you can pass it command-line arguments, such as a file to operate on.</p>
+<p>This is much like when you provide a command like <code>ls</code> with arguments:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run ls without arguments:</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass 1 filename as an argument to ls:</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/sampleA.fastq.gz</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass 2 filenames as arguments to ls, separated by spaces:</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/sampleA.fastq.gz data/sampleB.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s see what this would look like with our <code>printname.sh</code> script and a fictional script <code>fastqc.sh</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run scripts without any arguments:</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> fastqc.sh                            <span class="co"># (Fictional script)</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printname.sh</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Run scripts with 1 or 2 arguments:</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> fastqc.sh data/sampleA.fastq.gz      <span class="co"># 1 argument, a filename</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printname.sh John Doe        <span class="co"># 2 arguments, strings representing names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In the next section, we’ll see what happens when we pass arguments to a script on the command line.</p>
+<p><br></p>
+</section>
+<section id="placeholder-variables" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="placeholder-variables"><span class="header-section-number">3.2</span> Placeholder variables</h3>
+<p>Inside the script, any command-line arguments are <em>automatically available</em> in placeholder variables.</p>
+<p>A first argument will be assigned to the variable <strong><code>$1</code></strong>, any second argument will be assigned to <strong><code>$2</code></strong>, any third argument will be assigned to <strong><code>$3</code></strong>, and so on.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+In the calls to fastqc.sh and printname.sh above, what are the placeholder variables and their values?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In <code>bash fastqc.sh data/sampleA.fastq.gz</code>, a single argument, <code>data/sampleA.fastq.gz</code>, is passed to the script, and will be assigned to <code>$1</code>.</p>
+<p>In <code>bash scripts/printname.sh John Doe</code>, two arguments are passed to the script: the first one (<code>John</code>) will be stored in <code>$1</code>, and the second one (<code>Doe</code>) in <code>$2</code>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Placeholder variables are not automagically <em>used</em>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Arguments passed to a script are <em>merely made available</em> in placeholder variables — unless we explicitly include code in the script to <em>do</em> something with those variables, nothing else happens.</p>
+</div>
+</div>
+<p>Let’s add code to our <code>printname.sh</code> script to “process” any first and last name that are passed to the script as command-line arguments. For now, our script will simply <code>echo</code> the placeholder variables, so that we can see what happens:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"First name: </span><span class="va">$1</span><span class="st">"</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Last name: </span><span class="va">$2</span><span class="st">"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># (Note: this is a script. Don't enter this directly in your terminal.)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> scripts/printname.sh <span class="op">&lt;&lt;'_EOF'</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="st">#!/bin/bash</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="st">set -ueo pipefail</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="st">echo "First name: $1"</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="st">echo "Last name: $2"</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="op">_EOF</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, we’ll <em>run</em> the script, passing the arguments <code>John</code> and <code>Doe</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printname.sh John Doe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>First name: John
+Last name: Doe</code></pre>
+</section>
+<section id="on-your-own-command-line-arguments" class="level3 unnumbered exercise">
+<h3 class="unnumbered anchored" data-anchor-id="on-your-own-command-line-arguments">On Your Own: Command-line arguments</h3>
+<p>In each case below, <strong>think about what might happen before you run the script</strong>. Then, run it, and if you didn’t make a successful prediction, try to figure out what happened instead.</p>
+<ol type="1">
+<li><p>Run the script (<code>scripts/printname.sh</code>) without passing arguments to it.</p></li>
+<li><p>Deactivate (“comment out”) the line with <code>set</code> settings by inserting a <code>#</code> as the first character. Then, run the script again without passing arguments to it.</p></li>
+<li><p>Double-quote <code>John Doe</code> when you run the script, i.e.&nbsp;run <code>bash scripts/printname.sh "John Doe"</code></p></li>
+</ol>
+<p>To get back to where we were, remove the <code>#</code> you inserted in the script in step 2 above.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>The script will error out because we are referencing variables that don’t exist: since we didn’t pass command-line arguments to the script, the <code>$1</code> and <code>$2</code> have not been set.</li>
+</ol>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printname.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="bash-out">
+<p>printname.sh: line 4: $1: unbound variable</p>
+</div>
+<ol start="2" type="1">
+<li>The script will run in its entirety and not throw any errors, because we are now using default Bash settings such that referencing non-existent variables does not throw an error. Of course, no names are printed either, since we didn’t specify any:</li>
+</ol>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printname.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+<p>Being commented out, the <code>set</code> line should read:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set -ueo pipefail</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol start="3" type="1">
+<li>Because we are quoting <code>"John Doe"</code>, both names are passed <em>as a single argument</em> and both names end up in <code>$1</code>, the “first name”:</li>
+</ol>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printname.sh <span class="st">"John Doe"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+</div>
+</div>
+</div>
+</section>
+<p><br></p>
+<section id="descriptive-variable-names" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="descriptive-variable-names"><span class="header-section-number">3.3</span> Descriptive variable names</h3>
+<p>While you can use the <code>$1</code>-style placeholder variables throughout your script, I find it very useful to copy them to more descriptively named variables as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="va">first_name</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="va">last_name</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"First name: </span><span class="va">$first_name</span><span class="st">"</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Last name: </span><span class="va">$last_name</span><span class="st">"</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># (Note: this is a script. Don't enter this directly in your terminal.)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using descriptively named variables in your scripts has several advantages. It will make your script easier to understand for others and for yourself. It will also make it less likely that you make errors in your script in which you use the wrong variable in the wrong place.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Other variables that are automatically available inside scripts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><code>$0</code> contains the script’s file name</li>
+<li><code>$#</code> contains the <em>number</em> of command-line arguments passed</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="on-your-own-a-script-to-print-a-specific-line" class="level3 unnumbered exercise">
+<h3 class="unnumbered anchored" data-anchor-id="on-your-own-a-script-to-print-a-specific-line">On Your Own: A script to print a specific line</h3>
+<p>Write a script that prints a specific line (identified by line number) from a file.</p>
+<ul>
+<li>Open a new file and save it as <code>scripts/printline.sh</code></li>
+<li>Start with the <em>shebang</em> and <code>set</code> lines</li>
+<li>Your script takes two arguments: a file name (<code>$1</code>) and a line number (<code>$2</code>)</li>
+<li>Copy the <code>$1</code> and <code>$2</code> variables to descriptively named variables</li>
+<li>To print a specific line, think how you might combine <code>head</code> and <code>tail</code> to do this. If you’re at a loss, feel free to check out the top solution box.</li>
+<li>Test the script by printing line 4 from <code>data/meta/meta.tsv</code>.</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Solution: how to print a specific line number (Click here)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>For example, to print line 4 of <code>data/meta/meta.tsv</code> directly:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 4 data/meta/meta.tsv <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Just note that in the script, you’ll be using variables instead of the “hardcode values” <code>4</code> and <code>data/meta/meta.tsv</code>.</p>
+<p>How this command works:</p>
+<ul>
+<li><code>head -n 4 data/meta/meta.tsv</code> will print the first 4 lines of <code>data/meta/meta.tsv</code></li>
+<li>We pipe those 4 lines into the <code>tail</code> command</li>
+<li>We ask <code>tail</code> to just print the last line of its input, which will in this case be line 4 of the original input file.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Full solution (Click here)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="va">input_file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="va">line_nr</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> <span class="st">"</span><span class="va">$line_nr</span><span class="st">"</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To run the script and make it print the 4th line of <code>meta.tsv</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printline.sh data/meta/meta.tsv 4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+</div>
+</div>
+</div>
+</section>
+<p><br></p>
+</section>
+<section id="script-variations-and-improvements" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="script-variations-and-improvements"><span class="header-section-number">4</span> Script variations and improvements</h2>
+<section id="a-script-to-serve-as-a-starting-point" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="a-script-to-serve-as-a-starting-point"><span class="header-section-number">4.1</span> A script to serve as a starting point</h3>
+<p>We’ve learned that the <code>head</code> command prints the first lines of a file, whereas the <code>tail</code> command prints the last lines. Sometimes it’s nice to be able to quickly see both ends of a file, so let’s write a little script that can do that for us, as a starting point for the next few modifications.</p>
+<p>Open a new file, save it as <code>scripts/headtail.sh</code>, and add the following code to it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="va">input_file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 2 <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"---"</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 2 <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># (Note: this is a script. Don't enter this directly in your terminal.)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, let’s run our <code>headtail.sh</code> script:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/headtail.sh metadata/meta.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+<p><br></p>
+</section>
+<section id="redirecting-output-to-a-file" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="redirecting-output-to-a-file"><span class="header-section-number">4.2</span> Redirecting output to a file</h3>
+<p>So far, the output of our scripts was printed to screen, e.g.:</p>
+<ul>
+<li>In <code>printnames.sh</code>, we simply <code>echo</code>’d, inside sentences, the arguments passed to the script.</li>
+<li>In <code>headtail.sh</code>, we printed the first and last few lines of a file.</li>
+</ul>
+<p>All this output was printed to screen because that is the default output mode of Unix commands, and this works the same way regardless of whether those commands are run directly on the command line, or are run inside a script.</p>
+<p>Along those same lines, we have already learned that we can “redirect” output to a file using <code>&gt;</code> (write/overwrite) and <code>&gt;&gt;</code> (append) when we run shell commands — and this, too, works exactly the same way inside a script.</p>
+<hr>
+<p>When working with genomics data, we commonly have files as input, and new/modified files as output. Let’s practice with this and <strong>modify our <code>headtail.sh</code> script so that it writes output to a file.</strong></p>
+<p>We’ll make the following changes:</p>
+<ul>
+<li><p>We will have the script accept a second argument: the output file name<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p></li>
+<li><p>We will redirect the output of our <code>head</code>, <code>echo</code>, and <code>tail</code> commands to the output file. We’ll have to append (using <code>&gt;&gt;</code>) in the last two commands.</p></li>
+</ul>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="va">input_file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="va">output_file</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 2 <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"---"</span> <span class="op">&gt;&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 2 <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co"># (Note: this is a script. Don't enter this directly in your terminal.)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now we run the script again, this time also passing the name of an <em>output</em> file:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/headtail.sh data/meta/meta.tsv sandbox/samples_headtail.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+<p>The script will no longer print any output to screen, and our output should instead be in <code>sandbox/samples_headtail.txt</code>:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the file exists and was just modified:</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> sandbox/samples_headtail.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the contents of the file to screen</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> sandbox/samples_headtail.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+<p><br></p>
+</section>
+<section id="report-whats-happening" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="report-whats-happening"><span class="header-section-number">4.3</span> Report what’s happening</h3>
+<p>It is often useful to have your scripts “report” or “log” what is going on. Let’s keep thinking about a script that has file(s) as the main output, but instead of having no output printed to screen at all, we’ll print some logging output to screen. For instance:</p>
+<ul>
+<li>What is the date and time</li>
+<li>Which arguments were passed to the script</li>
+<li>What are the output files</li>
+<li>Perhaps even summaries of the output.</li>
+</ul>
+<p>All of this can help with troubleshooting and record-keeping.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> Let’s try this with our <code>headtail.sh</code> script.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Copy placeholder variables</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="va">input_file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="va">output_file</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Initial logging </span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Starting script </span><span class="va">$0</span><span class="st">"</span>           <span class="co"># Print name of script</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span>                                <span class="co"># Print date &amp; time</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Input file:   </span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Output file:  </span><span class="va">$output_file</span><span class="st">"</span> </span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span>                                <span class="co"># Print empty line to separate initial &amp; final logging</span></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="co">## Print the first and last two lines to a separate file</span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> 2 <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="op">&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"---"</span> <span class="op">&gt;&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 2 <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="op">&gt;&gt;</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a><span class="co">## Final logging</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Listing the output file:"</span></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Done with script </span><span class="va">$0</span><span class="st">"</span></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a><span class="co"># (Note: this is a script. Don't enter this directly in your terminal.)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A couple of notes about the lines that were added to the script above:</p>
+<ul>
+<li><p>Printing the <code>date</code> at the end of the script as well will allow you to check for how long the script ran, which can be informative for longer-running scripts.</p></li>
+<li><p>Printing the input and output files (and the command-line arguments more generally) can be particularly useful for troubleshooting</p></li>
+<li><p>We printed a “marker line” like <code>Done with script</code>, indicating that the end of the script was reached. This is handy due to our <code>set</code> settings: seeing this line printed means that no errors were encountered.</p></li>
+<li><p>I also added some comment headers like “Initial logging” to make the script easier to read, and such comments can be made more extensive to really explain what is being done.</p></li>
+</ul>
+<p>Let’s run the script again:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/headtail.sh data/meta/meta.tsv sandbox/tmp.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+<p>The script printed some details for the output file, but not its contents (that would have worked here, but is usually not sensible when working with genomics data). Let’s take a look, though, to make sure the script worked:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> sandbox/tmp.txt      <span class="co"># "cat" prints all of a file's contents</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>echo</code>, <code>echo</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The extensive reporting (<code>echo</code>-ing) may have seemed silly for our little script, but fairly extensive reporting (as well as testing, but that’s outside the scope of this workshop) can be very useful — and will be eventually a time-saver.</p>
+<p>This is especially true for long-running scripts, or scripts that you often reuse and perhaps share with others.</p>
+</div>
+</div>
+</section>
+<section id="on-your-own-a-fanciful-script" class="level3 unnumbered exercise">
+<h3 class="unnumbered anchored" data-anchor-id="on-your-own-a-fanciful-script">On Your Own: A fanciful script</h3>
+<p>Modify your <code>printline.sh</code> script to:</p>
+<ul>
+<li>Redirect output to a file</li>
+<li>This output file should not be “hardcoded” in the script, but its name should be passed as an argument to the script, like we did above with <code>headtail.sh</code></li>
+<li>Add a bit of reporting — <code>echo</code> statements, <code>date</code>, etc, along the lines of what we did above with <code>headtail.sh</code></li>
+<li>Add some comments to describe what the code in the script is doing</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+The original <code>printline.sh</code> script
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><br></p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> scripts/printline.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+(One possible) solution
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Copy placeholder variables</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="va">input_file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="va">output_file</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a><span class="va">line_nr</span><span class="op">=</span><span class="va">$3</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a><span class="co">## Initial logging </span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Starting script </span><span class="va">$0</span><span class="st">"</span>           <span class="co"># Print name of script</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span>                                <span class="co"># Print date &amp; time</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Input file:   </span><span class="va">$input_file</span><span class="st">"</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Output file:  </span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Line number:  </span><span class="va">$line_nr</span><span class="st">"</span></span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span>                                <span class="co"># Print empty line to separate initial &amp; final logging</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a><span class="co">## Print 1 specific line from the input file and redirect to an output file</span></span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span> <span class="at">-n</span> <span class="st">"</span><span class="va">$line_nr</span><span class="st">"</span> <span class="st">"</span><span class="va">$input_file</span><span class="st">"</span> <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1 <span class="op">&gt;</span> <span class="va">$output_file</span></span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a><span class="co">## Final logging</span></span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Listing the output file:"</span></span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">"</span><span class="va">$output_file</span><span class="st">"</span></span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Done with script </span><span class="va">$0</span><span class="st">"</span></span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To run the script with the additional argument:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> scripts/printline.sh data/meta/meta.tsv sandbox/meta_line.tsv 4</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>TODO</code></pre>
+</div>
+</div>
+</div>
+</section>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Add keyboard shortcut to run shell commands from the editor:
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Click the <i class="fa fa-cog"></i> (bottom-left) =&gt; <code>Keyboard Shortcuts</code>.</p></li>
+<li><p>Find <code>Terminal: Run Selected Text in Active Terminal</code>, click on it, then add a shortcut, e.g.&nbsp;<kbd>Ctrl</kbd>+<kbd>Enter</kbd>.</p></li>
+</ul>
+</div>
+</div>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>But note that at OSC, you would not be able to remove anything you’re not supposed to, since you don’t have the permissions to do so. On your own computer, this could be more genuinely dangerous, though even there, you would not be able to remove the operating system without specifically requesting “admin” rights.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Because our script has a shebang line, we could also execute the script without the <code>bash</code> command using <code>./printname.sh</code>. However, this would also require us to “make the script executable”, which is beyond the scope of this workshop.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Of course, we <em>could</em> also simply write the output to a predefined (“hardcoded”) file name such as <code>out.txt</code>, but in general, it’s better practice to keep this flexible via an argument.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>We’ll see in the upcoming <code>SLURM</code> module that we when submit scripts to the OSC queue (rather than running them directly), the output of scripts that is normally printed to screen, will instead go to a sort of “log” file. So, your script’s reporting will end up in this file.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">2023, Jelmer Poelstra</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mcic-osu/rnaseq-intro">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+</body></html>

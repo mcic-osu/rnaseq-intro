@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jelmer Poelstra">
+<meta name="dcterms.date" content="2023-07-14">
 
-<title>RNAseq analysis – removed</title>
+<title>Intro</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -122,7 +90,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><i class="fa-solid fa-home" aria-label="home"></i></span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../modules/intro.html" rel="" target="">
+    <a class="nav-link active" href="../modules/intro.html" rel="" target="" aria-current="page">
  <span class="menu-text">Introduction</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -243,75 +211,201 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#workflow-overview" id="toc-workflow-overview" class="nav-link active" data-scroll-target="#workflow-overview">Workflow overview</a></li>
+  <li><a href="#rnaseq-data-analysis" id="toc-rnaseq-data-analysis" class="nav-link" data-scroll-target="#rnaseq-data-analysis">RNAseq data analysis</a>
+  <ul class="collapse">
+  <li><a href="#part-i-from-reads-to-count-table" id="toc-part-i-from-reads-to-count-table" class="nav-link" data-scroll-target="#part-i-from-reads-to-count-table">Part I: From reads to count table</a></li>
+  <li><a href="#part-ii-analyzing-the-count-table" id="toc-part-ii-analyzing-the-count-table" class="nav-link" data-scroll-target="#part-ii-analyzing-the-count-table">Part II: Analyzing the count table</a></li>
+  </ul></li>
+  <li><a href="#what-well-cover" id="toc-what-well-cover" class="nav-link" data-scroll-target="#what-well-cover">What we’ll cover</a>
+  <ul class="collapse">
+  <li><a href="#computing-skills" id="toc-computing-skills" class="nav-link" data-scroll-target="#computing-skills">Computing skills</a></li>
+  <li><a href="#analysis-part-i-from-sequence-reads-to-gene-counts" id="toc-analysis-part-i-from-sequence-reads-to-gene-counts" class="nav-link" data-scroll-target="#analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</a></li>
+  <li><a href="#analysis-part-ii-analyzing-gene-counts-in-r" id="toc-analysis-part-ii-analyzing-gene-counts-in-r" class="nav-link" data-scroll-target="#analysis-part-ii-analyzing-gene-counts-in-r">Analysis part II: Analyzing gene counts in R</a></li>
+  </ul></li>
+  <li><a href="#data-type-and-workflow-variations" id="toc-data-type-and-workflow-variations" class="nav-link" data-scroll-target="#data-type-and-workflow-variations">Data type and workflow variations</a>
+  <ul class="collapse">
+  <li><a href="#reference-based-versus-de-novo-workflows" id="toc-reference-based-versus-de-novo-workflows" class="nav-link" data-scroll-target="#reference-based-versus-de-novo-workflows">Reference-based versus <em>de novo</em> workflows</a></li>
+  <li><a href="#gene-level-versus-transcript-level-counts-and-short-versus-long-reads" id="toc-gene-level-versus-transcript-level-counts-and-short-versus-long-reads" class="nav-link" data-scroll-target="#gene-level-versus-transcript-level-counts-and-short-versus-long-reads">Gene-level versus transcript-level counts, and short versus long reads</a></li>
+  <li><a href="#bulk-versus-single-cell-rnaseq" id="toc-bulk-versus-single-cell-rnaseq" class="nav-link" data-scroll-target="#bulk-versus-single-cell-rnaseq">“Bulk” versus single-cell RNAseq</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">RNAseq data analysis: introduction</h1>
+</div>
 
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Checking the checksums for the downloaded FASTA and GTF (Click to expand)
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>The <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/">NCBI FTP directory for the human genome</a> also contains a file with checksums, <code>md5checksums.txt</code>.</p>
-<p>Let’s download it — we’ll use the <code>-P</code> option to tell <code>wget</code> to put it directly in the <code>data/ref</code> dir:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-P</span> data/ref https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/md5checksums.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>It’s a little harder to check the file integrity in these cases because we only have two out of the several dozen files listed in this <code>md5checksums.txt</code> file (namely, all those in the FTP dir), and to make matters worse, we renamed them.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> data/ref</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"GCF_000001405.40_GRCh38.p14_genomic.gtf.gz"</span> md5checksums.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>f573144e507a9fd85150cf6a3c8f8471  ./GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"GCF_000001405.40_GRCh38.p14_genomic.fna.gz"</span> md5checksums.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>c30471567037b2b2389d43c908c653e1  ./GCF_000001405.40_GRCh38.p14_genomic.fna.gz</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">md5sum</span> GCF<span class="pp">*</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>689762f267eafe361b6ee4b21638eb51  GCF_000001405.40_GRCh38.p14_genomic.fna
-a5274984906df2cc65319dfc1b307a01  GCF_000001405.40_GRCh38.p14_genomic.gtf</code></pre>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Alternatives to looping with a glob (Click to expand)
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>With genomics data, the routine of looping over an entire directory of files, or selections made with simple globbing patterns, should serve you very well.</p>
-<p>But in some cases, you may want to iterate only over a specific list of filenames (or partial filenames such as sample IDs) that represent a complex selection.</p>
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jelmer Poelstra </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 14, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<hr>
+<p><br></p>
+<section id="workflow-overview" class="level2">
+<h2 class="anchored" data-anchor-id="workflow-overview">Workflow overview</h2>
+<p align="center">
+<img src="img/workflow.png" width="85%">
+</p>
+<p><br></p>
+</section>
+<section id="rnaseq-data-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="rnaseq-data-analysis">RNAseq data analysis</h2>
+<p>RNAseq data analysis can be divided into two main parts:</p>
 <ul>
-<li><p>If this is a <strong>short list</strong>, you could directly specify it in the loop:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> sample <span class="kw">in</span> A1 B6 D3<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="va">R1</span><span class="op">=</span>data/fastq/<span class="st">"</span><span class="va">$sample</span><span class="st">"</span>_R1.fastq.gz</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="va">R2</span><span class="op">=</span>data/fastq/<span class="st">"</span><span class="va">$sample</span><span class="st">"</span>_R2.fastq.gz</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Some file processing...</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>If it is a <strong>longer list</strong>, you could create a simple text file with one line per sample ID / filename, and use command substitution as follows:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> <span class="va">$(</span><span class="fu">cat</span> file_of_filenames.txt<span class="va">)</span><span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Some file processing...</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>A <em>bioinformatics-heavy part</em> in which you generate <strong>gene counts from the raw reads</strong>.</p></li>
+<li><p>A more <em>statistical part</em> in which you <strong>analyze the count table</strong> to create lists of differentially expressed genes and enriched functional categories.</p></li>
 </ul>
-<p>In cases like this, <em>Bash arrays</em> (basically, variables that consist of multiple values, like a vector in R) or <em><code>while</code> loops</em> may provide more elegant solutions, but those are outside the scope of this introduction.</p>
+<p><br></p>
+<section id="part-i-from-reads-to-count-table" class="level3">
+<h3 class="anchored" data-anchor-id="part-i-from-reads-to-count-table">Part I: From reads to count table</h3>
+<p>This part starts with the raw reads from the (typically Illumina) sequencing machine to eventually generate a table with expression counts for each gene by each sample. This part:</p>
+<ul>
+<li><p>Is usually done by <strong>sequentially running a series of programs with a command-line interface (CLI).</strong> Therefore, you typically use the Unix shell (command line) and shell scripts to do this.</p></li>
+<li><p>Processes large amounts of data, and is generally not suitable to be run on a laptop or a desktop computer: you should <strong>use a high-performance computing (HPC) center or cloud computing</strong>. (We will use the Ohio Supercomputer Center, OSC.)</p></li>
+<li><p>Is quite <strong>standardized</strong> and therefore, a “<em>pipeline</em>” written for one dataset can be run for another one with minor changes, even if the datasets are from completely different experiments or different species.</p></li>
+</ul>
+<p><br></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
 </div>
 </div>
+<div class="callout-body-container callout-body">
+<p>Because of the required technical skills and computing infrastructure, in combination with the standardized execution, there are some alternatives available to doing this by yourself step-by-step<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<ul>
+<li><p>Companies and university bioinformatics core facilities may be able to simply <strong>run this part for you</strong>.</p></li>
+<li><p>Services with graphical user interfaces (GUIs) are available, such as <strong><a href="https://usegalaxy.org/">Galaxy</a></strong>.<br>
+These run the same command-line programs, but wrap their execution in a more user-friendly way.</p></li>
+</ul>
+<p><strong>Such options are especially worth considering when you have no plans or ambitions to do much other genomics work in the future – in other words, it may not be worth learning all the required technical skills just for one project.</strong></p>
+<p>When you plan to do multiple genomics projects and/or are generally interested in gaining computing skills, it’s better to go ahead and learn to run these command-line programs yourself.</p>
 </div>
+</div>
+<p><br></p>
+</section>
+<section id="part-ii-analyzing-the-count-table" class="level3">
+<h3 class="anchored" data-anchor-id="part-ii-analyzing-the-count-table">Part II: Analyzing the count table</h3>
+<p>In this part, you will analyze the table with gene counts for each sample, for example to test for differential expression among groups (e.g., different treatments) and to test whether certain functional (GO, KEGG) gene categories have distinct expression patterns as a whole.</p>
+<p>This part:</p>
+<ul>
+<li><p>Is typically run entirely in R, using a number of specialized R “packages”.</p></li>
+<li><p>Is not particularly “compute-intensive”: your count table is a text file of typically only a few Mb, and the analyses you’re running do not need much time or computer memory. As such, you can run this on your laptop or desktop computer. (Though we will do it at OSC, mainly for the sake of continuity.)</p></li>
+<li><p>Is much less standardized across projects: the details of the analysis depend a lot on your experimental design and what you’re interested in; in addition, initial results may influence your next steps, and so on.</p></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="what-well-cover" class="level2">
+<h2 class="anchored" data-anchor-id="what-well-cover">What we’ll cover</h2>
+<section id="computing-skills" class="level3">
+<h3 class="anchored" data-anchor-id="computing-skills">Computing skills</h3>
+<p>Many of these computing skills are needed only for part I below.</p>
+<ul>
+<li>Introduction to the Ohio Supercomputer Center (OSC)</li>
+<li>The VS Code (Code Server) text editor / IDE</li>
+<li>Introduction to the Unix shell (“command line” / “Bash”)</li>
+<li>Shell scripts and loops</li>
+<li>The <code>SLURM</code> compute job scheduler</li>
+<li>Using and installing software at OSC</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Along the way, we’ll also learn about <em>project organization</em> and <em>ensuring reproducibility</em>.</li>
+<li>I won’t include a full-blown <em>introduction to <strong>R</strong></em>, but will provide some learning resources for those of you with little R experience before we get to the relevant part of the RNAseq analysis.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="analysis-part-i-from-sequence-reads-to-gene-counts" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</h3>
+<ul>
+<li>Genomic file formats relevant to RNAseq: FASTA, FASTQ, BAM/SAM, GFF<br>
+</li>
+<li>Raw read QC with <code>FastQC</code> and <code>MultiQC</code></li>
+<li>Read pre-processing with <code>TrimGalore</code> and <code>SortMeRNA</code></li>
+<li>Read alignment to a reference genome with <code>STAR</code></li>
+<li>Alignment QC with (at least) <code>MultiQC</code></li>
+<li>Gene expression counting with <code>Salmon</code></li>
+</ul>
+</section>
+<section id="analysis-part-ii-analyzing-gene-counts-in-r" class="level3">
+<h3 class="anchored" data-anchor-id="analysis-part-ii-analyzing-gene-counts-in-r">Analysis part II: Analyzing gene counts in R</h3>
+<ul>
+<li>Getting an overview of sample/group distinctiveness with a PCA</li>
+<li>Differential expression analysis with <code>{DESeq2}</code></li>
+<li>KEGG and GO enrichment analysis with <code>{ClusterProfiler}</code></li>
+</ul>
+<p><br></p>
+</section>
+</section>
+<section id="data-type-and-workflow-variations" class="level2">
+<h2 class="anchored" data-anchor-id="data-type-and-workflow-variations">Data type and workflow variations</h2>
+<section id="reference-based-versus-de-novo-workflows" class="level3">
+<h3 class="anchored" data-anchor-id="reference-based-versus-de-novo-workflows">Reference-based versus <em>de novo</em> workflows</h3>
+<p>We will cover a <strong>“reference-based”</strong> RNAseq workflow: one where your focal organism has a reference genome assembly and annotation. “De novo” RNAseq workflows are necessary when you don’t have a reference genome. They are overall similar, but more time-consuming and bioinformatics-heavy, since you will first have to assemble a transcriptome from the RNAseq data itself.</p>
+</section>
+<section id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads" class="level3">
+<h3 class="anchored" data-anchor-id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads">Gene-level versus transcript-level counts, and short versus long reads</h3>
+<p>We will focus on generating and analyzing <strong>gene-level counts</strong> rather than transcript-level counts: that is, for each sample, we will obtain a single count for each gene even if that gene has multiple transcripts (isoforms). However, the program which we’ll use for counting (<code>Salmon</code>) can also generate transcript-level counts, and downstream transcript-level analysis is fairly similar too, though this certainly adds a level of complexity.</p>
+<p>Additionally, we will use short-read (Illumina) sequencing data, for which transcript-level counts have much greater levels of uncertainty, since most reads cannot directly be assigned to a specific transcript. Consider using long reads, such as <a href="https://www.pacb.com/products-and-services/applications/rna-sequencing/">PacBio IsoSeq</a>, if you’re interested in transcript-level inferences.</p>
+</section>
+<section id="bulk-versus-single-cell-rnaseq" class="level3">
+<h3 class="anchored" data-anchor-id="bulk-versus-single-cell-rnaseq">“Bulk” versus single-cell RNAseq</h3>
+<p>We will focus on “bulk” RNAseq, where RNA was extracted from a large mixture of cells and possibly cell types. Single-cell RNAseq analysis is similar for the first part (generating counts), but differs more in the second part (count analysis).</p>
 
 
+</section>
+</section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Additionally, you can run standardized pipelines yourself, which wrap many individual steps into a single executable workflow. This especially becomes a time-efficient option once you know the computing basics, and also aids with reproducibility and following best-practices. For example, for RNAseq there is a <a href="https://nf-co.re/rnaseq">Nextflow nf-core RNAseq pipeline</a>. The steps we will run fill follow this pipeline closely – but in my opinion, for initial learning, it is better to go step-by-step without a formalized pipeline.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -551,7 +645,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-left">2023, Jelmer Poelstra</div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></div>
+    </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">

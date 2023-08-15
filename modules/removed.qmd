@@ -40,3 +40,43 @@ a5274984906df2cc65319dfc1b307a01  GCF_000001405.40_GRCh38.p14_genomic.gtf
 ```
 
 :::
+
+
+:::{.callout-note  collapse="true"}
+## Alternatives to looping with a glob (Click to expand)
+
+With genomics data,
+the routine of looping over an entire directory of files,
+or selections made with simple globbing patterns,
+should serve you very well.
+
+But in some cases,
+you may want to iterate only over a specific list of filenames
+(or partial filenames such as sample IDs)
+that represent a complex selection.
+
+- If this is a **short list**, you could directly specify it in the loop:
+
+  ```bash
+  for sample in A1 B6 D3; do
+      R1=data/fastq/"$sample"_R1.fastq.gz
+      R2=data/fastq/"$sample"_R2.fastq.gz
+      # Some file processing...
+  done
+  ```
+
+- If it is a **longer list**,
+  you could create a simple text file with one line per sample ID / filename,
+  and use command substitution as follows:
+
+  ```bash
+  for fastq_file in $(cat file_of_filenames.txt); do
+      # Some file processing...
+  done
+  ```
+
+In cases like this, _Bash arrays_
+(basically, variables that consist of multiple values, like a vector in R)
+or _`while` loops_ may provide more elegant solutions,
+but those are outside the scope of this introduction.
+:::

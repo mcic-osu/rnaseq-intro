@@ -1,0 +1,880 @@
+---
+title: "Overview of next steps / shell variables & `for` loops"
+subtitle: "Starting with a bird's-eye view of how we will be running CLI bioinformatics programs"
+pagetitle: "Running bioinformatics programs"
+highlight-style: github
+number-sections: true
+engine: knitr
+author: Jelmer Poelstra
+date: 2023-08-25
+---
+
+```{r knitr_options, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE,
+                      class.output = "bash-out")
+```
+
+-------
+
+<br>
+
+## Overview & Getting started
+
+In this session, we'll start by looking ahead a bit.
+You will get an overview of how we will be running bioinformatics programs with
+command-line interfaces (CLIs) during the first part of the RNAseq analysis,
+where we start with reads in FASTQ files to produce a table with gene counts.
+This will reveal **which fundamentals we still need to cover**
+**before we can start running these analyses.**
+
+Then, we'll cover the first of the remaining fundamental topics:
+**shell variables** and **`for` loops**.
+The next few sessions will cover the remaining ones:
+
+- [Writing shell scripts](./A07_scripts.qmd)
+- [Using software at OSC](./A08_software.qmd)
+- [Submitting scripts to the OSC job queue](./A09_slurm.qmd).
+
+### Start VS Code and open your folder {-}
+
+As always, we'll be working in VS Code &mdash;
+if you don't already have a session open, see below how to do so.
+
+**Make sure to open your `/fs/ess/PAS0471/<user>/rnaseq_intro` dir**,
+either by using the `Open Folder` menu item,
+or by clicking on this dir when it appears in the `Welcome` tab.
+
+:::{.callout-tip collapse="true"}
+## Starting VS Code at OSC - with a Terminal (Click to expand)
+1. Log in to OSC's OnDemand portal at <https://ondemand.osc.edu>.
+
+2. In the blue top bar, select `Interactive Apps`
+   and then near the bottom of the dropdown menu, click `Code Server`.
+
+3. In the form that appears on a new page:
+   - Select an appropriate OSC project (here: `PAS0471`)
+   - For this session, select `/fs/ess/PAS0471` as the starting directory
+   - Make sure that `Number of hours` is at least `2`
+   - Click `Launch`.
+
+4. On the next page, once the top bar of the box has turned green
+   and says `Runnning`, click `Connect to VS Code`.
+
+<figure><p align="center"><img src=img/osc-code-launch_ed.png width="80%"></p></figure>
+
+5. Open a Terminal by clicking
+   &nbsp; {{< fa bars >}} &nbsp; => `Terminal` => `New Terminal`.
+   (Or use one of the keyboard shortcuts:
+   <kbd>Ctrl</kbd>+<kbd>\`</kbd> (backtick) or
+   <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.)
+
+6. In the `Welcome` tab under `Recent`,
+   you should see your `/fs/ess/PAS0471/<user>/rnaseq_intro` dir listed:
+   click on that to open it.
+   Alternatively, use
+   &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `Open Folder`
+   to open that dir in VS Code.
+:::
+
+:::{.callout-warning collapse="true"}
+#### Don't have your own dir with the data? (Click to expand)
+If you missed the last session, or deleted your `rnaseq_intro` dir entirely,
+run these commands to get a (fresh) copy of all files you should have so far:
+
+```bash
+mkdir -p /fs/ess/PAS0471/$USER/rnaseq_intro
+cp -r /fs/ess/PAS0471/demo/202307_rnaseq /fs/ess/PAS0471/$USER/rnaseq_intro
+```
+
+And if you do have an `rnaseq_intro` dir,
+but you want to start over because you moved or removed some of the files
+while practicing, then delete the dir before your run the commands above:
+
+```bash
+rm -r /fs/ess/PAS0471/$USER/rnaseq_intro
+```
+
+You should have at least the following files in this dir:
+
+```{.bash-out}
+/fs/ess/PAS0471/demo/202307_rnaseq
+├── data
+│   └── fastq
+│       ├── ASPC1_A178V_R1.fastq.gz
+│       ├── ASPC1_A178V_R2.fastq.gz
+│       ├── ASPC1_G31V_R1.fastq.gz
+│       ├── ASPC1_G31V_R2.fastq.gz
+│       ├── md5sums.txt
+│       ├── Miapaca2_A178V_R1.fastq.gz
+│       ├── Miapaca2_A178V_R2.fastq.gz
+│       ├── Miapaca2_G31V_R1.fastq.gz
+│       └── Miapaca2_G31V_R2.fastq.gz
+├── metadata
+│   └── meta.tsv
+└── README.md
+│   └── ref
+│       ├── GCF_000001405.40.fna
+│       ├── GCF_000001405.40.gtf
+```
+:::
+
+<br>
+
+## Running CLI bioinformatics programs at OSC: an overview
+
+We'll use the program _FastQC_ as an example,
+which performs quality control (QC) on a FASTQ file, 
+and is often the very first step when analyzing a newly sequenced genomics dataset.
+
+### Running a CLI program interactively
+
+When we run a bioinformatics program at OSC,
+we'll always have to first make the program available to us.
+We will cover that in more in detail in the session [Software at OSC](A08_software.qmd)
+&mdash; but here is how you can do this for _FastQC_:
+
+```bash
+# Load the OSC "module" for FastQC, so we can use this program
+module load fastqc
+```
+
+Next, we could run _FastQC_ for one of our FASTQ files as follows:
+
+```bash
+mkdir -p results/fastqc # First create the output dir
+
+fastqc --outdir results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz
+```
+```{.bash-out}
+Started analysis of ASPC1_A178V_R1.fastq.gz
+Approx 5% complete for ASPC1_A178V_R1.fastq.gz
+Approx 10% complete for ASPC1_A178V_R1.fastq.gz
+Approx 15% complete for ASPC1_A178V_R1.fastq.gz
+# [...truncated]
+Approx 95% complete for ASPC1_A178V_R1.fastq.gz
+Approx 100% complete for ASPC1_A178V_R1.fastq.gz
+Analysis complete for ASPC1_A178V_R1.fastq.gz
+```
+```bash
+ls -lh results/fastqc
+```
+```{.bash-out}
+total 736K
+-rw-r--r-- 1 jelmer PAS0471 266K Aug 15 10:39 ASPC1_A178V_R1_fastqc.html
+-rw-r--r-- 1 jelmer PAS0471 456K Aug 15 10:39 ASPC1_A178V_R1_fastqc.zip
+```
+
+That seems to have worked!
+We have two output files,
+including an HTML file that contains figures with all the results.
+
+So should we simply repeat this for all our FASTQ files?
+I.e., we could run the `fastqc` command 8 times,
+each time passing a different input file as the argument.
+That seems a bit tedious,
+and remember that the full dataset contains even more files...
+
+::: {.callout-note}
+
+For completeness' sake, I should mention that it is in fact possible
+to pass multiple files to _FastQC_.
+If we did that, we'd only need to run _FastQC_ once,
+and would not need the approach shown below, where we use a loop.
+
+However, using a loop is a very general approach,
+and can be used with the many programs that can only run one FASTQ file or one
+sample at a time.
+When using a supercomputer like OSC,
+this is also by far the most time-efficient approach,
+because it allows each sample/file to be processed in parallel rather than
+consecutively.
+
+:::
+
+### Looping over input files
+
+We can avoid having to type a very similar command a whole bunch of times
+by using a **loop**.
+
+Further down on this page,
+we will learn all about [`for` loops](#for-loops)
+(and [variables](#variables)).
+Here, we'll again just see a quick example,
+and it is not yet important to understand the details of the code below,
+which will loop over all FASTQ files in the `data/fastq` dir,
+and run _FastQC_ for one file at a time:
+
+```bash
+for fastq_file in data/fastq/*fastq.gz; do
+    fastqc "$fastq_file"
+done
+```
+
+That's a lot better than repeating a similar line of codes many times &mdash;
+and the loop would be exactly the same regardless of whether we had
+8 or 200 FASTQ files!
+
+However, recall that our full dataset also _much larger_ files.
+A _FastQC_ run on one of these will take several minutes,
+so our loop might take a while to finish
+(and some of the other programs we'll run later take much longer than this).
+Most of all, when we run the program interactively and consecutively like this,
+we would not make use of the supercomputer's strengths at all:
+this is basically like running it on our own laptop,
+since each _FastQC_ run happens consecutively.
+
+### Running the program with a shell script
+
+What we should do instead is to submit a separate compute job for each _FastQC_ run,
+and these can then all run in parallel (i.e., at the same time) on different compute nodes.
+To make the switch from interactively running _FastQC_,
+to submitting each run as a compute job,
+will involve _two steps_:
+
+1. Putting the code to run _FastQC_ **inside a shell script**
+2. **Submitting** that shell script to the OSC compute job queue with `sbatch`
+   (rather than directly _running_ it)
+
+We will cover the basics of shell scripts in [A07 - Shell scripts](link) &mdash;
+for now, just realize that these scripts are small text files with the extension
+`.sh` that basically contain the same kind of Unix shell code we've been running
+interactively, with some added bells and whistles.
+
+If for now we just assume we had created such a script,
+we can modify our loop as follows to run _FastQC_ through a script instead of
+including the command to run the program directly in the loop:
+
+```bash
+for fastq_file in data/fastq/*fastq.gz; do
+    bash scripts/fastqc.sh "$fastq_file"
+done
+```
+```{.bash-out}
+Started analysis of ASPC1_A178V_R1.fastq.gz
+Approx 5% complete for ASPC1_A178V_R1.fastq.gz
+# [...]
+Started analysis of ASPC1_A178V_R2.fastq.gz
+Approx 5% complete for ASPC1_A178V_R2.fastq.gz
+# [...]
+Started analysis of ASPC1_G31V_R1.fastq.gz
+Approx 5% complete for ASPC1_G31V_R1.fastq.gz
+# [...]
+Started analysis of ASPC1_G31V_R2.fastq.gz
+Approx 5% complete for ASPC1_G31V_R2.fastq.gz
+# [...]
+Started analysis of Miapaca2_A178V_R1.fastq.gz
+Approx 5% complete for Miapaca2_A178V_R1.fastq.gz
+# [...]
+```
+
+However,
+running that loop would still make _FastQC_ run _sequentially_ on the node that
+we are at,
+instead of in parallel on different compute nodes.
+
+### Submitting the script to the job scheduler (many times)
+
+To run our script in parallel,
+we will use the `sbatch` command,
+which will submit the script to the Slurm job scheduler in every iteration of
+the loop (i.e., as many times as we have input files):
+
+```bash
+for fastq_file in data/fastq/*fastq.gz; do
+    sbatch --account=PAS0471 scripts/fastqc.sh "$fastq_file"
+done
+```
+```{.bash-out}
+submitted batch job XXX
+submitted batch job XXX
+# ...
+# (Output truncated)
+```
+
+We will learn about `sbatch` and associated commands,
+as well as the different options you can use to specify the resources you want to
+request (how much time, how many cores, etc),
+in [A09 - Slurm jobs](link).
+
+### Summarizing what we need to learn about
+
+- **`for` loops and variables**  
+  **`for` loops** will allow you to repeat operations &mdash;
+  specifically, we will later use them to submit many scripts at the same time,
+  one per input file or sample.
+  Using **variables** will allow you to run scripts flexibly,
+  with different input files and settings; they are also used in loops.
+  _We'll talk about these in the sections below._
+
+- **Making software available**  
+  At OSC, a bunch of bioinformatics programs are installed system-wide,
+  but they still need to be "loaded" via `module load`.
+  This collection of programs is unfortunately not comprehensive and we also
+  need another approach, as we'll see in the
+  [Software at OSC session](./A08_software.qmd).
+
+- **Writing shell scripts**  
+  Putting the code to run individual bioinformatics programs inside small shell
+  scripts will allow us to submit them to Slurm job scheduler.
+  (It's also a good way to keep your code organized and clear.)
+
+- **Submitting scripts to the Slurm job scheduler**  
+  Submitting scripts as Slurm jobs allows us, for example,
+  to run the same analysis for different samples simultaneously, in parallel.
+
+<br>
+
+## Variables
+
+In programming, we use **variables** for things that:
+
+  - We refer to repeatedly and/or
+  - Are subject to change.
+
+These tend to be _settings_ like the paths to input and output files,
+and parameter values for programs.
+Using variables makes it easier to change such settings.
+We also need to understand variables to _work with loops and scripts_.
+
+### Assigning and referencing variables
+
+**To _assign_ a value to a variable in Bash** (in short: to assign a variable),
+use the syntax `variable=value`:
+
+```bash
+# Assign the value "beach" to the variable "location":
+location=beach
+
+# Assign the value "200" to the variable "nlines":
+nlines=200
+```
+
+:::{.callout-warning}
+## There can be no spaces around the equals sign (`=`)!
+:::
+
+**To _reference_ a variable** (i.e., to access its value),
+you need to put a dollar sign `$` in front of its name.
+As before with the environment variable `$HOME`,
+we'll use the `echo` command to review the values that our variables contain:
+
+```bash
+echo $location
+```
+```{.bash-out}
+beach
+```
+
+```bash
+echo $nlines
+```
+```{.bash-out}
+200
+```
+
+Conveniently, we can use variables in lots of contexts,
+**as if we had directly typed their _values_**:
+
+```bash
+input_file=data/fastq/ASPC1_A178V_R1.fastq.gz
+ls -lh $input_file 
+```
+```{.bash-out}
+-rw-r--r-- 1 jelmer PAS0471 4.1M Aug  1 18:05 data/fastq/ASPC1_A178V_R1.fastq.gz
+```
+
+::: {.callout-note}
+#### Rules and tips for naming variables
+
+Variable names:
+
+- **Can** contain letters, numbers, and underscores
+- **Cannot** contain spaces, periods, or other special symbols
+- **Cannot start** with a number
+
+Try to make your variable names descriptive,
+like `$input_file` and `$ls_options` above, as opposed to say `$x` and `$bla`.
+
+There are multiple ways of distinguishing words in the absence of spaces,
+such as `$inputFile` and `$input_file`:
+I prefer the latter, which is called "snake case", and I always use lowercase.
+
+:::
+
+<br>
+
+### Quoting variables
+
+Above, we learned that a variable name cannot contain spaces.
+But what happens if our variable's _value_ contains spaces?
+First off, when we try to **assign** the variable without using quotes,
+we get an error:
+
+```bash
+today=Thu, Aug 18
+```
+``` {.bash-out}
+Aug: command not found
+```
+
+:::{.callout-caution collapse="true"}
+## Why do you think we got this error?
+
+The shell tried to assign everything up to the first space (i.e., `Thu,`)
+to `today`.
+After that, since we used a space,
+it assumed the next word (`Aug`) was something else:
+specifically, it interpreted that as a command.
+:::
+
+But it works when we quote (with _double_ quotes, `"..."`)
+the entire string that makes up the value:
+
+```bash
+today="Thu, Aug 18"
+echo $today
+```
+```{.bash-out}
+Thu, Aug 18
+```
+
+----
+
+Now, let's try to **reference** this variable in another context.
+For example, we can try make a new file with today's date:
+
+```bash
+cd sandbox
+
+touch README_$today.txt
+ls
+```
+```{.bash-out}
+# The output should include the following files:
+18.txt  
+Aug  
+README_Thu,
+```
+
+:::{.callout-caution collapse="true"}
+#### What went wrong _here_?
+Again, the shell split the value of `$today` in 3 parts separated by a space
+(this is called "field splitting"): as a result, three files were created.
+:::
+
+Like with assignment,
+our problems can be avoided by **quoting a variable** when we reference it.
+This tells the shell it shouldn't perform field splitting on the variable's value;
+put another way, it takes aways the special meaning of the spaces (as _separators_)
+in the variable's value:
+
+```bash
+touch README_"$today".txt
+
+ls -1
+```
+```{.bash-out}
+# The output should include the following file:
+README_Thu, Aug 18.txt
+```
+
+**It is good practice to quote variables** when you reference them:
+it never hurts, and avoids unexpected surprises.
+
+:::{.callout-note collapse="true"}
+#### Where does a variable name end? (Click to expand)
+Another issue we can run into when we don't quote variables
+is that we can't explicitly define where a variable name ends
+within a longer string of text:
+
+```bash
+echo README_$today_final.txt
+```
+```{.bash-out}
+README_.txt
+```
+
+:::{.callout-caution collapse="true"}
+## What went wrong here? (Hint: check the coloring highlighting above)
+
+- Following a `$`, the shell will stop interpreting characters as being part
+  of the variable name only when it encounters a character that cannot be
+  part of a variable name, such as a space or a period.
+
+- Since variable names _can_ contain underscores, it will look for the variable
+  `$today_final`, which does not exist.
+  
+- Importantly, the shell **does not error out** when you reference a
+  non-existing variable -- it basically ignores it,
+  such that `README_$today_final.txt` becomes `README_.txt`,
+  as if we hadn't referenced any variable.
+:::
+
+Quoting solves this issue, too:
+
+```{bash, eval=FALSE}
+echo README_"$today"_final.txt
+```
+```{.bash-out}
+README_Thu, Aug 18_final.txt
+```
+:::
+
+:::{.callout-note collapse="true"}
+## Quoting as "escaping" special meaning & and double vs. single quotes (Click to expand)
+
+By double-quoting a variable,
+we are essentially escaping (or "turning off")
+the default special meaning of the _space as a separator_,
+and are asking the shell to interpret it as a _literal space_.
+
+Similarly, double quotes will escape other "special characters",
+such as shell wildcards. Compare:
+
+```bash
+echo *     # This will echo/list all files in the current working dir (!)
+```
+```{.bash-out}
+18.txt Aug README_Thu, README_Thu, Aug 18.txt
+```
+
+```bash
+echo "*"   # This will simply print the "*" character 
+```
+```{.bash-out}
+*
+```
+
+However, as we saw above,
+double quotes **not** turn off the special meaning of `$`
+(which is to denote a string as a variable):
+
+```bash
+echo "$today"      # Double quotes do not escape the special meaning of $
+```
+```{.bash-out}
+Thu, Aug 18
+```
+
+...but **_single quotes_** will:
+
+```bash
+echo '$today'     # Single quotes do escape the special meaning of $
+```
+```{.bash-out}
+$today
+```
+:::
+
+<br>
+
+## For loops
+
+Loops are a universal element of programming languages,
+and are used to repeat operations,
+such as when you want to run the same script or command for multiple files.
+
+Here, we'll only cover the **most common type of loop: the `for` loop.**
+These _iterate_ over a collection, such as a list of files:
+that is,
+they allow you to perform one or more actions for each element in the collection,
+one element at a time.
+
+### `for` loop syntax and mechanics
+
+Let's see a first example,
+where our "collection" is just a very short list of numbers (`1`, `2`, and `3`):
+
+```{bash, eval=TRUE}
+for a_number in 1 2 3; do
+    echo "In this iteration of the loop, the number is $a_number"
+    echo "--------"
+done
+```
+
+The **indented lines** between `do` and `done` contain the code that is being executed
+as many times as there are items in the collection:
+in this case 3 times, as you can tell from the output above.
+
+On the first and last, unindented lines,
+`for` loops contain the following mandatory keywords:
+
+| Keyword | Purpose	                            |
+|---------|-------------------------------------|
+| `for`	  | After `for`, we set the **variable name** (an arbitrary name, whatever we choose)
+| `in`	  | After `in`, we specify the **collection** we are looping over	
+| `do`	  | After `do`, we have one ore more lines specifying what to do with each item	
+| `done`  | Tells the shell we are done with the loop 
+
+:::{.callout-note collapse="true"}
+## A semicolon `;` (as used before `do`) separates two commands on a single line (Click to expand)
+
+A semicolon separates two commands written on a single line --
+for instance, instead of:
+
+```bash
+mkdir results
+cd results
+```
+
+...you could equivalently type:
+
+```bash
+mkdir results; cd results
+```
+
+The `;` in the `for` loop syntax has the same function, and as such,
+an alternative way to format a `for` loop is:
+
+```bash
+for a_number in 1 2 3
+do
+    echo "In this iteration of the loop, the number is $a_number"
+done
+```
+
+But that's one line longer and a bit awkwardly asymmetric.
+:::
+
+<br>
+
+----
+
+Here are two key things to understand about `for` loops:
+
+First, in each iteration of the loop, one element in the collection
+**is being assigned to the variable** specified after `for`.
+In the example above, we used `a_number` as the variable name,
+so that variable contained `1` when the loop ran for the first time,
+`2` when it ran for the second time,
+and `3` when it ran for the third and last time.
+
+This variable continues to exist outside of the loop,
+having the last value that was assigned to it in the loop:
+
+```bash
+echo $a_number
+```
+::: {.bash-out}
+3
+:::
+
+Second, **the loop runs sequentially for each item in the collection**,
+and will run exactly as many times as there are items in the collection.
+
+The following example, where we let the computer sleep for 1 second
+before printing the date and time with the `date` command,
+demonstrates that the loop is being executed sequentially: xxx
+
+```bash
+for a_number in 1 2 3; do
+    echo "In this iteration of the loop, the number is $a_number"
+    sleep 1           # Let the computer sleep for 1 second
+    date              # Print the date and time
+    echo "--------"
+done
+```
+```{.bash-out}
+In this iteration of the loop, the number is 1  
+Tue Aug 15 13:30:16 EDT 2023  
+--------  
+In this iteration of the loop, the number is 2  
+Tue Aug 15 13:30:17 EDT 2023  
+--------  
+In this iteration of the loop, the number is 3  
+Tue Aug 15 13:30:18 EDT 2023  
+```
+
+:::{.exercise}
+### On Your Own: A simple loop {-}
+
+Create a loop that will print:
+
+```{.bash-out}
+morel is an Ohio mushroom  
+destroying_angel is an Ohio mushroom  
+eyelash_cup is an Ohio mushroom
+```
+
+:::{.callout-tip collapse="true"}
+## Hints (Click here)
+
+- Just like we looped over 3 numbers above (`1`, `2`, and `3`),
+  you want to loop over the three mushroom names,
+  `morel`, `destroying_angel`, and `eyelash_cup`.
+
+- Notice that when we specify the collection "manually",
+  like we did above with numbers, the elements are simply separated by a space.
+:::
+
+:::{.callout-tip collapse="true"}
+## Solution (Click here)
+
+```{bash, eval=TRUE}
+for mushroom in morel destroying_angel eyelash_cup; do
+    echo "$mushroom is an Ohio mushroom"
+done
+```
+
+:::
+:::
+
+<br>
+
+### Looping over files with globbing
+
+In practice, it is rare to manually list the collection of items we want to
+loop over, like we did above.
+Instead, we commonly **loop over files** directly using _globbing_: 
+
+```bash
+cd /fs/ess/PAS0471/$USER/rnaseq_intro
+
+for fastq_file in data/fastq/*fastq.gz; do
+    echo "Now processing FASTQ file $fastq_file..."
+    # More processing...
+done
+```
+```{.bash-out}
+Now processing FASTQ file data/fastq/ASPC1_A178V_R1.fastq.gz...
+Now processing FASTQ file data/fastq/ASPC1_A178V_R2.fastq.gz...
+Now processing FASTQ file data/fastq/ASPC1_G31V_R1.fastq.gz...
+Now processing FASTQ file data/fastq/ASPC1_G31V_R2.fastq.gz...
+Now processing FASTQ file data/fastq/Miapaca2_A178V_R1.fastq.gz...
+Now processing FASTQ file data/fastq/Miapaca2_A178V_R2.fastq.gz...
+Now processing FASTQ file data/fastq/Miapaca2_G31V_R1.fastq.gz...
+Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...
+```
+
+**This technique is extremely useful**, and I use it all the time.
+Take a moment to realize that we're not doing a separate `ls` and storing
+the results:
+as mentioned before, a globbing pattern directly selects files.
+
+If needed,
+you can use your globbing / wild card skills to narrow down the file selection:
+
+- Perhaps we only want to select R1 files (forward reads): 
+
+  ```bash
+  for fastq_file in data/raw/*_R1.fastq.gz; do
+      # Some file processing...
+  done
+  ```
+
+- Or FASTQ files are in sample-specific folders:
+
+  ```bash
+  # With default shell settings, '**' will traverse one dir level
+  # E.g., files are in 'results/trim/sampleA/', 'results/trim/sampleB/', etc. 
+  for fastq_file in results/trim/**/*_R1.fastq.gz; do
+      # Some file processing...
+  done
+  ```
+
+<br>
+
+## At-home reading: Command substitution
+
+If you want to store the result of a command in a variable,
+you can use a construct called "**command substitution**"
+by wrapping the command inside `$()`.
+
+Let's see an example.
+As you know, the `date` command will print the current date and time:
+
+```{bash, eval=TRUE}
+date
+```
+
+If we try to store the date in a variable directly, it doesn't work:
+the literal string "date" is stored, not the output of the command:
+
+```{bash, eval=TRUE}
+today=date
+echo "$today"
+```
+
+That's why we need command substitution with `$()`:
+
+```{bash, eval=TRUE}
+today=$(date)
+echo "$today"
+```
+
+----
+
+One practical example of this is that you might want to automatically 
+include the current date in a file name.
+First, note that we can use `date +%F` to print the date in `YYYY-MM-DD` format,
+and omit the time:
+
+```{bash, eval=TRUE}
+date +%F
+```
+
+Let's use that in a command substitution &mdash; but a bit differently than before:
+we use the command substitution `$(date +%F)` _directly_ in our
+`touch` command, rather than first assigning it to a variable:
+
+```bash
+cd sandbox
+
+# Create a file with our $today variable:
+touch README_"$(date +%F)".txt
+
+ls
+```
+```{.bash-out}
+# Output should include a file like this (the actual date will vary, of course!):
+README_2023-08-15.txt
+```
+
+Among many other uses,
+command substitution is handy when you want your script to report some results,
+or when a next step in the script depends on a previous result.
+We'll come across it a few times in our shell scripts later on.
+
+:::{.exercise}
+### On Your Own: Command substitution {-}
+
+Say we wanted to store and report the number of lines in a file,
+which can be a good QC measure for FASTQ and other genomic data files.
+
+`wc -l` gets you the number of lines,
+and you can use a trick to omit the filename:
+
+```bash
+cd /fs/ess/PAS0471/$USER/rnaseq_intro
+
+zcat data/fastq/ASPC1_A178V_R1.fastq.gz | wc -l
+```
+```{.bash-out}
+400000
+```
+
+**Use command substitution to store the output of the last command in a variable,**
+**and then use an `echo` command to print:**
+
+```{bash-out}
+The file has 30387 lines
+```
+
+:::{.callout-tip collapse="true"}
+## Solution
+
+```bash
+nlines=$(zcat data/fastq/ASPC1_A178V_R1.fastq.gz | wc -l)
+echo "The file $nlines lines"
+```
+```{.bash-out}
+The file 400000 lines
+```
+
+**Note:** You don't have to quote variables _inside_ a quoted `echo` call,
+since it's, well, already quoted.
+If you _also_ quote the variables, you will in fact _unquote_ it,
+although that shouldn't pose a problem inside echo statements.
+
+:::
+:::
