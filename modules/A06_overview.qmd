@@ -23,9 +23,9 @@ knitr::opts_chunk$set(eval = FALSE,
 In this session, we'll start by looking ahead a bit.
 You will get an overview of how we will be running bioinformatics programs with
 command-line interfaces (CLIs) during the first part of the RNAseq analysis,
-where we start with reads in FASTQ files to produce a table with gene counts.
-This will reveal **which fundamentals we still need to cover**
-**before we can start running these analyses.**
+where we start with reads in FASTQ files and will produce a table with gene counts.
+This overview is meant to clarify
+**which fundamentals we still need to cover before we can start running these analyses.**
 
 Then, we'll cover the first of the remaining fundamental topics:
 **shell variables** and **`for` loops**.
@@ -141,8 +141,10 @@ module load fastqc
 Next, we could run _FastQC_ for one of our FASTQ files as follows:
 
 ```bash
-mkdir -p results/fastqc # First create the output dir
+# First create the output dir
+mkdir -p results/fastqc
 
+# Tell FastQC about the output dir with --outdir, and pass the file name as an argument
 fastqc --outdir results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz
 ```
 ```{.bash-out}
@@ -175,20 +177,18 @@ That seems a bit tedious,
 and remember that the full dataset contains even more files...
 
 ::: {.callout-note}
-
 For completeness' sake, I should mention that it is in fact possible
-to pass multiple files to _FastQC_.
+to pass multiple files as argument to `fastqc`.
 If we did that, we'd only need to run _FastQC_ once,
 and would not need the approach shown below, where we use a loop.
 
 However, using a loop is a very general approach,
-and can be used with the many programs that can only run one FASTQ file or one
+and is necessary for the many programs that can only run one FASTQ file or one
 sample at a time.
 When using a supercomputer like OSC,
 this is also by far the most time-efficient approach,
 because it allows each sample/file to be processed in parallel rather than
 consecutively.
-
 :::
 
 ### Looping over input files
@@ -197,27 +197,39 @@ We can avoid having to type a very similar command a whole bunch of times
 by using a **loop**.
 
 Further down on this page,
-we will learn all about [`for` loops](#for-loops)
-(and [variables](#variables)).
+we will learn all about [`for` loops](#for-loops).
 Here, we'll again just see a quick example,
 and it is not yet important to understand the details of the code below,
-which will loop over all FASTQ files in the `data/fastq` dir,
+which will "loop over" all FASTQ files in the `data/fastq` dir,
 and run _FastQC_ for one file at a time:
 
 ```bash
 for fastq_file in data/fastq/*fastq.gz; do
-    fastqc "$fastq_file"
+    fastqc --outdir results/fastqc "$fastq_file"
 done
+```
+```{.bash-out}
+Started analysis of ASPC1_A178V_R1.fastq.gz
+Approx 5% complete for ASPC1_A178V_R1.fastq.gz
+# [...]
+Started analysis of ASPC1_A178V_R2.fastq.gz
+Approx 5% complete for ASPC1_A178V_R2.fastq.gz
+# [...]
+Started analysis of ASPC1_G31V_R1.fastq.gz
+Approx 5% complete for ASPC1_G31V_R1.fastq.gz
+# [...]
+# [Output for all remaining files follows...]
 ```
 
 That's a lot better than repeating a similar line of codes many times &mdash;
 and the loop would be exactly the same regardless of whether we had
 8 or 200 FASTQ files!
 
-However, recall that our full dataset also _much larger_ files.
+However, recall that our full dataset also has _much larger_ files.
 A _FastQC_ run on one of these will take several minutes,
 so our loop might take a while to finish
-(and some of the other programs we'll run later take much longer than this).
+(and it gets worse,
+as some of the other programs we'll run later take much longer than this).
 Most of all, when we run the program interactively and consecutively like this,
 we would not make use of the supercomputer's strengths at all:
 this is basically like running it on our own laptop,
@@ -226,25 +238,28 @@ since each _FastQC_ run happens consecutively.
 ### Running the program with a shell script
 
 What we should do instead is to submit a separate compute job for each _FastQC_ run,
-and these can then all run in parallel (i.e., at the same time) on different compute nodes.
-To make the switch from interactively running _FastQC_,
-to submitting each run as a compute job,
+and these can then all run in parallel (i.e., at the same time)
+on different OSC compute nodes.
+Making the switch from interactively running _FastQC_
+to submitting each run as a compute job
 will involve _two steps_:
 
 1. Putting the code to run _FastQC_ **inside a shell script**
 2. **Submitting** that shell script to the OSC compute job queue with `sbatch`
    (rather than directly _running_ it)
 
-We will cover the basics of shell scripts in [A07 - Shell scripts](link) &mdash;
-for now, just realize that these scripts are small text files with the extension
-`.sh` that basically contain the same kind of Unix shell code we've been running
-interactively, with some added bells and whistles.
+We will cover the basics of shell scripts in the
+[session on shell scripts](./A07_scripts.qmd) &mdash;
+for now, you just need to know that these scripts are small text files 
+(with the extension `.sh`) that basically contain the same kind of shell code
+we've been running interactively, with some added bells and whistles.
 
 If for now we just assume we had created such a script,
-we can modify our loop as follows to run _FastQC_ through a script instead of
-including the command to run the program directly in the loop:
+we can modify our loop as follows to run _FastQC_ through a script,
+instead of including the command to run the program directly in the loop:
 
 ```bash
+# Don't run this - meant as an example only (you don't have this script yet)
 for fastq_file in data/fastq/*fastq.gz; do
     bash scripts/fastqc.sh "$fastq_file"
 done
@@ -259,18 +274,15 @@ Approx 5% complete for ASPC1_A178V_R2.fastq.gz
 Started analysis of ASPC1_G31V_R1.fastq.gz
 Approx 5% complete for ASPC1_G31V_R1.fastq.gz
 # [...]
-Started analysis of ASPC1_G31V_R2.fastq.gz
-Approx 5% complete for ASPC1_G31V_R2.fastq.gz
-# [...]
-Started analysis of Miapaca2_A178V_R1.fastq.gz
-Approx 5% complete for Miapaca2_A178V_R1.fastq.gz
-# [...]
+# [Output for all remaining files follows...]
 ```
 
 However,
-running that loop would still make _FastQC_ run _sequentially_ on the node that
-we are at,
+**running that loop would still make _FastQC_ run _sequentially_**
+on the node that we are at,
 instead of in parallel on different compute nodes.
+With the script, we've set ourselves up to be able to submit batch jobs,
+but running the script in itself does not change much yet.
 
 ### Submitting the script to the job scheduler (many times)
 
@@ -280,21 +292,21 @@ which will submit the script to the Slurm job scheduler in every iteration of
 the loop (i.e., as many times as we have input files):
 
 ```bash
+# Don't run this - meant as an example only (you don't have this script yet)
 for fastq_file in data/fastq/*fastq.gz; do
     sbatch --account=PAS0471 scripts/fastqc.sh "$fastq_file"
 done
 ```
 ```{.bash-out}
-submitted batch job XXX
-submitted batch job XXX
-# ...
-# (Output truncated)
+Submitted batch job 23510054
+Submitted batch job 23510055
+# [Output truncated...]
 ```
 
 We will learn about `sbatch` and associated commands,
 as well as the different options you can use to specify the resources you want to
 request (how much time, how many cores, etc),
-in [A09 - Slurm jobs](link).
+in the [session on Slurm compute jobs](./A09_slurm.qmd).
 
 ### Summarizing what we need to learn about
 
@@ -311,16 +323,19 @@ in [A09 - Slurm jobs](link).
   but they still need to be "loaded" via `module load`.
   This collection of programs is unfortunately not comprehensive and we also
   need another approach, as we'll see in the
-  [Software at OSC session](./A08_software.qmd).
+  [session Software at OSC](./A08_software.qmd).
 
 - **Writing shell scripts**  
   Putting the code to run individual bioinformatics programs inside small shell
   scripts will allow us to submit them to Slurm job scheduler.
-  (It's also a good way to keep your code organized and clear.)
+  Using scripts is more generally useful for e.g. long-running commands or programs,
+  and is a good way to keep your code organized and clear.
+  We'll talk about [shell scripts in the next session](./A07_scripts.qmd).
 
 - **Submitting scripts to the Slurm job scheduler**  
-  Submitting scripts as Slurm jobs allows us, for example,
-  to run the same analysis for different samples simultaneously, in parallel.
+  Submitting scripts as Slurm batch jobs at OSC allows us, for example,
+  to run the same analysis for different samples simultaneously.
+  We'll see this in more detail in the [session on Slurm jobs](./A09_slurm.qmd). 
 
 <br>
 
@@ -464,8 +479,8 @@ Again, the shell split the value of `$today` in 3 parts separated by a space
 
 Like with assignment,
 our problems can be avoided by **quoting a variable** when we reference it.
-This tells the shell it shouldn't perform field splitting on the variable's value;
-put another way, it takes aways the special meaning of the spaces (as _separators_)
+This tells the shell it shouldn't perform "field splitting" on the variable's value;
+put another way, it takes aways the special meaning of the space as a _separator_
 in the variable's value:
 
 ```bash
@@ -650,7 +665,7 @@ so that variable contained `1` when the loop ran for the first time,
 and `3` when it ran for the third and last time.
 
 This variable continues to exist outside of the loop,
-having the last value that was assigned to it in the loop:
+and will have the last value that was assigned to it in the loop:
 
 ```bash
 echo $a_number
@@ -664,14 +679,17 @@ and will run exactly as many times as there are items in the collection.
 
 The following example, where we let the computer sleep for 1 second
 before printing the date and time with the `date` command,
-demonstrates that the loop is being executed sequentially: xxx
+demonstrates that the loop is being executed sequentially.
+When you run it, you should notice a slight pause after the output of each
+iterations, and you can see that the output of `date` differs by one second
+each time:
 
 ```bash
 for a_number in 1 2 3; do
     echo "In this iteration of the loop, the number is $a_number"
-    sleep 1           # Let the computer sleep for 1 second
     date              # Print the date and time
     echo "--------"
+    sleep 1           # Let the computer sleep for 1 second
 done
 ```
 ```{.bash-out}
@@ -724,7 +742,10 @@ done
 ### Looping over files with globbing
 
 In practice, it is rare to manually list the collection of items we want to
-loop over, like we did above.
+loop over,
+like we did above with the numbers 1-3 and a few types of mushroom in the
+exercise.
+
 Instead, we commonly **loop over files** directly using _globbing_: 
 
 ```bash
@@ -732,7 +753,7 @@ cd /fs/ess/PAS0471/$USER/rnaseq_intro
 
 for fastq_file in data/fastq/*fastq.gz; do
     echo "Now processing FASTQ file $fastq_file..."
-    # More processing...
+    # [Code to analyze the FASTQ file...]
 done
 ```
 ```{.bash-out}
@@ -746,7 +767,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R1.fastq.gz...
 Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...
 ```
 
-**This technique is extremely useful**, and I use it all the time.
+**This technique is extremely useful**.
 Take a moment to realize that we're not doing a separate `ls` and storing
 the results:
 as mentioned before, a globbing pattern directly selects files.
@@ -758,17 +779,17 @@ you can use your globbing / wild card skills to narrow down the file selection:
 
   ```bash
   for fastq_file in data/raw/*_R1.fastq.gz; do
-      # Some file processing...
+      # [Some file processing...]
   done
   ```
 
-- Or FASTQ files are in sample-specific folders:
+- Or our FASTQ files are tucked away in sample-specific folders:
 
   ```bash
   # With default shell settings, '**' will traverse one dir level
   # E.g., files are in 'results/trim/sampleA/', 'results/trim/sampleB/', etc. 
   for fastq_file in results/trim/**/*_R1.fastq.gz; do
-      # Some file processing...
+      # [Some file processing...]
   done
   ```
 

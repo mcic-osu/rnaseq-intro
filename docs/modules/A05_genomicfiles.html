@@ -676,7 +676,7 @@ Solution
 <h3 data-number="3.1" class="anchored" data-anchor-id="finding-genome-files-at-ncbi"><span class="header-section-number">3.1</span> Finding genome files at NCBI</h3>
 <p>To analyze our RNAseq data, we’ll need two files related to our <strong>reference genome</strong>. This is the genome that we will align our reads to, and whose gene annotations will form the basis of the gene counts we’ll eventually get.</p>
 <p>Specifically, we’ll need the <strong>nucleotide FASTA</strong> file with the genome assembly itself, and a <strong>GTF file</strong>, which is a tabular file with the genomic coordinates and other information for genes and other so-called genomic “features”.</p>
-<p>We can download these files from NCBI. For human, many genome assemblies are available on NCBI, but the current reference genome is “<em>GRCh38.p14</em>” (<a href="https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=9606">see this overview</a>). There are several ways to download genomes from the NCBI — here, we will keep it simple and directly download just the two files that we need from the <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/">FTP site for this genome</a>.</p>
+<p>We can download these files from NCBI. For human, many genome assemblies are available on NCBI, but the current reference genome is “<em>GRCh38.p14</em>” (<a href="https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=9606">see this overview</a>). There are several ways to download genomes from the NCBI — here, we will keep it simple and directly download just the two files that we need from the <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/">NCBI FTP site for this genome</a>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -690,12 +690,12 @@ Getting to the FTP site
 <p>You can get to this FTP site by clicking on the link for “GRCh38.p14” on the <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=9606">overview page</a>, which will bring you <a href="https://www.ncbi.nlm.nih.gov/datasets/genome/GCF_000001405.40/">here</a>, then clicking on “View the legacy Assembly page”, which will bring you <a href="https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.40/?shouldredirect=false">here</a>, and then clicking on “FTP directory for RefSeq assembly” on the right-hand side of the page.</p>
 </div>
 </div>
-<p>On the <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/">FTP site</a>, we can first right-click on <code>GCF_000001405.40_GRCh38.p14_genomic.fna.gz</code> and then click “<em>Copy link address</em>”. (The URL to this file is also shown in the command box below.)</p>
+<p>On the <a href="https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/">FTP site</a>, right-click on <code>GCF_000001405.40_GRCh38.p14_genomic.fna.gz</code> and then click “<em>Copy link address</em>” (the URL to this file is also shown in the command box below).</p>
 <p><br></p>
 </section>
 <section id="downloading-files-to-osc-with-wget" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="downloading-files-to-osc-with-wget"><span class="header-section-number">3.2</span> Downloading files to OSC with <code>wget</code></h3>
-<p>To download a file to OSC, you can’t just open a web browser and download it directly to there. You <em>could</em> download it to your own computer and then transfer it to OSC. A more direct approach is to use a download command in your OSC shell. <strong><code>wget</code> is one command that allows you to download files from the web</strong> (<code>curl</code> is another very commonly used one, with much the same functionality).</p>
+<p>To download a file to OSC, you can’t just open a web browser and download it there directly. You <em>could</em> download it to your own computer and then transfer it to OSC. A more direct approach is to use a download command in your OSC shell. <strong><code>wget</code> is one command that allows you to download files from the web</strong> (<code>curl</code> is another very commonly used one, with much the same functionality).</p>
 <p><strong>To download a file to your working directory</strong>, you just need to tell <code>wget</code> about the URL (web address) to that file — type “wget”, press <kbd>Space</kbd>, and paste the address you copied:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.fna.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -721,7 +721,7 @@ Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
 <section id="uncompressing-and-renaming-the-genome-files" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="uncompressing-and-renaming-the-genome-files"><span class="header-section-number">3.3</span> Uncompressing and renaming the genome files</h3>
 <p>Both the FASTA and the GTF file are gzip-compressed. While it’s preferable to keep FASTQ files compressed (as mentioned above), it’s often more convenient to store your reference genome files as uncompressed files<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
-<p>We can uncompress/unzip them simply as follows (notice the subsequent increase in file size in the <code>ls</code> output):</p>
+<p>We can uncompress/unzip these files with the <code>gunzip</code> (“g-unzip”) command as follows (and notice the subsequent increase in file size in the <code>ls</code> output):</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Will take several seconds, esp. for the first file, and not print output to screen</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> GCF_000001405.40_GRCh38.p14_genomic.fna.gz</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</span>
@@ -730,12 +730,13 @@ Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
 <pre class="bash-out"><code># (Output should include:)
 -rw-r--r-- 1 jelmer PAS0471 3.2G Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.fna
 -rw-r--r-- 1 jelmer PAS0471 1.6G Mar 21 10:15 GCF_000001405.40_GRCh38.p14_genomic.gtf</code></pre>
-<p>We’ll also want to move these files to a dedicated directory. And while this is not necessary, it will be convenient for our purposes to shorten their file names while retaining the necessary identifying information (the “GCF_” RefSeq number).</p>
+<p>We’ll also want to move these files to a dedicated directory. Also, it will be convenient for our purposes to shorten their file names while retaining the necessary identifying information (the “GCF_” RefSeq number).</p>
 <p>After creating a directory, we can move and rename the files at once as follows:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/ref</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> GCF_000001405.40_GRCh38.p14_genomic.fna data/ref/GCF_000001405.40.fna</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> GCF_000001405.40_GRCh38.p14_genomic.gtf data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll use a dir 'data/ref' for reference genome files</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> data/ref</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> GCF_000001405.40_GRCh38.p14_genomic.fna data/ref/GCF_000001405.40.fna</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> GCF_000001405.40_GRCh38.p14_genomic.gtf data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>‘GCF_000001405.40_GRCh38.p14_genomic.fna’ -&gt; ‘data/ref/GCF_000001405.40.fna’
 ‘GCF_000001405.40_GRCh38.p14_genomic.gtf’ -&gt; ‘data/ref/GCF_000001405.40.gtf’</code></pre>
 <p><br></p>
@@ -747,16 +748,17 @@ Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
 <section id="the-fasta-format" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="the-fasta-format"><span class="header-section-number">4.1</span> The FASTA format</h3>
 <p>The FASTA format is in essence simpler than FASTQ, but it is also less standardized and more generic.</p>
+<p>The following example FASTA file contains two entries:</p>
 <pre class="bash-out-solo"><code>&gt;unique_sequence_ID Optional description (free form!)
 ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAAAA
 &gt;unique_sequence_ID2
 ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAATG</code></pre>
 <p>Like FASTQ files, each entry contains a <strong>header</strong> and the <strong>sequence</strong> itself, but:</p>
 <ul>
-<li><strong>Header lines start with a <code>&gt;</code></strong>, and are otherwise basically “free form”, but they usually provide some sort of identifier (and sometimes some metadata) for the sequence in the entry.</li>
+<li><strong>Header lines start with a <code>&gt;</code></strong> and are otherwise basically “free form”, but they usually provide some sort of identifier (and sometimes some metadata) for the sequence in the entry.</li>
 <li>There are no quality scores, and there is no <code>+</code> line.</li>
 <li>The sequences can be DNA, RNA, or amino acids.</li>
-<li>Each sequence can represent e.g.&nbsp;a read, a contig/scaffold, a chromosome, or a gene, as well as an <em>aligned</em> sequence with gaps in it.</li>
+<li>A FASTA entry can represent a number of different types of sequencs, such as a read, a contig/scaffold, a chromosome, or a gene, as well as an <em>aligned</em> sequence with gaps in it.</li>
 <li>Because the individual sequences in a FASTA file can be very long, <strong>sequences are often not on a single line</strong>, but may be spread across multiple/many lines with some fixed width, say 50 or 80 characters. (As such, line counts are not that informative!)</li>
 </ul>
 <p><em>Generic</em> FASTA file <strong>extensions</strong> are <code>.fasta</code> and <code>.fa</code>, but also used are extensions that explicitly indicate whether the sequences are <em>nucleotides</em> (<code>.fna</code>, like our downloaded genome assembly file) or <em>amino acids</em> (<code>.faa</code>).</p>
@@ -784,7 +786,7 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 <div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> data/ref/GCF_000001405.40.fna</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Remember: press 'q' to quit less)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
-<p>We can also look at all or some of the entry headers by <code>grep</code>ing for <code>&gt;</code> (which is only allowed in the header) — in this file, these represent the scaffolds:</p>
+<p>We can also look at all or some of the entry headers by <code>grep</code>ing for <code>&gt;</code> (which is only allowed in the header) — in this file, we can see that the entries represent the scaffolds:</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">"&gt;"</span> data/ref/GCF_000001405.40.fna <span class="kw">|</span> <span class="fu">head</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>&gt;NC_000001.11 Homo sapiens chromosome 1, GRCh38.p14 Primary Assembly
 &gt;NT_187361.1 Homo sapiens chromosome 1 unlocalized genomic scaffold, GRCh38.p14 Primary Assembly HSCHR1_CTG1_UNLOCALIZED
@@ -810,7 +812,7 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 <section id="the-gtf-format" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="the-gtf-format"><span class="header-section-number">5.1</span> The GTF format</h3>
 <p>The GTF format and the very similar GFF format<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> are <strong>tabular</strong> files, with one row for each individual “<strong>genomic feature</strong>” (gene, exon, intron, etc.) that has been annotated in the genome, and with columns that contain information like the genomic coordinates of the features.</p>
-<p>See the small sample below, with an added header line with column names for clarity:</p>
+<p>See the small sample below, with an <em>added header line</em> (not normally present) with column names for clarity:</p>
 <pre class="bash-out-solo"><code>seqname     source  feature start   end     score  strand  frame    attributes
 NC_000001   RefSeq  gene    11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id ""; db_xref "GeneID:100287102"; db_xref "HGNC:HGNC:37102"; description "DEAD/H-box helicase 11 like 1 (pseudogene)"; gbkey "Gene"; gene "DDX11L1"; gene_biotype "transcribed_pseudogene"; pseudo "true"; 
 NC_000001   RefSeq  exon    11874   12227   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; </code></pre>
@@ -826,7 +828,7 @@ NC_000001   RefSeq  exon    11874   12227   .       +       .       gene_id "DDX
 <li><em>frame</em> — <code>0</code>, <code>1</code> or <code>2</code> (or <code>.</code> for no frame). <code>0</code> means the 1st base of the feature is the 1st base of a codon, etc.</li>
 <li><strong><em>attribute</em></strong> — A semicolon-separated list of tag-value pairs with additional information about each feature.</li>
 </ul>
-<p>They also contain a <strong>header section</strong>, whose lines start with a <code>#</code> and contain some metadata for the file.</p>
+<p>As we’ll see below, GTF files also have a <strong>header section</strong>, whose lines start with a <code>#</code> and contain some metadata for the file.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -856,10 +858,10 @@ NC_000001.11    BestRefSeq      transcript      11874   14409   .       +       
 NC_000001.11    BestRefSeq      exon    11874   12227   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "1"; 
 NC_000001.11    BestRefSeq      exon    12613   12721   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "2"; 
 NC_000001.11    BestRefSeq      exon    13221   14409   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "3"; </code></pre>
-<p>The final column (“attributes”) contains lots of data so the line width will almost certainly exceed your screen width, and the output you should see in your shell will be line-wrapped. It’s easier to see what’s going on on this website (where we get one line for each line of the file and can scroll sideways), or with <code>less -S</code>:</p>
+<p>The final column (“attributes”) contains lots of data, so the line width will almost certainly exceed your screen width, and the output you see in your shell will be line-wrapped. It’s easier to see what’s going on on this website (where we get one line for each line of the file, and can scroll sideways), or with <code>less -S</code>:</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">less</span> <span class="at">-S</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <hr>
-<p>One nice trick for if we only want to see the tabular lines (for some files, the header can be quite long), or if we wanted to summarize the data in the tabular lines, is to <strong>omit the header lines using <code>grep -v</code></strong>. The <code>-v</code> option will invert <code>grep</code>’s behavior and only print <strong>non-matching</strong> lines — since only the header lines contain a <code>#</code>, we can use that as the pattern to search for:</p>
+<p>One nice trick for if we only want to only see the tabular lines (for some files, the header can be quite long), or if we want to summarize the data in the tabular lines, is to <strong>omit the header lines using <code>grep -v</code></strong>. The <code>-v</code> option will invert <code>grep</code>’s behavior and only print <strong>non-matching</strong> lines — since only the header lines contain a <code>#</code>, we can use that as the pattern to search for:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"#"</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">head</span> <span class="at">-n</span> 3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>NC_000001.11    BestRefSeq      gene    11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id ""; db_xref "GeneID:100287102"; db_xref "HGNC:HGNC:37102"; description "DEAD/H-box helicase 11 like 1 (pseudogene)"; gbkey "Gene"; gene "DDX11L1"; gene_biotype "transcribed_pseudogene"; pseudo "true"; 
 NC_000001.11    BestRefSeq      transcript      11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gbkey "misc_RNA"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; 
@@ -902,7 +904,7 @@ Miapaca2_A178V  Miapaca2   A178V
 Miapaca2_A178V  Miapaca2   A178V
 Miapaca2_G31V   Miapaca2   G31V
 Miapaca2_G31V   Miapaca2   G31V</code></pre>
-<p>First, <strong>the <code>cut</code> command</strong> can extract columns from tabular files, and you can use its <code>-f</code> option to specify the column(s) you want to extract — for example, <code>-f 3</code> extracts column 3 and <code>-f 3,5</code> extracts columns 3 and 5:</p>
+<p>First, <strong>the <code>cut</code> command</strong> can extract columns from tabular files, and you can use its <code>-f</code> option to specify the column(s) you want to extract — for example, <code>-f 3</code> extracts column 3, while <code>-f 3,5</code> would extract columns 3 and 5:</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-f</span> 3 metadata/meta.tsv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>variant
 A178V
@@ -937,7 +939,7 @@ Other <code>sort</code> functionality
 <p>While in the example below, we’re sorting a single column, <code>sort</code> can also sort multi-column files on one or more columns, <em>while keeping the rows intact</em>. Additionally, it can sort numerically, in reverse, and much more.</p>
 </div>
 </div>
-<p>Hmmm… maybe it isn’t appropriate to include the header line (<code>variant</code> in the output above). A nice little trick to exclude the first line of a file is <code>tail -n +2</code>:</p>
+<p>Hmmm… maybe it isn’t appropriate to include the header line (<code>variant</code> in the output above). A nice little <strong>trick to exclude the first line of a file is <code>tail -n +2</code></strong>:</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 metadata/meta.tsv <span class="kw">|</span> <span class="fu">sort</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>A178V
 A178V
@@ -947,7 +949,7 @@ G31V
 G31V
 G31V
 G31V</code></pre>
-<p>Third, <strong>the <code>uniq</code> command</strong> will remove <em>consecutive</em> duplicate lines — for that reason, we need to have the entries sorted if we want to remove all duplicates:</p>
+<p>Third, <strong>the <code>uniq</code> command</strong> will remove <em>consecutive</em> duplicate lines — for that reason, its input needs to be if we want to remove <em>all</em> duplicates:</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 metadata/meta.tsv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>A178V
 G31V</code></pre>
@@ -967,14 +969,19 @@ G31V</code></pre>
 </section>
 <section id="getting-gtf-summary-stats-with-cut-uniq-and-grep" class="level3" data-number="5.4">
 <h3 data-number="5.4" class="anchored" data-anchor-id="getting-gtf-summary-stats-with-cut-uniq-and-grep"><span class="header-section-number">5.4</span> Getting GTF summary stats with <code>cut</code>, <code>uniq</code>, and <code>grep</code></h3>
-<p>How many “RASD” genes are in the annotation?</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'gene_id "RASD'</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="st">"gene"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>2</code></pre>
 <p>How many snRNAs are in the annotation?</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">'gene_biotype "snRNA"'</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Because the 'gene_biotype' attribute only occurs in 'gene' entries,</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we can simply count the number of lines found by grep:</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">'gene_biotype "snRNA"'</span> data/ref/GCF_000001405.40.gtf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>172</code></pre>
+<p>How many “RASD” genes are in the annotation?</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After getting all RASD entries (for different feature types), we can select</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="co"># only 'gene' entries by cutting column 3 (feature types) and grep for 'gene':</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="st">'gene_id "RASD'</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-c</span> <span class="st">"gene"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>2</code></pre>
 <p>Which feature types are present and what are their counts?</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^#"</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f3</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Column 3 contains the feature types</span></span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"^#"</span> data/ref/GCF_000001405.40.gtf <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>1835339 CDS
 2291763 exon
   67127 gene
@@ -986,6 +993,12 @@ G31V</code></pre>
 <ul>
 <li>How many features are derived from each of the annotation sources (column 2)?</li>
 </ul>
+<details>
+<summary>
+Hint
+</summary>
+The code to do this is nearly identical to the last example above, you just have to cut a different column.
+</details>
 <details>
 <summary>
 Solution
@@ -1211,7 +1224,7 @@ md5sum: WARNING: 1 computed checksum did NOT match</code></pre>
 <li id="fn1"><p>Though long-read technologies like Oxford Nanopore Technologies and especially PacBio are picking up steam, since these can sequence transcripts <em>in full</em>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>In some cases, most often when you simply do a lot of sequencing for each sample, you’ll get more than one pair of files: one pair for each “lane” of the sequencer on which the sample was sequenced.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>And they would fail in a possibly worse way because you might overlook the problem: <code>wc -l</code> <em>will</em> return a count yet this is not the number of lines for the uncompressed file, whereas a text search with <code>grep</code> may “falsely” return nothing while that text <em>is</em> present in the uncompressed file.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>They don’t take up as much space, and bioinformatics tools regularly expect them to be uncompressed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>This is because reference genome files don’t take up as much space, and bioinformatics tools may expect them to be uncompressed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>In fact, GTF is identical to GFF v2. But the current GFF version is the slightly different GFF v3, which sometimes has the extension <code>.gff3</code> to make that clear.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>This technically depends on how the file names are shown in the text file with the checksums: if there are just file names without directories (or <code>./&lt;filename&gt;</code>, etc.), you’ll have to be in the dir with the files to run <code>md5sum -c</code>. (This in turn depends on from where the checksums were <em>generated</em>: if you generate them while in the dir with the focal files, which is the only sensible way to do this, that’s how they will be displayed.)<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>

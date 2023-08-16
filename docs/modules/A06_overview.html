@@ -316,7 +316,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><br></p>
 <section id="overview-getting-started" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</h2>
-<p>In this session, we’ll start by looking ahead a bit. You will get an overview of how we will be running bioinformatics programs with command-line interfaces (CLIs) during the first part of the RNAseq analysis, where we start with reads in FASTQ files to produce a table with gene counts. This will reveal <strong>which fundamentals we still need to cover</strong> <strong>before we can start running these analyses.</strong></p>
+<p>In this session, we’ll start by looking ahead a bit. You will get an overview of how we will be running bioinformatics programs with command-line interfaces (CLIs) during the first part of the RNAseq analysis, where we start with reads in FASTQ files and will produce a table with gene counts. This overview is meant to clarify <strong>which fundamentals we still need to cover before we can start running these analyses.</strong></p>
 <p>Then, we’ll cover the first of the remaining fundamental topics: <strong>shell variables</strong> and <strong><code>for</code> loops</strong>. The next few sessions will cover the remaining ones:</p>
 <ul>
 <li><a href="../modules/A07_scripts.html">Writing shell scripts</a></li>
@@ -414,9 +414,11 @@ Don’t have your own dir with the data? (Click to expand)
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the OSC "module" for FastQC, so we can use this program</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next, we could run <em>FastQC</em> for one of our FASTQ files as follows:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/fastqc <span class="co"># First create the output dir</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">--outdir</span> results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First create the output dir</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/fastqc</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Tell FastQC about the output dir with --outdir, and pass the file name as an argument</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">--outdir</span> results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Started analysis of ASPC1_A178V_R1.fastq.gz
 Approx 5% complete for ASPC1_A178V_R1.fastq.gz
 Approx 10% complete for ASPC1_A178V_R1.fastq.gz
@@ -441,33 +443,18 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For completeness’ sake, I should mention that it is in fact possible to pass multiple files to <em>FastQC</em>. If we did that, we’d only need to run <em>FastQC</em> once, and would not need the approach shown below, where we use a loop.</p>
-<p>However, using a loop is a very general approach, and can be used with the many programs that can only run one FASTQ file or one sample at a time. When using a supercomputer like OSC, this is also by far the most time-efficient approach, because it allows each sample/file to be processed in parallel rather than consecutively.</p>
+<p>For completeness’ sake, I should mention that it is in fact possible to pass multiple files as argument to <code>fastqc</code>. If we did that, we’d only need to run <em>FastQC</em> once, and would not need the approach shown below, where we use a loop.</p>
+<p>However, using a loop is a very general approach, and is necessary for the many programs that can only run one FASTQ file or one sample at a time. When using a supercomputer like OSC, this is also by far the most time-efficient approach, because it allows each sample/file to be processed in parallel rather than consecutively.</p>
 </div>
 </div>
 </section>
 <section id="looping-over-input-files" class="level3" data-number="2.2">
 <h3 data-number="2.2" class="anchored" data-anchor-id="looping-over-input-files"><span class="header-section-number">2.2</span> Looping over input files</h3>
 <p>We can avoid having to type a very similar command a whole bunch of times by using a <strong>loop</strong>.</p>
-<p>Further down on this page, we will learn all about <a href="#for-loops"><code>for</code> loops</a> (and <a href="#variables">variables</a>). Here, we’ll again just see a quick example, and it is not yet important to understand the details of the code below, which will loop over all FASTQ files in the <code>data/fastq</code> dir, and run <em>FastQC</em> for one file at a time:</p>
+<p>Further down on this page, we will learn all about <a href="#for-loops"><code>for</code> loops</a>. Here, we’ll again just see a quick example, and it is not yet important to understand the details of the code below, which will “loop over” all FASTQ files in the <code>data/fastq</code> dir, and run <em>FastQC</em> for one file at a time:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">fastqc</span> <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">fastqc</span> <span class="at">--outdir</span> results/fastqc <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>That’s a lot better than repeating a similar line of codes many times — and the loop would be exactly the same regardless of whether we had 8 or 200 FASTQ files!</p>
-<p>However, recall that our full dataset also <em>much larger</em> files. A <em>FastQC</em> run on one of these will take several minutes, so our loop might take a while to finish (and some of the other programs we’ll run later take much longer than this). Most of all, when we run the program interactively and consecutively like this, we would not make use of the supercomputer’s strengths at all: this is basically like running it on our own laptop, since each <em>FastQC</em> run happens consecutively.</p>
-</section>
-<section id="running-the-program-with-a-shell-script" class="level3" data-number="2.3">
-<h3 data-number="2.3" class="anchored" data-anchor-id="running-the-program-with-a-shell-script"><span class="header-section-number">2.3</span> Running the program with a shell script</h3>
-<p>What we should do instead is to submit a separate compute job for each <em>FastQC</em> run, and these can then all run in parallel (i.e., at the same time) on different compute nodes. To make the switch from interactively running <em>FastQC</em>, to submitting each run as a compute job, will involve <em>two steps</em>:</p>
-<ol type="1">
-<li>Putting the code to run <em>FastQC</em> <strong>inside a shell script</strong></li>
-<li><strong>Submitting</strong> that shell script to the OSC compute job queue with <code>sbatch</code> (rather than directly <em>running</em> it)</li>
-</ol>
-<p>We will cover the basics of shell scripts in <a href="link">A07 - Shell scripts</a> — for now, just realize that these scripts are small text files with the extension <code>.sh</code> that basically contain the same kind of Unix shell code we’ve been running interactively, with some added bells and whistles.</p>
-<p>If for now we just assume we had created such a script, we can modify our loop as follows to run <em>FastQC</em> through a script instead of including the command to run the program directly in the loop:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">bash</span> scripts/fastqc.sh <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Started analysis of ASPC1_A178V_R1.fastq.gz
 Approx 5% complete for ASPC1_A178V_R1.fastq.gz
 # [...]
@@ -477,25 +464,46 @@ Approx 5% complete for ASPC1_A178V_R2.fastq.gz
 Started analysis of ASPC1_G31V_R1.fastq.gz
 Approx 5% complete for ASPC1_G31V_R1.fastq.gz
 # [...]
-Started analysis of ASPC1_G31V_R2.fastq.gz
-Approx 5% complete for ASPC1_G31V_R2.fastq.gz
+# [Output for all remaining files follows...]</code></pre>
+<p>That’s a lot better than repeating a similar line of codes many times — and the loop would be exactly the same regardless of whether we had 8 or 200 FASTQ files!</p>
+<p>However, recall that our full dataset also has <em>much larger</em> files. A <em>FastQC</em> run on one of these will take several minutes, so our loop might take a while to finish (and it gets worse, as some of the other programs we’ll run later take much longer than this). Most of all, when we run the program interactively and consecutively like this, we would not make use of the supercomputer’s strengths at all: this is basically like running it on our own laptop, since each <em>FastQC</em> run happens consecutively.</p>
+</section>
+<section id="running-the-program-with-a-shell-script" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="running-the-program-with-a-shell-script"><span class="header-section-number">2.3</span> Running the program with a shell script</h3>
+<p>What we should do instead is to submit a separate compute job for each <em>FastQC</em> run, and these can then all run in parallel (i.e., at the same time) on different OSC compute nodes. Making the switch from interactively running <em>FastQC</em> to submitting each run as a compute job will involve <em>two steps</em>:</p>
+<ol type="1">
+<li>Putting the code to run <em>FastQC</em> <strong>inside a shell script</strong></li>
+<li><strong>Submitting</strong> that shell script to the OSC compute job queue with <code>sbatch</code> (rather than directly <em>running</em> it)</li>
+</ol>
+<p>We will cover the basics of shell scripts in the <a href="../modules/A07_scripts.html">session on shell scripts</a> — for now, you just need to know that these scripts are small text files (with the extension <code>.sh</code>) that basically contain the same kind of shell code we’ve been running interactively, with some added bells and whistles.</p>
+<p>If for now we just assume we had created such a script, we can modify our loop as follows to run <em>FastQC</em> through a script, instead of including the command to run the program directly in the loop:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Don't run this - meant as an example only (you don't have this script yet)</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">bash</span> scripts/fastqc.sh <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>Started analysis of ASPC1_A178V_R1.fastq.gz
+Approx 5% complete for ASPC1_A178V_R1.fastq.gz
 # [...]
-Started analysis of Miapaca2_A178V_R1.fastq.gz
-Approx 5% complete for Miapaca2_A178V_R1.fastq.gz
-# [...]</code></pre>
-<p>However, running that loop would still make <em>FastQC</em> run <em>sequentially</em> on the node that we are at, instead of in parallel on different compute nodes.</p>
+Started analysis of ASPC1_A178V_R2.fastq.gz
+Approx 5% complete for ASPC1_A178V_R2.fastq.gz
+# [...]
+Started analysis of ASPC1_G31V_R1.fastq.gz
+Approx 5% complete for ASPC1_G31V_R1.fastq.gz
+# [...]
+# [Output for all remaining files follows...]</code></pre>
+<p>However, <strong>running that loop would still make <em>FastQC</em> run <em>sequentially</em></strong> on the node that we are at, instead of in parallel on different compute nodes. With the script, we’ve set ourselves up to be able to submit batch jobs, but running the script in itself does not change much yet.</p>
 </section>
 <section id="submitting-the-script-to-the-job-scheduler-many-times" class="level3" data-number="2.4">
 <h3 data-number="2.4" class="anchored" data-anchor-id="submitting-the-script-to-the-job-scheduler-many-times"><span class="header-section-number">2.4</span> Submitting the script to the job scheduler (many times)</h3>
 <p>To run our script in parallel, we will use the <code>sbatch</code> command, which will submit the script to the Slurm job scheduler in every iteration of the loop (i.e., as many times as we have input files):</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbatch</span> <span class="at">--account</span><span class="op">=</span>PAS0471 scripts/fastqc.sh <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>submitted batch job XXX
-submitted batch job XXX
-# ...
-# (Output truncated)</code></pre>
-<p>We will learn about <code>sbatch</code> and associated commands, as well as the different options you can use to specify the resources you want to request (how much time, how many cores, etc), in <a href="link">A09 - Slurm jobs</a>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Don't run this - meant as an example only (you don't have this script yet)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">sbatch</span> <span class="at">--account</span><span class="op">=</span>PAS0471 scripts/fastqc.sh <span class="st">"</span><span class="va">$fastq_file</span><span class="st">"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre class="bash-out"><code>Submitted batch job 23510054
+Submitted batch job 23510055
+# [Output truncated...]</code></pre>
+<p>We will learn about <code>sbatch</code> and associated commands, as well as the different options you can use to specify the resources you want to request (how much time, how many cores, etc), in the <a href="../modules/A09_slurm.html">session on Slurm compute jobs</a>.</p>
 </section>
 <section id="summarizing-what-we-need-to-learn-about" class="level3" data-number="2.5">
 <h3 data-number="2.5" class="anchored" data-anchor-id="summarizing-what-we-need-to-learn-about"><span class="header-section-number">2.5</span> Summarizing what we need to learn about</h3>
@@ -503,11 +511,11 @@ submitted batch job XXX
 <li><p><strong><code>for</code> loops and variables</strong><br>
 <strong><code>for</code> loops</strong> will allow you to repeat operations — specifically, we will later use them to submit many scripts at the same time, one per input file or sample. Using <strong>variables</strong> will allow you to run scripts flexibly, with different input files and settings; they are also used in loops. <em>We’ll talk about these in the sections below.</em></p></li>
 <li><p><strong>Making software available</strong><br>
-At OSC, a bunch of bioinformatics programs are installed system-wide, but they still need to be “loaded” via <code>module load</code>. This collection of programs is unfortunately not comprehensive and we also need another approach, as we’ll see in the <a href="../modules/A08_software.html">Software at OSC session</a>.</p></li>
+At OSC, a bunch of bioinformatics programs are installed system-wide, but they still need to be “loaded” via <code>module load</code>. This collection of programs is unfortunately not comprehensive and we also need another approach, as we’ll see in the <a href="../modules/A08_software.html">session Software at OSC</a>.</p></li>
 <li><p><strong>Writing shell scripts</strong><br>
-Putting the code to run individual bioinformatics programs inside small shell scripts will allow us to submit them to Slurm job scheduler. (It’s also a good way to keep your code organized and clear.)</p></li>
+Putting the code to run individual bioinformatics programs inside small shell scripts will allow us to submit them to Slurm job scheduler. Using scripts is more generally useful for e.g.&nbsp;long-running commands or programs, and is a good way to keep your code organized and clear. We’ll talk about <a href="../modules/A07_scripts.html">shell scripts in the next session</a>.</p></li>
 <li><p><strong>Submitting scripts to the Slurm job scheduler</strong><br>
-Submitting scripts as Slurm jobs allows us, for example, to run the same analysis for different samples simultaneously, in parallel.</p></li>
+Submitting scripts as Slurm batch jobs at OSC allows us, for example, to run the same analysis for different samples simultaneously. We’ll see this in more detail in the <a href="../modules/A09_slurm.html">session on Slurm jobs</a>.</p></li>
 </ul>
 <p><br></p>
 </section>
@@ -523,11 +531,11 @@ Submitting scripts as Slurm jobs allows us, for example, to run the same analysi
 <section id="assigning-and-referencing-variables" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="assigning-and-referencing-variables"><span class="header-section-number">3.1</span> Assigning and referencing variables</h3>
 <p><strong>To <em>assign</em> a value to a variable in Bash</strong> (in short: to assign a variable), use the syntax <code>variable=value</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the value "beach" to the variable "location":</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="va">location</span><span class="op">=</span>beach</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the value "200" to the variable "nlines":</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="va">nlines</span><span class="op">=</span>200</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the value "beach" to the variable "location":</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="va">location</span><span class="op">=</span>beach</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Assign the value "200" to the variable "nlines":</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="va">nlines</span><span class="op">=</span>200</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -542,13 +550,13 @@ There can be no spaces around the equals sign (<code>=</code>)!
 </div>
 </div>
 <p><strong>To <em>reference</em> a variable</strong> (i.e., to access its value), you need to put a dollar sign <code>$</code> in front of its name. As before with the environment variable <code>$HOME</code>, we’ll use the <code>echo</code> command to review the values that our variables contain:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$location</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$location</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>beach</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$nlines</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$nlines</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>200</code></pre>
 <p>Conveniently, we can use variables in lots of contexts, <strong>as if we had directly typed their <em>values</em></strong>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="va">input_file</span><span class="op">=</span>data/fastq/ASPC1_A178V_R1.fastq.gz</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="va">$input_file</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="va">input_file</span><span class="op">=</span>data/fastq/ASPC1_A178V_R1.fastq.gz</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="va">$input_file</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>-rw-r--r-- 1 jelmer PAS0471 4.1M Aug  1 18:05 data/fastq/ASPC1_A178V_R1.fastq.gz</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -575,7 +583,7 @@ Rules and tips for naming variables
 <section id="quoting-variables" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="quoting-variables"><span class="header-section-number">3.2</span> Quoting variables</h3>
 <p>Above, we learned that a variable name cannot contain spaces. But what happens if our variable’s <em>value</em> contains spaces? First off, when we try to <strong>assign</strong> the variable without using quotes, we get an error:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span>Thu, <span class="ex">Aug</span> 18</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span>Thu, <span class="ex">Aug</span> 18</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Aug: command not found</code></pre>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
@@ -594,15 +602,15 @@ Why do you think we got this error?
 </div>
 </div>
 <p>But it works when we quote (with <em>double</em> quotes, <code>"..."</code>) the entire string that makes up the value:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="st">"Thu, Aug 18"</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$today</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="st">"Thu, Aug 18"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$today</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Thu, Aug 18</code></pre>
 <hr>
 <p>Now, let’s try to <strong>reference</strong> this variable in another context. For example, we can try make a new file with today’s date:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sandbox</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> README_<span class="va">$today</span>.txt</span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sandbox</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> README_<span class="va">$today</span>.txt</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code># The output should include the following files:
 18.txt  
 Aug  
@@ -623,10 +631,10 @@ What went wrong <em>here</em>?
 </div>
 </div>
 </div>
-<p>Like with assignment, our problems can be avoided by <strong>quoting a variable</strong> when we reference it. This tells the shell it shouldn’t perform field splitting on the variable’s value; put another way, it takes aways the special meaning of the spaces (as <em>separators</em>) in the variable’s value:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> README_<span class="st">"</span><span class="va">$today</span><span class="st">"</span>.txt</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Like with assignment, our problems can be avoided by <strong>quoting a variable</strong> when we reference it. This tells the shell it shouldn’t perform “field splitting” on the variable’s value; put another way, it takes aways the special meaning of the space as a <em>separator</em> in the variable’s value:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> README_<span class="st">"</span><span class="va">$today</span><span class="st">"</span>.txt</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code># The output should include the following file:
 README_Thu, Aug 18.txt</code></pre>
 <p><strong>It is good practice to quote variables</strong> when you reference them: it never hurts, and avoids unexpected surprises.</p>
@@ -643,7 +651,7 @@ Where does a variable name end? (Click to expand)
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Another issue we can run into when we don’t quote variables is that we can’t explicitly define where a variable name ends within a longer string of text:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> README_<span class="va">$today_final</span>.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> README_<span class="va">$today_final</span>.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>README_.txt</code></pre>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
@@ -667,7 +675,7 @@ What went wrong here? (Hint: check the coloring highlighting above)
 </div>
 <p>Quoting solves this issue, too:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> README_<span class="st">"</span><span class="va">$today</span><span class="st">"</span>_final.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> README_<span class="st">"</span><span class="va">$today</span><span class="st">"</span>_final.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <pre class="bash-out"><code>README_Thu, Aug 18_final.txt</code></pre>
 </div>
@@ -687,15 +695,15 @@ Quoting as “escaping” special meaning &amp; and double vs.&nbsp;single quote
 <div class="callout-body-container callout-body">
 <p>By double-quoting a variable, we are essentially escaping (or “turning off”) the default special meaning of the <em>space as a separator</em>, and are asking the shell to interpret it as a <em>literal space</em>.</p>
 <p>Similarly, double quotes will escape other “special characters”, such as shell wildcards. Compare:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="pp">*</span>     <span class="co"># This will echo/list all files in the current working dir (!)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="pp">*</span>     <span class="co"># This will echo/list all files in the current working dir (!)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>18.txt Aug README_Thu, README_Thu, Aug 18.txt</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"*"</span>   <span class="co"># This will simply print the "*" character </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"*"</span>   <span class="co"># This will simply print the "*" character </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>*</code></pre>
 <p>However, as we saw above, double quotes <strong>not</strong> turn off the special meaning of <code>$</code> (which is to denote a string as a variable):</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span>      <span class="co"># Double quotes do not escape the special meaning of $</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span>      <span class="co"># Double quotes do not escape the special meaning of $</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Thu, Aug 18</code></pre>
 <p>…but <strong><em>single quotes</em></strong> will:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'$today'</span>     <span class="co"># Single quotes do escape the special meaning of $</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">'$today'</span>     <span class="co"># Single quotes do escape the special meaning of $</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>$today</code></pre>
 </div>
 </div>
@@ -711,10 +719,10 @@ Quoting as “escaping” special meaning &amp; and double vs.&nbsp;single quote
 <h3 data-number="4.1" class="anchored" data-anchor-id="for-loop-syntax-and-mechanics"><span class="header-section-number">4.1</span> <code>for</code> loop syntax and mechanics</h3>
 <p>Let’s see a first example, where our “collection” is just a very short list of numbers (<code>1</code>, <code>2</code>, and <code>3</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a_number <span class="kw">in</span> 1 2 3<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"In this iteration of the loop, the number is </span><span class="va">$a_number</span><span class="st">"</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"--------"</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a_number <span class="kw">in</span> 1 2 3<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"In this iteration of the loop, the number is </span><span class="va">$a_number</span><span class="st">"</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"--------"</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>In this iteration of the loop, the number is 1
 --------
@@ -769,15 +777,15 @@ A semicolon <code>;</code> (as used before <code>do</code>) separates two comman
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A semicolon separates two commands written on a single line – for instance, instead of:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> results</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> results</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>…you could equivalently type:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> results<span class="kw">;</span> <span class="bu">cd</span> results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> results<span class="kw">;</span> <span class="bu">cd</span> results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The <code>;</code> in the <code>for</code> loop syntax has the same function, and as such, an alternative way to format a <code>for</code> loop is:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a_number <span class="kw">in</span> 1 2 3</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"In this iteration of the loop, the number is </span><span class="va">$a_number</span><span class="st">"</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a_number <span class="kw">in</span> 1 2 3</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"In this iteration of the loop, the number is </span><span class="va">$a_number</span><span class="st">"</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>But that’s one line longer and a bit awkwardly asymmetric.</p>
 </div>
 </div>
@@ -786,19 +794,19 @@ A semicolon <code>;</code> (as used before <code>do</code>) separates two comman
 <hr>
 <p>Here are two key things to understand about <code>for</code> loops:</p>
 <p>First, in each iteration of the loop, one element in the collection <strong>is being assigned to the variable</strong> specified after <code>for</code>. In the example above, we used <code>a_number</code> as the variable name, so that variable contained <code>1</code> when the loop ran for the first time, <code>2</code> when it ran for the second time, and <code>3</code> when it ran for the third and last time.</p>
-<p>This variable continues to exist outside of the loop, having the last value that was assigned to it in the loop:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$a_number</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This variable continues to exist outside of the loop, and will have the last value that was assigned to it in the loop:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$a_number</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="bash-out">
 <p>3</p>
 </div>
 <p>Second, <strong>the loop runs sequentially for each item in the collection</strong>, and will run exactly as many times as there are items in the collection.</p>
-<p>The following example, where we let the computer sleep for 1 second before printing the date and time with the <code>date</code> command, demonstrates that the loop is being executed sequentially: xxx</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a_number <span class="kw">in</span> 1 2 3<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"In this iteration of the loop, the number is </span><span class="va">$a_number</span><span class="st">"</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> 1           <span class="co"># Let the computer sleep for 1 second</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">date</span>              <span class="co"># Print the date and time</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"--------"</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The following example, where we let the computer sleep for 1 second before printing the date and time with the <code>date</code> command, demonstrates that the loop is being executed sequentially. When you run it, you should notice a slight pause after the output of each iterations, and you can see that the output of <code>date</code> differs by one second each time:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a_number <span class="kw">in</span> 1 2 3<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"In this iteration of the loop, the number is </span><span class="va">$a_number</span><span class="st">"</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">date</span>              <span class="co"># Print the date and time</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"--------"</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sleep</span> 1           <span class="co"># Let the computer sleep for 1 second</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>In this iteration of the loop, the number is 1  
 Tue Aug 15 13:30:16 EDT 2023  
 --------  
@@ -846,9 +854,9 @@ Solution (Click here)
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> mushroom <span class="kw">in</span> morel destroying_angel eyelash_cup<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"</span><span class="va">$mushroom</span><span class="st"> is an Ohio mushroom"</span></span>
-<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> mushroom <span class="kw">in</span> morel destroying_angel eyelash_cup<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"</span><span class="va">$mushroom</span><span class="st"> is an Ohio mushroom"</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>morel is an Ohio mushroom
 destroying_angel is an Ohio mushroom
@@ -862,13 +870,14 @@ eyelash_cup is an Ohio mushroom</code></pre>
 <p><br></p>
 <section id="looping-over-files-with-globbing" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="looping-over-files-with-globbing"><span class="header-section-number">4.2</span> Looping over files with globbing</h3>
-<p>In practice, it is rare to manually list the collection of items we want to loop over, like we did above. Instead, we commonly <strong>loop over files</strong> directly using <em>globbing</em>:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Now processing FASTQ file </span><span class="va">$fastq_file</span><span class="st">..."</span></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># More processing...</span></span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In practice, it is rare to manually list the collection of items we want to loop over, like we did above with the numbers 1-3 and a few types of mushroom in the exercise.</p>
+<p>Instead, we commonly <strong>loop over files</strong> directly using <em>globbing</em>:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"Now processing FASTQ file </span><span class="va">$fastq_file</span><span class="st">..."</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># [Code to analyze the FASTQ file...]</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Now processing FASTQ file data/fastq/ASPC1_A178V_R1.fastq.gz...
 Now processing FASTQ file data/fastq/ASPC1_A178V_R2.fastq.gz...
 Now processing FASTQ file data/fastq/ASPC1_G31V_R1.fastq.gz...
@@ -877,19 +886,19 @@ Now processing FASTQ file data/fastq/Miapaca2_A178V_R1.fastq.gz...
 Now processing FASTQ file data/fastq/Miapaca2_A178V_R2.fastq.gz...
 Now processing FASTQ file data/fastq/Miapaca2_G31V_R1.fastq.gz...
 Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
-<p><strong>This technique is extremely useful</strong>, and I use it all the time. Take a moment to realize that we’re not doing a separate <code>ls</code> and storing the results: as mentioned before, a globbing pattern directly selects files.</p>
+<p><strong>This technique is extremely useful</strong>. Take a moment to realize that we’re not doing a separate <code>ls</code> and storing the results: as mentioned before, a globbing pattern directly selects files.</p>
 <p>If needed, you can use your globbing / wild card skills to narrow down the file selection:</p>
 <ul>
 <li><p>Perhaps we only want to select R1 files (forward reads):</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/raw/<span class="pp">*</span>_R1.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Some file processing...</span></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
-<li><p>Or FASTQ files are in sample-specific folders:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With default shell settings, '**' will traverse one dir level</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="co"># E.g., files are in 'results/trim/sampleA/', 'results/trim/sampleB/', etc. </span></span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> results/trim/<span class="pp">**</span>/<span class="pp">*</span>_R1.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Some file processing...</span></span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/raw/<span class="pp">*</span>_R1.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># [Some file processing...]</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Or our FASTQ files are tucked away in sample-specific folders:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co"># With default shell settings, '**' will traverse one dir level</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="co"># E.g., files are in 'results/trim/sampleA/', 'results/trim/sampleB/', etc. </span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> results/trim/<span class="pp">**</span>/<span class="pp">*</span>_R1.fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># [Some file processing...]</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 <p><br></p>
 </section>
@@ -899,42 +908,42 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <p>If you want to store the result of a command in a variable, you can use a construct called “<strong>command substitution</strong>” by wrapping the command inside <code>$()</code>.</p>
 <p>Let’s see an example. As you know, the <code>date</code> command will print the current date and time:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Tue Aug 15 14:41:02 EDT 2023</code></pre>
+<pre class="bash-out"><code>Wed Aug 16 13:23:55 EDT 2023</code></pre>
 </div>
 </div>
 <p>If we try to store the date in a variable directly, it doesn’t work: the literal string “date” is stored, not the output of the command:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span>date</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span>date</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre class="bash-out"><code>date</code></pre>
 </div>
 </div>
 <p>That’s why we need command substitution with <code>$()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span></span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Tue Aug 15 14:41:02 EDT 2023</code></pre>
+<pre class="bash-out"><code>Wed Aug 16 13:23:55 EDT 2023</code></pre>
 </div>
 </div>
 <hr>
 <p>One practical example of this is that you might want to automatically include the current date in a file name. First, note that we can use <code>date +%F</code> to print the date in <code>YYYY-MM-DD</code> format, and omit the time:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +%F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +%F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>2023-08-15</code></pre>
+<pre class="bash-out"><code>2023-08-16</code></pre>
 </div>
 </div>
 <p>Let’s use that in a command substitution — but a bit differently than before: we use the command substitution <code>$(date +%F)</code> <em>directly</em> in our <code>touch</code> command, rather than first assigning it to a variable:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sandbox</span>
-<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a file with our $today variable:</span></span>
-<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> README_<span class="st">"</span><span class="va">$(</span><span class="fu">date</span> +%F<span class="va">)</span><span class="st">"</span>.txt</span>
-<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> sandbox</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a file with our $today variable:</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> README_<span class="st">"</span><span class="va">$(</span><span class="fu">date</span> +%F<span class="va">)</span><span class="st">"</span>.txt</span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code># Output should include a file like this (the actual date will vary, of course!):
 README_2023-08-15.txt</code></pre>
 <p>Among many other uses, command substitution is handy when you want your script to report some results, or when a next step in the script depends on a previous result. We’ll come across it a few times in our shell scripts later on.</p>
@@ -942,9 +951,9 @@ README_2023-08-15.txt</code></pre>
 <h3 class="unnumbered anchored" data-anchor-id="on-your-own-command-substitution">On Your Own: Command substitution</h3>
 <p>Say we wanted to store and report the number of lines in a file, which can be a good QC measure for FASTQ and other genomic data files.</p>
 <p><code>wc -l</code> gets you the number of lines, and you can use a trick to omit the filename:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> /fs/ess/PAS0471/<span class="va">$USER</span>/rnaseq_intro</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>400000</code></pre>
 <p><strong>Use command substitution to store the output of the last command in a variable,</strong> <strong>and then use an <code>echo</code> command to print:</strong></p>
 <pre class="{bash-out}"><code>The file has 30387 lines</code></pre>
@@ -960,8 +969,8 @@ Solution
 </div>
 <div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb69"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="va">nlines</span><span class="op">=</span><span class="va">$(</span><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"The file </span><span class="va">$nlines</span><span class="st"> lines"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="va">nlines</span><span class="op">=</span><span class="va">$(</span><span class="fu">zcat</span> data/fastq/ASPC1_A178V_R1.fastq.gz <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span><span class="va">)</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"The file </span><span class="va">$nlines</span><span class="st"> lines"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>The file 400000 lines</code></pre>
 <p><strong>Note:</strong> You don’t have to quote variables <em>inside</em> a quoted <code>echo</code> call, since it’s, well, already quoted. If you <em>also</em> quote the variables, you will in fact <em>unquote</em> it, although that shouldn’t pose a problem inside echo statements.</p>
 </div>

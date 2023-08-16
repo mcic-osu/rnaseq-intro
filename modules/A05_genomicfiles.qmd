@@ -572,7 +572,8 @@ This is the genome that we will align our reads to,
 and whose gene annotations will form the basis of the gene counts we'll
 eventually get.
 
-Specifically, we'll need the **nucleotide FASTA** file with the genome assembly itself,
+Specifically,
+we'll need the **nucleotide FASTA** file with the genome assembly itself,
 and a **GTF file**,
 which is a tabular file with the genomic coordinates and other information for genes
 and other so-called genomic "features".
@@ -583,7 +584,8 @@ but the current reference genome is "_GRCh38.p14_"
 ([see this overview](https://www.ncbi.nlm.nih.gov/datasets/genome/?taxon=9606)).
 There are several ways to download genomes from the NCBI &mdash;
 here, we will keep it simple and directly download just the two files that we
-need from the [FTP site for this genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/).
+need from the
+[NCBI FTP site for this genome](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/).
 
 ::: {.callout-note}
 #### Getting to the FTP site
@@ -597,16 +599,16 @@ of the page.
 :::
 
 On the [FTP site](https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/),
-we can first right-click on 
-`GCF_000001405.40_GRCh38.p14_genomic.fna.gz` and then click "_Copy link address_".
-(The URL to this file is also shown in the command box below.)
+right-click on  `GCF_000001405.40_GRCh38.p14_genomic.fna.gz`
+and then click "_Copy link address_"
+(the URL to this file is also shown in the command box below).
 
 <br>
 
 ### Downloading files to OSC with `wget`
 
 To download a file to OSC,
-you can't just open a web browser and download it directly to there.
+you can't just open a web browser and download it there directly.
 You _could_ download it to your own computer and then transfer it to OSC.
 A more direct approach is to use a download command in your OSC shell.
 **`wget` is one command that allows you to download files from the web**
@@ -665,11 +667,12 @@ While it's preferable to keep FASTQ files compressed (as mentioned above),
 it's often more convenient to store your reference genome files as uncompressed
 files[^4].
 
-[^4]: They don't take up as much space, and bioinformatics tools regularly
-      expect them to be uncompressed.
+[^4]: This is because reference genome files don't take up as much space,
+      and bioinformatics tools may expect them to be uncompressed.
 
-We can uncompress/unzip them simply as follows
-(notice the subsequent increase in file size in the `ls` output):
+We can uncompress/unzip these files with the `gunzip` ("g-unzip") command
+as follows
+(and notice the subsequent increase in file size in the `ls` output):
 
 ```bash
 # Will take several seconds, esp. for the first file, and not print output to screen
@@ -685,13 +688,14 @@ ls -lh
 ```
 
 We'll also want to move these files to a dedicated directory.
-And while this is not necessary,
+Also,
 it will be convenient for our purposes to shorten their file names while
 retaining the necessary identifying information (the "GCF_" RefSeq number).
 
 After creating a directory, we can move and rename the files at once as follows:
 
 ```bash
+# We'll use a dir 'data/ref' for reference genome files
 mkdir -p data/ref
 
 mv -v GCF_000001405.40_GRCh38.p14_genomic.fna data/ref/GCF_000001405.40.fna
@@ -714,6 +718,8 @@ so we'll learn more about this format and take a look at our own file.
 The FASTA format is in essence simpler than FASTQ,
 but it is also less standardized and more generic.
 
+The following example FASTA file contains two entries:
+
 ```{.bash-out-solo}
 >unique_sequence_ID Optional description (free form!)
 ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAAAA
@@ -723,13 +729,14 @@ ATTCATTAAAGCAGTTTATTGGCTTAATGTACATCAGTGAAATCATAAATGCTAAATG
 
 Like FASTQ files, each entry contains a **header** and the **sequence** itself, but:
 
-- **Header lines start with a `>`**, and are otherwise basically "free form",
+- **Header lines start with a `>`** and are otherwise basically "free form",
   but they usually provide some sort of identifier (and sometimes some metadata)
   for the sequence in the entry. 
 - There are no quality scores, and there is no `+` line.
 - The sequences can be DNA, RNA, or amino acids.
-- Each sequence can represent e.g. a read, a contig/scaffold, a chromosome,
-  or a gene, as well as an _aligned_ sequence with gaps in it. 
+- A FASTA entry can represent a number of different types of sequencs,
+  such as a read, a contig/scaffold, a chromosome, or a gene,
+  as well as an _aligned_ sequence with gaps in it. 
 - Because the individual sequences in a FASTA file can be very long,
   **sequences are often not on a single line**,
   but may be spread across multiple/many lines with some fixed width,
@@ -786,7 +793,7 @@ less data/ref/GCF_000001405.40.fna
 
 We can also look at all or some of the entry headers by `grep`ing for `>`
 (which is only allowed in the header) &mdash;
-in this file, these represent the scaffolds:
+in this file, we can see that the entries represent the scaffolds:
 
 ```bash
 grep ">" data/ref/GCF_000001405.40.fna | head
@@ -838,7 +845,7 @@ features.
       which sometimes has the extension `.gff3` to make that clear.
 
 See the small sample below,
-with an added header line with column names for clarity:
+with an _added header line_ (not normally present) with column names for clarity:
 
 ```{.bash-out-solo}
 seqname     source  feature start   end     score  strand  frame    attributes
@@ -859,7 +866,7 @@ with the more important/interesting columns in bold:
 - _frame_ &mdash; `0`, `1` or `2` (or `.` for no frame). `0` means the 1st base of the feature is the 1st base of a codon, etc.
 - **_attribute_** &mdash; A semicolon-separated list of tag-value pairs with additional information about each feature.
 
-They also contain a **header section**,
+As we'll see below, GTF files also have a **header section**,
 whose lines start with a `#` and contain some metadata for the file.
 
 ::: {.callout-warning}
@@ -897,11 +904,11 @@ NC_000001.11    BestRefSeq      exon    12613   12721   .       +       .       
 NC_000001.11    BestRefSeq      exon    13221   14409   .       +       .       gene_id "DDX11L1"; transcript_id "NR_046018.2"; db_xref "GeneID:100287102"; gene "DDX11L1"; product "DEAD/H-box helicase 11 like 1 (pseudogene)"; pseudo "true"; transcript_biotype "transcript"; exon_number "3"; 
 ```
 
-The final column ("attributes") contains lots of data so the line width will almost
-certainly exceed your screen width,
-and the output you should see in your shell will be line-wrapped.
+The final column ("attributes") contains lots of data,
+so the line width will almost certainly exceed your screen width,
+and the output you see in your shell will be line-wrapped.
 It's easier to see what's going on on this website
-(where we get one line for each line of the file and can scroll sideways),
+(where we get one line for each line of the file, and can scroll sideways),
 or with `less -S`:
 
 ```bash
@@ -910,9 +917,9 @@ less -S data/ref/GCF_000001405.40.gtf
 
 ------
 
-One nice trick for if we only want to see the tabular lines
+One nice trick for if we only want to only see the tabular lines
 (for some files, the header can be quite long),
-or if we wanted to summarize the data in the tabular lines,
+or if we want to summarize the data in the tabular lines,
 is to **omit the header lines using `grep -v`**.
 The `-v` option will invert `grep`'s behavior and only print **non-matching** lines
 &mdash; since only the header lines contain a `#`,
@@ -994,7 +1001,7 @@ Miapaca2_G31V   Miapaca2   G31V
 First, **the `cut` command** can extract columns from tabular files,
 and you can use its `-f` option to specify the column(s) you want to extract
 &mdash; for example,
-`-f 3` extracts column 3 and `-f 3,5` extracts columns 3 and 5:
+`-f 3` extracts column 3, while `-f 3,5` would extract columns 3 and 5:
 
 ```bash
 cut -f 3 metadata/meta.tsv
@@ -1038,7 +1045,7 @@ Additionally, it can sort numerically, in reverse, and much more.
 
 Hmmm... maybe it isn't appropriate to include the header line
 (`variant` in the output above).
-A nice little trick to exclude the first line of a file is `tail -n +2`:
+A nice little **trick to exclude the first line of a file is `tail -n +2`**:
 
 ```bash
 tail -n +2 | cut -f 3 metadata/meta.tsv | sort
@@ -1055,8 +1062,8 @@ G31V
 ```
 
 Third, **the `uniq` command** will remove _consecutive_ duplicate lines &mdash;
-for that reason, we need to have the entries sorted if we want to remove all
-duplicates:
+for that reason,
+its input needs to be if we want to remove _all_ duplicates:
 
 ```bash
 tail -n +2 metadata/meta.tsv | cut -f 3 | sort | uniq
@@ -1092,28 +1099,33 @@ tail -n +2 metadata/meta.tsv | cut -f 3 | sort | uniq -c
 
 ### Getting GTF summary stats with `cut`, `uniq`, and `grep`
 
-How many "RASD" genes are in the annotation?
-
-```bash
-grep 'gene_id "RASD' data/ref/GCF_000001405.40.gtf | cut -f 3 | grep -c "gene"
-```
-```{.bash-out}
-2
-```
-
 How many snRNAs are in the annotation?
 
 ```bash
+# Because the 'gene_biotype' attribute only occurs in 'gene' entries,
+# we can simply count the number of lines found by grep:
 grep -c 'gene_biotype "snRNA"' data/ref/GCF_000001405.40.gtf
 ```
 ```{.bash-out}
 172
 ```
 
+How many "RASD" genes are in the annotation?
+
+```bash
+# After getting all RASD entries (for different feature types), we can select
+# only 'gene' entries by cutting column 3 (feature types) and grep for 'gene':
+grep 'gene_id "RASD' data/ref/GCF_000001405.40.gtf | cut -f 3 | grep -c "gene"
+```
+```{.bash-out}
+2
+```
+
 Which feature types are present and what are their counts?
 
 ```bash
-grep -v "^#" data/ref/GCF_000001405.40.gtf | cut -f3 | sort | uniq -c
+# Column 3 contains the feature types
+grep -v "^#" data/ref/GCF_000001405.40.gtf | cut -f 3 | sort | uniq -c
 ```
 ```{.bash-out}
 1835339 CDS
@@ -1128,6 +1140,11 @@ grep -v "^#" data/ref/GCF_000001405.40.gtf | cut -f3 | sort | uniq -c
 #### Your turn: more GTF exploration {-}
 
 - How many features are derived from each of the annotation sources (column 2)?
+
+<details><summary>Hint</summary>
+The code to do this is nearly identical to the last example above,
+you just have to cut a different column.
+</details>
 
 <details><summary>Solution</summary>
 
