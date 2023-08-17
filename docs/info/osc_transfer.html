@@ -259,9 +259,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#sftp" id="toc-sftp" class="nav-link" data-scroll-target="#sftp"><span class="header-section-number">4</span> SFTP</a>
   <ul class="collapse">
   <li><a href="#logging-in" id="toc-logging-in" class="nav-link" data-scroll-target="#logging-in"><span class="header-section-number">4.1</span> Logging in</a></li>
-  <li><a href="#uploading-files-to-osc" id="toc-uploading-files-to-osc" class="nav-link" data-scroll-target="#uploading-files-to-osc"><span class="header-section-number">4.2</span> Uploading files to OSC</a></li>
-  <li><a href="#downloading-files-from-osc" id="toc-downloading-files-from-osc" class="nav-link" data-scroll-target="#downloading-files-from-osc"><span class="header-section-number">4.3</span> Downloading files from OSC</a></li>
-  <li><a href="#exiting" id="toc-exiting" class="nav-link" data-scroll-target="#exiting"><span class="header-section-number">4.4</span> Exiting</a></li>
+  <li><a href="#uploading-files-to-osc" id="toc-uploading-files-to-osc" class="nav-link" data-scroll-target="#uploading-files-to-osc"><span class="header-section-number">4.2</span> <em>Uploading</em> files to OSC</a></li>
+  <li><a href="#downloading-files-from-osc" id="toc-downloading-files-from-osc" class="nav-link" data-scroll-target="#downloading-files-from-osc"><span class="header-section-number">4.3</span> <em>Downloading</em> files from OSC</a></li>
+  <li><a href="#closing-the-sftp-connection" id="toc-closing-the-sftp-connection" class="nav-link" data-scroll-target="#closing-the-sftp-connection"><span class="header-section-number">4.4</span> Closing the SFTP connection</a></li>
   </ul></li>
   <li><a href="#globus" id="toc-globus" class="nav-link" data-scroll-target="#globus"><span class="header-section-number">5</span> Globus</a></li>
   </ul>
@@ -516,9 +516,10 @@ Connected to sftp.osc.edu.</code></pre>
 <pre class="bash-out"><code>Remote working directory: /users/PAS0471/jelmer</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> lpwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Local working directory: /Users/poelstra.1/Desktop</code></pre>
+<p><br></p>
 </section>
 <section id="uploading-files-to-osc" class="level3" data-number="4.2">
-<h3 data-number="4.2" class="anchored" data-anchor-id="uploading-files-to-osc"><span class="header-section-number">4.2</span> Uploading files to OSC</h3>
+<h3 data-number="4.2" class="anchored" data-anchor-id="uploading-files-to-osc"><span class="header-section-number">4.2</span> <em>Uploading</em> files to OSC</h3>
 <p>To upload files to OSC, use <code>sftp</code>’s <strong><code>put</code> command</strong>.</p>
 <p>The syntax is <code>put &lt;local-path&gt; &lt;remote-path&gt;</code>, and unlike with <code>scp</code> etc., you don’t need to include the address to the remote (because in an <code>stfp</code> session, you are simultaneously connected to both computers). But like with <code>cp</code> and <code>scp</code>, you’ll need the <code>-r</code> flag for recursive transfers, i.e.&nbsp;transferring a directory and its contents.</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Upload fastqc.sh in a dir 'scripts' on your local computer to the PAS0471 Scratch dir:</span></span>
@@ -543,17 +544,19 @@ Connected to sftp.osc.edu.</code></pre>
 <p><code>sftp</code> is generally quite primitive and you also cannot use, for example, tab completion or the recalling of previous commands with the up arrow.</p>
 </div>
 </div>
+<p><br></p>
 </section>
 <section id="downloading-files-from-osc" class="level3" data-number="4.3">
-<h3 data-number="4.3" class="anchored" data-anchor-id="downloading-files-from-osc"><span class="header-section-number">4.3</span> Downloading files from OSC</h3>
+<h3 data-number="4.3" class="anchored" data-anchor-id="downloading-files-from-osc"><span class="header-section-number">4.3</span> <em>Downloading</em> files from OSC</h3>
 <p>To download files from OSC, use the <code>get</code> command, which has the syntax <code>get &lt;remote-path&gt; &lt;local-path&gt;</code> (this is the other way around from <code>put</code> in that the remote path comes first, but the same in that both use the order <code>&lt;source&gt; &lt;target&gt;</code>, like <code>cp</code> and so on).</p>
 <p>For example:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> get /fs/scratch/PAS0471/mcic-scripts/misc/fastqc.sh .</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="ex">sftp</span><span class="op">&gt;</span> get <span class="at">-r</span> /fs/scratch/PAS0471/sandbox/ .</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br></p>
 </section>
-<section id="exiting" class="level3" data-number="4.4">
-<h3 data-number="4.4" class="anchored" data-anchor-id="exiting"><span class="header-section-number">4.4</span> Exiting</h3>
+<section id="closing-the-sftp-connection" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="closing-the-sftp-connection"><span class="header-section-number">4.4</span> Closing the SFTP connection</h3>
 <p>When you’re done, you can type <code>exit</code> or press <kbd>Ctrl</kbd>+<kbd>D</kbd> to exit the <code>sftp</code> prompt.</p>
 <p><br></p>
 </section>

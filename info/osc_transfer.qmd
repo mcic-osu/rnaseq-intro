@@ -275,7 +275,9 @@ sftp> lpwd
 Local working directory: /Users/poelstra.1/Desktop
 ```
 
-### Uploading files to OSC
+<br>
+
+### _Uploading_ files to OSC
 
 To upload files to OSC, use `sftp`'s **`put` command**.
 
@@ -304,7 +306,9 @@ The `~` shortcut to your Home directory does not work in `sftp`!
 tab completion or the recalling of previous commands with the up arrow.
 :::
 
-### Downloading files from OSC
+<br>
+
+### _Downloading_ files from OSC
 
 To download files from OSC, use the `get` command,
 which has the syntax `get <remote-path> <local-path>`
@@ -319,7 +323,9 @@ sftp> get /fs/scratch/PAS0471/mcic-scripts/misc/fastqc.sh .
 sftp> get -r /fs/scratch/PAS0471/sandbox/ .
 ```
 
-### Exiting
+<br>
+
+### Closing the SFTP connection 
 
 When you're done, you can type `exit` or press <kbd>Ctrl</kbd>+<kbd>D</kbd>
 to exit the `sftp` prompt.

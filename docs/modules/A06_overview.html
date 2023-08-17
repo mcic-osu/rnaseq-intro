@@ -407,7 +407,8 @@ Don’t have your own dir with the data? (Click to expand)
 </section>
 <section id="running-cli-bioinformatics-programs-at-osc-an-overview" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="running-cli-bioinformatics-programs-at-osc-an-overview"><span class="header-section-number">2</span> Running CLI bioinformatics programs at OSC: an overview</h2>
-<p>We’ll use the program <em>FastQC</em> as an example, which performs quality control (QC) on a FASTQ file, and is often the very first step when analyzing a newly sequenced genomics dataset.</p>
+<p>As pointed out earlier, bioinformatics software (programs) that we use to analyze genomic data are typically run from the command line. That is, they have a “command-line interface” (<em>CLI</em>) rather than a “graphical user interface” (<em>GUI</em>), and are run using commands that are structurally very similar to how we’ve been using basic Unix shell commands.</p>
+<p>Here, we’ll use the program <em>FastQC</em> as an example, which performs quality control (QC) on a FASTQ file, and is often the very first step when analyzing a newly sequenced genomics dataset.</p>
 <section id="running-a-cli-program-interactively" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="running-a-cli-program-interactively"><span class="header-section-number">2.1</span> Running a CLI program interactively</h3>
 <p>When we run a bioinformatics program at OSC, we’ll always have to first make the program available to us. We will cover that in more in detail in the session <a href="../modules/A08_software.html">Software at OSC</a> — but here is how you can do this for <em>FastQC</em>:</p>
@@ -828,7 +829,7 @@ eyelash_cup is an Ohio mushroom</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Hints (Click here)
+Hints (Click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -847,7 +848,7 @@ Hints (Click here)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Solution (Click here)
+Solution (Click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -910,7 +911,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Wed Aug 16 13:23:55 EDT 2023</code></pre>
+<pre class="bash-out"><code>Thu Aug 17 09:49:08 EDT 2023</code></pre>
 </div>
 </div>
 <p>If we try to store the date in a variable directly, it doesn’t work: the literal string “date” is stored, not the output of the command:</p>
@@ -926,7 +927,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Wed Aug 16 13:23:55 EDT 2023</code></pre>
+<pre class="bash-out"><code>Thu Aug 17 09:49:08 EDT 2023</code></pre>
 </div>
 </div>
 <hr>
@@ -934,7 +935,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +%F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>2023-08-16</code></pre>
+<pre class="bash-out"><code>2023-08-17</code></pre>
 </div>
 </div>
 <p>Let’s use that in a command substitution — but a bit differently than before: we use the command substitution <code>$(date +%F)</code> <em>directly</em> in our <code>touch</code> command, rather than first assigning it to a variable:</p>

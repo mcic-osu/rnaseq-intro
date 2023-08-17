@@ -122,7 +122,15 @@ You should have at least the following files in this dir:
 
 ## Running CLI bioinformatics programs at OSC: an overview
 
-We'll use the program _FastQC_ as an example,
+As pointed out earlier,
+bioinformatics software (programs) that we use to analyze genomic data are
+typically run from the command line.
+That is, they have a "command-line interface" (*CLI*) rather than a
+"graphical user interface" (*GUI*),
+and are run using commands that are structurally very similar to how we've
+been using basic Unix shell commands.
+
+Here, we'll use the program _FastQC_ as an example,
 which performs quality control (QC) on a FASTQ file, 
 and is often the very first step when analyzing a newly sequenced genomics dataset.
 
@@ -715,7 +723,7 @@ eyelash_cup is an Ohio mushroom
 ```
 
 :::{.callout-tip collapse="true"}
-## Hints (Click here)
+## Hints (Click to expand)
 
 - Just like we looped over 3 numbers above (`1`, `2`, and `3`),
   you want to loop over the three mushroom names,
@@ -726,7 +734,7 @@ eyelash_cup is an Ohio mushroom
 :::
 
 :::{.callout-tip collapse="true"}
-## Solution (Click here)
+## Solution (Click to expand)
 
 ```{bash, eval=TRUE}
 for mushroom in morel destroying_angel eyelash_cup; do
