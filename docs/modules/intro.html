@@ -223,7 +223,7 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#what-well-cover" id="toc-what-well-cover" class="nav-link" data-scroll-target="#what-well-cover">What we’ll cover</a>
   <ul class="collapse">
-  <li><a href="#computing-skills" id="toc-computing-skills" class="nav-link" data-scroll-target="#computing-skills">Computing skills</a></li>
+  <li><a href="#computing-skills-and-genomic-file-formats" id="toc-computing-skills-and-genomic-file-formats" class="nav-link" data-scroll-target="#computing-skills-and-genomic-file-formats">Computing skills and genomic file formats</a></li>
   <li><a href="#analysis-part-i-from-sequence-reads-to-gene-counts" id="toc-analysis-part-i-from-sequence-reads-to-gene-counts" class="nav-link" data-scroll-target="#analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</a></li>
   <li><a href="#analysis-part-ii-analyzing-gene-counts-in-r" id="toc-analysis-part-ii-analyzing-gene-counts-in-r" class="nav-link" data-scroll-target="#analysis-part-ii-analyzing-gene-counts-in-r">Analysis part II: Analyzing gene counts in R</a></li>
   </ul></li>
@@ -330,8 +330,8 @@ These run the same command-line programs, but wrap their execution in a more use
 </section>
 <section id="what-well-cover" class="level2">
 <h2 class="anchored" data-anchor-id="what-well-cover">What we’ll cover</h2>
-<section id="computing-skills" class="level3">
-<h3 class="anchored" data-anchor-id="computing-skills">Computing skills</h3>
+<section id="computing-skills-and-genomic-file-formats" class="level3">
+<h3 class="anchored" data-anchor-id="computing-skills-and-genomic-file-formats">Computing skills and genomic file formats</h3>
 <p>Many of these computing skills are needed only for part I below.</p>
 <ul>
 <li>Introduction to the Ohio Supercomputer Center (OSC)</li>
@@ -340,6 +340,7 @@ These run the same command-line programs, but wrap their execution in a more use
 <li>Shell scripts and loops</li>
 <li>The <code>SLURM</code> compute job scheduler</li>
 <li>Using and installing software at OSC</li>
+<li>Input genomic file formats relevant to RNAseq: FASTQ, FASTA, GTF/GFF</li>
 </ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -361,13 +362,11 @@ Note
 <section id="analysis-part-i-from-sequence-reads-to-gene-counts" class="level3">
 <h3 class="anchored" data-anchor-id="analysis-part-i-from-sequence-reads-to-gene-counts">Analysis part I: From sequence reads to gene counts</h3>
 <ul>
-<li>Genomic file formats relevant to RNAseq: FASTA, FASTQ, BAM/SAM, GFF<br>
-</li>
 <li>Raw read QC with <code>FastQC</code> and <code>MultiQC</code></li>
 <li>Read pre-processing with <code>TrimGalore</code> and <code>SortMeRNA</code></li>
-<li>Read alignment to a reference genome with <code>STAR</code></li>
+<li>Read alignment to a reference genome with <code>STAR</code> (and BAM/SAM files)</li>
 <li>Alignment QC with (at least) <code>MultiQC</code></li>
-<li>Gene expression counting with <code>Salmon</code></li>
+<li>Gene expression quantification with <code>Salmon</code></li>
 </ul>
 </section>
 <section id="analysis-part-ii-analyzing-gene-counts-in-r" class="level3">
@@ -388,7 +387,7 @@ Note
 </section>
 <section id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads" class="level3">
 <h3 class="anchored" data-anchor-id="gene-level-versus-transcript-level-counts-and-short-versus-long-reads">Gene-level versus transcript-level counts, and short versus long reads</h3>
-<p>We will focus on generating and analyzing <strong>gene-level counts</strong> rather than transcript-level counts: that is, for each sample, we will obtain a single count for each gene even if that gene has multiple transcripts (isoforms). However, the program which we’ll use for counting (<code>Salmon</code>) can also generate transcript-level counts, and downstream transcript-level analysis is fairly similar too, though this certainly adds a level of complexity.</p>
+<p>We will focus on generating and analyzing <strong>gene-level counts</strong> rather than transcript-level counts: that is, for each sample, we will obtain a single count for each gene even if that gene has multiple transcripts (isoforms). However, the program which we’ll use for counting (<em>Salmon</em>) can also generate transcript-level counts, and downstream transcript-level analysis is fairly similar too, though this certainly adds a level of complexity.</p>
 <p>Additionally, we will use short-read (Illumina) sequencing data, for which transcript-level counts have much greater levels of uncertainty, since most reads cannot directly be assigned to a specific transcript. Consider using long reads, such as <a href="https://www.pacb.com/products-and-services/applications/rna-sequencing/">PacBio IsoSeq</a>, if you’re interested in transcript-level inferences.</p>
 </section>
 <section id="bulk-versus-single-cell-rnaseq" class="level3">

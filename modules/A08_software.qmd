@@ -4,7 +4,9 @@ subtitle: "Loading existing modules and installing and using software with conda
 pagetitle: "Software at OSC"
 highlight-style: github
 number-sections: true
+engine: knitr
 author: Jelmer Poelstra
+date: 2023-09-08
 ---
 
 ```{r knitr_options, echo=FALSE}

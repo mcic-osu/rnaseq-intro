@@ -4,15 +4,13 @@ subtitle: 'With a focus on submitting shell scripts as "batch jobs"'
 pagetitle: "Slurm"
 highlight-style: github
 number-sections: true
-knitr:
-  opts_knit:
-    root.dir: "sandbox"
+engine: knitr
 author: Jelmer Poelstra
+date: 2023-09-15
 ---
 
 ```{r knitr_options, echo=FALSE}
-knitr::opts_chunk$set(eval = FALSE,
-                      class.output = "bash-out")
+knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 ```
 
 ----
@@ -20,6 +18,15 @@ knitr::opts_chunk$set(eval = FALSE,
 ::: {.callout-important}
 ## Under construction 
 This page is still under construction.
+:::
+
+::: {.callout-note}
+#### Add keyboard shortcut to run shell commands from the editor:
+
+- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
+
+- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
+  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
 :::
 
 We have so far been working on _login nodes_ at OSC,
@@ -216,8 +223,11 @@ Whereas we used Slurm's `srun` command to start an interactive shell job,
 we use its **`sbatch` command to submit a batch job**.
 Recall from the Bash scripting module that we can run a Bash script as follows:
 
-```{bash, eval=TRUE}
+```bash
 bash scripts/printname.sh Jane Doe
+```
+```{.bash-out}
+TODO
 ```
 
 :::{.callout-caution collapse="true"}

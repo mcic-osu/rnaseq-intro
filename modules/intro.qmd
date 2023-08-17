@@ -107,7 +107,7 @@ This part:
 
 ## What we'll cover
 
-### Computing skills
+### Computing skills and genomic file formats
 
 Many of these computing skills are needed only for part I below.
 
@@ -117,7 +117,8 @@ Many of these computing skills are needed only for part I below.
 - Shell scripts and loops
 - The `SLURM` compute job scheduler
 - Using and installing software at OSC
-
+- Input genomic file formats relevant to RNAseq: FASTQ, FASTA, GTF/GFF
+  
 ::: {.callout-note}
 
 - Along the way, we'll also learn about _project organization_ and
@@ -130,12 +131,11 @@ Many of these computing skills are needed only for part I below.
 
 ### Analysis part I: From sequence reads to gene counts
 
-- Genomic file formats relevant to RNAseq: FASTA, FASTQ, BAM/SAM, GFF  
 - Raw read QC with `FastQC` and `MultiQC`
 - Read pre-processing with `TrimGalore` and `SortMeRNA` 
-- Read alignment to a reference genome with `STAR`
+- Read alignment to a reference genome with `STAR` (and BAM/SAM files)
 - Alignment QC with (at least) `MultiQC`
-- Gene expression counting with `Salmon`
+- Gene expression quantification with `Salmon`
 
 ### Analysis part II: Analyzing gene counts in R
 
@@ -160,7 +160,7 @@ since you will first have to assemble a transcriptome from the RNAseq data itsel
 We will focus on generating and analyzing **gene-level counts** rather than transcript-level counts:
 that is, for each sample, we will obtain a single count for each gene even
 if that gene has multiple transcripts (isoforms).
-However, the program which we'll use for counting (`Salmon`) can also generate
+However, the program which we'll use for counting (_Salmon_) can also generate
 transcript-level counts, and downstream transcript-level analysis is fairly similar too,
 though this certainly adds a level of complexity.
 

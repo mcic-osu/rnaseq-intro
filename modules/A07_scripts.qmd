@@ -16,26 +16,23 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 
 <br>
 
-::: {.callout-important}
-## Under construction 
-This page is still under construction.
-:::
-
 ## Overview & Getting started
 
-Shell scripts (or to be slightly more precise, Bash scripts)
-enable us to **run sets of commands non-interactively**.
-This is especially beneficial or necessary when a set of commands:
+Shell scripts enable us to **run sets of commands non-interactively**,
+which is useful:
 
-  - Takes a long time to run and/or
-  - Should be run many times, e.g. for different samples
+- When a set of commands takes a long time to run and/or should be run many times.
+
+- To help keep our code clean and clear by using separate scripts for individual
+  parts of our analysis pipeline.
+
+- To run our analyses as Slurm batch jobs at OSC,
+  (which will for instance to allow them to run simultaneously for differet samples)
 
 Scripts form the basis for *analysis pipelines* and if we code things cleverly,
-it should be straightforward to rerun much of our project workflow:
-  
-- After removing or adding a sample
-- For different parameter settings
-- And possibly even for an entirely different dataset. 
+it should be **straightforward to rerun much of our project workflow**
+after removing or adding some samples, with different parameter settings,
+and possibly even for an entirely different dataset. 
 
 <br>
 
@@ -124,7 +121,68 @@ You should have at least the following files in this dir:
 
 <br>
 
-## Script header lines and zombie scripts
+## A basic shell script
+
+### Our first script
+
+We'll be writing our shell scripts in the editor pane of VS Code.
+To create our first one, open a new file in the `VS Code` editor
+(&nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `New File`)
+and save it as `printname.sh` within the `sandbox` dir
+(shell scripts most commonly have the extension `.sh`).
+
+Then, type or paste the following _inside the script_ in your editor pane
+(and _not_ in the terminal pane):
+
+```bash
+echo "This script will print a first and a last name"
+```
+
+::: {.callout-tip}
+#### Auto Save
+
+The changes to the file should be immediately, automatically saved by VS Code:
+if that's not happening for some reason,
+there should be an indication like a large black dot next to the script's file
+name in the editor pane tab header (see the box below how to fix this).
+
+::: {.callout-warning collapse="true"}
+### Auto Save not happening? (Click to expand)
+
+If the file is not auto-saving, you can always save it manually
+(including with <kbd>Ctrl/Cmd</kbd>+<kbd>S</kbd>)
+like you'd do in other programs.
+
+However, it may be convenient to turn Auto Save on:
+press <kbd>Ctrl/Cmd</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>
+to open the Command Palette and type "Auto Save".
+You should see an option "Toggle Auto Save": click on that.
+:::
+:::
+
+Shell scripts mostly contain the same regular Unix shell (specifically, Bash shell)
+code that we have so far just been typing in the terminal.
+As such,
+**our single line with an `echo` command already consitutes a functional shell script!**
+One way of running the script is by calling the `bash` command followed by the
+name of the script:
+
+```bash
+bash sandbox/printname.sh
+```
+```{.bash-out}
+This script will print a first and a last name
+```
+
+That worked! 
+Although of course,
+the script doesn't yet print your name like it "promises" to do,
+but we will add that functionality in a little bit.
+
+First, though, we'll learn about two header lines that are good practice to
+add to every shell script.
+
+<br>
 
 ### Shebang line
 
@@ -136,31 +194,41 @@ More specifically, this line tell the computer where to find the binary
 Such a line starts with **`#!`**,
 basically marking it as a special type of comment.
 After that, we provide the location to the relevant program:
-in our case Bash, which is located at `/bin/bash` on Linux and Mac computers.
+in our case Bash (which is the specific type of shell we are using),
+which is located at `/bin/bash` on Linux and Mac computers.
 
 ```sh
 #!/bin/bash
 ```
 
-Adding a shebang line is good practice in general,
-and is necessary when we want to submit our script to OSC's Slurm queue,
-which we'll do tomorrow.
+While not always strictly necessary, adding a shebang line is good practice,
+especially when we want to submit our script to OSC's Slurm queue.
 
 <br>
 
-### Bash script settings
+### Shell script settings
 
-Another line that is good practice to add to your Bash scripts changes some
+Another line that is good practice to add to your shell scripts changes some
 default settings to safer alternatives.
-The following two Bash default settings are bad ideas inside scripts:
 
-_First_, and as we've seen in the previous module,
-Bash does not complain when you
-**reference a variable that does not exist**
-(in other words, it does not consider that an error).
+#### Bad default shell settings {-}
+
+The following two default settings of the Bash shell are bad ideas inside scripts:
+
+**_First_**, as we've seen previously,
+when you **reference a variable that does not exist**,
+the shell will just replace that with nothing, and will not complain:
+
+```bash
+echo "Hello, my name is $myname ..."
+```
+```{.bash-out}
+Hello, my name is  ...
+```
 
 In scripts, this can lead to all sorts of downstream problems,
-because you very likely tried and failed to do something with an actual variable.
+because you very likely tried and failed to do something with an existing variable
+(but misspelled its name, or forgot to assign it altogether).
 Even more problematically,
 it can lead to potentially very destructive file removal:
 
@@ -189,8 +257,8 @@ which means that we are referencing a (likely) non-existent variable.
 
 - In the second example, along similar lines,
   `rm -rf $tmpdir/*` would have been interpreted as `rm -rf /*`.
-  Horrifyingly, this would **attempt to remove the entire filesystem**
-  (recall that a leading `/` in a path is a computer's root directory).[^1]
+  Horrifyingly, this would **attempt to remove the entire filesystem**:
+  recall that a leading `/` in a path is a computer's root directory[^1].
   (`-r` makes the removal _recursive_ and `-f` makes _forces_ removal).
 
 [^1]: But note that at OSC,
@@ -202,10 +270,8 @@ requesting  "admin" rights.
 
 :::
 
-----
-
-_Second_, a Bash script **keeps running after encountering errors**.
-That is, if an error is encountered when running line 2 of a script,
+**_Second_**, a Bash script **keeps running after encountering errors**.
+That is, if an error is encountered when running, say, line 2 of a script,
 any remaining lines in the script will nevertheless be executed.
 
 In the best case, this is a waste of computer resources,
@@ -216,7 +282,7 @@ more errors downstream.
 But the downstream results from what we at that point might call a
 "**zombie script**" may still be completely wrong.
 
-----
+#### Safer settings {-}
 
 The following three settings will make your Bash scripts more robust and safer.
 With these settings, the script terminates,
@@ -230,58 +296,59 @@ with an appropriate error message, if:
 We can change all of these settings in one line in a script:
 
 ```bash
-set -u -e -o pipefail     # (For in a script - don't run in the terminal)
+set -e -u -o pipefail     # (For in a script - don't run in the terminal)
 ```
 
 Or even more concisely:
 
 ```bash
-set -ueo pipefail         # (For in a script - don't run in the terminal)
+set -euo pipefail         # (For in a script - don't run in the terminal)
 ```
 
 <br>
 
-### Our header lines as a rudimentary script
+### Adding the header lines to our script
 
-Let's go ahead and start a script with the header lines
-that we have so far discussed.
+Let's add these lines to our `headtail.sh` script,
+so it will now contain the following:
 
-- Inside your personal directory within `/fs/ess/scratch/PAS2250/participants`,
-  make a directory called `scripts` and one called `sandbox`
-  (e.g. `mkdir scripts sandbox`, or use the VS Code menus.
+```bash
+#!/bin/bash
+set -ueo pipefail
 
-- Open a new file in the `VS Code` editor
-  (&nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `New File`)
-  and save it as `printname.sh` within the newly created `scripts` dir.
-
-  :::{.callout-note}
-  ## Shell scripts, including Bash scripts, most commonly have the extension `.sh`
-  :::
+echo "This script will print a first and a last name"
+```
   
-- Type the following lines in that script (not in your terminal!):
-  
-  ```bash
-  #!/bin/bash
-  set -ueo pipefail
-  ```
+And let's run it again:
 
-At this point, we could already _run_ (execute) the script.
-One way of doing this is calling the `bash` command
-followed by the name of the script[^2]:
+```bash
+bash sandbox/printname.sh
+```
+```{.bash-out}
+This script will print a first and a last name
+```
 
-[^2]: Because our script has a shebang line,
-we could also execute the script without the `bash` command using
-`./printname.sh`.
+That didn't change anything to the output,
+but at least we confirmed that the script still works.
+
+::: {.callout-note collapse="true"}
+#### Running the script without using `bash` (Click to expand)
+
+Because our script has a shebang line,
+we could also execute the script without the `bash` command,
+simply using `sandbox/printname.sh`.
+
+(Or if the script was in our current working dir, using `./printname.sh`.
+In that case the `./` is necessary to make it explicit that we are referring
+to a file name:
+otherwise, when running just `printname.sh`,
+the shell would look for a command or program of that name,
+and wouldn't be able to find it.)
+
 However, this would also require us to "make the script executable",
 which is beyond the scope of this workshop.
 
-```bash
-bash scripts/printname.sh
-```
-
-Doing this won't print anything to screen (or file).
-Since our script doesn't have any output, that makes sense &mdash;
-no output can be a good sign, because it means that no errors were encountered.
+:::
 
 <br>
 
@@ -311,11 +378,11 @@ and a fictional script `fastqc.sh`:
 ```bash
 # Run scripts without any arguments:
 bash fastqc.sh                            # (Fictional script)
-bash scripts/printname.sh
+bash sandbox/printname.sh
 
 # Run scripts with 1 or 2 arguments:
 bash fastqc.sh data/sampleA.fastq.gz      # 1 argument, a filename
-bash scripts/printname.sh John Doe        # 2 arguments, strings representing names
+bash sandbox/printname.sh John Doe        # 2 arguments, strings representing names
 ```
 
 In the next section, we'll see what happens when we pass arguments to a script
@@ -326,7 +393,8 @@ on the command line.
 ### Placeholder variables
 
 Inside the script,
-any command-line arguments are _automatically available_ in placeholder variables.
+any command-line arguments that you passed to it are _automatically available_
+in placeholder variables.
 
 A first argument will be assigned to the variable **`$1`**,
 any second argument will be assigned to **`$2`**,
@@ -339,7 +407,7 @@ In `bash fastqc.sh data/sampleA.fastq.gz`,
 a single argument, `data/sampleA.fastq.gz`, is passed to the script,
 and will be assigned to `$1`.
 
-In `bash scripts/printname.sh John Doe`,
+In `bash sandbox/printname.sh John Doe`,
 two arguments are passed to the script:
 the first one (`John`) will be stored in `$1`,
 and the second one (`Doe`) in `$2`.
@@ -367,20 +435,10 @@ echo "Last name: $2"
 # (Note: this is a script. Don't enter this directly in your terminal.)
 ```
 
-```bash
-cat > scripts/printname.sh <<'_EOF'
-#!/bin/bash
-set -ueo pipefail
-
-echo "First name: $1"
-echo "Last name: $2"
-_EOF
-```
-
 Next, we'll _run_ the script, passing the arguments `John` and `Doe`:
 
 ```bash
-bash scripts/printname.sh John Doe
+bash sandbox/printname.sh John Doe
 ```
 ```{.bash-out}
 First name: John
@@ -394,14 +452,14 @@ In each case below, **think about what might happen before you run the script**.
 Then, run it, and if you didn't make a successful prediction,
 try to figure out what happened instead.
 
-1. Run the script (`scripts/printname.sh`) without passing arguments to it.
+1. Run the script (`sandbox/printname.sh`) without passing arguments to it.
 
 2. Deactivate ("comment out") the line with `set` settings
    by inserting a `#` as the first character.
    Then, run the script again without passing arguments to it.
 
 3. Double-quote `John Doe` when you run the script,
-   i.e. run `bash scripts/printname.sh "John Doe"`
+   i.e. run `bash sandbox/printname.sh "John Doe"`
 
 To get back to where we were,
 remove the `#` you inserted in the script in step 2 above.
@@ -414,7 +472,7 @@ remove the `#` you inserted in the script in step 2 above.
    the `$1` and `$2` have not been set.
 
 ```bash
-bash scripts/printname.sh
+bash sandbox/printname.sh
 ```
 
 :::{.bash-out}
@@ -427,10 +485,11 @@ printname.sh: line 4: $1: unbound variable
    Of course, no names are printed either, since we didn't specify any:
 
 ```bash
-bash scripts/printname.sh
+bash sandbox/printname.sh
 ```
 ```{.bash-out}
-TODO
+echo "First name:"
+echo "Last name:"
 ```
 
 Being commented out, the `set` line should read:
@@ -444,10 +503,11 @@ Being commented out, the `set` line should read:
    the "first name":
 
 ```bash
-bash scripts/printname.sh "John Doe"
+bash sandbox/printname.sh "John Doe"
 ```
 ```{.bash-out}
-TODO
+echo "First name: John Doe"
+echo "Last name:"
 ```
 
 :::
@@ -455,7 +515,7 @@ TODO
 
 <br>
 
-### Descriptive variable names
+### Copying placeholders to variables with descriptive names
 
 While you can use the `$1`-style placeholder variables throughout your script,
 I find it very useful to copy them to more descriptively named variables
@@ -483,7 +543,7 @@ in which you use the wrong variable in the wrong place.
 ## Other variables that are automatically available inside scripts
 
 - `$0` contains the script's file name
-- `$#` contains the _number_ of command-line arguments passed
+- `$#` contains the _number_ of command-line arguments passed to the script
 :::
 
 :::{.exercise}
@@ -493,38 +553,34 @@ in which you use the wrong variable in the wrong place.
 Write a script that prints a specific line (identified by line number)
 from a file.
 
-- Open a new file and save it as `scripts/printline.sh`
+- Open a new file and save it as `sandbox/printline.sh`
 - Start with the _shebang_ and `set` lines
 - Your script takes two arguments: a file name (`$1`) and a line number (`$2`) 
 - Copy the `$1` and `$2` variables to descriptively named variables
 - To print a specific line,
   think how you might combine `head` and `tail` to do this.
   If you're at a loss, feel free to check out the top solution box.
-- Test the script by printing line 4 from `data/meta/meta.tsv`.
+- Test the script by printing line 4 from `metadata/meta.tsv`.
 
 :::{.callout-tip collapse="true"}
-## Solution: how to print a specific line number (Click here)
+## Solution: how to print a specific line number (Click to expand)
 
-For example, to print line 4 of `data/meta/meta.tsv` directly:
+For example, to print line 4 of `metadata/meta.tsv` directly:
 
 ```bash
-head -n 4 data/meta/meta.tsv | tail -n 1
+head -n 4 metadata/meta.tsv | tail -n 1
 ```
-
-Just note that in the script,
-you'll be using variables instead of the "hardcode values"
-`4` and `data/meta/meta.tsv`.
 
 How this command works:
 
-- `head -n 4 data/meta/meta.tsv` will print the first 4 lines of `data/meta/meta.tsv`
+- `head -n 4 metadata/meta.tsv` will print the first 4 lines of `metadata/meta.tsv`
 - We pipe those 4 lines into the `tail` command
 - We ask `tail` to just print the last line of its input,
   which will in this case be line 4 of the original input file.
 :::
 
 :::{.callout-tip collapse="true"}
-## Full solution (Click here)
+## Full solution (Click to expand)
 
 ```bash
 #!/bin/bash
@@ -539,17 +595,24 @@ head -n "$line_nr" "$input_file" | tail -n 1
 To run the script and make it print the 4th line of `meta.tsv`:
 
 ```bash
-bash scripts/printline.sh data/meta/meta.tsv 4
+bash sandbox/printline.sh metadata/meta.tsv 4
 ```
 ```{.bash-out}
-TODO
+ASPC1_G31V      ASPC1   G31V
 ```
 :::
 :::
 
 <br>
 
-## Script variations and improvements
+## Script variations and enhancements
+
+In this section,
+we will change our `printline.sh` script and a similar small utility script
+to **make their behavior more like scripts that run a bioinformatics program**:
+the script's _main output will end up in a file_,
+but it prints extensive "logging" notes to the screen,
+so we can monitor what we're doing.
 
 ### A script to serve as a starting point
 
@@ -559,7 +622,7 @@ Sometimes it's nice to be able to quickly see both ends of a file,
 so let's write a little script that can do that for us,
 as a starting point for the next few modifications.
 
-Open a new file, save it as `scripts/headtail.sh`,
+Open a new file, save it as `sandbox/headtail.sh`,
 and add the following code to it:
 
 ```{bash, eval=FALSE}
@@ -578,10 +641,14 @@ tail -n 2 "$input_file"
 Next, let's run our `headtail.sh` script:
 
 ```bash
-bash scripts/headtail.sh metadata/meta.tsv
+bash sandbox/headtail.sh metadata/meta.tsv
 ```
 ```{.bash-out}
-TODO
+sample_id       cell_line       variant
+ASPC1_A178V     ASPC1   A178V
+---
+Miapaca2_G31V   Miapaca2        G31V
+Miapaca2_G31V   Miapaca2        G31V
 ```
 
 <br>
@@ -590,14 +657,14 @@ TODO
 
 So far, the output of our scripts was printed to screen, e.g.:
 
-- In `printnames.sh`, we simply `echo`'d, inside sentences,
+- In `printname.sh`, we simply `echo`'d, inside sentences,
   the arguments passed to the script.
 - In `headtail.sh`, we printed the first and last few lines of a file.
 
 All this output was printed to screen because that is the default output
 mode of Unix commands,
 and this works the same way regardless of whether those commands
-are run directly on the command line, or are run inside a script.
+are typed and run interactively in the shell, or are run inside a script.
 
 Along those same lines, we have already learned that we can "redirect" output
 to a file using `>` (write/overwrite) and `>>` (append) when we run shell commands &mdash; and this, too, works exactly the same way inside a script.
@@ -605,9 +672,9 @@ to a file using `>` (write/overwrite) and `>>` (append) when we run shell comman
 -----
 
 When working with genomics data,
-we commonly have files as input, and new/modified files as output.
+we commonly have **files as input, and new/modified files as output**.
 Let's practice with this and
-**modify our `headtail.sh` script so that it writes output to a file.**
+_modify our `headtail.sh` script so that it writes output to a file._
 
 We'll make the following changes:
 
@@ -637,10 +704,7 @@ tail -n 2 "$input_file" >> "$output_file"
 Now we run the script again, this time also passing the name of an _output_ file:
 
 ```bash
-bash scripts/headtail.sh data/meta/meta.tsv sandbox/samples_headtail.txt
-```
-```{.bash-out}
-TODO
+bash sandbox/headtail.sh metadata/meta.tsv sandbox/samples_headtail.txt
 ```
 
 The script will no longer print any output to screen,
@@ -651,7 +715,7 @@ and our output should instead be in `sandbox/samples_headtail.txt`:
 ls -lh sandbox/samples_headtail.txt
 ```
 ```{.bash-out}
-TODO
+-rw-r--r-- 1 jelmer PAS0471 112 Aug 16 16:45 sandbox/samples_headtail.txt
 ```
 
 ```bash
@@ -659,7 +723,11 @@ TODO
 cat sandbox/samples_headtail.txt
 ```
 ```{.bash-out}
-TODO
+sample_id       cell_line       variant
+ASPC1_A178V     ASPC1   A178V
+---
+Miapaca2_G31V   Miapaca2        G31V
+Miapaca2_G31V   Miapaca2        G31V
 ```
 
 <br>
@@ -667,20 +735,21 @@ TODO
 ### Report what's happening
 
 It is often useful to have your scripts "report" or "log" what is going on.
-Let's keep thinking about a script that has file(s) as the main output,
-but instead of having no output printed to screen at all,
+Let's keep thinking about a script that has one or more files as its main output
+(again, like most bioinformatics programs do).
+But instead of having no output printed to screen at all,
 we'll print some logging output to screen.
 For instance:
 
-- What is the date and time
+- At what date and time did we run this script 
 - Which arguments were passed to the script
 - What are the output files
 - Perhaps even summaries of the output.
 
-All of this can help with troubleshooting and record-keeping.[^3]
+All of this can help with troubleshooting and record-keeping[^3].
 Let's try this with our `headtail.sh` script.
 
-[^3]: We'll see in the upcoming `SLURM` module that we when
+[^3]: We'll see in the upcoming Slurm module that we when
       submit scripts to the OSC queue (rather than running them directly),
       the output of scripts that is normally printed to screen,
       will instead go to a sort of "log" file.
@@ -690,26 +759,26 @@ Let's try this with our `headtail.sh` script.
 #!/bin/bash
 set -ueo pipefail
 
-## Copy placeholder variables
+# Copy placeholder variables
 input_file=$1
 output_file=$2
 
-## Initial logging 
-echo "Starting script $0"           # Print name of script
-date                                # Print date & time
-echo "Input file:   $input_file"
-echo "Output file:  $output_file" 
-echo                                # Print empty line to separate initial & final logging
+# Initial logging 
+echo "# Starting script headtail.sh" # Print name of script
+date                                 # Print date & time
+echo "# Input file:   $input_file"
+echo "# Output file:  $output_file" 
+echo                                 # Empty line to separate initial & final logging
 
-## Print the first and last two lines to a separate file
+# Print the first and last two lines to a separate file
 head -n 2 "$input_file" > "$output_file"
 echo "---" >> "$output_file"
 tail -n 2 "$input_file" >> "$output_file"
 
-## Final logging
-echo "Listing the output file:"
+# Final logging
+echo "# Listing the output file:"
 ls -lh "$output_file"
-echo "Done with script $0"
+echo "# Done with script headtail.sh"
 date
 
 # (Note: this is a script. Don't enter this directly in your terminal.)
@@ -717,51 +786,68 @@ date
 
 A couple of notes about the lines that were added to the script above:
 
-- Printing the `date` at the end of the script as well will allow you to check
-  for how long the script ran, which can be informative for longer-running
-  scripts.
+- Running `date` at the end of the script (as well as at the beginning)
+  allows you to check for how long the script ran
   
 - Printing the input and output files
-  (and the command-line arguments more generally) can be particularly useful
-  for troubleshooting
+  (and the command-line arguments more generally)
+  can be particularly useful for troubleshooting
 
 - We printed a "marker line" like `Done with script`,
   indicating that the end of the script was reached.
   This is handy due to our `set` settings:
-  seeing this line printed means that no errors were encountered.
+  **seeing this line printed means that no errors were encountered**.
 
-- I also added some comment headers like "Initial logging" to make the script
+- I also added some comment lines like "Initial logging" to make the script
   easier to read, and such comments can be made more extensive to really explain
   what is being done.
 
 Let's run the script again:
 
 ```bash
-bash scripts/headtail.sh data/meta/meta.tsv sandbox/tmp.txt
+bash sandbox/headtail.sh metadata/meta.tsv sandbox/tmp.txt
 ```
 ```{.bash-out}
-TODO
+# Starting script sandbox/headtail.sh
+Wed Aug 16 21:12:28 EDT 2023
+# Input file:   metadata/meta.tsv
+# Output file:  sandbox/tmp.txt
+
+# Listing the output file:
+-rw-r--r-- 1 jelmer PAS0471 112 Aug 16 21:12 sandbox/tmp.txt
+# Done with script sandbox/headtail.sh
+Wed Aug 16 21:12:28 EDT 2023
 ```
 
-The script printed some details for the output file, but not its contents
+The script printed some details for the output file,
+but not its contents
 (that would have worked here,
 but is usually not sensible when working with genomics data).
-Let's take a look, though, to make sure the script worked:
+Let's take a look at the output file, though, to make sure the script worked:
 
 ```bash
-cat sandbox/tmp.txt      # "cat" prints all of a file's contents
+cat sandbox/tmp.txt
 ```
 ```{.bash-out}
-TODO
+sample_id       cell_line       variant
+ASPC1_A178V     ASPC1   A178V
+---
+Miapaca2_G31V   Miapaca2        G31V
+Miapaca2_G31V   Miapaca2        G31V
 ```
 
 :::{.callout-tip}
-## `echo`, `echo`
-The extensive reporting (`echo`-ing) may have seemed silly for our little script,
-but fairly extensive reporting
-(as well as testing, but that's outside the scope of this workshop)
-can be very useful &mdash; and will be eventually a time-saver.
-  
+## `echo`, `echo`?
+The extensive logging output (`echo` statements)
+may seem silly for our little `headtail.sh` script,
+and it is at some level:
+a tiny utility script like this would ideally work much like a regular Unix
+shell command, and just print the main output and no logging output.
+
+However, this kind of fairly extensive logging is in fact useful when running
+scripts that execute long-running bioinformatics programs,
+and can eventually be a time-saver because it makes it easier to spot problems
+and helps with record-keeping.
 This is especially true for long-running scripts,
 or scripts that you often reuse and perhaps share with others.
 :::
@@ -770,74 +856,78 @@ or scripts that you often reuse and perhaps share with others.
 ### On Your Own: A fanciful script {-}
 Modify your `printline.sh` script to:
 
-- Redirect output to a file
-- This output file should not be "hardcoded" in the script,
-  but its name should be passed as an argument to the script,
+- Redirect the main output (the printed line) to a file
+- The name of this output file should not be "hardcoded" in the script,
+  but should be passed as an argument to the script,
   like we did above with `headtail.sh`
-- Add a bit of reporting &mdash; `echo` statements, `date`, etc,
-  along the lines of what we did above with `headtail.sh`
+- Add a bit of logging &mdash; `echo` statements, `date`, etc,
+  similar to what we did above with `headtail.sh`
 - Add some comments to describe what the code in the script is doing
 
 :::{.callout-note collapse="true"}
-## The original `printline.sh` script
-
-<br>
+## The original `printline.sh` script (Click to expand)
 
 ```bash
-cat scripts/printline.sh
+cat sandbox/printline.sh
 ```
 ```{.bash-out}
-TODO
+#!/bin/bash
+set -ueo pipefail
+  
+input_file=$1
+line_nr=$2
+
+head -n "$line_nr" "$input_file" | tail -n 1
 ```
 :::
 
 :::{.callout-tip collapse="true"}
-## (One possible) solution
+## (One possible) solution  (Click to expand)
 
 ```{bash, eval=FALSE}
 #!/bin/bash
 set -ueo pipefail
 
-## Copy placeholder variables
+# Copy placeholder variables
 input_file=$1
 output_file=$2
 line_nr=$3
 
-## Initial logging 
-echo "Starting script $0"           # Print name of script
-date                                # Print date & time
-echo "Input file:   $input_file"
-echo "Output file:  $output_file"
-echo "Line number:  $line_nr"
-echo                                # Print empty line to separate initial & final logging
+# Initial logging 
+echo "# Starting script printline.sh"
+date
+echo "# Input file:   $input_file"
+echo "# Output file:  $output_file"
+echo "# Line number:  $line_nr"
+echo
 
-## Print 1 specific line from the input file and redirect to an output file
+# Print 1 specific line from the input file and redirect to an output file
 head -n "$line_nr" "$input_file" | tail -n 1 > $output_file
 
-## Final logging
-echo "Listing the output file:"
+# Final logging
+echo "# Listing the output file:"
 ls -lh "$output_file"
-echo "Done with script $0"
+echo "# Done with script printline.sh"
 date
 ```
 
 To run the script with the additional argument:
 
 ```bash
-bash scripts/printline.sh data/meta/meta.tsv sandbox/meta_line.tsv 4
+bash sandbox/printline.sh metadata/meta.tsv sandbox/meta_line.tsv 4
 ```
 ```{.bash-out}
-TODO
+# Starting script printline.sh
+Wed Aug 16 21:27:48 EDT 2023
+# Input file:   metadata/meta.tsv
+# Output file:  sandbox/meta_line.tsv
+# Line number:  4
+
+# Listing the output file:
+-rw-r--r-- 1 jelmer PAS0471 22 Aug 16 21:27 sandbox/meta_line.tsv
+# Done with script printline.sh
+Wed Aug 16 21:27:48 EDT 2023
 ```
 
 :::
-:::
-
-::: {.callout-note}
-#### Add keyboard shortcut to run shell commands from the editor:
-
-- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
-
-- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
-  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
 :::
