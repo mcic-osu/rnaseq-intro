@@ -695,8 +695,8 @@ Getting to the FTP site
 </section>
 <section id="downloading-files-to-osc-with-wget" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="downloading-files-to-osc-with-wget"><span class="header-section-number">3.2</span> Downloading files to OSC with <code>wget</code></h3>
-<p>To download a file to OSC, you can’t just open a web browser and download it there directly. You <em>could</em> download it to your own computer and then transfer it to OSC. A more direct approach is to use a download command in your OSC shell. <strong><code>wget</code> is one command that allows you to download files from the web</strong> (<code>curl</code> is another very commonly used one, with much the same functionality).</p>
-<p><strong>To download a file to your working directory</strong>, you just need to tell <code>wget</code> about the URL (web address) to that file — type “wget”, press <kbd>Space</kbd>, and paste the address you copied:</p>
+<p>To download a file to OSC, you can’t just open a web browser and download it there directly. You <em>could</em> download it to your own computer and then transfer it to OSC. A more direct approach is to use a download command in your OSC shell. <strong><code>wget</code> is one command that allows you to download files from the web</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>To download a file to your working directory, you just need to tell <code>wget</code> about the URL (web address) to that file — type “wget”, press <kbd>Space</kbd>, and paste the address you copied:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.fna.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -708,7 +708,7 @@ Length: 972898531 (928M) [application/x-gzip]
 Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
 65% [============================================================================================&gt;                                                   ] 633,806,848 97.7MB/s </code></pre>
 <p>The <code>wget</code> command is quite chatty, as you can see above, and its output to the screen includes a progress bar for the download.</p>
-<p>Next, let’s download one of the annotation files. On the NCBI genome assembly FTP page, both a GFF and a GTF file are available. These are two very similar formats that contain the same data. For our specific analysis workflow, the GTF format is preferred, so we will download the GTF file — right-click on <code>GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</code> and copy the link address.</p>
+<p>Next, let’s download one of the <strong>annotation files</strong>. On the NCBI genome assembly FTP page, both a GFF and a GTF file are available. These are two very similar formats that contain the same data. For our specific analysis workflow, the GTF format is preferred, so we will download the GTF file — right-click on <code>GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</code> and copy the link address.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/001/405/GCF_000001405.40_GRCh38.p14/GCF_000001405.40_GRCh38.p14_genomic.gtf.gz</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Command output not shown)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next, let’s see if the files are indeed in our current working dir:</p>
@@ -720,7 +720,7 @@ Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
 </section>
 <section id="uncompressing-and-renaming-the-genome-files" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="uncompressing-and-renaming-the-genome-files"><span class="header-section-number">3.3</span> Uncompressing and renaming the genome files</h3>
-<p>Both the FASTA and the GTF file are gzip-compressed. While it’s preferable to keep FASTQ files compressed (as mentioned above), it’s often more convenient to store your reference genome files as uncompressed files<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>Both the FASTA and the GTF file are gzip-compressed. While it’s preferable to keep FASTQ files compressed (as mentioned above), it’s often more convenient to store your reference genome files as uncompressed files<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
 <p>We can uncompress/unzip these files with the <code>gunzip</code> (“g-unzip”) command as follows (and notice the subsequent increase in file size in the <code>ls</code> output):</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Will take several seconds, esp. for the first file, and not print output to screen</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> GCF_000001405.40_GRCh38.p14_genomic.fna.gz</span>
@@ -811,7 +811,7 @@ NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
 <p>Our reference genome <em>annotation</em> is stored in the GTF format, so we’ll learn about this format, too, and take a look at our own file.</p>
 <section id="the-gtf-format" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="the-gtf-format"><span class="header-section-number">5.1</span> The GTF format</h3>
-<p>The GTF format and the very similar GFF format<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> are <strong>tabular</strong> files, with one row for each individual “<strong>genomic feature</strong>” (gene, exon, intron, etc.) that has been annotated in the genome, and with columns that contain information like the genomic coordinates of the features.</p>
+<p>The GTF format and the very similar GFF format<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> are <strong>tabular</strong> files, with one row for each individual “<strong>genomic feature</strong>” (gene, exon, intron, etc.) that has been annotated in the genome, and with columns that contain information like the genomic coordinates of the features.</p>
 <p>See the small sample below, with an <em>added header line</em> (not normally present) with column names for clarity:</p>
 <pre class="bash-out-solo"><code>seqname     source  feature start   end     score  strand  frame    attributes
 NC_000001   RefSeq  gene    11874   14409   .       +       .       gene_id "DDX11L1"; transcript_id ""; db_xref "GeneID:100287102"; db_xref "HGNC:HGNC:37102"; description "DEAD/H-box helicase 11 like 1 (pseudogene)"; gbkey "Gene"; gene "DDX11L1"; gene_biotype "transcribed_pseudogene"; pseudo "true"; 
@@ -949,13 +949,13 @@ G31V
 G31V
 G31V
 G31V</code></pre>
-<p>Third, <strong>the <code>uniq</code> command</strong> will remove <em>consecutive</em> duplicate lines — for that reason, its input needs to be if we want to remove <em>all</em> duplicates:</p>
+<p>Third, <strong>the <code>uniq</code> command</strong> will remove <em>consecutive</em> duplicate lines — for that reason, its input needs to be sorted if we want to remove <em>all</em> duplicates:</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 metadata/meta.tsv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>A178V
 G31V</code></pre>
 <p>For large input files, it’s most often useful to either:</p>
 <ul>
-<li>Simply get the number of unique values in a column by piping into <code>wc -l</code>:</li>
+<li>Simply get the number of unique values that occur in a column by piping into <code>wc -l</code>:</li>
 </ul>
 <div class="sourceCode" id="cb65"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> +2 metadata/meta.tsv <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-f</span> 3 <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>2</code></pre>
@@ -1163,7 +1163,7 @@ ce5d444f8f9d87d325dbe9bc09ef0470        X10797_Cruz-MonserrateZ_Miapaca2_RASD1_V
 <p>This file was created by the folks at the sequencing facility, and now that we have the data at OSC and are ready to analyze it, we can check if they are still fully intact and didn’t –for example– get incompletely transferred.</p>
 <p>I have done this check for the original files, but this takes a little while, and for a quick exercise, we can now do so with our subsampled FASTQ files. First, let’s copy a file <code>md5.txt</code> from the <code>demo</code> directory, which has the checksums for the subsampled FASTQ files as I created them:</p>
 <div class="sourceCode" id="cb95"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cp</span> /fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/md5sums.txt data/fastq/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>To check whether the checksums for one or more files in a file correspond to those for the files, we can run <code>mdsum -c &lt;mdsum-file&gt;</code>, and should do so <em>while inside the dir with the files of interest</em><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. For example:</p>
+<p>To check whether the checksums for one or more files in a file correspond to those for the files, we can run <code>mdsum -c &lt;mdsum-file&gt;</code>, and should do so <em>while inside the dir with the files of interest</em><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. For example:</p>
 <div class="sourceCode" id="cb96"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> data/fastq</span>
 <span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a><span class="fu">md5sum</span> <span class="at">-c</span> md5sums.txt </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>ASPC1_A178V_R1.fastq.gz: OK
@@ -1224,9 +1224,10 @@ md5sum: WARNING: 1 computed checksum did NOT match</code></pre>
 <li id="fn1"><p>Though long-read technologies like Oxford Nanopore Technologies and especially PacBio are picking up steam, since these can sequence transcripts <em>in full</em>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>In some cases, most often when you simply do a lot of sequencing for each sample, you’ll get more than one pair of files: one pair for each “lane” of the sequencer on which the sample was sequenced.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>And they would fail in a possibly worse way because you might overlook the problem: <code>wc -l</code> <em>will</em> return a count yet this is not the number of lines for the uncompressed file, whereas a text search with <code>grep</code> may “falsely” return nothing while that text <em>is</em> present in the uncompressed file.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>This is because reference genome files don’t take up as much space, and bioinformatics tools may expect them to be uncompressed.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>In fact, GTF is identical to GFF v2. But the current GFF version is the slightly different GFF v3, which sometimes has the extension <code>.gff3</code> to make that clear.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>This technically depends on how the file names are shown in the text file with the checksums: if there are just file names without directories (or <code>./&lt;filename&gt;</code>, etc.), you’ll have to be in the dir with the files to run <code>md5sum -c</code>. (This in turn depends on from where the checksums were <em>generated</em>: if you generate them while in the dir with the focal files, which is the only sensible way to do this, that’s how they will be displayed.)<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><code>curl</code> is another very commonly used one, with much the same functionality.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>This is because reference genome files don’t take up as much space, and bioinformatics tools may expect them to be uncompressed.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>In fact, GTF is identical to GFF v2. But the current GFF version is the slightly different GFF v3, which sometimes has the extension <code>.gff3</code> to make that clear.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>This technically depends on how the file names are shown in the text file with the checksums: if there are just file names without directories (or <code>./&lt;filename&gt;</code>, etc.), you’ll have to be in the dir with the files to run <code>md5sum -c</code>. (This in turn depends on from where the checksums were <em>generated</em>: if you generate them while in the dir with the focal files, which is the only sensible way to do this, that’s how they will be displayed.)<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

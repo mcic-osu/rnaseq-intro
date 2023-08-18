@@ -611,10 +611,11 @@ To download a file to OSC,
 you can't just open a web browser and download it there directly.
 You _could_ download it to your own computer and then transfer it to OSC.
 A more direct approach is to use a download command in your OSC shell.
-**`wget` is one command that allows you to download files from the web**
-(`curl` is another very commonly used one, with much the same functionality).
+**`wget` is one command that allows you to download files from the web**[^4].
 
-**To download a file to your working directory**,
+[^4]: `curl` is another very commonly used one, with much the same functionality.
+
+To download a file to your working directory,
 you just need to tell `wget` about the URL (web address) to that file &mdash;
 type "wget", press <kbd>Space</kbd>, and paste the address you copied:
 
@@ -634,7 +635,7 @@ Saving to: ‘GCF_000001405.40_GRCh38.p14_genomic.fna.gz’
 The `wget` command is quite chatty, as you can see above,
 and its output to the screen includes a progress bar for the download.
 
-Next, let's download one of the annotation files.
+Next, let's download one of the **annotation files**.
 On the NCBI genome assembly FTP page, both a GFF and a GTF file are available.
 These are two very similar formats that contain the same data.
 For our specific analysis workflow, the GTF format is preferred,
@@ -665,9 +666,9 @@ ls -lh
 Both the FASTA and the GTF file are gzip-compressed.
 While it's preferable to keep FASTQ files compressed (as mentioned above),
 it's often more convenient to store your reference genome files as uncompressed
-files[^4].
+files[^5].
 
-[^4]: This is because reference genome files don't take up as much space,
+[^5]: This is because reference genome files don't take up as much space,
       and bioinformatics tools may expect them to be uncompressed.
 
 We can uncompress/unzip these files with the `gunzip` ("g-unzip") command
@@ -833,14 +834,14 @@ so we'll learn about this format, too, and take a look at our own file.
 
 ### The GTF format
 
-The GTF format and the very similar GFF format[^5] are **tabular** files,
+The GTF format and the very similar GFF format[^6] are **tabular** files,
 with one row for each individual "**genomic feature**"
 (gene, exon, intron, etc.)
 that has been annotated in the genome,
 and with columns that contain information like the genomic coordinates of the 
 features.
 
-[^5]: In fact, GTF is identical to GFF v2.
+[^6]: In fact, GTF is identical to GFF v2.
       But the current GFF version is the slightly different GFF v3,
       which sometimes has the extension `.gff3` to make that clear.
 
@@ -1063,7 +1064,7 @@ G31V
 
 Third, **the `uniq` command** will remove _consecutive_ duplicate lines &mdash;
 for that reason,
-its input needs to be if we want to remove _all_ duplicates:
+its input needs to be sorted if we want to remove _all_ duplicates:
 
 ```bash
 tail -n +2 metadata/meta.tsv | cut -f 3 | sort | uniq
@@ -1075,7 +1076,7 @@ G31V
 
 For large input files, it's most often useful to either:
 
-- Simply get the number of unique values in a column by piping into `wc -l`:
+- Simply get the number of unique values that occur in a column by piping into `wc -l`:
 
 ```bash
 tail -n +2 metadata/meta.tsv | cut -f 3 | sort | uniq | wc -l
@@ -1438,10 +1439,10 @@ cp /fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/md5sums.txt data/fastq/
 To check whether the checksums for one or more files in a file correspond to
 those for the files,
 we can run `mdsum -c <mdsum-file>`,
-and should do so _while inside the dir with the files of interest_[^6].
+and should do so _while inside the dir with the files of interest_[^7].
 For example:
 
-[^6]: This technically depends on how the file names are shown in the text file
+[^7]: This technically depends on how the file names are shown in the text file
       with the checksums:
       if there are just file names without directories (or `./<filename>`, etc.),
       you'll have to be in the dir with the files to run `md5sum -c`.
