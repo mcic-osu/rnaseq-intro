@@ -1049,7 +1049,7 @@ Hmmm... maybe it isn't appropriate to include the header line
 A nice little **trick to exclude the first line of a file is `tail -n +2`**:
 
 ```bash
-tail -n +2 | cut -f 3 metadata/meta.tsv | sort
+tail -n +2 metadata/meta.tsv | cut -f 3 | sort
 ```
 ```{.bash-out}
 A178V
@@ -1150,7 +1150,7 @@ you just have to cut a different column.
 <details><summary>Solution</summary>
 
 ```bash
-grep -v "^#" $gtf | cut -f 2 | sort | uniq -c
+grep -v "#" $gtf | cut -f 2 | sort | uniq -c
 ```
 ```{.bash-out}
 2141089 BestRefSeq
@@ -1175,7 +1175,7 @@ is to select two columns in your `cut` command
 <details><summary>Solution</summary>
 
 ```bash
-grep -v "^#" data/ref/GCF_000001405.40.gtf | cut -f3,7 | sort | uniq -c
+grep -v "#" data/ref/GCF_000001405.40.gtf | cut -f3,7 | sort | uniq -c
 ```
 ```{.bash-out}
  916540 CDS     -

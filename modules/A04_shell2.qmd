@@ -488,7 +488,7 @@ cp -rv /fs/ess/PAS0471/demo/202307_rnaseq/data/fastq data/
 ‘/fs/ess/PAS0471/demo/202307_rnaseq/data/fastq/Miapaca2_G31V_R2.fastq.gz’ -> ‘data/fastq/Miapaca2_G31V_R2.fastq.gz’
 ```
 
-Let's get an overview of the files we now have in our `rnaseq-intro` dir:
+Let's get an overview of the files we now have in our `rnaseq_intro` dir:
 
 ```bash
 tree -C                 # Your own output should have colors
