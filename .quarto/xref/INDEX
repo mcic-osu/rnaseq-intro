@@ -127,5 +127,23 @@
   },
   "modules/A04_shell2.qmd": {
     "A04_shell2.html": "d0ef8be4"
+  },
+  "modules/A10_slurm.qmd": {
+    "A10_slurm.html": "7816b91f"
+  },
+  "modules/A05_fastq.qmd": {
+    "A05_fastq.html": "81da7df7"
+  },
+  "modules/A08_scripts.qmd": {
+    "A08_scripts.html": "81e78898"
+  },
+  "modules/A07_overview.qmd": {
+    "A07_overview.html": "fbf1c95c"
+  },
+  "modules/A06_ref-files.qmd": {
+    "A06_ref-files.html": "7a17cf4d"
+  },
+  "modules/A09_software.qmd": {
+    "A09_software.html": "688dba06"
   }
 }

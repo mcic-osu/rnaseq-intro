@@ -1,5 +1,13 @@
 
 
+::: {.callout-note}
+#### Add keyboard shortcut to run shell commands from the editor:
+
+- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
+
+- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
+  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
+:::
 
 which takes a FASTQ file as its input and produces an HTML file with a series of
 figures and tables that allow you to assess the quality of these reads.

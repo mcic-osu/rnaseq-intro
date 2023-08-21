@@ -15,7 +15,9 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 
 <br>
 
-In this module, we will learn the basics of a fancy text editor called
+## Overview & setting up {-}
+
+Here, we will learn the basics of a fancy text editor called
 _VS Code_ (in full, Visual Studio Code).
 Conveniently, we can use a version of this editor
 (sometimes referred to as _Code Server_)
@@ -34,9 +36,7 @@ the RStudio program is another good example of an IDE.
 For our purposes, RStudio will be our IDE for R,
 and VS code will be our IDE for shell scripts and code.
 
-<br>
-
-## Starting a VS Code session in OSC OnDemand
+#### Starting a VS Code session in OSC OnDemand {-}
 
 In the previous session,
 I showed you how to start a VS Code session in OnDemand,
@@ -202,13 +202,10 @@ Then, try out a few themes and see what you like!
 :::
 
 <br>
-<br>
 
------
+## At-home reading: keyboard shortcuts & local installation {-}
 
-## At-home reading
-
-### keyboard shortcuts {-}
+### Keyboard shortcuts {-}
 
 Working with keyboard shortcuts (also called "keybindings")
 for common operations can be a lot faster than using your mouse.

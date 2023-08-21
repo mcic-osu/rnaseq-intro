@@ -149,24 +149,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">A4. Unix shell II</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A05_genomicfiles.html" rel="" target="">
- <span class="dropdown-text">A5. Genomic data files</span></a>
+    <a class="dropdown-item" href="../modules/A05_fastq.html" rel="" target="">
+ <span class="dropdown-text">A5. FASTQ files</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A06_overview.html" rel="" target="">
- <span class="dropdown-text">A6. Overview, variables &amp; loops</span></a>
+    <a class="dropdown-item" href="../modules/A06_ref-files.html" rel="" target="">
+ <span class="dropdown-text">A6. Reference genome files</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A07_scripts.html" rel="" target="">
- <span class="dropdown-text">A7. Shell scripts</span></a>
+    <a class="dropdown-item" href="../modules/A07_overview.html" rel="" target="">
+ <span class="dropdown-text">A7. Next steps, variables &amp; loops</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A08_software.html" rel="" target="">
- <span class="dropdown-text">A8. Software at OSC</span></a>
+    <a class="dropdown-item" href="../modules/A08_scripts.html" rel="" target="">
+ <span class="dropdown-text">A8. Shell scripts</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A09_slurm.html" rel="" target="">
- <span class="dropdown-text">A9. SLURM compute jobs</span></a>
+    <a class="dropdown-item" href="../modules/A09_software.html" rel="" target="">
+ <span class="dropdown-text">A9. Software at OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A10_slurm.html" rel="" target="">
+ <span class="dropdown-text">A10. SLURM compute jobs</span></a>
   </li>  
     </ul>
   </li>
@@ -177,10 +181,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-b.-from-reads-to-counts">    
         <li class="dropdown-header">B1. Read QC with <em>FastQC</em> [TBA]</li>
         <li class="dropdown-header">B2. Summarizing QC results with <em>MultiQC</em> [TBA]</li>
-        <li class="dropdown-header">B2. Trimming with <em>TrimGalore</em> [TBA]</li>
-        <li class="dropdown-header">B3. rRNA removal with <em>SortMeRNA</em> [TBA]</li>
+        <li class="dropdown-header">B3. Trimming with <em>TrimGalore</em> [TBA]</li>
         <li class="dropdown-header">B4. Alignment with <em>STAR</em> [TBA]</li>
-        <li class="dropdown-header">B5. Counting with <em>Salmon</em> [TBA]</li>
+        <li class="dropdown-header">B5. Quantification with <em>Salmon</em> [TBA]</li>
+        <li class="dropdown-header">B6: The Nextflow/nf-core rnaseq workflow [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -249,30 +253,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#first-steps" id="toc-first-steps" class="nav-link" data-scroll-target="#first-steps"><span class="header-section-number">2</span> First steps</a>
+  <li><a href="#overview-setting-up" id="toc-overview-setting-up" class="nav-link active" data-scroll-target="#overview-setting-up">Overview &amp; setting up</a></li>
+  <li><a href="#first-steps" id="toc-first-steps" class="nav-link" data-scroll-target="#first-steps"><span class="header-section-number">1</span> First steps</a>
   <ul class="collapse">
-  <li><a href="#the-prompt" id="toc-the-prompt" class="nav-link" data-scroll-target="#the-prompt"><span class="header-section-number">2.1</span> The prompt</a></li>
-  <li><a href="#a-few-simple-commands-date-whoami-pwd" id="toc-a-few-simple-commands-date-whoami-pwd" class="nav-link" data-scroll-target="#a-few-simple-commands-date-whoami-pwd"><span class="header-section-number">2.2</span> A few simple commands: <code>date</code>, <code>whoami</code>, <code>pwd</code></a></li>
+  <li><a href="#the-prompt" id="toc-the-prompt" class="nav-link" data-scroll-target="#the-prompt"><span class="header-section-number">1.1</span> The prompt</a></li>
+  <li><a href="#a-few-simple-commands-date-whoami-pwd" id="toc-a-few-simple-commands-date-whoami-pwd" class="nav-link" data-scroll-target="#a-few-simple-commands-date-whoami-pwd"><span class="header-section-number">1.2</span> A few simple commands: <code>date</code>, <code>whoami</code>, <code>pwd</code></a></li>
   </ul></li>
-  <li><a href="#cd-and-command-actions-defaults-and-arguments" id="toc-cd-and-command-actions-defaults-and-arguments" class="nav-link" data-scroll-target="#cd-and-command-actions-defaults-and-arguments"><span class="header-section-number">3</span> <code>cd</code> and command actions, defaults, and arguments</a></li>
-  <li><a href="#ls-and-command-options" id="toc-ls-and-command-options" class="nav-link" data-scroll-target="#ls-and-command-options"><span class="header-section-number">4</span> <code>ls</code> and command <em>options</em></a>
+  <li><a href="#cd-and-command-actions-defaults-and-arguments" id="toc-cd-and-command-actions-defaults-and-arguments" class="nav-link" data-scroll-target="#cd-and-command-actions-defaults-and-arguments"><span class="header-section-number">2</span> <code>cd</code> and command actions, defaults, and arguments</a></li>
+  <li><a href="#ls-and-command-options" id="toc-ls-and-command-options" class="nav-link" data-scroll-target="#ls-and-command-options"><span class="header-section-number">3</span> <code>ls</code> and command <em>options</em></a>
   <ul class="collapse">
-  <li><a href="#the-default-behavior-of-ls" id="toc-the-default-behavior-of-ls" class="nav-link" data-scroll-target="#the-default-behavior-of-ls"><span class="header-section-number">4.1</span> The default behavior of <code>ls</code></a></li>
-  <li><a href="#first-more-on-arguments" id="toc-first-more-on-arguments" class="nav-link" data-scroll-target="#first-more-on-arguments"><span class="header-section-number">4.2</span> First, more on arguments</a></li>
-  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options"><span class="header-section-number">4.3</span> Options</a></li>
-  <li><a href="#combining-options-and-arguments" id="toc-combining-options-and-arguments" class="nav-link" data-scroll-target="#combining-options-and-arguments"><span class="header-section-number">4.4</span> Combining options and arguments</a></li>
-  <li><a href="#recap-of-ls-arguments-and-options" id="toc-recap-of-ls-arguments-and-options" class="nav-link" data-scroll-target="#recap-of-ls-arguments-and-options"><span class="header-section-number">4.5</span> Recap of <code>ls</code>, arguments, and options</a></li>
+  <li><a href="#the-default-behavior-of-ls" id="toc-the-default-behavior-of-ls" class="nav-link" data-scroll-target="#the-default-behavior-of-ls"><span class="header-section-number">3.1</span> The default behavior of <code>ls</code></a></li>
+  <li><a href="#first-more-on-arguments" id="toc-first-more-on-arguments" class="nav-link" data-scroll-target="#first-more-on-arguments"><span class="header-section-number">3.2</span> First, more on arguments</a></li>
+  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options"><span class="header-section-number">3.3</span> Options</a></li>
+  <li><a href="#combining-options-and-arguments" id="toc-combining-options-and-arguments" class="nav-link" data-scroll-target="#combining-options-and-arguments"><span class="header-section-number">3.4</span> Combining options and arguments</a></li>
+  <li><a href="#recap-of-ls-arguments-and-options" id="toc-recap-of-ls-arguments-and-options" class="nav-link" data-scroll-target="#recap-of-ls-arguments-and-options"><span class="header-section-number">3.5</span> Recap of <code>ls</code>, arguments, and options</a></li>
   </ul></li>
-  <li><a href="#paths" id="toc-paths" class="nav-link" data-scroll-target="#paths"><span class="header-section-number">5</span> Paths</a>
+  <li><a href="#paths" id="toc-paths" class="nav-link" data-scroll-target="#paths"><span class="header-section-number">4</span> Paths</a>
   <ul class="collapse">
-  <li><a href="#moving-up-when-using-relative-paths" id="toc-moving-up-when-using-relative-paths" class="nav-link" data-scroll-target="#moving-up-when-using-relative-paths"><span class="header-section-number">5.1</span> Moving “up” when using relative paths</a></li>
+  <li><a href="#moving-up-when-using-relative-paths" id="toc-moving-up-when-using-relative-paths" class="nav-link" data-scroll-target="#moving-up-when-using-relative-paths"><span class="header-section-number">4.1</span> Moving “up” when using relative paths</a></li>
   </ul></li>
-  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">6</span> Recap</a></li>
-  <li><a href="#at-home-reading-getting-help" id="toc-at-home-reading-getting-help" class="nav-link" data-scroll-target="#at-home-reading-getting-help"><span class="header-section-number">7</span> At-home reading: getting help</a>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">5</span> Recap</a></li>
+  <li><a href="#at-home-reading-getting-help" id="toc-at-home-reading-getting-help" class="nav-link" data-scroll-target="#at-home-reading-getting-help">At-home reading: getting help</a>
   <ul class="collapse">
-  <li><a href="#the---help-option" id="toc-the---help-option" class="nav-link" data-scroll-target="#the---help-option"><span class="header-section-number">7.1</span> The <code>--help</code> option</a></li>
-  <li><a href="#the-man-command" id="toc-the-man-command" class="nav-link" data-scroll-target="#the-man-command"><span class="header-section-number">7.2</span> The <code>man</code> command</a></li>
+  <li><a href="#the---help-option" id="toc-the---help-option" class="nav-link" data-scroll-target="#the---help-option"><span class="header-section-number">5.1</span> The <code>--help</code> option</a></li>
+  <li><a href="#the-man-command" id="toc-the-man-command" class="nav-link" data-scroll-target="#the-man-command"><span class="header-section-number">5.2</span> The <code>man</code> command</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -311,8 +315,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <hr>
 <p><br></p>
-<section id="introduction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<section id="overview-setting-up" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="overview-setting-up">Overview &amp; setting up</h2>
 <p>Many of the things you typically do by pointing and clicking can alternatively be done by typing commands. The Unix shell allows you to interact with computers via commands. It is natively available through a Terminal app in computers with Unix-like operating systems like Linux (on which OSC runs) or MacOS, and can also be installed on Windows computers with relatively little trouble these days (see the <a href="../info/osc_ssh.html">SSH reference page on this website</a>).</p>
 <p>Working effectively on a remote supercomputer tends to simply <em>require</em> using a command line interface. But there are more <strong>advantages to doing command line computing</strong> than just allowing you to work on a supercomputer, such as:</p>
 <ul>
@@ -322,6 +326,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Making it much easier to repeat similar tasks across files, samples, and projects, with the possibility of true automation</li>
 <li>For bioinformatics, being able to use (the latest) command-line programs directly without having to depend on “GUI wrappers” written by third parties, that often cost money and also lag behind in functionality</li>
 </ul>
+<section id="starting-a-vs-code-session-in-osc-ondemand" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="starting-a-vs-code-session-in-osc-ondemand">Starting a VS Code session in OSC OnDemand</h4>
 <p>In these sessions, <strong>we’ll use a Unix shell at OSC inside VS Code</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. For this session, specifically, I will assume you still have an active VS Code session as setup in the <a href="../modules/A01_osc.html">previous one</a>, have VS Code located at <code>/fs/ess/PAS0471</code>, and with an open Terminal — if not, see the instructions in the dropdown box right below.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
@@ -365,7 +371,7 @@ Starting VS Code at OSC - with a Terminal (Click to expand)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Some Terminology
+Some Unix shell terminology
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -383,10 +389,11 @@ Some Terminology
 </div>
 <p><br></p>
 </section>
-<section id="first-steps" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="first-steps"><span class="header-section-number">2</span> First steps</h2>
-<section id="the-prompt" class="level3" data-number="2.1">
-<h3 data-number="2.1" class="anchored" data-anchor-id="the-prompt"><span class="header-section-number">2.1</span> The prompt</h3>
+</section>
+<section id="first-steps" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="first-steps"><span class="header-section-number">1</span> First steps</h2>
+<section id="the-prompt" class="level3" data-number="1.1">
+<h3 data-number="1.1" class="anchored" data-anchor-id="the-prompt"><span class="header-section-number">1.1</span> The prompt</h3>
 <p>Inside your terminal, the “prompt” indicates that the shell is ready for a command. What is shown exactly varies a bit across shells and can also be customized, but our prompts at OSC should show the following:</p>
 <pre class="bash-in-nocolor"><code>[&lt;username&gt;@&lt;node-name&gt; &lt;working-dir&gt;]$</code></pre>
 <p>For example:</p>
@@ -409,14 +416,14 @@ How shell code is presented on this website
 </div>
 <p><br></p>
 </section>
-<section id="a-few-simple-commands-date-whoami-pwd" class="level3" data-number="2.2">
-<h3 data-number="2.2" class="anchored" data-anchor-id="a-few-simple-commands-date-whoami-pwd"><span class="header-section-number">2.2</span> A few simple commands: <code>date</code>, <code>whoami</code>, <code>pwd</code></h3>
+<section id="a-few-simple-commands-date-whoami-pwd" class="level3" data-number="1.2">
+<h3 data-number="1.2" class="anchored" data-anchor-id="a-few-simple-commands-date-whoami-pwd"><span class="header-section-number">1.2</span> A few simple commands: <code>date</code>, <code>whoami</code>, <code>pwd</code></h3>
 <p>The Unix shell comes with hundreds of commands. Let’s start with a few simple ones.</p>
 <p>The <code>date</code> command prints the current date and time:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Tue Aug 15 14:45:27 EDT 2023</code></pre>
+<pre class="bash-out"><code>Mon Aug 21 11:59:41 EDT 2023</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -463,8 +470,8 @@ Working directories, and paths part I
 <p><br><br></p>
 </section>
 </section>
-<section id="cd-and-command-actions-defaults-and-arguments" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="cd-and-command-actions-defaults-and-arguments"><span class="header-section-number">3</span> <code>cd</code> and command actions, defaults, and arguments</h2>
+<section id="cd-and-command-actions-defaults-and-arguments" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="cd-and-command-actions-defaults-and-arguments"><span class="header-section-number">2</span> <code>cd</code> and command actions, defaults, and arguments</h2>
 <p>In the above three command line expressions:</p>
 <ul>
 <li>We merely typed the <em>name of a command and nothing else</em></li>
@@ -546,10 +553,10 @@ In other words, paths (dir and file specifications) are <strong>case-sensitive</
 <p>Next, we’ll learn about <em>options</em> to commands in the context of the <code>ls</code> command.</p>
 <p><br></p>
 </section>
-<section id="ls-and-command-options" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="ls-and-command-options"><span class="header-section-number">4</span> <code>ls</code> and command <em>options</em></h2>
-<section id="the-default-behavior-of-ls" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="the-default-behavior-of-ls"><span class="header-section-number">4.1</span> The default behavior of <code>ls</code></h3>
+<section id="ls-and-command-options" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="ls-and-command-options"><span class="header-section-number">3</span> <code>ls</code> and command <em>options</em></h2>
+<section id="the-default-behavior-of-ls" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="the-default-behavior-of-ls"><span class="header-section-number">3.1</span> The default behavior of <code>ls</code></h3>
 <p>The <code>ls</code> command, short for “list”, is a quite flexible command to list files and directories:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>data  metadata  README.md</code></pre>
@@ -581,8 +588,8 @@ In other words, paths (dir and file specifications) are <strong>case-sensitive</
 </ul>
 <p>All of this, and more, can be changed by providing <code>ls</code> with <strong>options</strong> and/or <strong>arguments</strong>.</p>
 </section>
-<section id="first-more-on-arguments" class="level3" data-number="4.2">
-<h3 data-number="4.2" class="anchored" data-anchor-id="first-more-on-arguments"><span class="header-section-number">4.2</span> First, more on arguments</h3>
+<section id="first-more-on-arguments" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="first-more-on-arguments"><span class="header-section-number">3.2</span> First, more on arguments</h3>
 <p>Let’s start with an <em>argument</em>, since we’re familiar with those in the context of <code>cd</code>. Any argument to <code>ls</code> should be <strong>a path to operate on</strong>. For example, if we wanted to see what’s inside that mysterious <code>data</code> dir, we could type:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>fastq</code></pre>
@@ -601,8 +608,8 @@ metadata:
 meta.tsv</code></pre>
 <p>Many Unix commands will accept multiple arguments (files or dirs to operate on), which can be very useful.</p>
 </section>
-<section id="options" class="level3" data-number="4.3">
-<h3 data-number="4.3" class="anchored" data-anchor-id="options"><span class="header-section-number">4.3</span> Options</h3>
+<section id="options" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="options"><span class="header-section-number">3.3</span> Options</h3>
 <p>Finally, we’ll turn to options. Whereas, in general, <em>arguments</em> tell a command what to operate on, <em>options</em> (also called “flags”) will modify its behavior.</p>
 <p>For example, we can call <code>ls</code> with the <strong>option <code>-l</code></strong> (a dash followed by a lowercase L):</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -642,8 +649,8 @@ More on the long-format output of <code>ls</code>
 </div>
 <p><br></p>
 </section>
-<section id="combining-options-and-arguments" class="level3" data-number="4.4">
-<h3 data-number="4.4" class="anchored" data-anchor-id="combining-options-and-arguments"><span class="header-section-number">4.4</span> Combining options and arguments</h3>
+<section id="combining-options-and-arguments" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="combining-options-and-arguments"><span class="header-section-number">3.4</span> Combining options and arguments</h3>
 <p>Finally, we can <strong>combine options and arguments</strong>, and let’s do so take a closer look at our dir with FASTQ files — now the <code>-h</code> option is especially useful because it makes it easy to see that the files vary between 4.1 MB and 5.3 MB in size:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> data/fastq</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>total 38M
@@ -658,8 +665,8 @@ More on the long-format output of <code>ls</code>
 <p>(Beginners are often inclined to move to a directory when they just want to <code>ls</code> its contents, but its often more convenient to stay put and use an argument to <code>ls</code> instead, like we did above.)</p>
 <p><br></p>
 </section>
-<section id="recap-of-ls-arguments-and-options" class="level3" data-number="4.5">
-<h3 data-number="4.5" class="anchored" data-anchor-id="recap-of-ls-arguments-and-options"><span class="header-section-number">4.5</span> Recap of <code>ls</code>, arguments, and options</h3>
+<section id="recap-of-ls-arguments-and-options" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="recap-of-ls-arguments-and-options"><span class="header-section-number">3.5</span> Recap of <code>ls</code>, arguments, and options</h3>
 <p>In summary, in this section we have learned that:</p>
 <ul>
 <li><p>The <code>ls</code> command lists files (by default without additional info and non-recursively)</p></li>
@@ -720,8 +727,8 @@ meta.tsv</code></pre>
 <p><br></p>
 </section>
 </section>
-<section id="paths" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="paths"><span class="header-section-number">5</span> Paths</h2>
+<section id="paths" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="paths"><span class="header-section-number">4</span> Paths</h2>
 <p>As we’ve mentioned, “paths” are specifications of a location on a computer, either of a file or a directory.</p>
 <p>We’ve talked about the commands <code>cd</code> and <code>ls</code> that operate on paths, and without going into much detail about it so far, we’ve already seen two distinct ways of specifying paths:</p>
 <ul>
@@ -748,8 +755,8 @@ This is something we’ll come back to later when talking about reproducibity.
 </details>
 </section>
 <p><br></p>
-<section id="moving-up-when-using-relative-paths" class="level3" data-number="5.1">
-<h3 data-number="5.1" class="anchored" data-anchor-id="moving-up-when-using-relative-paths"><span class="header-section-number">5.1</span> Moving “up” when using relative paths</h3>
+<section id="moving-up-when-using-relative-paths" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="moving-up-when-using-relative-paths"><span class="header-section-number">4.1</span> Moving “up” when using relative paths</h3>
 <p>There are a couple of “shortcuts” available for relative paths. First of all, <code>.</code> (a single period) is another way of representing the current working directory. Therefore, for instance, <code>ls ./data</code> is functionally the same as <code>ls data</code>, and just a more explicit way of saying that the <code>data</code> dir is located in your current working dir (this syntax is occasionally helpful).</p>
 <p>More usefully for our purposes here, <strong><code>..</code> (two periods) means one level up</strong> in the directory hierarchy, with “up” meaning towards the root directory (I guess the directory tree is best visualized upside down!):</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> ..               <span class="co"># One level up, listing /fs/ess/PAS0471/demo</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -787,8 +794,8 @@ These shortcuts work with all commands
 <p><br></p>
 </section>
 </section>
-<section id="recap" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="recap"><span class="header-section-number">6</span> Recap</h2>
+<section id="recap" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="recap"><span class="header-section-number">5</span> Recap</h2>
 <p>We’ve learned about structure of command line expressions in the Unix shell, which include: the <em>command</em> itself, <em>options</em>, <em>arguments</em>, and <em>output</em> (including, in some cases, error messages).</p>
 <p>A few key general points to remember are that:</p>
 <ul>
@@ -839,19 +846,19 @@ Many bioinformatics programs are basically specialized commands
 <p>We’ll continue with the basics of the Unix shell in <a href="../modules/A04_shell2.html">part II</a>.</p>
 <p><br></p>
 </section>
-<section id="at-home-reading-getting-help" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="at-home-reading-getting-help"><span class="header-section-number">7</span> At-home reading: getting help</h2>
+<section id="at-home-reading-getting-help" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="at-home-reading-getting-help">At-home reading: getting help</h2>
 <p>We saw several different <em>options</em> for the <code>ls</code> command, and that may have left you wondering how you are supposed to know about them.</p>
-<section id="the---help-option" class="level3" data-number="7.1">
-<h3 data-number="7.1" class="anchored" data-anchor-id="the---help-option"><span class="header-section-number">7.1</span> The <code>--help</code> option</h3>
+<section id="the---help-option" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="the---help-option"><span class="header-section-number">5.1</span> The <code>--help</code> option</h3>
 <p>Many (but not all!) commands have a <code>--help</code> option which will primarily describe the command’s function and “syntax” including many of the available options.</p>
 <p>For a very brief example, try:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">whoami</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For a much longer example, try:</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="the-man-command" class="level3" data-number="7.2">
-<h3 data-number="7.2" class="anchored" data-anchor-id="the-man-command"><span class="header-section-number">7.2</span> The <code>man</code> command</h3>
+<section id="the-man-command" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="the-man-command"><span class="header-section-number">5.2</span> The <code>man</code> command</h3>
 <p>The <code>man</code> command provides manual pages for Unix commands, which is more complete than the <code>--help</code> help, but sometimes overwhelming as well as terse and not always easy to fully understand — Google is your friend as well!</p>
 <p>For a short example, try:</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> pwd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -870,7 +877,7 @@ The man page opens in a “pager” – try to scroll around and type <kbd>q</kb
 </div>
 <p>For a much longer example, try:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">man</span> ls</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><br> <br></p>
+<p><br></p>
 
 
 </section>

@@ -149,24 +149,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">A4. Unix shell II</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A05_genomicfiles.html" rel="" target="">
- <span class="dropdown-text">A5. Genomic data files</span></a>
+    <a class="dropdown-item" href="../modules/A05_fastq.html" rel="" target="">
+ <span class="dropdown-text">A5. FASTQ files</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A06_overview.html" rel="" target="">
- <span class="dropdown-text">A6. Overview, variables &amp; loops</span></a>
+    <a class="dropdown-item" href="../modules/A06_ref-files.html" rel="" target="">
+ <span class="dropdown-text">A6. Reference genome files</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A07_scripts.html" rel="" target="">
- <span class="dropdown-text">A7. Shell scripts</span></a>
+    <a class="dropdown-item" href="../modules/A07_overview.html" rel="" target="">
+ <span class="dropdown-text">A7. Next steps, variables &amp; loops</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A08_software.html" rel="" target="">
- <span class="dropdown-text">A8. Software at OSC</span></a>
+    <a class="dropdown-item" href="../modules/A08_scripts.html" rel="" target="">
+ <span class="dropdown-text">A8. Shell scripts</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A09_slurm.html" rel="" target="">
- <span class="dropdown-text">A9. SLURM compute jobs</span></a>
+    <a class="dropdown-item" href="../modules/A09_software.html" rel="" target="">
+ <span class="dropdown-text">A9. Software at OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A10_slurm.html" rel="" target="">
+ <span class="dropdown-text">A10. SLURM compute jobs</span></a>
   </li>  
     </ul>
   </li>
@@ -177,10 +181,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-b.-from-reads-to-counts">    
         <li class="dropdown-header">B1. Read QC with <em>FastQC</em> [TBA]</li>
         <li class="dropdown-header">B2. Summarizing QC results with <em>MultiQC</em> [TBA]</li>
-        <li class="dropdown-header">B2. Trimming with <em>TrimGalore</em> [TBA]</li>
-        <li class="dropdown-header">B3. rRNA removal with <em>SortMeRNA</em> [TBA]</li>
+        <li class="dropdown-header">B3. Trimming with <em>TrimGalore</em> [TBA]</li>
         <li class="dropdown-header">B4. Alignment with <em>STAR</em> [TBA]</li>
-        <li class="dropdown-header">B5. Counting with <em>Salmon</em> [TBA]</li>
+        <li class="dropdown-header">B5. Quantification with <em>Salmon</em> [TBA]</li>
+        <li class="dropdown-header">B6: The Nextflow/nf-core rnaseq workflow [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -249,10 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview-getting-started" id="toc-overview-getting-started" class="nav-link active" data-scroll-target="#overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</a>
-  <ul class="collapse">
-  <li><a href="#start-vs-code-and-open-your-folder" id="toc-start-vs-code-and-open-your-folder" class="nav-link" data-scroll-target="#start-vs-code-and-open-your-folder">Start VS Code and open your folder</a></li>
-  </ul></li>
+  <li><a href="#overview-getting-started" id="toc-overview-getting-started" class="nav-link active" data-scroll-target="#overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</a></li>
   <li><a href="#loading-software-at-osc-with-lmod-modules" id="toc-loading-software-at-osc-with-lmod-modules" class="nav-link" data-scroll-target="#loading-software-at-osc-with-lmod-modules"><span class="header-section-number">2</span> Loading software at OSC with <em>Lmod</em> modules</a>
   <ul class="collapse">
   <li><a href="#checking-whether-a-program-is-available" id="toc-checking-whether-a-program-is-available" class="nav-link" data-scroll-target="#checking-whether-a-program-is-available"><span class="header-section-number">2.1</span> Checking whether a program is available</a></li>
@@ -262,13 +263,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#when-software-isnt-installed-at-osc" id="toc-when-software-isnt-installed-at-osc" class="nav-link" data-scroll-target="#when-software-isnt-installed-at-osc"><span class="header-section-number">3</span> When software isn’t installed at OSC</a></li>
   <li><a href="#intro-to-conda-using-mcics-conda-environments" id="toc-intro-to-conda-using-mcics-conda-environments" class="nav-link" data-scroll-target="#intro-to-conda-using-mcics-conda-environments"><span class="header-section-number">4</span> Intro to <em>Conda</em> &amp; using MCIC’s <em>Conda</em> environments</a>
   <ul class="collapse">
-  <li><a href="#activating-conda-environments" id="toc-activating-conda-environments" class="nav-link" data-scroll-target="#activating-conda-environments"><span class="header-section-number">4.1</span> Activating conda environments</a></li>
+  <li><a href="#activating-conda-environments" id="toc-activating-conda-environments" class="nav-link" data-scroll-target="#activating-conda-environments"><span class="header-section-number">4.1</span> Activating <em>Conda</em> environments</a></li>
   <li><a href="#lines-to-add-to-your-shell-script" id="toc-lines-to-add-to-your-shell-script" class="nav-link" data-scroll-target="#lines-to-add-to-your-shell-script"><span class="header-section-number">4.2</span> Lines to add to your shell script</a></li>
   </ul></li>
   <li><a href="#using-apptainer-containers" id="toc-using-apptainer-containers" class="nav-link" data-scroll-target="#using-apptainer-containers"><span class="header-section-number">5</span> Using <em>Apptainer</em> containers</a></li>
   <li><a href="#at-home-reading-creating-your-own-conda-environments" id="toc-at-home-reading-creating-your-own-conda-environments" class="nav-link" data-scroll-target="#at-home-reading-creating-your-own-conda-environments"><span class="header-section-number">6</span> At-home reading: Creating your own <em>Conda</em> environments</a>
   <ul class="collapse">
-  <li><a href="#one-time-conda-configuration" id="toc-one-time-conda-configuration" class="nav-link" data-scroll-target="#one-time-conda-configuration"><span class="header-section-number">6.1</span> One-time conda configuration</a></li>
+  <li><a href="#one-time-conda-configuration" id="toc-one-time-conda-configuration" class="nav-link" data-scroll-target="#one-time-conda-configuration"><span class="header-section-number">6.1</span> One-time <em>Conda</em> configuration</a></li>
   <li><a href="#example-creating-an-environment-for-trim-galore" id="toc-example-creating-an-environment-for-trim-galore" class="nav-link" data-scroll-target="#example-creating-an-environment-for-trim-galore"><span class="header-section-number">6.2</span> Example: Creating an environment for <em>Trim Galore!</em></a></li>
   <li><a href="#finding-the-conda-installation-info-online" id="toc-finding-the-conda-installation-info-online" class="nav-link" data-scroll-target="#finding-the-conda-installation-info-online"><span class="header-section-number">6.3</span> Finding the <em>Conda</em> installation info online</a></li>
   </ul></li>
@@ -281,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Using Software at OSC</h1>
-<p class="subtitle lead">Loading existing modules and installing and using software with conda</p>
+<p class="subtitle lead">Loading existing modules and installing and using software with <em>Conda</em></p>
 </div>
 
 
@@ -320,16 +321,16 @@ Under construction
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This page is still under construction.</p>
+<p>This page is nearly finished, only the Container section needs to be completed.</p>
 </div>
 </div>
 <section id="overview-getting-started" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="overview-getting-started"><span class="header-section-number">1</span> Overview &amp; Getting started</h2>
 <p>To analyze RNAseq data and other genomics data sets, a typical workflow includes using a sequence of specialized bioinformatics software.</p>
-<p>At OSC, there are system-wide installations of a number of bioinformatics programs. As we briefly <a href="./A06_overview.html#running-a-cli-program-interactively">saw earlier for FastQC</a>, and will talk about more here, we do need to “load” such programs.</p>
+<p>At OSC, there are system-wide installations of a number of bioinformatics programs. As we briefly <a href="../modules/A07_overview.html#running-a-cli-program-interactively">saw earlier for FastQC</a>, and will talk about more here, we do need to “load” such programs.</p>
 <p>Unfortunately, the collection of bioinformatics programs at OSC is not very comprehensive, and some of the available programs only come in relatively old versions. We therefore also need a way to make other programs available to ourselves at OSC.</p>
-<section id="start-vs-code-and-open-your-folder" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h3>
+<section id="start-vs-code-and-open-your-folder" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h4>
 <p>As always, we’ll be working in VS Code — if you don’t already have a session open, see below how to do so.</p>
 <p><strong>Make sure to open your <code>/fs/ess/PAS0471/&lt;user&gt;/rnaseq_intro</code> dir</strong>, either by using the <code>Open Folder</code> menu item, or by clicking on this dir when it appears in the <code>Welcome</code> tab.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -650,11 +651,11 @@ bcftools        cgmlst         entap-0.10.8   hmmer            links-2.0.1      
 <p>This collection includes <em>Conda</em> environments for several programs we need during RNAseq analysis that are not installed at OSC, such as <em>MultiQC</em>, <em>TrimGalore</em>, and <em>SortMeRNA</em>.</p>
 <p><br></p>
 <section id="activating-conda-environments" class="level3" data-number="4.1">
-<h3 data-number="4.1" class="anchored" data-anchor-id="activating-conda-environments"><span class="header-section-number">4.1</span> Activating conda environments</h3>
+<h3 data-number="4.1" class="anchored" data-anchor-id="activating-conda-environments"><span class="header-section-number">4.1</span> Activating <em>Conda</em> environments</h3>
 <p><em>Conda</em> itself is already installed at OSC as <em>Miniconda</em>, but we always need to load its module before we can use it:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>As mentioned above, these environments are activated and deactivated in a similar manner as with the <em>Lmod</em> system. (But whereas we use the term “load” for <em>Lmod</em> modules, we use <strong>“activate”</strong> for conda environments — it means the same thing.)</p>
-<p>Also like <em>Lmod</em>, there is a main command (<code>conda</code>) and several subcommands (<code>deactivate</code>, <code>create</code>, <code>install</code>, <code>update</code>) for different functionality. However, for historical reasons, the most foolproof way to activate a conda environment is to use <strong><code>source activate</code></strong> rather than the expected <code>conda activate</code> — for instance:</p>
+<p>As mentioned above, these environments are activated and deactivated in a similar manner as with the <em>Lmod</em> system. (But whereas we use the term “load” for <em>Lmod</em> modules, we use <strong>“activate”</strong> for <em>Conda</em> environments — it means the same thing.)</p>
+<p>Also like <em>Lmod</em>, there is a main command (<code>conda</code>) and several subcommands (<code>deactivate</code>, <code>create</code>, <code>install</code>, <code>update</code>) for different functionality. However, for historical reasons, the most foolproof way to activate a <em>Conda</em> environment is to use <strong><code>source activate</code></strong> rather than the expected <code>conda activate</code> — for instance:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/multiqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>(multiqc) [jelmer@p0085 rnaseq-intro]$</code></pre>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -724,7 +725,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>I’ve moved the <code>set -euo pipefail</code> line <em>below</em> the <code>source activate</code> command, because the conda activation procedure can otherwise result in “unbound variable” errors.</p>
+<p>I’ve moved the <code>set -euo pipefail</code> line <em>below</em> the <code>source activate</code> command, because the <em>Conda</em> activation procedure can otherwise result in “unbound variable” errors.</p>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -761,7 +762,25 @@ A few other useful <em>Conda</em> commands
 </section>
 <section id="using-apptainer-containers" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="using-apptainer-containers"><span class="header-section-number">5</span> Using <em>Apptainer</em> containers</h2>
-<p>TODO</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+TODO
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<ul>
+<li>Docker vs.&nbsp;Singularity &amp; Apptainer</li>
+<li>Downloading a container</li>
+<li>Running a program inside a container</li>
+<li>Building your own containers outside of the scope of this intro</li>
+</ul>
 <p><br></p>
 </section>
 <section id="at-home-reading-creating-your-own-conda-environments" class="level2" data-number="6">
@@ -770,7 +789,7 @@ A few other useful <em>Conda</em> commands
 <p>As of August 2023, the most recent version is <code>23.3.1-py310</code> (and recall that you can check all available versions with <code>module spider</code>):</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3/23.3.1-py310</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="one-time-conda-configuration" class="level3" data-number="6.1">
-<h3 data-number="6.1" class="anchored" data-anchor-id="one-time-conda-configuration"><span class="header-section-number">6.1</span> One-time conda configuration</h3>
+<h3 data-number="6.1" class="anchored" data-anchor-id="one-time-conda-configuration"><span class="header-section-number">6.1</span> One-time <em>Conda</em> configuration</h3>
 <p>We first have to do some <em>one-time</em> configuration<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, which will set the <strong><em>Conda</em> “channels”</strong> (basically, software repositories) that we want to use when we install programs. This config also includes setting relative <em>priorities</em> among channels, since one program may be available from multiple channels.</p>
 <p>We can do this with the <code>config</code> subcommand:</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels defaults     <span class="co"># Added first =&gt; lowest priority</span></span>
@@ -794,11 +813,11 @@ A few other useful <em>Conda</em> commands
 </div>
 <p>Let’s break the above command down:</p>
 <ul>
-<li><p><strong><code>create</code></strong> is the conda subcommand to create a new environment.</p></li>
+<li><p><strong><code>create</code></strong> is the <em>Conda</em> subcommand to create a new environment.</p></li>
 <li><p><strong><code>-y</code></strong> is a flag that prevents us from being asked to confirm installation.</p></li>
 <li><p>Following the <strong><code>-n</code></strong> option, we can specify the name of the environment, so <strong><code>-n trim-galore</code></strong> means that we want our environment to be called <code>trim-galore</code>. We can use whatever name we like for the environment, but of course a descriptive yet concise name is a good idea. Since we are making a single-program environment, it makes sense to simply name it after the program.</p></li>
 <li><p>Following the <strong><code>-c</code></strong> option, we can specify a channel from which we want to install, so <strong><code>-c bioconda</code></strong> indicates we want to use the <code>bioconda</code> channel. (Given that we’ve done some config above, this is not always necessary, but it can be good to be explicit.)</p></li>
-<li><p>The <strong><code>trim-galore</code></strong> at the end of the line simply tells conda to install the package of that name. This is a “<em>positional</em>” argument to the command (note that there’s no option like <code>-s</code> before it): we put any software package(s) we want to install at the end of the command.</p></li>
+<li><p>The <strong><code>trim-galore</code></strong> at the end of the line simply tells <em>Conda</em> to install the package of that name. This is a “<em>positional</em>” argument to the command (note that there’s no option like <code>-s</code> before it): we put any software package(s) we want to install at the end of the command.</p></li>
 </ul>
 <section id="specifying-a-version" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="specifying-a-version">Specifying a version</h4>
@@ -808,7 +827,7 @@ A few other useful <em>Conda</em> commands
 Solving environment: done
 # [...truncated...]</code></pre>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -817,7 +836,7 @@ See the full output when I ran this command (Click to expand)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><br></p>
 <div class="cell">
@@ -1022,7 +1041,7 @@ Specifying the full path to the environment dir
 <section id="build-the-installation-command" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="build-the-installation-command">Build the installation command</h4>
 <p>I always take the top of the two example installation commands as a template, which is here: <code>conda install -c bioconda cutadapt</code>.</p>
-<p>You may notice the <code>install</code> subcommand, which we haven’t yet seen. This would install Cutadapt into <em>the currently activated conda environment</em>. Since our strategy here –and my general strategy– is to create a new environment each time you’re installing a program, just installing in whatever environment is currently active is not a great idea. You could first create an “empty” environment, and <em>then</em> run the install command, but we saw above that we can do all of this in a single command.</p>
+<p>You may notice the <code>install</code> subcommand, which we haven’t yet seen. This would install Cutadapt into <em>the currently activated Conda environment</em>. Since our strategy here –and my general strategy– is to create a new environment each time you’re installing a program, just installing in whatever environment is currently active is not a great idea. You could first create an “empty” environment, and <em>then</em> run the install command, but we saw above that we can do all of this in a single command.</p>
 <p>To build this create-plus-install command, all we need to do is replace <code>install</code> in the example command on the <em>Conda</em> website by <code>create -y -n &lt;env-name&gt;</code>. Then, our full command (without version specification) again will be:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-y</span> <span class="at">-n</span> cutadapt <span class="at">-c</span> bioconda cutadapt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To see which <strong>version</strong> will be installed by default, and to see which older versions are available:</p>
@@ -1062,7 +1081,7 @@ Use one environment per program (as here) or one per research project
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Below are two reasonable ways to organize your conda environments, and their advantages:</p>
+<p>Below are two reasonable ways to organize your <em>Conda</em> environments, and their advantages:</p>
 <ul>
 <li><strong>Have one environment per program</strong> (my preference)
 <ul>

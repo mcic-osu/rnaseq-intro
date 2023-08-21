@@ -31,9 +31,9 @@ Then, we'll cover the first of the remaining fundamental topics:
 **shell variables** and **`for` loops**.
 The next few sessions will cover the remaining ones:
 
-- [Writing shell scripts](./A07_scripts.qmd)
-- [Using software at OSC](./A08_software.qmd)
-- [Submitting scripts to the OSC job queue](./A09_slurm.qmd).
+- [Writing shell scripts](./A08_scripts.qmd)
+- [Using software at OSC](./A09_software.qmd)
+- [Submitting scripts to the OSC job queue](./A10_slurm.qmd).
 
 ### Start VS Code and open your folder {-}
 
@@ -138,7 +138,7 @@ and is often the very first step when analyzing a newly sequenced genomics datas
 
 When we run a bioinformatics program at OSC,
 we'll always have to first make the program available to us.
-We will cover that in more in detail in the session [Software at OSC](A08_software.qmd)
+We will cover that in more in detail in the session [Software at OSC](A09_software.qmd)
 &mdash; but here is how you can do this for _FastQC_:
 
 ```bash
@@ -257,7 +257,7 @@ will involve _two steps_:
    (rather than directly _running_ it)
 
 We will cover the basics of shell scripts in the
-[session on shell scripts](./A07_scripts.qmd) &mdash;
+[session on shell scripts](./A08_scripts.qmd) &mdash;
 for now, you just need to know that these scripts are small text files 
 (with the extension `.sh`) that basically contain the same kind of shell code
 we've been running interactively, with some added bells and whistles.
@@ -314,7 +314,7 @@ Submitted batch job 23510055
 We will learn about `sbatch` and associated commands,
 as well as the different options you can use to specify the resources you want to
 request (how much time, how many cores, etc),
-in the [session on Slurm compute jobs](./A09_slurm.qmd).
+in the [session on Slurm compute jobs](./A10_slurm.qmd).
 
 ### Summarizing what we need to learn about
 
@@ -331,19 +331,19 @@ in the [session on Slurm compute jobs](./A09_slurm.qmd).
   but they still need to be "loaded" via `module load`.
   This collection of programs is unfortunately not comprehensive and we also
   need another approach, as we'll see in the
-  [session Software at OSC](./A08_software.qmd).
+  [session Software at OSC](./A09_software.qmd).
 
 - **Writing shell scripts**  
   Putting the code to run individual bioinformatics programs inside small shell
   scripts will allow us to submit them to Slurm job scheduler.
   Using scripts is more generally useful for e.g. long-running commands or programs,
   and is a good way to keep your code organized and clear.
-  We'll talk about [shell scripts in the next session](./A07_scripts.qmd).
+  We'll talk about [shell scripts in the next session](./A08_scripts.qmd).
 
 - **Submitting scripts to the Slurm job scheduler**  
   Submitting scripts as Slurm batch jobs at OSC allows us, for example,
   to run the same analysis for different samples simultaneously.
-  We'll see this in more detail in the [session on Slurm jobs](./A09_slurm.qmd). 
+  We'll see this in more detail in the [session on Slurm jobs](./A10_slurm.qmd). 
 
 <br>
 

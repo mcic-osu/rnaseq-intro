@@ -63,8 +63,8 @@ In **upcoming sessions**, we'll continue to work at OSC,
 so you will get a fair bit of experience with using it.
 We'll also have specific sessions dedicated to
 [using VS Code at OSC](A02_vscode.qmd),
-[loading and installing software at OSC](A08_software.qmd) and
-[using the SLURM job scheduler](A09_slurm.qmd).
+[loading and installing software at OSC](A09_software.qmd) and
+[using the SLURM job scheduler](A10_slurm.qmd).
 
 OSC has **three main websites**:
 
@@ -283,7 +283,7 @@ you'll be using compute nodes **non-interactively, that is, through "batch jobs"
 When doing so, you will write a script in advance and send it to the job scheduler,
 which will run the script on a compute node that "you" don't go to at all.
 
-The session [Compute Jobs with Slurm](A09_slurm.qmd) is dedicated to this topic.
+The session [Compute Jobs with Slurm](A10_slurm.qmd) is dedicated to this topic.
 :::
 
 **Compute nodes come in different shapes and sizes.**
@@ -527,8 +527,8 @@ accessing OSC. In separate sessions in this series, we will look at:
 - Using specific "**Interactive Apps**" (GUI-based programs):
   - [_VS Code_](A02_vscode.qmd)
   - _RStudio_ (TBA)
-- [Loading and installing command-line software at OSC](A08_software.qmd)
-- [Submitting batch jobs using the SLURM scheduler](A09_slurm.qmd)
+- [Loading and installing command-line software at OSC](A09_software.qmd)
+- [Submitting batch jobs using the SLURM scheduler](A10_slurm.qmd)
 
 Additionally, there are pages with reference material (see the right side of the top
 menu bar of this side) on:

@@ -149,24 +149,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">A4. Unix shell II</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A05_genomicfiles.html" rel="" target="">
- <span class="dropdown-text">A5. Genomic data files</span></a>
+    <a class="dropdown-item" href="../modules/A05_fastq.html" rel="" target="">
+ <span class="dropdown-text">A5. FASTQ files</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A06_overview.html" rel="" target="">
- <span class="dropdown-text">A6. Overview, variables &amp; loops</span></a>
+    <a class="dropdown-item" href="../modules/A06_ref-files.html" rel="" target="">
+ <span class="dropdown-text">A6. Reference genome files</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A07_scripts.html" rel="" target="">
- <span class="dropdown-text">A7. Shell scripts</span></a>
+    <a class="dropdown-item" href="../modules/A07_overview.html" rel="" target="">
+ <span class="dropdown-text">A7. Next steps, variables &amp; loops</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A08_software.html" rel="" target="">
- <span class="dropdown-text">A8. Software at OSC</span></a>
+    <a class="dropdown-item" href="../modules/A08_scripts.html" rel="" target="">
+ <span class="dropdown-text">A8. Shell scripts</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../modules/A09_slurm.html" rel="" target="">
- <span class="dropdown-text">A9. SLURM compute jobs</span></a>
+    <a class="dropdown-item" href="../modules/A09_software.html" rel="" target="">
+ <span class="dropdown-text">A9. Software at OSC</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../modules/A10_slurm.html" rel="" target="">
+ <span class="dropdown-text">A10. SLURM compute jobs</span></a>
   </li>  
     </ul>
   </li>
@@ -177,10 +181,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu" aria-labelledby="nav-menu-b.-from-reads-to-counts">    
         <li class="dropdown-header">B1. Read QC with <em>FastQC</em> [TBA]</li>
         <li class="dropdown-header">B2. Summarizing QC results with <em>MultiQC</em> [TBA]</li>
-        <li class="dropdown-header">B2. Trimming with <em>TrimGalore</em> [TBA]</li>
-        <li class="dropdown-header">B3. rRNA removal with <em>SortMeRNA</em> [TBA]</li>
+        <li class="dropdown-header">B3. Trimming with <em>TrimGalore</em> [TBA]</li>
         <li class="dropdown-header">B4. Alignment with <em>STAR</em> [TBA]</li>
-        <li class="dropdown-header">B5. Counting with <em>Salmon</em> [TBA]</li>
+        <li class="dropdown-header">B5. Quantification with <em>Salmon</em> [TBA]</li>
+        <li class="dropdown-header">B6: The Nextflow/nf-core rnaseq workflow [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -319,9 +323,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In this session, we’ll start by looking ahead a bit. You will get an overview of how we will be running bioinformatics programs with command-line interfaces (CLIs) during the first part of the RNAseq analysis, where we start with reads in FASTQ files and will produce a table with gene counts. This overview is meant to clarify <strong>which fundamentals we still need to cover before we can start running these analyses.</strong></p>
 <p>Then, we’ll cover the first of the remaining fundamental topics: <strong>shell variables</strong> and <strong><code>for</code> loops</strong>. The next few sessions will cover the remaining ones:</p>
 <ul>
-<li><a href="../modules/A07_scripts.html">Writing shell scripts</a></li>
-<li><a href="../modules/A08_software.html">Using software at OSC</a></li>
-<li><a href="../modules/A09_slurm.html">Submitting scripts to the OSC job queue</a>.</li>
+<li><a href="../modules/A08_scripts.html">Writing shell scripts</a></li>
+<li><a href="../modules/A09_software.html">Using software at OSC</a></li>
+<li><a href="../modules/A10_slurm.html">Submitting scripts to the OSC job queue</a>.</li>
 </ul>
 <section id="start-vs-code-and-open-your-folder" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h3>
@@ -411,7 +415,7 @@ Don’t have your own dir with the data? (Click to expand)
 <p>Here, we’ll use the program <em>FastQC</em> as an example, which performs quality control (QC) on a FASTQ file, and is often the very first step when analyzing a newly sequenced genomics dataset.</p>
 <section id="running-a-cli-program-interactively" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="running-a-cli-program-interactively"><span class="header-section-number">2.1</span> Running a CLI program interactively</h3>
-<p>When we run a bioinformatics program at OSC, we’ll always have to first make the program available to us. We will cover that in more in detail in the session <a href="../modules/A08_software.html">Software at OSC</a> — but here is how you can do this for <em>FastQC</em>:</p>
+<p>When we run a bioinformatics program at OSC, we’ll always have to first make the program available to us. We will cover that in more in detail in the session <a href="../modules/A09_software.html">Software at OSC</a> — but here is how you can do this for <em>FastQC</em>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the OSC "module" for FastQC, so we can use this program</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next, we could run <em>FastQC</em> for one of our FASTQ files as follows:</p>
@@ -476,7 +480,7 @@ Approx 5% complete for ASPC1_G31V_R1.fastq.gz
 <li>Putting the code to run <em>FastQC</em> <strong>inside a shell script</strong></li>
 <li><strong>Submitting</strong> that shell script to the OSC compute job queue with <code>sbatch</code> (rather than directly <em>running</em> it)</li>
 </ol>
-<p>We will cover the basics of shell scripts in the <a href="../modules/A07_scripts.html">session on shell scripts</a> — for now, you just need to know that these scripts are small text files (with the extension <code>.sh</code>) that basically contain the same kind of shell code we’ve been running interactively, with some added bells and whistles.</p>
+<p>We will cover the basics of shell scripts in the <a href="../modules/A08_scripts.html">session on shell scripts</a> — for now, you just need to know that these scripts are small text files (with the extension <code>.sh</code>) that basically contain the same kind of shell code we’ve been running interactively, with some added bells and whistles.</p>
 <p>If for now we just assume we had created such a script, we can modify our loop as follows to run <em>FastQC</em> through a script, instead of including the command to run the program directly in the loop:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Don't run this - meant as an example only (you don't have this script yet)</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> fastq_file <span class="kw">in</span> data/fastq/<span class="pp">*</span>fastq.gz<span class="kw">;</span> <span class="cf">do</span></span>
@@ -504,7 +508,7 @@ Approx 5% complete for ASPC1_G31V_R1.fastq.gz
 <pre class="bash-out"><code>Submitted batch job 23510054
 Submitted batch job 23510055
 # [Output truncated...]</code></pre>
-<p>We will learn about <code>sbatch</code> and associated commands, as well as the different options you can use to specify the resources you want to request (how much time, how many cores, etc), in the <a href="../modules/A09_slurm.html">session on Slurm compute jobs</a>.</p>
+<p>We will learn about <code>sbatch</code> and associated commands, as well as the different options you can use to specify the resources you want to request (how much time, how many cores, etc), in the <a href="../modules/A10_slurm.html">session on Slurm compute jobs</a>.</p>
 </section>
 <section id="summarizing-what-we-need-to-learn-about" class="level3" data-number="2.5">
 <h3 data-number="2.5" class="anchored" data-anchor-id="summarizing-what-we-need-to-learn-about"><span class="header-section-number">2.5</span> Summarizing what we need to learn about</h3>
@@ -512,11 +516,11 @@ Submitted batch job 23510055
 <li><p><strong><code>for</code> loops and variables</strong><br>
 <strong><code>for</code> loops</strong> will allow you to repeat operations — specifically, we will later use them to submit many scripts at the same time, one per input file or sample. Using <strong>variables</strong> will allow you to run scripts flexibly, with different input files and settings; they are also used in loops. <em>We’ll talk about these in the sections below.</em></p></li>
 <li><p><strong>Making software available</strong><br>
-At OSC, a bunch of bioinformatics programs are installed system-wide, but they still need to be “loaded” via <code>module load</code>. This collection of programs is unfortunately not comprehensive and we also need another approach, as we’ll see in the <a href="../modules/A08_software.html">session Software at OSC</a>.</p></li>
+At OSC, a bunch of bioinformatics programs are installed system-wide, but they still need to be “loaded” via <code>module load</code>. This collection of programs is unfortunately not comprehensive and we also need another approach, as we’ll see in the <a href="../modules/A09_software.html">session Software at OSC</a>.</p></li>
 <li><p><strong>Writing shell scripts</strong><br>
-Putting the code to run individual bioinformatics programs inside small shell scripts will allow us to submit them to Slurm job scheduler. Using scripts is more generally useful for e.g.&nbsp;long-running commands or programs, and is a good way to keep your code organized and clear. We’ll talk about <a href="../modules/A07_scripts.html">shell scripts in the next session</a>.</p></li>
+Putting the code to run individual bioinformatics programs inside small shell scripts will allow us to submit them to Slurm job scheduler. Using scripts is more generally useful for e.g.&nbsp;long-running commands or programs, and is a good way to keep your code organized and clear. We’ll talk about <a href="../modules/A08_scripts.html">shell scripts in the next session</a>.</p></li>
 <li><p><strong>Submitting scripts to the Slurm job scheduler</strong><br>
-Submitting scripts as Slurm batch jobs at OSC allows us, for example, to run the same analysis for different samples simultaneously. We’ll see this in more detail in the <a href="../modules/A09_slurm.html">session on Slurm jobs</a>.</p></li>
+Submitting scripts as Slurm batch jobs at OSC allows us, for example, to run the same analysis for different samples simultaneously. We’ll see this in more detail in the <a href="../modules/A10_slurm.html">session on Slurm jobs</a>.</p></li>
 </ul>
 <p><br></p>
 </section>
@@ -911,7 +915,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Thu Aug 17 09:49:08 EDT 2023</code></pre>
+<pre class="bash-out"><code>Mon Aug 21 12:18:40 EDT 2023</code></pre>
 </div>
 </div>
 <p>If we try to store the date in a variable directly, it doesn’t work: the literal string “date” is stored, not the output of the command:</p>
@@ -927,7 +931,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Thu Aug 17 09:49:08 EDT 2023</code></pre>
+<pre class="bash-out"><code>Mon Aug 21 12:18:40 EDT 2023</code></pre>
 </div>
 </div>
 <hr>
@@ -935,7 +939,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +%F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>2023-08-17</code></pre>
+<pre class="bash-out"><code>2023-08-21</code></pre>
 </div>
 </div>
 <p>Let’s use that in a command substitution — but a bit differently than before: we use the command substitution <code>$(date +%F)</code> <em>directly</em> in our <code>touch</code> command, rather than first assigning it to a variable:</p>

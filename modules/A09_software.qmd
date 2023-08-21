@@ -1,6 +1,6 @@
 ---
 title: "Using Software at OSC"
-subtitle: "Loading existing modules and installing and using software with conda" 
+subtitle: "Loading existing modules and installing and using software with _Conda_" 
 pagetitle: "Software at OSC"
 highlight-style: github
 number-sections: true
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 
 ::: {.callout-important}
 ## Under construction 
-This page is still under construction.
+This page is nearly finished, only the Container section needs to be completed.
 :::
 
 ## Overview & Getting started
@@ -28,7 +28,7 @@ To analyze RNAseq data and other genomics data sets,
 a typical workflow includes using a sequence of specialized bioinformatics software.
 
 At OSC, there are system-wide installations of a number of bioinformatics programs.
-As we briefly [saw earlier for FastQC](./A06_overview.html#running-a-cli-program-interactively),
+As we briefly [saw earlier for FastQC](./A07_overview.qmd#running-a-cli-program-interactively),
 and will talk about more here, we do need to "load" such programs.
 
 Unfortunately,
@@ -37,8 +37,7 @@ and some of the available programs only come in relatively old versions.
 We therefore also need a way to make other programs available to ourselves
 at OSC.
 
-
-### Start VS Code and open your folder {-}
+#### Start VS Code and open your folder {-}
 
 As always, we'll be working in VS Code &mdash;
 if you don't already have a session open, see below how to do so.
@@ -459,7 +458,7 @@ _TrimGalore_, and _SortMeRNA_.
 
 <br>
 
-### Activating conda environments
+### Activating _Conda_ environments
 
 _Conda_ itself is already installed at OSC as _Miniconda_,
 but we always need to load its module before we can use it:
@@ -471,12 +470,12 @@ module load miniconda3
 As mentioned above, these environments are activated and deactivated
 in a similar manner as with the _Lmod_ system.
 (But whereas we use the term "load" for _Lmod_ modules,
-we use **"activate"** for conda environments &mdash; it means the same thing.)
+we use **"activate"** for _Conda_ environments &mdash; it means the same thing.)
 
 Also like _Lmod_, there is a main command (`conda`) and several subcommands
 (`deactivate`, `create`, `install`, `update`) for different functionality.
 However, for historical reasons,
-the most foolproof way to activate a conda environment is to use **`source activate`**
+the most foolproof way to activate a _Conda_ environment is to use **`source activate`**
 rather than the expected `conda activate` &mdash; for instance:
 
 ```bash
@@ -561,7 +560,7 @@ set -euo pipefail
 
 :::{.callout-warning}
 I've moved the `set -euo pipefail` line _below_ the `source activate` command,
-because the conda activation procedure can otherwise result in "unbound variable"
+because the _Conda_ activation procedure can otherwise result in "unbound variable"
 errors.
 :::
 
@@ -598,7 +597,14 @@ errors.
 
 ## Using _Apptainer_ containers
 
-TODO
+::: {.callout-caution}
+#### TODO
+:::
+
+- Docker vs. Singularity & Apptainer
+- Downloading a container
+- Running a program inside a container
+- Building your own containers outside of the scope of this intro
 
 <br>
 
@@ -618,7 +624,7 @@ As of August 2023, the most recent version is `23.3.1-py310`
 module load miniconda3/23.3.1-py310
 ```
 
-### One-time conda configuration
+### One-time _Conda_ configuration
 
 We first have to do some _one-time_ configuration[^4],
 which will set the **_Conda_ "channels"** (basically, software repositories)
@@ -669,7 +675,7 @@ conda create -y -n trim-galore -c bioconda trim-galore
 
 Let's break the above command down:
 
-- **`create`** is the conda subcommand to create a new environment.
+- **`create`** is the _Conda_ subcommand to create a new environment.
 
 - **`-y`** is a flag that prevents us from being asked to confirm installation.
 
@@ -688,7 +694,7 @@ Let's break the above command down:
   but it can be good to be explicit.)
   
 - The **`trim-galore`** at the end of the line
-  simply tells conda to install the package of that name.
+  simply tells _Conda_ to install the package of that name.
   This is a "_positional_" argument to the command
   (note that there's no option like `-s` before it):
   we put any software package(s) we want to install at the end of the command.
@@ -795,7 +801,7 @@ I always take the top of the two example installation commands as a template,
 which is here: `conda install -c bioconda cutadapt`.
 
 You may notice the `install` subcommand, which we haven't yet seen.
-This would install Cutadapt into _the currently activated conda environment_.
+This would install Cutadapt into _the currently activated Conda environment_.
 Since our strategy here --and my general strategy-- is to create a new
 environment each time you're installing a program,
 just installing in whatever environment is currently active is not a great idea.
@@ -840,7 +846,7 @@ the _Conda_ package and install it!
 :::{.callout-note}
 ## Use one environment per program (as here) or one per research project
 
-Below are two reasonable ways to organize your conda environments,
+Below are two reasonable ways to organize your _Conda_ environments,
 and their advantages:
 
 - **Have one environment per program** (my preference)

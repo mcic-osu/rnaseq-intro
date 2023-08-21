@@ -34,9 +34,7 @@ it should be **straightforward to rerun much of our project workflow**
 after removing or adding some samples, with different parameter settings,
 and possibly even for an entirely different dataset. 
 
-<br>
-
-### Start VS Code and open your folder {-}
+#### Start VS Code and open your folder {-}
 
 As always, we'll be working in VS Code &mdash;
 if you don't already have a session open, see below how to do so.

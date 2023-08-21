@@ -1,19 +1,41 @@
 ---
-title: "RNAseq data analysis using the command line and R"
-subtitle: ""
-toc: false
+title: "RNAseq data analysis"
+subtitle: "Using the command line and R"
+toc: true
+toc-depth: 4
 ---
 
-### Sessions
+------
 
-| Date       | Topic & link                                                                     | Block  
-|------------|----------------------------------------------------------------------------------|---------------------------|
-| 2023-07-14 | [Introduction](modules/intro.qmd)                                                | A. Computing Skills       |
-| 2023-07-21 | [The Ohio Supercomputer Center (OSC)](modules/A01_osc.qmd)                       | A. Computing Skills       |
-| 2023-07-28 | [VS Code](modules/A02_vscode.qmd) & [Unix shell I](modules/A03_shell1.qmd)       | A. Computing Skills       |
-| 2023-08-04 | [Unix shell II](modules/A04_shell2.qmd)                                          | A. Computing Skills       |
-| 2023-08-11 | [Genomic data files](modules/A05_genomicfiles.qmd)                               | A. Computing Skills       |
-| 2023-08-18 | [Genomic data files (cont.)](modules/A05_genomicfiles.qmd)                       | A. Computing Skills       |
-| 2023-08-25 | [Overview of next steps, variables, and loops](modules/A06_overview.qmd)         | A. Computing Skills       |
-| 2023-09-01 | [Shell scripts](modules/A07_scripts.qmd)                                         | A. Computing Skills       |
-| 2023-09-08 | [Software at OSC](modules/A08_software.qmd) & [Slurm jobs](modules/A09_slurm.qmd) | A. Computing Skills       |
+<br>
+
+### Schedule
+
+#### Block A: Computing skills and genomics data files
+
+| Date       | Topic & link                                                                     |
+|------------|----------------------------------------------------------------------------------|
+| 2023-07-14 | [Introduction](modules/intro.qmd)                                                |
+| 2023-07-21 | [The Ohio Supercomputer Center (OSC)](modules/A01_osc.qmd)                       |
+| 2023-07-28 | [VS Code](modules/A02_vscode.qmd) & [Unix shell (part I)](modules/A03_shell1.qmd) |
+| 2023-08-04 | [Unix shell (part II)](modules/A04_shell2.qmd)                                   |
+| 2023-08-11 | [FASTQ files](modules/A05_fastq.qmd)                                             |
+| 2023-08-18 | [Reference genome files (FASTA and GTF)](modules/A06_ref-files.qmd)              |
+| 2023-08-25 | [Overview of next steps, variables, and loops](modules/A07_overview.qmd)         |
+| 2023-09-01 | [Shell scripts](modules/A08_scripts.qmd)                                         |
+| 2023-09-08 | [Software at OSC](modules/A09_software.qmd) & recap                              |
+| 2023-09-15 | [Slurm batch jobs](modules/A10_slurm.qmd)                                        |
+
+<br>
+
+#### Block B: From reads to counts
+
+| Date       | Topic & link                                                                     |
+|------------|----------------------------------------------------------------------------------|
+| 2023-09-22 | Read quality control with FastQC                                                 |
+| 2023-09-29 | Summarizing QC outputs with MultiQC                                              |
+| 2023-10-06 | Quality and adapter trimming with TrimGalore                                     |
+| 2023-10-13 | Read alignment with STAR                                                         |
+| 2023-10-20 | Quantification with Salmon                                                       |
+| 2023-10-27 | The Nextflow/nf-core rnaseq workflow (Part I)                                    |
+| 2023-11-03 | The Nextflow/nf-core rnaseq workflow (Part II)                                   |

@@ -17,7 +17,7 @@ knitr::opts_chunk$set(eval = FALSE,
 
 <br>
 
-## Introduction
+## Overview & setting up {-}
 
 Many of the things you typically do by pointing and clicking can alternatively
 be done by typing commands.
@@ -41,6 +41,8 @@ than just allowing you to work on a supercomputer, such as:
   - For bioinformatics, being able to use (the latest) command-line programs directly
     without having to depend on "GUI wrappers" written by third parties,
     that often cost money and also lag behind in functionality
+
+#### Starting a VS Code session in OSC OnDemand {-}
 
 In these sessions, **we'll use a Unix shell at OSC inside VS Code**[^1].
 For this session, specifically,
@@ -83,7 +85,7 @@ or you could connect your local Unix shell to OSC through SSH
 :::
 
 ::: {.callout-note}
-#### Some Terminology
+#### Some Unix shell terminology
 
 We're going to focus on the practice of doing command line computing here,
 and not get too bogged down in terminology,
@@ -856,7 +858,7 @@ We'll continue with the basics of the Unix shell in [part II](./A04_shell2.qmd).
 
 <br>
 
-## At-home reading: getting help
+## At-home reading: getting help {-}
 
 We saw several different _options_ for the `ls` command,
 and that may have left you wondering how you are supposed to know about them.
@@ -901,4 +903,4 @@ For a much longer example, try:
 man ls
 ```
 
-<br> <br>
+<br>

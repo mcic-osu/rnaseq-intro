@@ -18,7 +18,7 @@ knitr::opts_chunk$set(eval = FALSE,
 
 <br>
 
-## Overview & getting set up {-}
+## Overview & setting up {-}
 
 In this session, we will continue learning about the Unix shell.
 Specifically, we will focus on:
@@ -1392,14 +1392,14 @@ redirection for Slurm batch jobs.
 
 <br>
 
-## At-home reading: reference pages {-}
+## At-home reading: reference pages & further resources {-}
+
+### Shell reference pages on this site {-}
 
 - [Common shell commands](../info/shell_commands.qmd)
 - [Shell keyboard shortcuts](../info/shell_shortcuts.qmd)
 
-<br>
-
-## Further resources {-}
+### Further resources for learning the Unix shell {-}
 
 - [OSC's UNIX Basics](https://www.osc.edu/documentation/tutorials/unix_basics)
 - <https://www.learnenough.com/command-line-tutorial>
