@@ -22,7 +22,7 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 This page is nearly finished, only the Container section needs to be completed.
 :::
 
-## Overview & Getting started
+## Overview & setting up {-}
 
 To analyze RNAseq data and other genomics data sets,
 a typical workflow includes using a sequence of specialized bioinformatics software.

@@ -1,6 +1,5 @@
 ---
-title: "Batch Jobs with Slurm"
-subtitle: 'With a focus on submitting shell scripts as "batch jobs"'
+title: "Submitting and monitoring Slurm batch jobs"
 pagetitle: "Slurm"
 highlight-style: github
 number-sections: true
@@ -15,7 +14,9 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 
 ----
 
-## Overview and setting up {-}
+<br>
+
+## Overview & setting up {-}
 
 We have so far been working interactively at OSC,
 issuing our commands directly in the terminal.
@@ -35,7 +36,8 @@ What are the options to start a compute job at OSC?
    such as VS Code, RStudio or Jupyter Notebook on the OnDemand website,
    and they will run in a browser window.
 2. **Interactive shell jobs** &mdash; Start a interactive shell on a compute node.
-3. **Batch (non-interactive) jobs** &mdash; Run a _script_ on a compute node.
+3. **Batch (non-interactive) jobs** &mdash; Run a script on a compute node
+   without ever going to that node yourself.
 
 We've already worked a lot with the VS Code Interactive App,
 and the at-home reading at the bottom of this page will talk about interactive

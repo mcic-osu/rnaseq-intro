@@ -16,7 +16,7 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 
 <br>
 
-## Overview & Getting started
+## Overview & setting up {-}
 
 Shell scripts enable us to **run sets of commands non-interactively**,
 which is useful:

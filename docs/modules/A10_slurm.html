@@ -253,7 +253,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview-and-setting-up" id="toc-overview-and-setting-up" class="nav-link active" data-scroll-target="#overview-and-setting-up">Overview and setting up</a></li>
+  <li><a href="#overview-setting-up" id="toc-overview-setting-up" class="nav-link active" data-scroll-target="#overview-setting-up">Overview &amp; setting up</a></li>
   <li><a href="#getting-started-with-slurm-batch-jobs" id="toc-getting-started-with-slurm-batch-jobs" class="nav-link" data-scroll-target="#getting-started-with-slurm-batch-jobs"><span class="header-section-number">1</span> Getting started with Slurm batch jobs</a>
   <ul class="collapse">
   <li><a href="#the-sbatch-command" id="toc-the-sbatch-command" class="nav-link" data-scroll-target="#the-sbatch-command"><span class="header-section-number">1.1</span> The <code>sbatch</code> command</a></li>
@@ -288,8 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Batch Jobs with Slurm</h1>
-<p class="subtitle lead">With a focus on submitting shell scripts as “batch jobs”</p>
+<h1 class="title">Submitting and monitoring Slurm batch jobs</h1>
 </div>
 
 
@@ -317,15 +316,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <hr>
-<section id="overview-and-setting-up" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="overview-and-setting-up">Overview and setting up</h2>
+<p><br></p>
+<section id="overview-setting-up" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="overview-setting-up">Overview &amp; setting up</h2>
 <p>We have so far been working interactively at OSC, issuing our commands directly in the terminal. But in order to run some actual genomics analyses, we will want to run scripts non-interactively and submit them to the compute job queue at OSC.</p>
 <p>Automated scheduling software allows hundreds of people with different requirements to access compute nodes effectively and fairly. For this purpose, OSC uses the <strong>Slurm</strong> scheduler (Simple Linux Utility for Resource Management).</p>
 <p>A temporary reservation of resources on compute nodes is called a <strong>compute job</strong>. What are the options to start a compute job at OSC?</p>
 <ol type="1">
 <li>“<strong>Interactive Apps</strong>” — We can start programs with GUIs, such as VS Code, RStudio or Jupyter Notebook on the OnDemand website, and they will run in a browser window.</li>
 <li><strong>Interactive shell jobs</strong> — Start a interactive shell on a compute node.</li>
-<li><strong>Batch (non-interactive) jobs</strong> — Run a <em>script</em> on a compute node.</li>
+<li><strong>Batch (non-interactive) jobs</strong> — Run a script on a compute node without ever going to that node yourself.</li>
 </ol>
 <p>We’ve already worked a lot with the VS Code Interactive App, and the at-home reading at the bottom of this page will talk about interactive shell jobs. But what we’re most interested in here is running <strong>batch jobs</strong>, which will be the focus of this session.</p>
 <section id="start-vs-code-and-open-your-folder" class="level4 unnumbered">

@@ -18,7 +18,7 @@ knitr::opts_chunk$set(eval = FALSE,
 
 <br>
 
-## Overview & Getting started
+## Overview & setting up {-}
 
 In this session, we'll start by looking ahead a bit.
 You will get an overview of how we will be running bioinformatics programs with
