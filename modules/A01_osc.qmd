@@ -64,7 +64,7 @@ so you will get a fair bit of experience with using it.
 We'll also have specific sessions dedicated to
 [using VS Code at OSC](A02_vscode.qmd),
 [loading and installing software at OSC](A09_software.qmd) and
-[using the SLURM job scheduler](A10_slurm.qmd).
+[using the _Slurm_ job scheduler](A10_slurm.qmd).
 
 OSC has **three main websites**:
 
@@ -101,7 +101,7 @@ This is what the **Owens** supercomputer at OSC physically looks like:
 ::: {.callout-note}
 #### Linux and Unix
 Like the vast majority of supercomputers,
-OSC's run on the **Linux operating system** (as opposed to on MacOS or Windows).
+those of OSC run on the **Linux operating system** (as opposed to on MacOS or Windows).
 In turn, Linux is a **Unix-based** operating system like MacOS (but unlike Windows).
 :::
 
@@ -283,7 +283,7 @@ you'll be using compute nodes **non-interactively, that is, through "batch jobs"
 When doing so, you will write a script in advance and send it to the job scheduler,
 which will run the script on a compute node that "you" don't go to at all.
 
-The session [Compute Jobs with Slurm](A10_slurm.qmd) is dedicated to this topic.
+The session [Compute Jobs with _Slurm_](A10_slurm.qmd) is dedicated to this topic.
 :::
 
 **Compute nodes come in different shapes and sizes.**
@@ -480,17 +480,36 @@ We'll explore VS Code in the [next session](A02_vscode.qmd).
 
 <br>
 
-## In Closing
+## Upcoming sessions on OSC
 
-### Administrative miscellaneae
+Today, we have learned some of the basics of supercomputers and of
+accessing OSC. In separate sessions in this series, we will look at:
+
+- Using specific "**Interactive Apps**" (GUI-based programs):
+  - [_VS Code_](A02_vscode.qmd)
+  - _RStudio_ (TBA)
+- [Loading and installing command-line software at OSC](A09_software.qmd)
+- [Submitting batch jobs using the _Slurm_ scheduler](A10_slurm.qmd)
+
+Additionally, there are pages with reference material (see the right side of the top
+menu bar of this side) on:
+
+ - [File transfer to and from OSC](../info/osc_transfer.qmd)
+ - [Using OSC with SSH](../info/osc_ssh.qmd) (rather than through OnDemand)
+
+<br>
+
+## At-home reading: admin & further resources {-}
+
+### Administrative miscellaneae {-}
 
 - **Requesting & managing OSC Projects, and user accounts**  
   Generally, only PIs request **OSC projects**, and they typically manage them as well.
   OSC has [this page with more information on how to do so](https://www.osc.edu/supercomputing/support/account).
   Whoever manages an OSC Project can add both existing OSC users and new users
-  to the Project, which will provide these users with access the project's
-  Project and Scratch directories,
-  and the ability to specify this Project in association with compute node resource requests.
+  to the Project.
+  Anyone added to an OSC Project will have access to the project's directories,
+  and will be able specify this Project when issuing compute node resource requests.
   
   When you get added to an OSC Project and don't yet have an OSC **account**,
   you will automatically receive an email with a link that allows you to create an account.
@@ -519,26 +538,7 @@ We'll explore VS Code in the [next session](A02_vscode.qmd).
 
 <br>
 
-### Upcoming sessions on OSC
-
-Today, we have learned some of the basics of supercomputers and of
-accessing OSC. In separate sessions in this series, we will look at:
-
-- Using specific "**Interactive Apps**" (GUI-based programs):
-  - [_VS Code_](A02_vscode.qmd)
-  - _RStudio_ (TBA)
-- [Loading and installing command-line software at OSC](A09_software.qmd)
-- [Submitting batch jobs using the SLURM scheduler](A10_slurm.qmd)
-
-Additionally, there are pages with reference material (see the right side of the top
-menu bar of this side) on:
-
- - [File transfer to and from OSC](../info/osc_transfer.qmd)
- - [Using OSC with SSH](../info/osc_ssh.qmd) (rather than through OnDemand)
-
-<br>
-
-### OSC's learning resources
+### OSC's learning resources {-}
 
 To learn more about OSC, I would start with these short courses:
 
@@ -559,11 +559,10 @@ This series of pages is also useful:
 
 <br>
 
-### Acknowledgements
+### Acknowledgements {-}
 
 This page uses material from an
 [OSC Introduction written by Mike Sovic](https://mcic-osu.github.io/cl-workshop-22/modules/02-osc.html)
-and from OSC's Kate Cahill [Software Carpentry introduction to OSC](https://khill42.github.io/OSC_IntroHPC>)
-(outdated).
+and from OSC's Kate Cahill [Software Carpentry introduction to OSC](https://khill42.github.io/OSC_IntroHPC>).
 
 <br>

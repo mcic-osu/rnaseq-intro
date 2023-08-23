@@ -1,5 +1,5 @@
 ---
-title: "Overview of next steps / shell variables & `for` loops"
+title: "Overview of next steps, and shell variables & `for` loops"
 subtitle: "Starting with a bird's-eye view of how we will be running CLI bioinformatics programs"
 pagetitle: "Running bioinformatics programs"
 highlight-style: github
@@ -10,8 +10,7 @@ date: 2023-08-25
 ---
 
 ```{r knitr_options, echo=FALSE}
-knitr::opts_chunk$set(eval = FALSE,
-                      class.output = "bash-out")
+knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 ```
 
 -------
@@ -27,7 +26,7 @@ where we start with reads in FASTQ files and will produce a table with gene coun
 This overview is meant to clarify
 **which fundamentals we still need to cover before we can start running these analyses.**
 
-Then, we'll cover the first of the remaining fundamental topics:
+Then, we'll talk about the first of those remaining fundamental topics:
 **shell variables** and **`for` loops**.
 The next few sessions will cover the remaining ones:
 
@@ -125,10 +124,12 @@ You should have at least the following files in this dir:
 As pointed out earlier,
 bioinformatics software (programs) that we use to analyze genomic data are
 typically run from the command line.
-That is, they have a "command-line interface" (*CLI*) rather than a
+That is,
+they have a "command-line interface" (*CLI*) rather than a
 "graphical user interface" (*GUI*),
-and are run using commands that are structurally very similar to how we've
-been using basic Unix shell commands.
+and are run
+_using command line expressions that are structurally very similar to how we've_
+_been using basic Unix shell commands._
 
 Here, we'll use the program _FastQC_ as an example,
 which performs quality control (QC) on a FASTQ file, 
@@ -176,10 +177,11 @@ total 736K
 
 That seems to have worked!
 We have two output files,
-including an HTML file that contains figures with all the results.
+including an HTML file that contains figures with all the results for this
+one FASTQ file.
 
-So should we simply repeat this for all our FASTQ files?
-I.e., we could run the `fastqc` command 8 times,
+So should we simply repeat this for the rest of our FASTQ files?
+I.e., we could run a `fastqc` command 7 times more,
 each time passing a different input file as the argument.
 That seems a bit tedious,
 and remember that the full dataset contains even more files...
@@ -194,14 +196,14 @@ However, using a loop is a very general approach,
 and is necessary for the many programs that can only run one FASTQ file or one
 sample at a time.
 When using a supercomputer like OSC,
-this is also by far the most time-efficient approach,
+this is _also_ by far the most time-efficient approach,
 because it allows each sample/file to be processed in parallel rather than
 consecutively.
 :::
 
 ### Looping over input files
 
-We can avoid having to type a very similar command a whole bunch of times
+We can avoid using a very similar command a whole bunch of times
 by using a **loop**.
 
 Further down on this page,
@@ -230,22 +232,21 @@ Approx 5% complete for ASPC1_G31V_R1.fastq.gz
 ```
 
 That's a lot better than repeating a similar line of codes many times &mdash;
-and the loop would be exactly the same regardless of whether we had
+and the loop code would be exactly the same regardless of whether we had
 8 or 200 FASTQ files!
 
-However, recall that our full dataset also has _much larger_ files.
+However, recall that our full dataset also has _much larger_ FASTQ files.
 A _FastQC_ run on one of these will take several minutes,
 so our loop might take a while to finish
-(and it gets worse,
-as some of the other programs we'll run later take much longer than this).
+(and note that some of the programs we'll run later take much longer than this).
 Most of all, when we run the program interactively and consecutively like this,
-we would not make use of the supercomputer's strengths at all:
+we are not making use of the supercomputer's strengths at all:
 this is basically like running it on our own laptop,
 since each _FastQC_ run happens consecutively.
 
 ### Running the program with a shell script
 
-What we should do instead is to submit a separate compute job for each _FastQC_ run,
+We should instead submit a separate compute job for each _FastQC_ run,
 and these can then all run in parallel (i.e., at the same time)
 on different OSC compute nodes.
 Making the switch from interactively running _FastQC_
@@ -263,7 +264,7 @@ for now, you just need to know that these scripts are small text files
 we've been running interactively, with some added bells and whistles.
 
 If for now we just assume we had created such a script,
-we can modify our loop as follows to run _FastQC_ through a script,
+then we can modify our loop code as follows to run _FastQC_ through a script,
 instead of including the command to run the program directly in the loop:
 
 ```bash
@@ -289,8 +290,9 @@ However,
 **running that loop would still make _FastQC_ run _sequentially_**
 on the node that we are at,
 instead of in parallel on different compute nodes.
-With the script, we've set ourselves up to be able to submit batch jobs,
-but running the script in itself does not change much yet.
+With the `fastqc.sh` script,
+we've set ourselves up to be able to submit batch jobs,
+but just using this script in itself does not change much.
 
 ### Submitting the script to the job scheduler (many times)
 
@@ -361,15 +363,16 @@ We also need to understand variables to _work with loops and scripts_.
 
 ### Assigning and referencing variables
 
-**To _assign_ a value to a variable in Bash** (in short: to assign a variable),
-use the syntax `variable=value`:
+**To _assign_ a value to a variable** in the shell
+(in short: to assign a variable),
+use the syntax `variable_name=value`:
 
 ```bash
-# Assign the value "beach" to the variable "location":
+# Assign the value "beach" to a variable with the name "location":
 location=beach
 
-# Assign the value "200" to the variable "nlines":
-nlines=200
+# Assign the value "200" to a variable with the name "n_lines":
+n_lines=200
 ```
 
 :::{.callout-warning}
@@ -379,7 +382,7 @@ nlines=200
 **To _reference_ a variable** (i.e., to access its value),
 you need to put a dollar sign `$` in front of its name.
 As before with the environment variable `$HOME`,
-we'll use the `echo` command to review the values that our variables contain:
+we'll use the `echo` command to see what values our variables contain:
 
 ```bash
 echo $location
@@ -389,7 +392,7 @@ beach
 ```
 
 ```bash
-echo $nlines
+echo $n_lines
 ```
 ```{.bash-out}
 200
@@ -416,12 +419,11 @@ Variable names:
 - **Cannot start** with a number
 
 Try to make your variable names descriptive,
-like `$input_file` and `$ls_options` above, as opposed to say `$x` and `$bla`.
+like `$input_file` above, as opposed to say `$x` and `$myvar`.
 
 There are multiple ways of distinguishing words in the absence of spaces,
 such as `$inputFile` and `$input_file`:
-I prefer the latter, which is called "snake case", and I always use lowercase.
-
+I prefer the latter, which is called "snake case".
 :::
 
 <br>
@@ -606,7 +608,8 @@ one element at a time.
 ### `for` loop syntax and mechanics
 
 Let's see a first example,
-where our "collection" is just a very short list of numbers (`1`, `2`, and `3`):
+where our "collection" is just a very short list of numbers (`1`, `2`, and `3`)
+that we define on the fly:
 
 ```{bash, eval=TRUE}
 for a_number in 1 2 3; do
@@ -616,7 +619,7 @@ done
 ```
 
 The **indented lines** between `do` and `done` contain the code that is being executed
-as many times as there are items in the collection:
+_as many times as there are items in the collection_:
 in this case 3 times, as you can tell from the output above.
 
 On the first and last, unindented lines,
@@ -624,8 +627,8 @@ On the first and last, unindented lines,
 
 | Keyword | Purpose	                            |
 |---------|-------------------------------------|
-| `for`	  | After `for`, we set the **variable name** (an arbitrary name, whatever we choose)
-| `in`	  | After `in`, we specify the **collection** we are looping over	
+| `for`	  | After `for`, we set the **variable name** (an arbitrary name; above we used `a_number`)
+| `in`	  | After `in`, we specify the **collection** (list of items) we are looping over	
 | `do`	  | After `do`, we have one ore more lines specifying what to do with each item	
 | `done`  | Tells the shell we are done with the loop 
 
@@ -663,7 +666,8 @@ But that's one line longer and a bit awkwardly asymmetric.
 
 ----
 
-Here are two key things to understand about `for` loops:
+Here are two key things about `for` loops that we touched on above
+but are worth digging into a but more:
 
 First, in each iteration of the loop, one element in the collection
 **is being assigned to the variable** specified after `for`.
@@ -687,10 +691,10 @@ and will run exactly as many times as there are items in the collection.
 
 The following example, where we let the computer sleep for 1 second
 before printing the date and time with the `date` command,
-demonstrates that the loop is being executed sequentially.
-When you run it, you should notice a slight pause after the output of each
-iterations, and you can see that the output of `date` differs by one second
-each time:
+demonstrates that the loop is being executed sequentially (not in parallel).
+When you run it,
+you should notice a slight pause after the output of each iteration is printed,
+and you can see that the output of `date` differs by one second each time:
 
 ```bash
 for a_number in 1 2 3; do
@@ -753,8 +757,7 @@ In practice, it is rare to manually list the collection of items we want to
 loop over,
 like we did above with the numbers 1-3 and a few types of mushroom in the
 exercise.
-
-Instead, we commonly **loop over files** directly using _globbing_: 
+Instead, we commonly **loop over files directly** using _globbing_: 
 
 ```bash
 cd /fs/ess/PAS0471/$USER/rnaseq_intro
@@ -833,8 +836,8 @@ echo "$today"
 
 ----
 
-One practical example of this is that you might want to automatically 
-include the current date in a file name.
+One practical example of using command substitution is when you want to
+automatically  include the current date in a file name.
 First, note that we can use `date +%F` to print the date in `YYYY-MM-DD` format,
 and omit the time:
 
@@ -867,11 +870,13 @@ We'll come across it a few times in our shell scripts later on.
 :::{.exercise}
 ### On Your Own: Command substitution {-}
 
-Say we wanted to store and report the number of lines in a file,
-which can be a good QC measure for FASTQ and other genomic data files.
+Say we wanted to store and report the number of lines in a FASTQ file,
+which, as discussed before, tells us how many reads are in it
+(there are 4 lines per read).
 
-`wc -l` gets you the number of lines,
-and you can use a trick to omit the filename:
+As we've also seen before, `wc -l` gets you the number of lines,
+and if you pipe input into `wc -l`, it won't include the filename &mdash;
+this is useful for what you'll want to do below:
 
 ```bash
 cd /fs/ess/PAS0471/$USER/rnaseq_intro
@@ -893,8 +898,8 @@ The file has 30387 lines
 ## Solution
 
 ```bash
-nlines=$(zcat data/fastq/ASPC1_A178V_R1.fastq.gz | wc -l)
-echo "The file $nlines lines"
+n_lines=$(zcat data/fastq/ASPC1_A178V_R1.fastq.gz | wc -l)
+echo "The file $n_lines lines"
 ```
 ```{.bash-out}
 The file 400000 lines
