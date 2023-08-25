@@ -1,4 +1,336 @@
+---
+title: "Running _FastQC_ to QC our reads"
+subtitle: "And checking its output"
+pagetitle: "FastQC"
+highlight-style: github
+number-sections: true
+engine: knitr
+author: Jelmer Poelstra
+date: 2023-09-22
+---
 
+```{r knitr_options, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
+```
+
+::: {.callout-important}
+## Under construction 
+This page is still under construction.
+:::
+
+-------
+
+<br>
+
+## Overview & setting up {-}
+
+So far,
+we have covered all the building blocks to be able to run command-line programs
+at OSC:
+
+- Basics of a supercomputer and of OSC specifically
+- Bash shell basics to work at a supercomputer,
+  and learn the language used in our scripts
+- The bells and whistles needed to turn our commands into a shell script
+- Loading and installing the software (command-line programs) that we want to run
+- Working with the Slurm job scheduler, so we can submit scripts as batch jobs
+- The ability to loop over commands, so that we can submit many scripts at once
+
+With these skills,
+it's relatively straightforward to create and submit scripts that run command-line
+programs to analyze our genomics data.
+
+In this session,
+we'll run FastQC to apply these skills and to actually quality-comtrol our FASTQ files.   
+
+<br>
+
+## Running FastQC
+
+### FastQC: A program for quality control of FASTQ files 
+
+FastQC is one the most ubiquitous pieces of genomics software.
+It allows you to assess the overall quality of, and potential problems with,
+the reads in your FASTQ files.
+It produces visualizations and assessments of FASTQ files for statistics
+such as per-base quality (below) and adapter content.
+Running FastQC or an equivalent program should always be the first analysis step
+after receiving your sequences.  
+
+For each FASTQ file, FastQC outputs an HTML file that you can open in your
+browser and which has about a dozen graphs showing different QC metrics.
+The most important one is the per-base quality score graph shown below.
+
+::: {#fig-elephants layout-ncol=2 layout-nrow=1}
+
+![](img/fastqc_good.png)
+
+![](img/fastqc_bad.png)
+
+A FastQC per-base quality score graph for files with fairly good (left) and
+poor (right) quality reads.
+:::
+
+<br>
+
+### FastQC syntax
+
+To analyze one (optionally gzipped) FASTQ file with FastQC,
+the syntax can be as simple as:
+  
+```{bash}
+fastqc <fastq-file>
+```
+
+Though in practice, we'll want to specify the output directory &mdash;
+otherwise, output files would end up in the current working directory:
+
+```{bash}
+fastqc --outdir=<output-dir> <fastq-file>
+```
+
+For instance, if we wanted output files to go to the directory `results/fastqc`
+and wanted the program to analyze the file `data/fastq/ASPC1_A178V_R1.fastq.gz`,
+a functional command would like like this:
+
+```{bash}
+fastqc --outdir=results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz
+```
+
+:::{.callout-tip}
+## FastQC's output file names are automatically determined
+We can specify the output _directory_, but not the actual file names,
+which will be automatically determined by FastQC based on the input file name.
+
+For one FASTQ file, it will output one HTML file and one ZIP archive.
+The latter contains files with the summary statistics that were computed and
+on which the figures are based &mdash; we generally don't need to look at that.
+:::
+
+<br>
+
+### A basic FastQC script
+
+Here is what a basic script to run FastQC could look like:
+  
+```{bash}
+#!/bin/bash
+
+# Strict Bash settings
+set -euo pipefail
+
+# Copy the placeholder variables
+input_file="$1"
+output_dir="$2" 
+
+# Run FastQC
+fastqc --outdir="$output_dir" "$input_file"
+
+# (Don't run this in your terminal, but copy it into a .sh text file)
+```
+
+But we'll add a few things to this script to run it smoothly as a batch job at OSC:
+
+- We load the relevant OSC module:
+
+  ```{bash}
+  module load fastqc/0.11.8
+  ```
+  
+- We add a few `sbatch` options:
+
+  ```{bash}
+  #SBATCH --account=PAS0471
+  #SBATCH --output=slurm-fastqc-%j.out
+  ```
+
+We'll also add a few `echo` statements to report what's going on,
+and will create the output directory if it doesn't yet exist:
+
+```{bash}
+mkdir -p "$output_dir"
+```
+
+:::{.callout-tip collapse="true"}
+## Refresher: the `-p` option to `mkdir` (Click to expand)
+
+Using the `-p` option does two things at once for us,
+both of which are necessary for a foolproof inclusion of this command
+in a script:
+
+- It will enable `mkdir` to create multiple levels of directories at once:
+  by default, `mkdir` errors out if the _parent_ directory/directories of the
+  specified directory don't yet exist.
+
+  ```{bash}
+  mkdir newdir1/newdir2
+  #> mkdir: cannot create directory ‘newdir1/newdir2’: No such file or directory
+  ```
+
+  ```{bash}
+  mkdir -p newdir1/newdir2    # This successfully creates both directories
+  ```
+
+- If the directory already exists, it won't do anything and won't return an error
+  (which would lead the script to abort at that point with our `set` settings).
+  
+  ```{bash}
+  mkdir newdir1/newdir2
+  #> mkdir: cannot create directory ‘newdir1/newdir2’: File exists
+  ```
+
+  ```{bash}
+  mkdir -p newdir1/newdir2   # This does nothing since the dirs already exist
+  ```
+:::
+
+<br>
+
+**Our more well-developed script now looks as follows:**
+
+```{bash}
+#!/bin/bash
+#SBATCH --account=PAS2250
+#SBATCH --output=slurm-fastqc-%j.out
+  
+## Bash strict settings
+set -euo pipefail
+
+## Load the software
+module load fastqc
+
+## Copy the placeholder variables
+input_file="$1"
+output_dir="$2" 
+
+# Initial reporting
+echo "# Starting the script fastqc.ch"
+date
+echo "# Input FASTQ file:   $input_file"
+echo "# Output dir:         $output_dir"
+echo
+
+# Create the output dir if needed
+mkdir -p "$output_dir"
+
+# Run FastQC
+fastqc --outdir="$output_dir" "$input_file"
+
+# Final reporting
+echo
+echo "# Listing the output files:"
+ls -lh "$output_dir"
+
+echo
+echo "# Done with the FastQC script"
+date
+
+# (Don't run this in your terminal, but copy it into a .sh text file)
+```
+
+Notice that this script is very similar to our toy scripts from the previous
+sessions:
+mostly standard ("boilerplate") code with
+**just a single command to run our program of interest.**
+
+Therefore, you can adopt this script as a template for scripts that run other
+command-line programs, and will generally only need minor modifications!
+
+:::{.callout-tip}
+## Keep your scripts simple -- use one program in a script
+
+In general, it is a good idea to keep your scripts simple and run one program
+per script.
+
+Once you get the hang of it, it may seem appealing to string a number of programs
+together in a single script, so that it's easier to rerun everything &mdash;
+but that will often end up leading to more difficulties than convenience. 
+
+We'll see below how you can **separate** your code into:
+
+- The scripts that run individual steps of your analysis (again, typically individual programs)
+- A "master" or "runner" script that orchestrates the running of these individual
+  steps.
+  The code in this script is not run all at once,
+  unless you turn it into a formal
+  workflow, which is beyond the scope of this material.
+
+To really tie your full set of analyses together in an _actual_
+workflow / pipeline, you will want to start using a workflow management system
+like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
+[NextFlow](https://www.nextflow.io/).
+:::
+
+<br>
+
+### Submitting our FastQC script as a batch job
+
+Open a new file in VS Code
+(&nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `New File`)
+and save it as `fastqc.sh` within your `scripts/` directory.
+Paste in the code above and save the file.
+
+Then, submit the script:
+
+```{bash}
+sbatch scripts/fastqc.sh data/fastq/SRR7609467.fastq.gz results/fastqc
+```
+
+:::{.bash-out}
+Submitted batch job 12521308
+:::
+
+:::{.callout-caution collapse="true"}
+### Once again: Where does our output go?
+
+- Output that would have been printed to screen if we had run the script directly:
+  in the Slurm log file `slurm-fastqc-<job-nr>.out`
+  
+- FastQC's main output files (HTML ZIP): to the output directory we specified.
+:::
+
+Let's take a look at the queue:
+
+```{bash}
+squeue -u $USER
+# Fri Aug 19 10:38:16 2022
+#              JOBID PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
+#           12521308 serial-40 fastqc.s   jelmer  PENDING       0:00   1:00:00      1 (None)
+```
+
+Once it's no longer in the list produced by `squeue`, it's done.
+Then,  let's check the Slurm log file[^1]:
+
+[^1]: For longer running jobs,
+      you may also want to keep an eye on the log file while it's running.
+
+```{bash, eval=FALSE}
+cat slurm-fastqc-12521308.out    # You'll have a different number in the file name
+```
+
+:::{.callout-note collapse="true"}
+## Click to see the contents of the Slurm log file
+
+```{bash, eval=TRUE}
+cat misc/slurm-fastqc-12521308.out    # You'll have a different number in the file name
+```
+:::
+
+Our script already listed the output files,
+but let's take a look at those too, and do so in the VS Code file browser in the
+side bar.
+**To actually view FastQC's HTML output file**,
+we unfortunately need to download it with this older version of VS Code
+that's installed at OSC &mdash;
+but the ability to download files from here is a nice one!
+
+<p align="center">
+<img src=img/vscode_download.png width="50%">
+</p>
+
+<br>
+
+## Running FastQC for all FASTQ files in a loop
 
 ::: {.callout-note}
 #### Add keyboard shortcut to run shell commands from the editor:
@@ -9,5 +341,86 @@
   then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
 :::
 
-which takes a FASTQ file as its input and produces an HTML file with a series of
-figures and tables that allow you to assess the quality of these reads.
+### A "workflow" file
+
+So far, we've been typing our commands to run or submit scripts directly
+in the terminal.
+**But it's better to directly save these sorts of commands.**
+
+Therefore, we will now create a new file for the purpose of documenting the
+steps that we are taking, and the scripts that we are submitting.
+**You can think of this file as your analysis lab notebook[^2].**
+
+[^2]: Though possibly a highly sanitized one -- you may want to store daily
+      notes and dead ends in a separate file.
+
+It's easiest to also save this as a shell script (`.sh`) extension,
+even though it is not at all like the other scripts we've made,
+which are meant to be run/submitted in their entirety.
+
+:::{.callout-caution collapse="true"}
+## Not like the other scripts
+
+Once we've added multiple batch job steps,
+and the input of say step 2 depends on the output of step 1,
+we won't be able to just _run_ the script as is.
+This is because all the jobs would then be submitted at the same time,
+and step 2 would likely start running before step 1 is finished.
+
+There are some possibilities with `sbatch` to make batch jobs wait on each
+other (e.g. the `--dependency` option), but this gets tricky quickly.
+As also mentioned above, if you want a fully automatically rerunnable workflow /
+pipeline, you should consider using a workflow management system
+like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
+[NextFlow](https://www.nextflow.io/).
+:::
+
+So let's go ahead and open a new text file, and save it as `workflow.sh`.
+
+<br>
+
+### Looping over all our files
+
+The script that we wrote above will run FastQC for a single FASTQ file.
+Now, we will write a loop that iterates over all of our FASTQ files
+(only 8 in this case, but could be 100s just the same),
+and **submits a batch job for each of them.**
+
+Let's type the following into our `workflow.sh` script,
+and then copy-and-paste it into the terminal to run the loop:
+
+```{bash}
+for fastq_file in data/fastq/*fastq.gz; do
+    sbatch scripts/fastqc.sh "$fastq_file" results/fastqc
+done
+```
+
+:::{.bash-out}
+Submitted batch job 2451089  
+Submitted batch job 2451090  
+Submitted batch job 2451091  
+Submitted batch job 2451092   
+Submitted batch job 2451093  
+Submitted batch job 2451094  
+Submitted batch job 2451095  
+Submitted batch job 2451096
+:::
+
+:::{.exercise}
+### On Your Own: Check if everything went well {-}
+
+- Use `squeue` to monitor your jobs.
+
+- Take a look at the Slurm log files while the jobs are running and/or after the
+  jobs are finished.
+  A nice trick when you have many log files to check,
+  is to use `tail` with a wildcard:
+  
+  ```{bash}
+  tail slurm-fastqc*
+  ```
+- Take a look at the FastQC output files: are you seeing 12 HTML files?  
+
+:::
+
+<br>

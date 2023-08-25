@@ -143,7 +143,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">B. From reads to counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-b.-from-reads-to-counts">    
-        <li class="dropdown-header">B1. Read QC with <em>FastQC</em> [TBA]</li>
+        <li>
+    <a class="dropdown-item" href="./modules/B01_fastqc.html" rel="" target="">
+ <span class="dropdown-text">B1. Read QC with <em>FastQC</em></span></a>
+  </li>  
         <li class="dropdown-header">B2. Summarizing QC results with <em>MultiQC</em> [TBA]</li>
         <li class="dropdown-header">B3. Trimming with <em>TrimGalore</em> [TBA]</li>
         <li class="dropdown-header">B4. Alignment with <em>STAR</em> [TBA]</li>
@@ -221,6 +224,7 @@ ul.task-list li input[type="checkbox"] {
   <ul>
   <li><a href="#block-a-computing-skills-and-genomics-data-files" id="toc-block-a-computing-skills-and-genomics-data-files" class="nav-link" data-scroll-target="#block-a-computing-skills-and-genomics-data-files">Block A: Computing skills and genomics data files</a></li>
   <li><a href="#block-b-from-reads-to-counts" id="toc-block-b-from-reads-to-counts" class="nav-link" data-scroll-target="#block-b-from-reads-to-counts">Block B: From reads to counts</a></li>
+  <li><a href="#block-c-analyzing-the-counts" id="toc-block-c-analyzing-the-counts" class="nav-link" data-scroll-target="#block-c-analyzing-the-counts">Block C: Analyzing the counts</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -307,10 +311,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="block-b-from-reads-to-counts" class="level4">
 <h4 class="anchored" data-anchor-id="block-b-from-reads-to-counts">Block B: From reads to counts</h4>
 <table class="table">
-<colgroup>
-<col style="width: 12%">
-<col style="width: 87%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Date</th>
@@ -320,7 +320,7 @@ ul.task-list li input[type="checkbox"] {
 <tbody>
 <tr class="odd">
 <td>2023-09-22</td>
-<td>Read quality control with FastQC</td>
+<td><a href="./modules/B01_fastqc.html">Read quality control with FastQC</a></td>
 </tr>
 <tr class="even">
 <td>2023-09-29</td>
@@ -345,6 +345,44 @@ ul.task-list li input[type="checkbox"] {
 <tr class="odd">
 <td>2023-11-03</td>
 <td>The Nextflow/nf-core rnaseq workflow (Part II)</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</section>
+<section id="block-c-analyzing-the-counts" class="level4">
+<h4 class="anchored" data-anchor-id="block-c-analyzing-the-counts">Block C: Analyzing the counts</h4>
+<table class="table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 87%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Date</th>
+<th>Topic &amp; link</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2023-11-10</td>
+<td>Creating a DESeq2 object</td>
+</tr>
+<tr class="even">
+<td>2023-11-17</td>
+<td>PCA and overall exploration of the count data</td>
+</tr>
+<tr class="odd">
+<td>2023-11-24</td>
+<td>Differential expression analysis (Part I)</td>
+</tr>
+<tr class="even">
+<td>2023-11-31</td>
+<td>Differential expression analysis (Part II)</td>
+</tr>
+<tr class="odd">
+<td>2023-12-07</td>
+<td>GO enrichment analysis</td>
 </tr>
 </tbody>
 </table>

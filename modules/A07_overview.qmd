@@ -20,11 +20,12 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 ## Overview & setting up {-}
 
 In this session, we'll start by looking ahead a bit.
-You will get an overview of how we will be running bioinformatics programs with
-command-line interfaces (CLIs) during the first part of the RNAseq analysis,
-where we start with reads in FASTQ files and will produce a table with gene counts.
-This overview is meant to clarify
-**which fundamentals we still need to cover before we can start running these analyses.**
+You will get an bird's eye view of how,
+during the first part of the RNAseq analysis
+(going from reads to a count table).
+we will be running bioinformatics programs with command-line interfaces (CLIs)
+This meant to give an
+**overview of the fundamentals we still need to cover before we can start running these analyses.**
 
 Then, we'll talk about the first of those remaining fundamental topics:
 **shell variables** and **`for` loops**.
@@ -125,8 +126,8 @@ As pointed out earlier,
 bioinformatics software (programs) that we use to analyze genomic data are
 typically run from the command line.
 That is,
-they have a "command-line interface" (*CLI*) rather than a
-"graphical user interface" (*GUI*),
+they have a "command-line interface" _(CLI)_ rather than a
+"graphical user interface" _(GUI)_,
 and are run
 _using command line expressions that are structurally very similar to how we've_
 _been using basic Unix shell commands._
@@ -181,7 +182,7 @@ including an HTML file that contains figures with all the results for this
 one FASTQ file.
 
 So should we simply repeat this for the rest of our FASTQ files?
-I.e., we could run a `fastqc` command 7 times more,
+I.e., we could create and run a `fastqc` command 7 more times,
 each time passing a different input file as the argument.
 That seems a bit tedious,
 and remember that the full dataset contains even more files...
@@ -192,7 +193,7 @@ to pass multiple files as argument to `fastqc`.
 If we did that, we'd only need to run _FastQC_ once,
 and would not need the approach shown below, where we use a loop.
 
-However, using a loop is a very general approach,
+However, using a loop is a very **general approach**,
 and is necessary for the many programs that can only run one FASTQ file or one
 sample at a time.
 When using a supercomputer like OSC,
@@ -320,32 +321,33 @@ in the [session on Slurm compute jobs](./A10_slurm.qmd).
 
 ### Summarizing what we need to learn about
 
-- **`for` loops and variables**  
-  **`for` loops** will allow you to repeat operations &mdash;
-  specifically, we will later use them to submit many scripts at the same time,
-  one per input file or sample.
-  Using **variables** will allow you to run scripts flexibly,
-  with different input files and settings; they are also used in loops.
-  _We'll talk about these in the sections below._
-
 - **Making software available**  
   At OSC, a bunch of bioinformatics programs are installed system-wide,
   but they still need to be "loaded" via `module load`.
   This collection of programs is unfortunately not comprehensive and we also
   need another approach, as we'll see in the
-  [session Software at OSC](./A09_software.qmd).
+  [session on Software at OSC](./A09_software.qmd).
 
 - **Writing shell scripts**  
   Putting the code to run individual bioinformatics programs inside small shell
-  scripts will allow us to submit them to Slurm job scheduler.
-  Using scripts is more generally useful for e.g. long-running commands or programs,
-  and is a good way to keep your code organized and clear.
+  scripts allows us to submit them to the Slurm job scheduler.
+  Using scripts (as opposed to typing or pasting commands into the terminal directly)
+  is more generally useful, e.g. for long-running commands or programs,
+  and is also a good way to save your code and keep it organized and clear.
   We'll talk about [shell scripts in the next session](./A08_scripts.qmd).
 
 - **Submitting scripts to the Slurm job scheduler**  
   Submitting scripts as Slurm batch jobs at OSC allows us, for example,
   to run the same analysis for different samples simultaneously.
   We'll see this in more detail in the [session on Slurm jobs](./A10_slurm.qmd). 
+
+- **`for` loops and variables**  
+  **`for` loops** will allow you to repeat operations &mdash;
+  specifically, we will later use them to submit many scripts at the same time,
+  one per input file or sample.
+  Using **variables** will allow you to run scripts _flexibly_,
+  with different input files and settings; they are also used in loops.
+  **We'll talk about these in the sections below.**
 
 <br>
 
@@ -376,7 +378,7 @@ n_lines=200
 ```
 
 :::{.callout-warning}
-## There can be no spaces around the equals sign (`=`)!
+## There can not be any spaces around the equals sign (`=`)!
 :::
 
 **To _reference_ a variable** (i.e., to access its value),
@@ -403,6 +405,7 @@ Conveniently, we can use variables in lots of contexts,
 
 ```bash
 input_file=data/fastq/ASPC1_A178V_R1.fastq.gz
+
 ls -lh $input_file 
 ```
 ```{.bash-out}
@@ -489,9 +492,10 @@ Again, the shell split the value of `$today` in 3 parts separated by a space
 
 Like with assignment,
 our problems can be avoided by **quoting a variable** when we reference it.
-This tells the shell it shouldn't perform "field splitting" on the variable's value;
-put another way, it takes aways the special meaning of the space as a _separator_
-in the variable's value:
+This tells the shell it shouldn't perform so-called "field splitting" on the
+variable's value.
+Put another way, the quotes takes away the special meaning of the space as a
+_separator_ inside the variable's value:
 
 ```bash
 touch README_"$today".txt
@@ -600,9 +604,8 @@ and are used to repeat operations,
 such as when you want to run the same script or command for multiple files.
 
 Here, we'll only cover the **most common type of loop: the `for` loop.**
-These _iterate_ over a collection, such as a list of files:
-that is,
-they allow you to perform one or more actions for each element in the collection,
+A `for` loop _iterates_ over a collection, such as a list of files: that is,
+is allows you to perform one or more actions for each element in the collection,
 one element at a time.
 
 ### `for` loop syntax and mechanics
@@ -666,17 +669,17 @@ But that's one line longer and a bit awkwardly asymmetric.
 
 ----
 
-Here are two key things about `for` loops that we touched on above
-but are worth digging into a but more:
+Here are **two key things to understand about `for` loops** &mdash;
+we touched on these above, but they are worth digging into a bit more:
 
-First, in each iteration of the loop, one element in the collection
+**_First_**, in each iteration of the loop, one element in the collection
 **is being assigned to the variable** specified after `for`.
 In the example above, we used `a_number` as the variable name,
 so that variable contained `1` when the loop ran for the first time,
 `2` when it ran for the second time,
 and `3` when it ran for the third and last time.
 
-This variable continues to exist outside of the loop,
+This variable even continues to exist outside of the loop,
 and will have the last value that was assigned to it in the loop:
 
 ```bash
@@ -686,7 +689,7 @@ echo $a_number
 3
 :::
 
-Second, **the loop runs sequentially for each item in the collection**,
+**_Second_**, **the loop runs sequentially for each item in the collection**,
 and will run exactly as many times as there are items in the collection.
 
 The following example, where we let the computer sleep for 1 second
@@ -779,14 +782,12 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...
 ```
 
 **This technique is extremely useful**.
-Take a moment to realize that we're not doing a separate `ls` and storing
-the results:
+Take a moment to realize that to get the list of files,
+we're not running a separate `ls` and storing the results:
 as mentioned before, a globbing pattern directly selects files.
+You could also use your globbing / wild card skills to narrow down the file selection:
 
-If needed,
-you can use your globbing / wild card skills to narrow down the file selection:
-
-- Perhaps we only want to select R1 files (forward reads): 
+- Perhaps we only want to select R1 FASTQ files (forward reads): 
 
   ```bash
   for fastq_file in data/raw/*_R1.fastq.gz; do
@@ -808,9 +809,11 @@ you can use your globbing / wild card skills to narrow down the file selection:
 
 ## At-home reading: Command substitution
 
-If you want to store the result of a command in a variable,
-you can use a construct called "**command substitution**"
-by wrapping the command inside `$()`.
+If you want to, for excample,
+store the result of a command in a variable,
+or be able to print this result in an `echo` statement,
+you can use a construct called "**command substitution**".
+To do so, you just need to wrap the command inside `$()`.
 
 Let's see an example.
 As you know, the `date` command will print the current date and time:
@@ -819,7 +822,7 @@ As you know, the `date` command will print the current date and time:
 date
 ```
 
-If we try to store the date in a variable directly, it doesn't work:
+If we try to _store the date in a variable_ directly, it doesn't work:
 the literal string "date" is stored, not the output of the command:
 
 ```{bash, eval=TRUE}
