@@ -256,10 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview-setting-up" id="toc-overview-setting-up" class="nav-link active" data-scroll-target="#overview-setting-up">Overview &amp; setting up</a>
-  <ul class="collapse">
-  <li><a href="#start-vs-code-and-open-your-folder" id="toc-start-vs-code-and-open-your-folder" class="nav-link" data-scroll-target="#start-vs-code-and-open-your-folder">Start VS Code and open your folder</a></li>
-  </ul></li>
+  <li><a href="#overview-setting-up" id="toc-overview-setting-up" class="nav-link active" data-scroll-target="#overview-setting-up">Overview &amp; setting up</a></li>
   <li><a href="#running-cli-bioinformatics-programs-at-osc-an-overview" id="toc-running-cli-bioinformatics-programs-at-osc-an-overview" class="nav-link" data-scroll-target="#running-cli-bioinformatics-programs-at-osc-an-overview"><span class="header-section-number">1</span> Running CLI bioinformatics programs at OSC: an overview</a>
   <ul class="collapse">
   <li><a href="#running-a-cli-program-interactively" id="toc-running-a-cli-program-interactively" class="nav-link" data-scroll-target="#running-a-cli-program-interactively"><span class="header-section-number">1.1</span> Running a CLI program interactively</a></li>
@@ -330,8 +327,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="../modules/A09_software.html">Using software at OSC</a></li>
 <li><a href="../modules/A10_slurm.html">Submitting scripts to the OSC job queue</a>.</li>
 </ul>
-<section id="start-vs-code-and-open-your-folder" class="level3 unnumbered">
-<h3 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h3>
+<section id="start-vs-code-and-open-your-folder" class="level4 unnumbered">
+<h4 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h4>
 <p>As always, we’ll be working in VS Code — if you don’t already have a session open, see below how to do so.</p>
 <p><strong>Make sure to open your <code>/fs/ess/PAS0471/&lt;user&gt;/rnaseq_intro</code> dir</strong>, either by using the <code>Open Folder</code> menu item, or by clicking on this dir when it appears in the <code>Welcome</code> tab.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -917,7 +914,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Fri Aug 25 09:24:52 EDT 2023</code></pre>
+<pre class="bash-out"><code>Fri Aug 25 14:26:12 EDT 2023</code></pre>
 </div>
 </div>
 <p>If we try to <em>store the date in a variable</em> directly, it doesn’t work: the literal string “date” is stored, not the output of the command:</p>
@@ -933,7 +930,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Fri Aug 25 09:24:52 EDT 2023</code></pre>
+<pre class="bash-out"><code>Fri Aug 25 14:26:12 EDT 2023</code></pre>
 </div>
 </div>
 <hr>

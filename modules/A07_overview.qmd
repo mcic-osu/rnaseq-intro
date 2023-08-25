@@ -35,7 +35,7 @@ The next few sessions will cover the remaining ones:
 - [Using software at OSC](./A09_software.qmd)
 - [Submitting scripts to the OSC job queue](./A10_slurm.qmd).
 
-### Start VS Code and open your folder {-}
+#### Start VS Code and open your folder {-}
 
 As always, we'll be working in VS Code &mdash;
 if you don't already have a session open, see below how to do so.

@@ -1,6 +1,6 @@
 ---
-title: "Running _FastQC_ to QC our reads"
-subtitle: "And checking its output"
+title: "Read QC with _FastQC_"
+subtitle: "And the distinction between program-specific scripts and an overarching runner/master script"
 pagetitle: "FastQC"
 highlight-style: github
 number-sections: true
@@ -28,38 +28,35 @@ So far,
 we have covered all the building blocks to be able to run command-line programs
 at OSC:
 
-- Basics of a supercomputer and of OSC specifically
-- Bash shell basics to work at a supercomputer,
+- Basics of a supercomputer and of **OSC** specifically
+- Unix (Bash) **shell** basics to work at a supercomputer,
   and learn the language used in our scripts
-- The bells and whistles needed to turn our commands into a shell script
-- Loading and installing the software (command-line programs) that we want to run
-- Working with the Slurm job scheduler, so we can submit scripts as batch jobs
-- The ability to loop over commands, so that we can submit many scripts at once
+- The bells and whistles needed to turn our commands into a **shell script**
+- Loading and installing the **software** (command-line programs) that we want to run
+- Working with the **Slurm** job scheduler, so we can submit scripts as batch jobs
+- The ability to **loop** over commands, so that we can submit many scripts at once
 
 With these skills,
 it's relatively straightforward to create and submit scripts that run command-line
 programs to analyze our genomics data.
-
 In this session,
-we'll run FastQC to apply these skills and to actually quality-comtrol our FASTQ files.   
+we'll apply these skills for the first time to run **_FastQC_**.
 
 <br>
 
-## Running FastQC
+#### _FastQC_: A program for quality control of FASTQ files {-}
 
-### FastQC: A program for quality control of FASTQ files 
-
-FastQC is one the most ubiquitous pieces of genomics software.
+_FastQC_ is one the most ubiquitous pieces of genomics software.
 It allows you to assess the overall quality of, and potential problems with,
 the reads in your FASTQ files.
 It produces visualizations and assessments of FASTQ files for statistics
 such as per-base quality (below) and adapter content.
 Running FastQC or an equivalent program should always be the first analysis step
-after receiving your sequences.  
+after you receive your sequences.  
 
-For each FASTQ file, FastQC outputs an HTML file that you can open in your
+For each FASTQ file, FastQC outputs an **HTML file** that you can open in your
 browser and which has about a dozen graphs showing different QC metrics.
-The most important one is the per-base quality score graph shown below.
+The most important one is the **per-base quality score graph** shown below.
 
 ::: {#fig-elephants layout-ncol=2 layout-nrow=1}
 
@@ -71,7 +68,92 @@ A FastQC per-base quality score graph for files with fairly good (left) and
 poor (right) quality reads.
 :::
 
+#### Start VS Code and open your folder {-}
+
+As always, we'll be working in VS Code &mdash;
+if you don't already have a session open, see below how to do so.
+
+**Make sure to open your `/fs/ess/PAS0471/<user>/rnaseq_intro` dir**,
+either by using the `Open Folder` menu item,
+or by clicking on this dir when it appears in the `Welcome` tab.
+
+:::{.callout-tip collapse="true"}
+## Starting VS Code at OSC - with a Terminal (Click to expand)
+1. Log in to OSC's OnDemand portal at <https://ondemand.osc.edu>.
+
+2. In the blue top bar, select `Interactive Apps`
+   and then near the bottom of the dropdown menu, click `Code Server`.
+
+3. In the form that appears on a new page:
+   - Select an appropriate OSC project (here: `PAS0471`)
+   - For this session, select `/fs/ess/PAS0471` as the starting directory
+   - Make sure that `Number of hours` is at least `2`
+   - Click `Launch`.
+
+4. On the next page, once the top bar of the box has turned green
+   and says `Runnning`, click `Connect to VS Code`.
+
+<figure><p align="center"><img src=img/osc-code-launch_ed.png width="80%"></p></figure>
+
+5. Open a Terminal by clicking
+   &nbsp; {{< fa bars >}} &nbsp; => `Terminal` => `New Terminal`.
+   (Or use one of the keyboard shortcuts:
+   <kbd>Ctrl</kbd>+<kbd>\`</kbd> (backtick) or
+   <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd>.)
+
+6. In the `Welcome` tab under `Recent`,
+   you should see your `/fs/ess/PAS0471/<user>/rnaseq_intro` dir listed:
+   click on that to open it.
+   Alternatively, use
+   &nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `Open Folder`
+   to open that dir in VS Code.
+:::
+
+:::{.callout-warning collapse="true"}
+#### Don't have your own dir with the data? (Click to expand)
+If you missed the last session, or deleted your `rnaseq_intro` dir entirely,
+run these commands to get a (fresh) copy of all files you should have so far:
+
+```bash
+mkdir -p /fs/ess/PAS0471/$USER/rnaseq_intro
+cp -r /fs/ess/PAS0471/demo/202307_rnaseq /fs/ess/PAS0471/$USER/rnaseq_intro
+```
+
+And if you do have an `rnaseq_intro` dir,
+but you want to start over because you moved or removed some of the files
+while practicing, then delete the dir before your run the commands above:
+
+```bash
+rm -r /fs/ess/PAS0471/$USER/rnaseq_intro
+```
+
+You should have at least the following files in this dir:
+
+```{.bash-out}
+/fs/ess/PAS0471/demo/202307_rnaseq
+├── data
+│   └── fastq
+│       ├── ASPC1_A178V_R1.fastq.gz
+│       ├── ASPC1_A178V_R2.fastq.gz
+│       ├── ASPC1_G31V_R1.fastq.gz
+│       ├── ASPC1_G31V_R2.fastq.gz
+│       ├── md5sums.txt
+│       ├── Miapaca2_A178V_R1.fastq.gz
+│       ├── Miapaca2_A178V_R2.fastq.gz
+│       ├── Miapaca2_G31V_R1.fastq.gz
+│       └── Miapaca2_G31V_R2.fastq.gz
+├── metadata
+│   └── meta.tsv
+└── README.md
+│   └── ref
+│       ├── GCF_000001405.40.fna
+│       ├── GCF_000001405.40.gtf
+```
+:::
+
 <br>
+
+## A script to run _FastQC_
 
 ### FastQC syntax
 
@@ -109,19 +191,19 @@ on which the figures are based &mdash; we generally don't need to look at that.
 
 <br>
 
-### A basic FastQC script
+### A basic script to run _FastQC_, and improvements
 
-Here is what a basic script to run FastQC could look like:
+Here is what a basic script to run _FastQC_ could look like:
   
-```{bash}
+```bash
 #!/bin/bash
 
 # Strict Bash settings
 set -euo pipefail
 
 # Copy the placeholder variables
-input_file="$1"
-output_dir="$2" 
+input_file=$1
+output_dir=$2
 
 # Run FastQC
 fastqc --outdir="$output_dir" "$input_file"
@@ -131,25 +213,26 @@ fastqc --outdir="$output_dir" "$input_file"
 
 But we'll add a few things to this script to run it smoothly as a batch job at OSC:
 
-- We load the relevant OSC module:
+- Add a line to the script to load the relevant OSC module:
 
   ```{bash}
   module load fastqc/0.11.8
   ```
   
-- We add a few `sbatch` options:
+- Add a few `sbatch` options to the top of the script:
 
   ```{bash}
   #SBATCH --account=PAS0471
   #SBATCH --output=slurm-fastqc-%j.out
   ```
 
-We'll also add a few `echo` statements to report what's going on,
-and will create the output directory if it doesn't yet exist:
+- We'll add a few `echo` statements to report what's going on
 
-```{bash}
-mkdir -p "$output_dir"
-```
+- We will create the output directory if it doesn't yet exist:
+
+  ```bash
+  mkdir -p "$output_dir"
+  ```
 
 :::{.callout-tip collapse="true"}
 ## Refresher: the `-p` option to `mkdir` (Click to expand)
@@ -186,25 +269,25 @@ in a script:
 
 <br>
 
-**Our more well-developed script now looks as follows:**
+### A more well-developed _FastQC_ script
 
 ```{bash}
 #!/bin/bash
 #SBATCH --account=PAS2250
 #SBATCH --output=slurm-fastqc-%j.out
   
-## Bash strict settings
+# Strict Bash settings
 set -euo pipefail
 
-## Load the software
+# Load the OSC module for FastQC
 module load fastqc
 
-## Copy the placeholder variables
+# Copy the placeholder variables
 input_file="$1"
 output_dir="$2" 
 
 # Initial reporting
-echo "# Starting the script fastqc.ch"
+echo "# Starting script fastqc.ch"
 date
 echo "# Input FASTQ file:   $input_file"
 echo "# Output dir:         $output_dir"
@@ -222,7 +305,7 @@ echo "# Listing the output files:"
 ls -lh "$output_dir"
 
 echo
-echo "# Done with the FastQC script"
+echo "# Done with script fastqc.sh"
 date
 
 # (Don't run this in your terminal, but copy it into a .sh text file)
@@ -232,38 +315,76 @@ Notice that this script is very similar to our toy scripts from the previous
 sessions:
 mostly standard ("boilerplate") code with
 **just a single command to run our program of interest.**
-
 Therefore, you can adopt this script as a template for scripts that run other
 command-line programs, and will generally only need minor modifications!
 
-:::{.callout-tip}
-## Keep your scripts simple -- use one program in a script
+<br>
 
-In general, it is a good idea to keep your scripts simple and run one program
-per script.
+## A master / runner "script"
 
-Once you get the hang of it, it may seem appealing to string a number of programs
-together in a single script, so that it's easier to rerun everything &mdash;
-but that will often end up leading to more difficulties than convenience. 
+Above, we created a `fastqc.sh` script,
+which we'll eventually want to submit using a `for` loop.
+The code with that loop and the `sbatch` command _could_ be typed directly in the terminal.
+**But it's better to save these sorts of commands in a file/script as well.**
 
-We'll see below how you can **separate** your code into:
+Therefore, we will now create a new file for the purpose of documenting the
+steps that we are taking, and the scripts that we are submitting.
+_You can think of this file as your analysis lab notebook,_
+_or perhaps more accurately,_
+_your notebook entry that contains **the final protocol** you followed._
+
+These kinds of scripts are sometimes called "master" or "runner" scripts.
+Because they will mostly contain shell code,
+we will save them as a shell script (`.sh`),
+even though it is not at all like the other scripts we've made,
+which are meant to be run/submitted in their entirety.
+
+::: {.callout-warning}
+#### The runner script can't itself be run at once
+Once we've added multiple batch job steps,
+and the input of say step 2 depends on the output of step 1,
+we won't be able to just _run_ the script as is.
+This is because all the jobs would then be submitted at the same time,
+and step 2 would likely start running before step 1 is finished.
+
+There are some possibilities with `sbatch` to make batch jobs wait on each
+other (e.g. the `--dependency` option), but this gets tricky quickly.
+If you want a fully automatically rerunnable workflow /
+pipeline, you should consider using a workflow management system
+like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
+[NextFlow](https://www.nextflow.io/).
+
+**TODO include an example**
+:::
+
+So, we'll have two types of scripts that we **separate** our code into:
 
 - The scripts that run individual steps of your analysis (again, typically individual programs)
 - A "master" or "runner" script that orchestrates the running of these individual
   steps.
   The code in this script is not run all at once,
-  unless you turn it into a formal
-  workflow, which is beyond the scope of this material.
+  unless you turn it into a formal workflow,
+  which is beyond the scope of this material.
 
-To really tie your full set of analyses together in an _actual_
-workflow / pipeline, you will want to start using a workflow management system
-like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
-[NextFlow](https://www.nextflow.io/).
+So let's go ahead and open a new text file, and save it as `run.sh`.
+
+::: {.callout-tip}
+#### Keep the individual scripts simple
+It is a good idea to keep the shell scripts you will submit (e.g., `fastqc.sh`) simple
+_in the sense that they should generally just run one program_,
+and not a sequence of programs.
+
+Once you get the hang of writing these scripts,
+it may seem appealing to string a number of programs together in a single script,
+so that it's easier to rerun everything at once &mdash;
+but in practice, that will often end up leading to more difficulties than convenience. 
 :::
 
 <br>
 
-### Submitting our FastQC script as a batch job
+## Running FastQC using batch jobs
+
+### Submitting the script for one FASTQ file
 
 Open a new file in VS Code
 (&nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `New File`)
@@ -273,7 +394,7 @@ Paste in the code above and save the file.
 Then, submit the script:
 
 ```{bash}
-sbatch scripts/fastqc.sh data/fastq/SRR7609467.fastq.gz results/fastqc
+sbatch scripts/fastqc.sh data/fastq/ASPC1_A178V_R1.fastq.gz results/fastqc
 ```
 
 :::{.bash-out}
@@ -286,33 +407,76 @@ Submitted batch job 12521308
 - Output that would have been printed to screen if we had run the script directly:
   in the Slurm log file `slurm-fastqc-<job-nr>.out`
   
-- FastQC's main output files (HTML ZIP): to the output directory we specified.
+- FastQC's main output files (HTML and zip): to the output directory we specified.
 :::
 
-Let's take a look at the queue:
+Let's take a look at the queue &mdash; you may catch the job while it's still pending
+(note below that the `NAME` will be the name of the script, by default):
 
-```{bash}
-squeue -u $USER
-# Fri Aug 19 10:38:16 2022
-#              JOBID PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
-#           12521308 serial-40 fastqc.s   jelmer  PENDING       0:00   1:00:00      1 (None)
+```{.bash-out}
+Fri Aug 25 12:07:48 2023
+    JOBID PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
+  23666218 serial-40 fastqc.s   jelmer  PENDING       0:00   1:00:00      1 (None)
 ```
 
-Once it's no longer in the list produced by `squeue`, it's done.
-Then,  let's check the Slurm log file[^1]:
+...and then it should start running:
 
-[^1]: For longer running jobs,
-      you may also want to keep an eye on the log file while it's running.
+```{.bash-out}
+Fri Aug 25 12:07:54 2023
+    JOBID PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
+  23666218 condo-osu fastqc.s   jelmer  RUNNING       0:06   1:00:00      1 p0133
+```
+
+The job will be finished within 10 seconds, though,
+and you might miss its listing in the `squeue` output entirely:
+as soon as it's done, it will be removed from the list.
+
+Of course, we have to always check whether it ran _successfully_ &mdash;
+to do so, let start by checking the Slurm log file:
 
 ```{bash, eval=FALSE}
-cat slurm-fastqc-12521308.out    # You'll have a different number in the file name
+cat slurm-fastqc-23666218.out    # You'll have a different number in the file name
 ```
 
 :::{.callout-note collapse="true"}
 ## Click to see the contents of the Slurm log file
 
-```{bash, eval=TRUE}
-cat misc/slurm-fastqc-12521308.out    # You'll have a different number in the file name
+```{.bash-out}
+# Starting script fastqc.ch
+Fri Aug 25 12:07:50 EDT 2023
+# Input FASTQ file:   data/fastq/ASPC1_A178V_R1.fastq.gz
+# Output dir:         results/fastqc
+
+Started analysis of ASPC1_A178V_R1.fastq.gz
+Approx 5% complete for ASPC1_A178V_R1.fastq.gz
+Approx 10% complete for ASPC1_A178V_R1.fastq.gz
+Approx 15% complete for ASPC1_A178V_R1.fastq.gz
+Approx 20% complete for ASPC1_A178V_R1.fastq.gz
+Approx 25% complete for ASPC1_A178V_R1.fastq.gz
+Approx 30% complete for ASPC1_A178V_R1.fastq.gz
+Approx 35% complete for ASPC1_A178V_R1.fastq.gz
+Approx 40% complete for ASPC1_A178V_R1.fastq.gz
+Approx 45% complete for ASPC1_A178V_R1.fastq.gz
+Approx 50% complete for ASPC1_A178V_R1.fastq.gz
+Approx 55% complete for ASPC1_A178V_R1.fastq.gz
+Approx 60% complete for ASPC1_A178V_R1.fastq.gz
+Approx 65% complete for ASPC1_A178V_R1.fastq.gz
+Approx 70% complete for ASPC1_A178V_R1.fastq.gz
+Approx 75% complete for ASPC1_A178V_R1.fastq.gz
+Approx 80% complete for ASPC1_A178V_R1.fastq.gz
+Approx 85% complete for ASPC1_A178V_R1.fastq.gz
+Approx 90% complete for ASPC1_A178V_R1.fastq.gz
+Approx 95% complete for ASPC1_A178V_R1.fastq.gz
+Approx 100% complete for ASPC1_A178V_R1.fastq.gz
+Analysis complete for ASPC1_A178V_R1.fastq.gz
+
+# Listing the output files:
+total 5.1M
+-rw-r--r-- 1 jelmer PAS0471 266K Aug 25 12:07 ASPC1_A178V_R1_fastqc.html
+-rw-r--r-- 1 jelmer PAS0471 456K Aug 25 12:07 ASPC1_A178V_R1_fastqc.zip
+
+# Done with script fastqc.sh
+Fri Aug 25 12:07:56 EDT 2023
 ```
 :::
 
@@ -324,13 +488,9 @@ we unfortunately need to download it with this older version of VS Code
 that's installed at OSC &mdash;
 but the ability to download files from here is a nice one!
 
-<p align="center">
-<img src=img/vscode_download.png width="50%">
-</p>
+<p align="center"><img src=img/vscode_download.png width="50%"></p>
 
 <br>
-
-## Running FastQC for all FASTQ files in a loop
 
 ::: {.callout-note}
 #### Add keyboard shortcut to run shell commands from the editor:
@@ -341,61 +501,24 @@ but the ability to download files from here is a nice one!
   then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
 :::
 
-### A "workflow" file
-
-So far, we've been typing our commands to run or submit scripts directly
-in the terminal.
-**But it's better to directly save these sorts of commands.**
-
-Therefore, we will now create a new file for the purpose of documenting the
-steps that we are taking, and the scripts that we are submitting.
-**You can think of this file as your analysis lab notebook[^2].**
-
-[^2]: Though possibly a highly sanitized one -- you may want to store daily
-      notes and dead ends in a separate file.
-
-It's easiest to also save this as a shell script (`.sh`) extension,
-even though it is not at all like the other scripts we've made,
-which are meant to be run/submitted in their entirety.
-
-:::{.callout-caution collapse="true"}
-## Not like the other scripts
-
-Once we've added multiple batch job steps,
-and the input of say step 2 depends on the output of step 1,
-we won't be able to just _run_ the script as is.
-This is because all the jobs would then be submitted at the same time,
-and step 2 would likely start running before step 1 is finished.
-
-There are some possibilities with `sbatch` to make batch jobs wait on each
-other (e.g. the `--dependency` option), but this gets tricky quickly.
-As also mentioned above, if you want a fully automatically rerunnable workflow /
-pipeline, you should consider using a workflow management system
-like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
-[NextFlow](https://www.nextflow.io/).
-:::
-
-So let's go ahead and open a new text file, and save it as `workflow.sh`.
-
 <br>
 
-### Looping over all our files
+### Submitting the script many times with a loop
 
 The script that we wrote above will run FastQC for a single FASTQ file.
 Now, we will write a loop that iterates over all of our FASTQ files
 (only 8 in this case, but could be 100s just the same),
 and **submits a batch job for each of them.**
 
-Let's type the following into our `workflow.sh` script,
+Let's type the following into our `run.sh` script,
 and then copy-and-paste it into the terminal to run the loop:
 
-```{bash}
+```bash
 for fastq_file in data/fastq/*fastq.gz; do
     sbatch scripts/fastqc.sh "$fastq_file" results/fastqc
 done
 ```
-
-:::{.bash-out}
+``` {.bash-out}
 Submitted batch job 2451089  
 Submitted batch job 2451090  
 Submitted batch job 2451091  
@@ -404,7 +527,7 @@ Submitted batch job 2451093
 Submitted batch job 2451094  
 Submitted batch job 2451095  
 Submitted batch job 2451096
-:::
+```
 
 :::{.exercise}
 ### On Your Own: Check if everything went well {-}
@@ -413,14 +536,23 @@ Submitted batch job 2451096
 
 - Take a look at the Slurm log files while the jobs are running and/or after the
   jobs are finished.
-  A nice trick when you have many log files to check,
-  is to use `tail` with a wildcard:
   
-  ```{bash}
+  A nice trick when you have many log files to check using `tail` with a wildcard:
+  
+  ```
   tail slurm-fastqc*
   ```
-- Take a look at the FastQC output files: are you seeing 12 HTML files?  
+
+- Take a look at the FastQC output files: are you seeing 8 HTML files?  
 
 :::
+
+<br>
+
+## Interpreting the FastQC output
+
+**TODO**
+
+For now see, <https://biodash.github.io/tutorials/2021-01_rnaseq/03-fastqc-output.html>
 
 <br>
