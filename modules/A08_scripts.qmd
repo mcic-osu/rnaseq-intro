@@ -23,11 +23,11 @@ which is useful:
 
 - When a set of commands takes a long time to run and/or should be run many times.
 
-- To help keep our code clean and clear by using separate scripts for individual
-  parts of our analysis pipeline.
+- To help keep our code clean and clear
+  by using separate scripts for individual parts of our analysis pipeline.
 
 - To run our analyses as Slurm batch jobs at OSC,
-  (which will for instance to allow them to run simultaneously for differet samples)
+  which will for instance to allow us to run analyses simultaneously for different samples.
 
 Scripts form the basis for *analysis pipelines* and if we code things cleverly,
 it should be **straightforward to rerun much of our project workflow**
@@ -130,31 +130,33 @@ and save it as `printname.sh` within the `sandbox` dir
 (shell scripts most commonly have the extension `.sh`).
 
 Then, type or paste the following _inside the script_ in your editor pane
-(and _not_ in the terminal pane):
+(and _not_ in the terminal):
 
 ```bash
 echo "This script will print a first and a last name"
 ```
 
 ::: {.callout-tip}
-#### Auto Save
+#### Auto Save in VS Code
 
-The changes to the file should be immediately, automatically saved by VS Code:
-if that's not happening for some reason,
-there should be an indication like a large black dot next to the script's file
-name in the editor pane tab header (see the box below how to fix this).
+Any changes you make to this and other files in the editor pane should be
+immediately, automatically saved by VS Code.
+If that's not happening for some reason,
+you should see an indication of unsaved changes like a large black dot next to
+the script's file name in the editor pane tab header
+(if that's the case, see the box below on how to fix this).
 
 ::: {.callout-warning collapse="true"}
 ### Auto Save not happening? (Click to expand)
 
 If the file is not auto-saving, you can always save it manually
 (including with <kbd>Ctrl/Cmd</kbd>+<kbd>S</kbd>)
-like you'd do in other programs.
+like you would do in other programs.
 
 However, it may be convenient to turn Auto Save on:
 press <kbd>Ctrl/Cmd</kbd>+<kbd>Shift</kbd>+<kbd>S</kbd>
 to open the Command Palette and type "Auto Save".
-You should see an option "Toggle Auto Save": click on that.
+You should see an option "**_Toggle Auto Save_**": click on that.
 :::
 :::
 
@@ -163,7 +165,7 @@ code that we have so far just been typing in the terminal.
 As such,
 **our single line with an `echo` command already consitutes a functional shell script!**
 One way of running the script is by calling the `bash` command followed by the
-name of the script:
+path to the script:
 
 ```bash
 bash sandbox/printname.sh
@@ -174,7 +176,7 @@ This script will print a first and a last name
 
 That worked! 
 Although of course,
-the script doesn't yet print your name like it "promises" to do,
+the script doesn't yet print any names like it "promises" to do,
 but we will add that functionality in a little bit.
 
 First, though, we'll learn about two header lines that are good practice to
@@ -199,7 +201,7 @@ which is located at `/bin/bash` on Linux and Mac computers.
 #!/bin/bash
 ```
 
-While not always strictly necessary, adding a shebang line is good practice,
+While not always strictly necessary, adding a _shebang_ line is good practice,
 especially when we want to submit our script to OSC's Slurm queue.
 
 <br>
@@ -226,24 +228,38 @@ Hello, my name is  ...
 
 In scripts, this can lead to all sorts of downstream problems,
 because you very likely tried and failed to do something with an existing variable
-(but misspelled its name, or forgot to assign it altogether).
+(but e.g. misspelled its name, or forgot to assign it altogether).
 Even more problematically,
-it can lead to potentially very destructive file removal:
+this can lead to potentially very destructive file removal,
+as the box below illustrates.
 
-```bash
-# Using a variable, we try to remove some temporary files whose names start with tmp_
-temp_prefix="temp_"
-rm "$tmp_prefix"*     # DON'T TRY THIS!
-```
+::: {.callout-warning collapse="true"}
+##### Accidental file removal with unset variables (Click to expand)
 
-```bash
-# Using a variable, we try to remove a temporary directory
-tempdir=output/tmp
-rm -rf $tmpdir/*      # DON'T TRY THIS!
-```
+The shell's default behavior of ignoring (instead of giving an error)
+the referencing of unset variables can make you accidentally remove files
+as follows &mdash; and this is especially likely to happen inside scripts
+where we more commonly use variables and are not working interactively:
 
-:::{.callout-caution collapse="true"}
-## The comments above specified the _intent_ we had. What would have actually happened?
+- Using a variable,
+  we try to remove some temporary files whose names start with `tmp_`:
+
+  ```bash
+  temp_prefix="temp_"
+  
+  rm "$tmp_prefix"*     # DON'T TRY THIS!
+  ```
+
+- Using a variable, we try to remove a temporary directory:
+
+  ```bash
+  tempdir=output/tmp
+  
+  rm -r $tmpdir/*      # DON'T TRY THIS!
+  ```
+
+:::{.callout-tip collapse="true"}
+##### Above, the text specified the _intent_ of the commands. What would have actually happened?
   
 In both examples, there is a similar typo: `temp` vs. `tmp`,
 which means that we are referencing a (likely) non-existent variable.
@@ -256,14 +272,20 @@ which means that we are referencing a (likely) non-existent variable.
 - In the second example, along similar lines,
   `rm -rf $tmpdir/*` would have been interpreted as `rm -rf /*`.
   Horrifyingly, this would **attempt to remove the entire filesystem**:
-  recall that a leading `/` in a path is a computer's root directory[^1].
+  recall that a leading `/` in a path is a computer's root directory.
   (`-r` makes the removal _recursive_ and `-f` makes _forces_ removal).
 
-[^1]: But note that at OSC,
-you would not be able to remove anything you're not supposed to,
+:::
+
+Before you get too scared of creating terrible damage,
+note that at OSC,
+you would not be able to remove any essential files
+(and more generally, any files that are not yours unless you've explicitly been
+given permission for this),
 since you don't have the permissions to do so.
-On your own computer, this could be more genuinely dangerous, though even there,
-you would not be able to remove the operating system without specifically
+On your own computer,
+this could be more genuinely dangerous, though even there,
+you would not be able to remove operating system files without specifically
 requesting  "admin" rights.
 
 :::
@@ -278,13 +300,14 @@ Additionally, if your script prints a lot of output,
 you might not notice an error somewhere in the middle if it doesn't produce
 more errors downstream.
 But the downstream results from what we at that point might call a
-"**zombie script**" may still be completely wrong.
+"**zombie script**" can still be completely wrong.
 
 #### Safer settings {-}
 
 The following three settings will make your Bash scripts more robust and safer.
-With these settings, the script terminates,
-with an appropriate error message, if:
+With these settings, **the script terminates[^1] if:**
+
+[^1]: With an appropriate error message
 
 - `set -u` &mdash; An unset (non-existent) variable is referenced.
 - `set -e` &mdash; Almost any error occurs.
@@ -307,12 +330,12 @@ set -euo pipefail         # (For in a script - don't run in the terminal)
 
 ### Adding the header lines to our script
 
-Let's add these lines to our `headtail.sh` script,
+Let's add these lines to our `printname.sh` script,
 so it will now contain the following:
 
 ```bash
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 echo "This script will print a first and a last name"
 ```
@@ -330,11 +353,16 @@ That didn't change anything to the output,
 but at least we confirmed that the script still works.
 
 ::: {.callout-note collapse="true"}
-#### Running the script without using `bash` (Click to expand)
+#### Running the script without using the `bash` command (Click to expand)
 
-Because our script has a shebang line,
-we could also execute the script without the `bash` command,
-simply using `sandbox/printname.sh`.
+Because our script has a _shebang_ line,
+we have taken one step towards being able to execute the script without
+the `bash` command,
+simply using:
+
+```bash
+sandbox/printname.sh
+```
 
 (Or if the script was in our current working dir, using `./printname.sh`.
 In that case the `./` is necessary to make it explicit that we are referring
@@ -344,8 +372,9 @@ the shell would look for a command or program of that name,
 and wouldn't be able to find it.)
 
 However, this would also require us to "make the script executable",
-which is beyond the scope of this workshop.
-
+which is beyond the scope of this material.
+But I'm mentioning it here because you might see this way of running scripts
+being used elsewhere.
 :::
 
 <br>
@@ -354,7 +383,8 @@ which is beyond the scope of this workshop.
 
 ### Calling a script with arguments
 
-When you call a script, you can pass it command-line arguments,
+When you call a script to run it,
+you can pass command-line arguments to it,
 such as a file to operate on.
 
 This is much like when you provide a command like `ls` with arguments:
@@ -368,6 +398,8 @@ ls data/sampleA.fastq.gz
 
 # Pass 2 filenames as arguments to ls, separated by spaces:
 ls data/sampleA.fastq.gz data/sampleB.fastq.gz
+
+# (No need to run any of this, they are just syntax examples)
 ```
 
 Let's see what this would look like with our `printname.sh` script
@@ -381,51 +413,51 @@ bash sandbox/printname.sh
 # Run scripts with 1 or 2 arguments:
 bash fastqc.sh data/sampleA.fastq.gz      # 1 argument, a filename
 bash sandbox/printname.sh John Doe        # 2 arguments, strings representing names
+
+# (No need to run any of this, they are just syntax examples)
 ```
 
-In the next section, we'll see what happens when we pass arguments to a script
-on the command line.
+In the next section,
+we'll see what actually happens when we pass arguments to a script on the command line.
 
 <br>
 
 ### Placeholder variables
 
 Inside the script,
-any command-line arguments that you passed to it are _automatically available_
-in placeholder variables.
-
-A first argument will be assigned to the variable **`$1`**,
+any command-line arguments that you pass to it are
+**automatically available in "placeholder" variables**.
+Any first argument will be assigned to the variable **`$1`**,
 any second argument will be assigned to **`$2`**,
 any third argument will be assigned to **`$3`**, and so on.
 
 :::{.callout-caution collapse="true"}
-## In the calls to fastqc.sh and printname.sh above, what are the placeholder variables and their values? 
+##### In the calls to fastqc.sh and printname.sh above, what are the placeholder variables and their values? 
 
-In `bash fastqc.sh data/sampleA.fastq.gz`,
-a single argument, `data/sampleA.fastq.gz`, is passed to the script,
-and will be assigned to `$1`.
+- In `bash fastqc.sh data/sampleA.fastq.gz`,
+  a single argument, `data/sampleA.fastq.gz`, is passed to the script,
+  and will be assigned to `$1`.
 
-In `bash sandbox/printname.sh John Doe`,
-two arguments are passed to the script:
-the first one (`John`) will be stored in `$1`,
-and the second one (`Doe`) in `$2`.
+- In `bash sandbox/printname.sh John Doe`,
+  two arguments are passed to the script:
+  the first one (`John`) will be stored in `$1`,
+  and the second one (`Doe`) in `$2`.
+
 :::
 
-:::{.callout-tip}
-## Placeholder variables are not automagically _used_
-Arguments passed to a script are _merely made available_ in placeholder variables
-&mdash; unless we explicitly include code in the script to _do_ something with
-those variables, nothing else happens. 
-:::
+However, these placeholder variables are not automagically _used_ &mdash;
+the arguments passed to a script are **merely made available** in these variables.
+Unless we explicitly include code in the script to _do_ something with
+these variables, nothing else happens. 
 
-Let's add code to our `printname.sh` script to "process"
-any first and last name that are passed to the script as command-line arguments.
+Therefore, let's add some code to our `printname.sh` script to "process"
+any first and last name that are passed to the script.
 For now, our script will simply `echo` the placeholder variables,
 so that we can see what happens:
 
 ```bash
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 echo "First name: $1"
 echo "Last name: $2"
@@ -493,7 +525,7 @@ echo "Last name:"
 Being commented out, the `set` line should read:
 
 ```bash
-#set -ueo pipefail
+#set -euo pipefail
 ```
 
 3. Because we are quoting `"John Doe"`,
@@ -521,7 +553,7 @@ as follows:
 
 ```{bash, eval=FALSE}
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 first_name=$1
 last_name=$2
@@ -582,7 +614,7 @@ How this command works:
 
 ```bash
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
   
 input_file=$1
 line_nr=$2
@@ -616,7 +648,7 @@ so we can monitor what we're doing.
 
 We've learned that the `head` command prints the first lines of a file,
 whereas the `tail` command prints the last lines.
-Sometimes it's nice to be able to quickly see both ends of a file,
+Sometimes it's nice to be able to quickly see "both ends" of a file,
 so let's write a little script that can do that for us,
 as a starting point for the next few modifications.
 
@@ -625,7 +657,7 @@ and add the following code to it:
 
 ```{bash, eval=FALSE}
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 input_file=$1
 
@@ -653,11 +685,12 @@ Miapaca2_G31V   Miapaca2        G31V
 
 ### Redirecting output to a file
 
-So far, the output of our scripts was printed to screen, e.g.:
+So far, the output of our scripts was **printed to screen**:
 
 - In `printname.sh`, we simply `echo`'d, inside sentences,
   the arguments passed to the script.
-- In `headtail.sh`, we printed the first and last few lines of a file.
+- In `headtail.sh`, we printed the first and last few lines of a file
+  with the `head` and `tail` commands.
 
 All this output was printed to screen because that is the default output
 mode of Unix commands,
@@ -687,7 +720,7 @@ We'll make the following changes:
   
 ```bash
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 input_file=$1
 output_file=$2
@@ -755,7 +788,7 @@ Let's try this with our `headtail.sh` script.
 
 ```bash
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 # Copy placeholder variables
 input_file=$1
@@ -818,9 +851,7 @@ Wed Aug 16 21:12:28 EDT 2023
 ```
 
 The script printed some details for the output file,
-but not its contents
-(that would have worked here,
-but is usually not sensible when working with genomics data).
+but not its contents.
 Let's take a look at the output file, though, to make sure the script worked:
 
 ```bash
@@ -870,7 +901,7 @@ cat sandbox/printline.sh
 ```
 ```{.bash-out}
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
   
 input_file=$1
 line_nr=$2
@@ -884,7 +915,7 @@ head -n "$line_nr" "$input_file" | tail -n 1
 
 ```{bash, eval=FALSE}
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 # Copy placeholder variables
 input_file=$1
