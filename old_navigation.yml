@@ -16,35 +16,8 @@ website:
         text: "{{< fa home >}}"
       - href: modules/intro.qmd
         text: Introduction
-      - sidebar:computing_skills
-      - sidebar:reads_to_counts
-      - sidebar:count_analysis
-    right:
-      - text: Reference material
+      - text: "A. Computing skills"
         menu:
-          - text: Specific tutorials
-          - href: info/osc_transfer.qmd
-            text: "- File transfer to and from OSC"
-          - href: info/osc_ssh.qmd
-            text: "- Using OSC with SSH"
-          - text: General info
-          - href: info/shell_commands.qmd
-            text: "- Shell commands overview"
-          - href: info/shell_shortcuts.qmd
-            text: "- Shell keyboard shortcuts"
-          - text: "- Further Resources"
-          - text: "- Glossary"
-      - href: info/about.qmd
-        text: About
-      - icon: github
-        href: https://github.com/mcic-osu/rnaseq-intro
-  sidebar:
-      - id: computing_skills
-        title: A. Computing Skills
-        style: docked
-        background: light
-        collapse-level: 2
-        contents:
           - href: modules/A01_osc.qmd
             text: "A1. OSC"
           - href: "modules/A02_vscode.qmd"
@@ -65,12 +38,8 @@ website:
             text: "A9. Software at OSC"
           - href: "modules/A10_slurm.qmd"
             text: "A10. SLURM compute jobs"
-      - id: reads_to_counts
-        title: "B. From reads to counts"
-        style: docked
-        background: light
-        collapse-level: 2
-        contents:
+      - text: "B. From reads to counts"
+        menu:
           - href: "modules/B01_fastqc.qmd"
             text: "B1. Read QC with _FastQC_"
           - text: "B2. Summarizing QC results with _MultiQC_ [TBA]"
@@ -78,17 +47,32 @@ website:
           - text: "B4. Alignment with _STAR_ [TBA]"
           - text: "B5. Quantification with _Salmon_ [TBA]"
           - text: "B6: The Nextflow/nf-core rnaseq workflow [TBA]"
-      - id: count_analysis
-        title: "C. Analyzing the counts"
-        style: docked
-        background: light
-        collapse-level: 2
-        contents:
+      - text: "C. Analyzing the counts"
+        menu:
           - text: "C1. Creating a _DESeq2_ object [TBA]"
           - text: "C2. PCA [TBA]"
           - text: "C3. Differential expression analysis [TBA]"
           - text: "C4. GO enrichment analysis [TBA]"
-          - text: "C5. KEGG enrichment analysis [TBA]" 
+          - text: "C5. KEGG enrichment analysis [TBA]"
+    right:
+      - text: Reference material
+        menu:
+          - text: Specific tutorials
+          - href: info/osc_transfer.qmd
+            text: "- File transfer to and from OSC"
+          - href: info/osc_ssh.qmd
+            text: "- Using OSC with SSH"
+          - text: General info
+          - href: info/shell_commands.qmd
+            text: "- Shell commands overview"
+          - href: info/shell_shortcuts.qmd
+            text: "- Shell keyboard shortcuts"
+          - text: "- Further Resources"
+          - text: "- Glossary"
+      - href: info/about.qmd
+        text: About
+      - icon: github
+        href: https://github.com/mcic-osu/rnaseq-intro
   page-footer:
     left: "2023, Jelmer Poelstra"
     right:

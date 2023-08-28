@@ -5,6 +5,16 @@
     border-color: #030303;
 */
 
+/*
+.title {
+    color: #BB0000;
+}
+*/
+
+h2 {
+    color: #BB0000; 
+}
+
 .bash-in-nocolor {
     background-color: #f0f3f4;
     padding: 5px 5px 5px 10px;

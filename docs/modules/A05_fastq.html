@@ -66,6 +66,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../modules/A06_ref-files.html" rel="next">
+<link href="../modules/A04_shell2.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -102,7 +104,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar docked nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -129,7 +131,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item dropdown ">
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-a.-computing-skills" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
- <span class="menu-text">A. Computing skills</span>
+ <span class="menu-text">A. Computing Skills</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-a.-computing-skills">    
         <li>
@@ -183,11 +185,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../modules/B01_fastqc.html" rel="" target="">
  <span class="dropdown-text">B1. Read QC with <em>FastQC</em></span></a>
   </li>  
-        <li class="dropdown-header">B2. Summarizing QC results with <em>MultiQC</em> [TBA]</li>
-        <li class="dropdown-header">B3. Trimming with <em>TrimGalore</em> [TBA]</li>
-        <li class="dropdown-header">B4. Alignment with <em>STAR</em> [TBA]</li>
-        <li class="dropdown-header">B5. Quantification with <em>Salmon</em> [TBA]</li>
-        <li class="dropdown-header">B6: The Nextflow/nf-core rnaseq workflow [TBA]</li>
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -195,11 +192,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">C. Analyzing the counts</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-c.-analyzing-the-counts">    
-        <li class="dropdown-header">C1. Creating a <em>DESeq2</em> object [TBA]</li>
-        <li class="dropdown-header">C2. PCA [TBA]</li>
-        <li class="dropdown-header">C3. Differential expression analysis [TBA]</li>
-        <li class="dropdown-header">C4. GO enrichment analysis [TBA]</li>
-        <li class="dropdown-header">C5. KEGG enrichment analysis [TBA]</li>
     </ul>
   </li>
 </ul>
@@ -246,10 +238,87 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modules/A05_fastq.html">A5. FASTQ files</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A01_osc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A1. OSC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A02_vscode.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A2. VS Code</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A03_shell1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A3. Unix shell I</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A04_shell2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A4. Unix shell II</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A05_fastq.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">A5. FASTQ files</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A06_ref-files.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A6. Reference genome files</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A07_overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A7. Next steps, variables &amp; loops</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A08_scripts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A8. Shell scripts</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A09_software.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A9. Software at OSC</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../modules/A10_slurm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A10. SLURM compute jobs</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -270,7 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#checking-file-integrity-after-transfer" id="toc-checking-file-integrity-after-transfer" class="nav-link" data-scroll-target="#checking-file-integrity-after-transfer">Checking file integrity after transfer</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/edit/main/modules/A05_fastq.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -805,7 +874,7 @@ md5sum: WARNING: 1 computed checksum did NOT match</code></pre>
 </section>
 
 
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Though long-read technologies like Oxford Nanopore Technologies and especially PacBio are picking up steam, since these can sequence transcripts <em>in full</em>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -1047,6 +1116,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../modules/A04_shell2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">A4. Unix shell II</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../modules/A06_ref-files.html" class="pagination-link">
+        <span class="nav-page-text">A6. Reference genome files</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
