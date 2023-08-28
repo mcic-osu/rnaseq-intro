@@ -49,6 +49,8 @@ toc-depth: 4
 |------------|----------------------------------------------------------------------------------|
 | 2023-11-10 | Creating a DESeq2 object                                                         |
 | 2023-11-17 | PCA and overall exploration of the count data                                    |
-| 2023-11-24 | Differential expression analysis (Part I)                                        |
-| 2023-11-31 | Differential expression analysis (Part II)                                       |
-| 2023-12-07 | GO enrichment analysis                                                           |
+| 2023-12-01 | Differential expression analysis (Part I)                                        |
+| 2023-12-08 | Differential expression analysis (Part II)                                       |
+| 2023-12-15 | GO enrichment analysis                                                           |
+
+_No meetings on Nov 24 (Thanksgiving), Dec 22 and Dec 28._

@@ -39,8 +39,7 @@ at OSC:
 With these skills,
 it's relatively straightforward to create and submit scripts that run command-line
 programs to analyze our genomics data.
-In this session,
-we'll apply these skills for the first time to run **_FastQC_**.
+In this session, we'll apply them to run **_FastQC_**.
 
 <br>
 
@@ -49,8 +48,8 @@ we'll apply these skills for the first time to run **_FastQC_**.
 _FastQC_ is one the most ubiquitous pieces of genomics software.
 It allows you to assess the overall quality of, and potential problems with,
 the reads in your FASTQ files.
-It produces visualizations and assessments of FASTQ files for statistics
-such as per-base quality (below) and adapter content.
+It produces visualizations and assessments of for statistics such as
+per-base quality (below) and adapter content.
 Running FastQC or an equivalent program should always be the first analysis step
 after you receive your sequences.  
 
@@ -164,8 +163,9 @@ the syntax can be as simple as:
 fastqc <fastq-file>
 ```
 
-Though in practice, we'll want to specify the output directory &mdash;
-otherwise, output files would end up in the current working directory:
+However, we'll always want to specify the output directory,
+because the unfortunate default for _FastQC_ is to put them in the directory
+that the FASTQ files are in &mdash; we can do so as follows:
 
 ```{bash}
 fastqc --outdir=<output-dir> <fastq-file>
@@ -180,18 +180,17 @@ fastqc --outdir=results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz
 ```
 
 :::{.callout-tip}
-## FastQC's output file names are automatically determined
-We can specify the output _directory_, but not the actual file names,
-which will be automatically determined by FastQC based on the input file name.
+## _FastQC_'s output file names are automatically determined
+_FastQC_ allows us to specify the output _directory_,
+but not the output file names,
+which will be automatically determined based on the input file name.
 
-For one FASTQ file, it will output one HTML file and one ZIP archive.
+For one FASTQ file, _FastQC_ will output one HTML file and one ZIP archive.
 The latter contains files with the summary statistics that were computed and
 on which the figures are based &mdash; we generally don't need to look at that.
 :::
 
-<br>
-
-### A basic script to run _FastQC_, and improvements
+### A basic script to run _FastQC_
 
 Here is what a basic script to run _FastQC_ could look like:
   
@@ -208,27 +207,30 @@ output_dir=$2
 # Run FastQC
 fastqc --outdir="$output_dir" "$input_file"
 
-# (Don't run this in your terminal, but copy it into a .sh text file)
+# (Don't run this in your terminal, this is an example script)
 ```
 
-But we'll add a few things to this script to run it smoothly as a batch job at OSC:
+### A more well-developed _FastQC_ script
 
-- Add a line to the script to load the relevant OSC module:
+We'll add a few things to this script to e.g. make it run it smoothly as a
+batch job at OSC:
+
+- A line to load the relevant OSC software module:
 
   ```{bash}
   module load fastqc/0.11.8
   ```
   
-- Add a few `sbatch` options to the top of the script:
+- A few `sbatch` options:
 
   ```{bash}
   #SBATCH --account=PAS0471
   #SBATCH --output=slurm-fastqc-%j.out
   ```
 
-- We'll add a few `echo` statements to report what's going on
+- A few `echo` statements to report what's going on
 
-- We will create the output directory if it doesn't yet exist:
+- A line to create the output directory if it doesn't yet exist:
 
   ```bash
   mkdir -p "$output_dir"
@@ -241,35 +243,39 @@ Using the `-p` option does two things at once for us,
 both of which are necessary for a foolproof inclusion of this command
 in a script:
 
-- It will enable `mkdir` to create multiple levels of directories at once:
-  by default, `mkdir` errors out if the _parent_ directory/directories of the
+- It will enable `mkdir` to create multiple levels of directories at once
+  (i.e., to act _recursively_):
+  by default, `mkdir` errors out if the parent directory/ies of the
   specified directory don't yet exist.
 
-  ```{bash}
+  ```bash
   mkdir newdir1/newdir2
-  #> mkdir: cannot create directory ‘newdir1/newdir2’: No such file or directory
+  ```
+  ```{.bash-out}
+  mkdir: cannot create directory ‘newdir1/newdir2’: No such file or directory
   ```
 
-  ```{bash}
+  ```bash
   mkdir -p newdir1/newdir2    # This successfully creates both directories
   ```
 
 - If the directory already exists, it won't do anything and won't return an error
-  (which would lead the script to abort at that point with our `set` settings).
+  (by default, `mkdir` would return an error in this case,
+  which would in turn lead the script to abort at that point with our `set` settings):
   
-  ```{bash}
+  ```bash
   mkdir newdir1/newdir2
-  #> mkdir: cannot create directory ‘newdir1/newdir2’: File exists
+  ```
+  ```{.bash-out}
+  mkdir: cannot create directory ‘newdir1/newdir2’: File exists
   ```
 
-  ```{bash}
+  ```bash
   mkdir -p newdir1/newdir2   # This does nothing since the dirs already exist
   ```
 :::
 
-<br>
-
-### A more well-developed _FastQC_ script
+Here is what our script looks like with those additions:
 
 ```{bash}
 #!/bin/bash
@@ -311,6 +317,11 @@ date
 # (Don't run this in your terminal, but copy it into a .sh text file)
 ```
 
+{{< fa user-edit >}} Open a new file in VS Code
+(&nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `New File`)
+and save it as `fastqc.sh` within your `scripts/` directory.
+Paste in the code above and save the file.
+
 Notice that this script is very similar to our toy scripts from the previous
 sessions:
 mostly standard ("boilerplate") code with
@@ -324,52 +335,61 @@ command-line programs, and will generally only need minor modifications!
 
 Above, we created a `fastqc.sh` script,
 which we'll eventually want to submit using a `for` loop.
-The code with that loop and the `sbatch` command _could_ be typed directly in the terminal.
-**But it's better to save these sorts of commands in a file/script as well.**
+The code with that loop and the `sbatch` command _could_ be directly typed in the terminal.
+**But it's better to save the commands used for job submission in a file/script as well.**
 
-Therefore, we will now create a new file for the purpose of documenting the
-steps that we are taking, and the scripts that we are submitting.
+We will now create such a file,
+which has the overall purpose of documenting the steps we took
+and the batch jobs we submitted.
 _You can think of this file as your analysis lab notebook,_
 _or perhaps more accurately,_
 _your notebook entry that contains **the final protocol** you followed._
 
-These kinds of scripts are sometimes called "master" or "runner" scripts.
-Because they will mostly contain shell code,
-we will save them as a shell script (`.sh`),
-even though it is not at all like the other scripts we've made,
-which are meant to be run/submitted in their entirety.
+This kind of script is sometimes called a "master" or "runner" script.
+Because it will contain shell code, we will save it as a shell script (`.sh`)
+just like the script to run `fastqc.sh` and other individual analysis steps.
+However, it is important to realize that the runner script is not like the
+scripts to run individual steps.
+The latter are meant to be run/submitted in their entirety by the runner script,
+whereas a basic runner script that contains `sbatch` compute job commands for
+multiple steps has to be run step-by-step (see the box below).
 
 ::: {.callout-warning}
-#### The runner script can't itself be run at once
+#### The runner script can't itself be run at once in its entirety
 Once we've added multiple batch job steps,
-and the input of say step 2 depends on the output of step 1,
+and the input of a later step uses the output of an earlier step,
 we won't be able to just _run_ the script as is.
-This is because all the jobs would then be submitted at the same time,
-and step 2 would likely start running before step 1 is finished.
+**This is because the runner script would then submit jobs from different steps**
+**all at once,**
+**and that later step would start running before the earlier step has finished.**
 
-There are some possibilities with `sbatch` to make batch jobs wait on each
-other (e.g. the `--dependency` option), but this gets tricky quickly.
-If you want a fully automatically rerunnable workflow /
-pipeline, you should consider using a workflow management system
+**TODO include an example**
+
+It _is_ possible to make `sbatch` batch jobs wait for earlier steps to finish
+(e.g. with the `--dependency` option), but this quickly gets tricky.
+If you want a fully automatically rerunnable workflow / pipeline,
+you should consider using a workflow management system
 like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
 [NextFlow](https://www.nextflow.io/).
 
-**TODO include an example**
 :::
 
-So, we'll have two types of scripts that we **separate** our code into:
+So, we'll **separate** our code into two hierarchical levels of scripts,
+which we'll also save in separate dirs to make this division clear:
 
-- The scripts that run individual steps of your analysis (again, typically individual programs)
-- A "master" or "runner" script that orchestrates the running of these individual
-  steps.
-  The code in this script is not run all at once,
-  unless you turn it into a formal workflow,
-  which is beyond the scope of this material.
+- The scripts that run individual steps of your analysis, like `fastqc.sh`.
+  We'll save these in a directory called `scripts`.
+- A "runner" script that orchestrates the batch job submission of these individual steps.
+  This script is not run at once in its entirety
+  (unless you turn it into a formal workflow, which is beyond the scope of this material).
+  We'll save this script in a directory called `run`.
 
-So let's go ahead and open a new text file, and save it as `run.sh`.
+{{< fa user-edit >}} Let's go ahead and open a new text file,
+and save it as `run/run.sh`
+(VS Code should create that directory on the fly as needed).
 
 ::: {.callout-tip}
-#### Keep the individual scripts simple
+#### Keep the scripts for individual steps simple
 It is a good idea to keep the shell scripts you will submit (e.g., `fastqc.sh`) simple
 _in the sense that they should generally just run one program_,
 and not a sequence of programs.
@@ -377,7 +397,9 @@ and not a sequence of programs.
 Once you get the hang of writing these scripts,
 it may seem appealing to string a number of programs together in a single script,
 so that it's easier to rerun everything at once &mdash;
-but in practice, that will often end up leading to more difficulties than convenience. 
+but in practice, that will often end up leading to more difficulties than convenience.
+Once again, if you do want to develop a workflow that can run from start to finish,
+you'll have to bite the bullet and learn a workflow management system.
 :::
 
 <br>
@@ -386,32 +408,29 @@ but in practice, that will often end up leading to more difficulties than conven
 
 ### Submitting the script for one FASTQ file
 
-Open a new file in VS Code
-(&nbsp; {{< fa bars >}} &nbsp; => &nbsp; `File` &nbsp; => &nbsp; `New File`)
-and save it as `fastqc.sh` within your `scripts/` directory.
-Paste in the code above and save the file.
+Let's submit our `fastqc.sh` script to the Slurm queue with `sbatch`:
 
-Then, submit the script:
-
-```{bash}
+```bash
 sbatch scripts/fastqc.sh data/fastq/ASPC1_A178V_R1.fastq.gz results/fastqc
 ```
-
-:::{.bash-out}
+```{.bash-out}
 Submitted batch job 12521308
-:::
+```
 
 :::{.callout-caution collapse="true"}
-### Once again: Where does our output go?
+### Once again: Where does our output go? (Click to expand)
 
-- Output that would have been printed to screen if we had run the script directly:
-  in the Slurm log file `slurm-fastqc-<job-nr>.out`
+- Output that would have been printed to screen if we had run the script directly,
+  such as our `echo` statements and _FastQC_'s progress logging,
+  will go into the Slurm log file `slurm-fastqc-<job-nr>.out` in our working dir.
   
-- FastQC's main output files (HTML and zip): to the output directory we specified.
+- _FastQC_'s main output files (HTML and zip) will end up in the output directory
+  we specified, in this case `results/fastqc`.
 :::
 
-Let's take a look at the queue &mdash; you may catch the job while it's still pending
-(note below that the `NAME` will be the name of the script, by default):
+If we take a look at the queue,
+you may catch the job while it's still pending
+(note below that the job's `NAME` will by default be the filename of the script):
 
 ```{.bash-out}
 Fri Aug 25 12:07:48 2023
@@ -431,11 +450,12 @@ The job will be finished within 10 seconds, though,
 and you might miss its listing in the `squeue` output entirely:
 as soon as it's done, it will be removed from the list.
 
-Of course, we have to always check whether it ran _successfully_ &mdash;
-to do so, let start by checking the Slurm log file:
+Of course, just because a job has finished does not mean that it has ran
+_successfully_, and we should always check this.
+Let's start by taking a look at the Slurm log file:
 
 ```{bash, eval=FALSE}
-cat slurm-fastqc-23666218.out    # You'll have a different number in the file name
+cat slurm-fastqc-23666218.out    # You'll have a different job number in the filename
 ```
 
 :::{.callout-note collapse="true"}
@@ -484,22 +504,13 @@ Our script already listed the output files,
 but let's take a look at those too, and do so in the VS Code file browser in the
 side bar.
 **To actually view FastQC's HTML output file**,
-we unfortunately need to download it with this older version of VS Code
-that's installed at OSC &mdash;
-but the ability to download files from here is a nice one!
+we unfortunately need to download it with the older version of VS Code
+that's installed at OSC.
+
+Find the HTML file in VS Code's file Explorer on the left-hand side of the screen,
+right-click on it, and **find the "Download..." entry** towards the bottom:
 
 <p align="center"><img src=img/vscode_download.png width="50%"></p>
-
-<br>
-
-::: {.callout-note}
-#### Add keyboard shortcut to run shell commands from the editor:
-
-- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
-
-- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
-  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
-:::
 
 <br>
 
@@ -507,7 +518,7 @@ but the ability to download files from here is a nice one!
 
 The script that we wrote above will run FastQC for a single FASTQ file.
 Now, we will write a loop that iterates over all of our FASTQ files
-(only 8 in this case, but could be 100s just the same),
+(only 8 files in our case, but this could be 100s of files just the same),
 and **submits a batch job for each of them.**
 
 Let's type the following into our `run.sh` script,
@@ -537,14 +548,30 @@ Submitted batch job 2451096
 - Take a look at the Slurm log files while the jobs are running and/or after the
   jobs are finished.
   
-  A nice trick when you have many log files to check using `tail` with a wildcard:
+  A nice trick when you have many log files is to check the last few lines of
+  all of them using `tail` with a wildcard.
+  This is useful because recall that with our strict Bash settings,
+  a script should only run until the end if it did not encounter errors.
+  And `tail` will helpfully include file name markers when you run it on
+  multiple files as follows:
   
-  ```
+  ```bash
   tail slurm-fastqc*
   ```
 
-- Take a look at the FastQC output files: are you seeing 8 HTML files?  
+- Take a look at _FastQC_'s output files: are you seeing 8 HTML files?  
 
+:::
+
+::: {.callout-note}
+#### Add keyboard shortcut to run shell commands from the editor
+
+**TODO - expand on this**
+
+- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
+
+- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
+  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
 :::
 
 <br>
