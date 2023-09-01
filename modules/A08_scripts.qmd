@@ -161,11 +161,11 @@ You should see an option "**_Toggle Auto Save_**": click on that.
 :::
 
 Shell scripts mostly contain the same regular Unix shell (specifically, Bash shell)
-code that we have so far just been typing in the terminal.
+code that we have gotten familiar with,
+but have so far directly typed in the terminal.
 As such,
 **our single line with an `echo` command already consitutes a functional shell script!**
-One way of running the script is by calling the `bash` command followed by the
-path to the script:
+One way of running the script is by typing `bash` followed by the path to the script:
 
 ```bash
 bash sandbox/printname.sh
@@ -195,21 +195,23 @@ Such a line starts with **`#!`**,
 basically marking it as a special type of comment.
 After that, we provide the location to the relevant program:
 in our case Bash (which is the specific type of shell we are using),
-which is located at `/bin/bash` on Linux and Mac computers.
+which itself is just a program with a binary (executable) file
+that is located at `/bin/bash` on Linux and Mac computers.
 
 ```sh
 #!/bin/bash
 ```
 
-While not always strictly necessary, adding a _shebang_ line is good practice,
+While not always strictly necessary,
+adding a _shebang_ line to every shell script is good practice,
 especially when we want to submit our script to OSC's Slurm queue.
 
 <br>
 
 ### Shell script settings
 
-Another line that is good practice to add to your shell scripts changes some
-default settings to safer alternatives.
+Another boilerplate line that is good practice to add to your shell scripts
+will change some default Bash settings to safer alternatives.
 
 #### Bad default shell settings {-}
 
@@ -228,7 +230,7 @@ Hello, my name is  ...
 
 In scripts, this can lead to all sorts of downstream problems,
 because you very likely tried and failed to do something with an existing variable
-(but e.g. misspelled its name, or forgot to assign it altogether).
+(e.g. you misspelled its name, or forgot to assign it altogether).
 Even more problematically,
 this can lead to potentially very destructive file removal,
 as the box below illustrates.
@@ -402,8 +404,7 @@ ls data/sampleA.fastq.gz data/sampleB.fastq.gz
 # (No need to run any of this, they are just syntax examples)
 ```
 
-Let's see what this would look like with our `printname.sh` script
-and a fictional script `fastqc.sh`:
+And here is what it looks like to pass arguments to scripts:
 
 ```bash
 # Run scripts without any arguments:
@@ -418,7 +419,7 @@ bash sandbox/printname.sh John Doe        # 2 arguments, strings representing na
 ```
 
 In the next section,
-we'll see what actually happens when we pass arguments to a script on the command line.
+we'll see what happens inside the script with the arguments we pass to it.
 
 <br>
 
@@ -447,8 +448,9 @@ any third argument will be assigned to **`$3`**, and so on.
 
 However, these placeholder variables are not automagically _used_ &mdash;
 the arguments passed to a script are **merely made available** in these variables.
-Unless we explicitly include code in the script to _do_ something with
-these variables, nothing else happens. 
+So, unless we explicitly include code in the script to _do_ something with
+these variables,
+nothing else happens. 
 
 Therefore, let's add some code to our `printname.sh` script to "process"
 any first and last name that are passed to the script.
@@ -483,9 +485,10 @@ Then, run it, and if you didn't make a successful prediction,
 try to figure out what happened instead.
 
 1. Run the script (`sandbox/printname.sh`) without passing arguments to it.
+   (Keep in mind that we have the `set -euo pipefail` line in the script.)
 
 2. Deactivate ("comment out") the line with `set` settings
-   by inserting a `#` as the first character.
+   by inserting a `#` as the first character of that line.
    Then, run the script again without passing arguments to it.
 
 3. Double-quote `John Doe` when you run the script,

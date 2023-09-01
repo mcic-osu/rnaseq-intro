@@ -60,7 +60,7 @@ website:
           - href: "modules/A07_overview.qmd"
             text: "A7. Next steps, variables & loops"
           - href: "modules/A08_scripts.qmd"
-            text: "A8. Shell scripts"
+            text: "A8. Shell scripting"
           - href: "modules/A09_software.qmd"
             text: "A9. Software at OSC"
           - href: "modules/A10_slurm.qmd"
@@ -73,22 +73,22 @@ website:
         contents:
           - href: "modules/B01_fastqc.qmd"
             text: "B1. Read QC with _FastQC_"
-          - text: "B2. Summarizing QC results with _MultiQC_ [TBA]"
-          - text: "B3. Trimming with _TrimGalore_ [TBA]"
-          - text: "B4. Alignment with _STAR_ [TBA]"
-          - text: "B5. Quantification with _Salmon_ [TBA]"
-          - text: "B6: The Nextflow/nf-core rnaseq workflow [TBA]"
+          - text: "B2. Summarizing QC results with _MultiQC_"
+          - text: "B3. Trimming with _TrimGalore_"
+          - text: "B4. Alignment with _STAR_"
+          - text: "B5. Quantification with _Salmon_"
+          - text: "B6: The Nextflow/nf-core rnaseq workflow"
       - id: count_analysis
         title: "C. Analyzing the counts"
         style: docked
         background: light
         collapse-level: 2
         contents:
-          - text: "C1. Creating a _DESeq2_ object [TBA]"
-          - text: "C2. PCA [TBA]"
-          - text: "C3. Differential expression analysis [TBA]"
-          - text: "C4. GO enrichment analysis [TBA]"
-          - text: "C5. KEGG enrichment analysis [TBA]" 
+          - text: "C1. Creating a _DESeq2_ object"
+          - text: "C2. PCA"
+          - text: "C3. Differential expression analysis"
+          - text: "C4. GO enrichment analysis"
+          - text: "C5. KEGG enrichment analysis" 
   page-footer:
     left: "2023, Jelmer Poelstra"
     right:
@@ -100,6 +100,8 @@ format:
     theme: cosmo
     css: styles.css
     toc: true
+    grid:
+      body-width: 750px
 
 execute:
   freeze: auto

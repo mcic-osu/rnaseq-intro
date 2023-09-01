@@ -164,7 +164,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../modules/A08_scripts.html" rel="" target="">
- <span class="dropdown-text">A8. Shell scripts</span></a>
+ <span class="dropdown-text">A8. Shell scripting</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../modules/A09_software.html" rel="" target="">
@@ -243,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modules/A08_scripts.html">A8. Shell scripts</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../modules/A08_scripts.html">A8. Shell scripting</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
     </div>
@@ -300,7 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../modules/A08_scripts.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">A8. Shell scripts</span></a>
+ <span class="menu-text">A8. Shell scripting</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -513,7 +513,7 @@ Auto Save not happening? (Click to expand)
 </div>
 </div>
 </div>
-<p>Shell scripts mostly contain the same regular Unix shell (specifically, Bash shell) code that we have so far just been typing in the terminal. As such, <strong>our single line with an <code>echo</code> command already consitutes a functional shell script!</strong> One way of running the script is by calling the <code>bash</code> command followed by the path to the script:</p>
+<p>Shell scripts mostly contain the same regular Unix shell (specifically, Bash shell) code that we have gotten familiar with, but have so far directly typed in the terminal. As such, <strong>our single line with an <code>echo</code> command already consitutes a functional shell script!</strong> One way of running the script is by typing <code>bash</code> followed by the path to the script:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> sandbox/printname.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>This script will print a first and a last name</code></pre>
 <p>That worked! Although of course, the script doesn’t yet print any names like it “promises” to do, but we will add that functionality in a little bit.</p>
@@ -523,21 +523,21 @@ Auto Save not happening? (Click to expand)
 <section id="shebang-line" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="shebang-line"><span class="header-section-number">1.2</span> Shebang line</h3>
 <p>We use a so-called “<em>shebang</em>” line as the first line of a script to <strong>indicate which language our script uses</strong>. More specifically, this line tell the computer where to find the binary (executable) that will run our script.</p>
-<p>Such a line starts with <strong><code>#!</code></strong>, basically marking it as a special type of comment. After that, we provide the location to the relevant program: in our case Bash (which is the specific type of shell we are using), which is located at <code>/bin/bash</code> on Linux and Mac computers.</p>
+<p>Such a line starts with <strong><code>#!</code></strong>, basically marking it as a special type of comment. After that, we provide the location to the relevant program: in our case Bash (which is the specific type of shell we are using), which itself is just a program with a binary (executable) file that is located at <code>/bin/bash</code> on Linux and Mac computers.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>While not always strictly necessary, adding a <em>shebang</em> line is good practice, especially when we want to submit our script to OSC’s Slurm queue.</p>
+<p>While not always strictly necessary, adding a <em>shebang</em> line to every shell script is good practice, especially when we want to submit our script to OSC’s Slurm queue.</p>
 <p><br></p>
 </section>
 <section id="shell-script-settings" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="shell-script-settings"><span class="header-section-number">1.3</span> Shell script settings</h3>
-<p>Another line that is good practice to add to your shell scripts changes some default settings to safer alternatives.</p>
+<p>Another boilerplate line that is good practice to add to your shell scripts will change some default Bash settings to safer alternatives.</p>
 <section id="bad-default-shell-settings" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="bad-default-shell-settings">Bad default shell settings</h4>
 <p>The following two default settings of the Bash shell are bad ideas inside scripts:</p>
 <p><strong><em>First</em></strong>, as we’ve seen previously, when you <strong>reference a variable that does not exist</strong>, the shell will just replace that with nothing, and will not complain:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Hello, my name is </span><span class="va">$myname</span><span class="st"> ..."</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Hello, my name is  ...</code></pre>
-<p>In scripts, this can lead to all sorts of downstream problems, because you very likely tried and failed to do something with an existing variable (but e.g.&nbsp;misspelled its name, or forgot to assign it altogether). Even more problematically, this can lead to potentially very destructive file removal, as the box below illustrates.</p>
+<p>In scripts, this can lead to all sorts of downstream problems, because you very likely tried and failed to do something with an existing variable (e.g.&nbsp;you misspelled its name, or forgot to assign it altogether). Even more problematically, this can lead to potentially very destructive file removal, as the box below illustrates.</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -652,7 +652,7 @@ Running the script without using the <code>bash</code> command (Click to expand)
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> data/sampleA.fastq.gz data/sampleB.fastq.gz</span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># (No need to run any of this, they are just syntax examples)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Let’s see what this would look like with our <code>printname.sh</code> script and a fictional script <code>fastqc.sh</code>:</p>
+<p>And here is what it looks like to pass arguments to scripts:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Run scripts without any arguments:</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> fastqc.sh                            <span class="co"># (Fictional script)</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> sandbox/printname.sh</span>
@@ -662,7 +662,7 @@ Running the script without using the <code>bash</code> command (Click to expand)
 <span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="fu">bash</span> sandbox/printname.sh John Doe        <span class="co"># 2 arguments, strings representing names</span></span>
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># (No need to run any of this, they are just syntax examples)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In the next section, we’ll see what actually happens when we pass arguments to a script on the command line.</p>
+<p>In the next section, we’ll see what happens inside the script with the arguments we pass to it.</p>
 <p><br></p>
 </section>
 <section id="placeholder-variables" class="level3" data-number="2.2">
@@ -687,7 +687,7 @@ In the calls to fastqc.sh and printname.sh above, what are the placeholder varia
 </div>
 </div>
 </div>
-<p>However, these placeholder variables are not automagically <em>used</em> — the arguments passed to a script are <strong>merely made available</strong> in these variables. Unless we explicitly include code in the script to <em>do</em> something with these variables, nothing else happens.</p>
+<p>However, these placeholder variables are not automagically <em>used</em> — the arguments passed to a script are <strong>merely made available</strong> in these variables. So, unless we explicitly include code in the script to <em>do</em> something with these variables, nothing else happens.</p>
 <p>Therefore, let’s add some code to our <code>printname.sh</code> script to “process” any first and last name that are passed to the script. For now, our script will simply <code>echo</code> the placeholder variables, so that we can see what happens:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
@@ -705,8 +705,8 @@ Last name: Doe</code></pre>
 <h3 class="unnumbered anchored" data-anchor-id="on-your-own-command-line-arguments">On Your Own: Command-line arguments</h3>
 <p>In each case below, <strong>think about what might happen before you run the script</strong>. Then, run it, and if you didn’t make a successful prediction, try to figure out what happened instead.</p>
 <ol type="1">
-<li><p>Run the script (<code>sandbox/printname.sh</code>) without passing arguments to it.</p></li>
-<li><p>Deactivate (“comment out”) the line with <code>set</code> settings by inserting a <code>#</code> as the first character. Then, run the script again without passing arguments to it.</p></li>
+<li><p>Run the script (<code>sandbox/printname.sh</code>) without passing arguments to it. (Keep in mind that we have the <code>set -euo pipefail</code> line in the script.)</p></li>
+<li><p>Deactivate (“comment out”) the line with <code>set</code> settings by inserting a <code>#</code> as the first character of that line. Then, run the script again without passing arguments to it.</p></li>
 <li><p>Double-quote <code>John Doe</code> when you run the script, i.e.&nbsp;run <code>bash sandbox/printname.sh "John Doe"</code></p></li>
 </ol>
 <p>To get back to where we were, remove the <code>#</code> you inserted in the script in step 2 above.</p>
