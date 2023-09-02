@@ -461,6 +461,7 @@ so that we can see what happens:
 #!/bin/bash
 set -euo pipefail
 
+echo "This script will print a first and a last name"
 echo "First name: $1"
 echo "Last name: $2"
 
@@ -473,6 +474,7 @@ Next, we'll _run_ the script, passing the arguments `John` and `Doe`:
 bash sandbox/printname.sh John Doe
 ```
 ```{.bash-out}
+This script will print a first and a last name
 First name: John
 Last name: Doe
 ```
@@ -560,7 +562,8 @@ set -euo pipefail
 
 first_name=$1
 last_name=$2
-  
+
+echo "This script will print a first and a last name"
 echo "First name: $first_name"
 echo "Last name: $last_name"
 
@@ -664,6 +667,7 @@ set -euo pipefail
 
 input_file=$1
 
+# Print the first and last 2 lines of a file, separated by a line with "---"
 head -n 2 "$input_file"
 echo "---"
 tail -n 2 "$input_file"
@@ -728,6 +732,7 @@ set -euo pipefail
 input_file=$1
 output_file=$2
 
+# Print the first and last 2 lines of a file, separated by a line with "---"
 head -n 2 "$input_file" > "$output_file"
 echo "---" >> "$output_file"
 tail -n 2 "$input_file" >> "$output_file"
@@ -804,7 +809,7 @@ echo "# Input file:   $input_file"
 echo "# Output file:  $output_file" 
 echo                                 # Empty line to separate initial & final logging
 
-# Print the first and last two lines to a separate file
+# Print the first and last 2 lines of a file, separated by a line with "---"
 head -n 2 "$input_file" > "$output_file"
 echo "---" >> "$output_file"
 tail -n 2 "$input_file" >> "$output_file"

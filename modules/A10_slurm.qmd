@@ -1,5 +1,6 @@
 ---
-title: "Submitting and monitoring Slurm batch jobs"
+title: "Slurm batch jobs"
+subtitle: "Submitting and monitoring shell scripts as Slurm batch jobs"
 pagetitle: "Slurm"
 highlight-style: github
 number-sections: true

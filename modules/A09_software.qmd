@@ -1,6 +1,6 @@
 ---
 title: "Using Software at OSC"
-subtitle: "Loading existing modules and installing and using software with _Conda_" 
+subtitle: "Loading 'modules' and activating _Conda_ environments,<br> with at-home reading on installation with _Conda_ and using _Apptainer_ containers" 
 pagetitle: "Software at OSC"
 highlight-style: github
 number-sections: true
@@ -17,11 +17,6 @@ knitr::opts_chunk$set(eval = FALSE, class.output = "bash-out")
 
 <br>
 
-::: {.callout-important}
-## Under construction 
-This page is nearly finished, only the Container section needs to be completed.
-:::
-
 ## Overview & setting up {-}
 
 To analyze RNAseq data and other genomics data sets,
@@ -29,13 +24,17 @@ a typical workflow includes using a sequence of specialized bioinformatics softw
 
 At OSC, there are system-wide installations of a number of bioinformatics programs.
 As we briefly [saw earlier for FastQC](./A07_overview.qmd#running-a-cli-program-interactively),
-and will talk about more here, we do need to "load" such programs.
-
-Unfortunately,
-the collection of bioinformatics programs at OSC is not very comprehensive,
+and will talk about more here,
+we do need to "load" such programs before we can use them.
+The collection of bioinformatics programs at OSC is unfortunately not comprehensive,
 and some of the available programs only come in relatively old versions.
-We therefore also need a way to make other programs available to ourselves
-at OSC.
+
+We therefore also need another way to make bioinformatics programs available to
+ourselves.
+Two common methods are using the _Conda_ software management and containers &mdash;
+we will talk about loading MCIC's _Conda_ enviroments,
+while there is at-home reading about installing your own software with _Conda_,
+and using containers.
 
 #### Start VS Code and open your folder {-}
 
@@ -126,7 +125,7 @@ You should have at least the following files in this dir:
 
 OSC administrators manage software with the _Lmod_ system of software modules.
 For us users, this means that even though a lot of software is installed,
-**most of it can only be used after we explicitly load it.**  
+**most of it can only be used after we explicitly load it.**
 (That may seem like a drag, but on the upside,
 this practice enables the use of different versions of the same software,
 and of mutually incompatible software on a single system.)
@@ -141,14 +140,15 @@ The OSC website has a
 You can also search for available software in the shell
 using two subtly different commands:
   
-  - `module spider` lists modules that are installed.
+  - `module spider` lists all modules that are installed.
   - `module avail` lists modules that *can be directly loaded*,
     given the current environment
     (i.e., depending on which other software has been loaded).
 
 Simply running `module spider` or `module avail` would spit out the full lists
 of installed/available programs &mdash;
-it is more useful to add a **search term** as an argument to these commands:
+it is more useful to add a **search term** as an argument to these commands &mdash;
+below, we'll search for "miniconda" with each of these commands:
 
 ```bash
 module spider miniconda
@@ -183,7 +183,7 @@ module avail miniconda
 ```
 
 As stated at the bottom of the output below,
-the `(D)` in the `module avail` output above marks the default version of the program:
+the `(D)` in the `module avail` output above marks the **default version** of the program:
 this is the version of the program that will be loaded if we don't specify
 a version ourselves (see examples below).
 The `module spider` command does not provide this information.
@@ -194,7 +194,7 @@ The `module spider` command does not provide this information.
 
 All other _Lmod_ software functionality is also accessed using `module`
 "subcommands" (we call `module` the command and e.g. `spider` the subcommand).
-For instance, to make a program available to us we need to **_load_ a module**:
+For instance, to make a program available to us we use the `load` subcommand:
   
 ```bash
 # Load a module:
@@ -202,7 +202,7 @@ module load miniconda3               # Load the default version
 module load miniconda3/23.3.1-py310  # Load a specific version
 ```
 
-::: {.callout-tip}
+::: {.callout-note}
 #### Modules do not remain loaded across separate shell sessions 
 Module loading does _not_ persist across shell sessions.
 Whenever you get a fresh shell session
@@ -210,8 +210,9 @@ Whenever you get a fresh shell session
 you will have to (re)load any modules you want to use!
 :::
 
-To check which modules have been loaded, we use `module list` &mdash;
-note that the output includes several _automatically_ loaded modules:
+To check which modules have been loaded,
+use `module list` &mdash;
+the output will also include _automatically_ loaded modules:
 
 ```bash
 module list
@@ -221,18 +222,14 @@ Currently Loaded Modules:
   1) xalt/latest   2) gcc-compatibility/8.4.0   3) intel/19.0.5   4) mvapich2/2.3.3   5) modules/sp2020
 ```
 
-:::{.callout-note collapse="true"}
-## Unloading modules (Click to expand)
-
 Occasionally, when you run into conflicting (mutually incompatible) modules,
-it can be useful to unload modules,
+it can be useful to **unload modules**,
 which you can do as follows:
 
 ```bash
 module unload python        # Unload a module
 module purge                # Unload all modules
 ```
-:::
 
 <br>
 
@@ -248,9 +245,9 @@ fastqc --help
 bash: fastqc: command not found
 ```
 
-:::{.callout-tip}
+:::{.callout-note}
 ##### Help!
-A solid majority of command-line programs can be run with with a `--help`
+Many command-line programs can be run with with a `--help`
 (and/or `-h`) flag, and this is often a good thing to try first,
 since it will tell use whether we can use the program &mdash;
 and if we can, we immediately get some usage information.
@@ -270,7 +267,7 @@ There is only one version available (`0.11.8`),
 which means that `module load fastqc` and `module load fastqc/0.11.8` would 
 each load that same version.
 
-:::{.callout-caution collapse="true"}
+:::{.callout-tip collapse="true"}
 ## What might still be a reason to specify the version when we load FastQC?
 
 When we use the `module load` command inside a script:
@@ -308,7 +305,10 @@ SYNOPSIS
 ```
 
 ::: {.exercise}
-#### On your own: load `miniconda3`
+#### On your own: load `miniconda3` {-}
+
+The `miniconda3` module will allow us to use Conda software environments,
+which we'll talk about more below.
 
 - Load the default version of `miniconda3`, and then check which version was loaded.
 
@@ -353,7 +353,7 @@ The following have been reloaded with a version change:
 
 It's not too uncommon that software you need for your project
 is not installed at OSC,
-or that you need a more recent version of the software than is available.
+or that you need a more recent version of the software than what is available.
 In that case, the following two are generally your best options:
 
 - **_Conda_**, which creates software environments that you can activate
@@ -370,7 +370,8 @@ In that case, the following two are generally your best options:
 - Send an **email to [OSC Help](mailto:oschelp@osc.edu)**.
   They might be able to help you with your installation,
   or in case of commonly used software, might be willing to perform a
-  system-wide installation (that is, making it available through _Lmod_).
+  system-wide installation
+  (that is, making it available through _Lmod_ / `module` commands).
 
 - **"Manually" install the software**, which in the best case involves
   downloading a directly functioning binary (executable),
@@ -382,13 +383,14 @@ In that case, the following two are generally your best options:
 
 _Conda_ and containers are useful not only at OSC,
 where they bypass issues with dependencies and administrator privileges,
-but more generally, for **reproducible and portable software environments**.
+but more generally for **reproducible and portable software environments**.
 They also allow you to easily maintain distinct "environments",
 each with a different version of the same software,
 or with mutually incompatible software.
 
-Below, you'll learn how you can use Conda and/or containers to use bioinformatics
-programs that aren't installed system-wide at OSC.
+Next, we'll talk about _Conda_ and using the MCIC's _Conda_ environments.
+The at-home reading includes installing software yourself with Conda,
+and using containers.
 
 [^1]: When your personal computer asks you to "authenticate" while you are
       installing something, you are authenticating yourself as a user with
@@ -460,7 +462,7 @@ _TrimGalore_, and _SortMeRNA_.
 
 ### Activating _Conda_ environments
 
-_Conda_ itself is already installed at OSC as _Miniconda_,
+_Conda_ itself is already installed at OSC through _Miniconda_,
 but we always need to load its module before we can use it:
       
 ```bash
@@ -469,8 +471,8 @@ module load miniconda3
 
 As mentioned above, these environments are activated and deactivated
 in a similar manner as with the _Lmod_ system.
-(But whereas we use the term "load" for _Lmod_ modules,
-we use **"activate"** for _Conda_ environments &mdash; it means the same thing.)
+But whereas we use the term "load" for _Lmod_ modules,
+we use **"activate"** for _Conda_ environments &mdash; it means the same thing.
 
 Also like _Lmod_, there is a main command (`conda`) and several subcommands
 (`deactivate`, `create`, `install`, `update`) for different functionality.
@@ -488,12 +490,13 @@ source activate /fs/ess/PAS0471/jelmer/conda/multiqc
 :::{.callout-tip}
 ##### _Conda_ environment indicator
 When we have an active _Conda_ environment,
-its name is conveniently displayed in our prompt, as depicted above.
+its name is conveniently displayed in front of our prompt, as depicted above.
 :::
 
 After we have activated the `multiqc` environment, 
 we should be able to actually use the program.
-To test this, we'll again simply run it with a `--help` option:
+To test this, we'll simply run it with the `--help` option like we did with
+_FastQC_:
 
 ```{bash, eval=FALSE}
 multiqc --help
@@ -524,15 +527,57 @@ multiqc --help
 
 <br>
 
+Unlike _Lmod_ / `module load`,
+_Conda_ will by default only keep **a single environment activated**.
+Therefore, when you have one environment activate and then activate another,
+you will _switch_ environments:
+
+```bash
+# After running this command, the multiqc env will be active
+source activate /fs/ess/PAS0471/jelmer/conda/multiqc
+
+# After running his command, the trimgalore env will be active
+source activate /fs/ess/PAS0471/jelmer/conda/trimgalore
+
+# ...but the multiqc env will no longer be:
+multiqc --help
+```
+```{.bash-out}
+bash: multiqc: command not found...
+```
+
+However,
+the `conda activate --stack` option enables you to have
+**multiple _Conda_ environments active at once**:
+
+```bash
+# Assuming you had trimgalore activated, now add the multiqc env:
+conda activate --stack /fs/ess/PAS0471/jelmer/conda/multiqc
+
+multiqc --help
+# (Output not shown, but this should print help info)
+
+trim_galore --help
+# (Output not shown, but this should print help info)
+```
+
+Note that it's `conda activate --stack` and not `source activate --stack`!
+
+<br>
+
 ### Lines to add to your shell script
 
 As mentioned above for _Lmod_ modules,
 you need to load them in every shell session you want to use them &mdash;
 and the same is true for _Conda_ environments.
-Therefore, you should also always
+While Conda enviroments that are loaded in your interactive shell environment
+will "carry over" to the environment in which your script runs
+(even when you submit them to the Slurm queue with `sbatch`; 
+topic of the next session),
+it is good practice to always
 _include the necessary code to load/activate programs in your shell scripts._
 
-**When your program is in an _Lmod_ module**,
+**When the program you will run in a script is in an _Lmod_ module**,
 this only involves a `module load` call &mdash; e.g., for _FastQC_:
 
 ```bash
@@ -543,7 +588,7 @@ set -euo pipefail
 module load fastqc
 ```
 
-**When your program is in a _Conda_ environment**,
+**When the program you will run in a script is in a _Conda_ environment**,
 this entails a `module load` command to load _Conda_ itself,
 followed by a `source activate` command to load the relevant _Conda_ environment:
 
@@ -559,83 +604,64 @@ set -euo pipefail
 ```
 
 :::{.callout-warning}
-I've moved the `set -euo pipefail` line _below_ the `source activate` command,
-because the _Conda_ activation procedure can otherwise result in "unbound variable"
-errors.
-:::
+#### Perils of Conda environments inside scripts
 
-::: {.callout-note}
-#### A few other useful _Conda_ commands
+- In the example above,
+  the `set -euo pipefail` line was moved to _below_ the `source activate` command,
+  because the _Conda_ activation procedure can otherwise result in
+  **"unbound variable" errors**.
 
-- Deactivate the currently active _Conda_ environment:
+- Another unfortunate aspect of _Conda_ environments at OSC is the following.
+  Problems can occur when you have a Conda environment active in your interactive
+  shell while you submit a script as a batch job that activates a different environment.
+  
+  Therefore, it is generally a good idea to
+  **not have any Conda environments active in your interactive shell**
+  **when submitting batch jobs[^4]**.
+  To deactivate the currently active _Conda_ environment,
+  simply type `conda deactivate` without any arguments:
 
-  ```{bash, eval=FALSE}
+  ```bash
   conda deactivate   
   ```
 
-- Activate one environment and then "stack" an _additional_ environment
-  (a regular `source activate` command would _switch_ environments):
-
-  ```{bash, eval=FALSE}
-  # Load one environment the regular way:
-  source activate /fs/ess/PAS0471/jelmer/conda/multiqc
-  # This will _also_ activate the TrimGalore environment (yes, use 'conda'!):
-  conda activate --stack /fs/ess/PAS0471/jelmer/conda/trimgalore
-  ```
-
-- List all packages (programs) installed in an environment &mdash;
-  due to dependencies, this can be a long list,
-  even if you only actively installed one program:
-
-  ```{bash, eval=FALSE}
-  conda list -n /fs/ess/PAS0471/jelmer/conda/multiqc
-  ```
+[^4]: Unless you first deactivate any active environments in your script,
+      which the "MCIC scripts" that we'll talk about later do.
 
 :::
 
 <br>
 
-## Using _Apptainer_ containers
-
-::: {.callout-caution}
-#### TODO
-:::
-
-- Docker vs. Singularity & Apptainer
-- Downloading a container
-- Running a program inside a container
-- Building your own containers outside of the scope of this intro
-
-<br>
-
-## At-home reading: Creating your own _Conda_ environments
+## At-home reading: Creating your own _Conda_ environments {-}
 
 When you want to create your own _Conda_ environments and install programs,
 make sure to load the most recent `miniconda3` module,
 which is currently not the default one.
 This is because installation has become much quicker and less likely to fail than
-in earlier versions
-(just for _loading_ environments, like we did above, the version doesn't matter).
+in earlier versions.
+(Note that when we are just _loading_ environments, like above,
+the version doesn't seem to matter).
 
 As of August 2023, the most recent version is `23.3.1-py310`
-(and recall that you can check all available versions with `module spider`):
+(recall that you can list available versions with `module spider`):
 
 ```bash
 module load miniconda3/23.3.1-py310
 ```
 
-### One-time _Conda_ configuration
+### One-time _Conda_ configuration {-}
 
-We first have to do some _one-time_ configuration[^4],
+We first have to do some _one-time_ configuration[^5],
 which will set the **_Conda_ "channels"** (basically, software repositories)
 that we want to use when we install programs.
 This config also includes setting relative _priorities_ among channels,
 since one program may be available from multiple channels.
 
-[^4]: That is, these settings will be saved somewhere in your OSC home directory,
+[^5]: That is, these settings will be saved somewhere in your OSC home directory,
       and you never have to set them again unless you need to make changes.
 
-We can do this with the `config` subcommand:
+We can do this with the `config` subcommand &mdash;
+run the following commands in your shell:
 
 ```bash
 conda config --add channels defaults     # Added first => lowest priority
@@ -659,11 +685,11 @@ conda config --get channels
 ### Example: Creating an environment for _Trim Galore!_
 
 To practice using _Conda_,
-we will now create a Conda environment with the program _Trim Galore!_ installed.
-
-_Trim Galore!_ is a commonly used program to do quality trimming and adapter trimming
-for `FASTQ` files &mdash;
-we'll learn more about it in a later session, as we will use it on our RNAseq data.
+we will now create a _Conda_ environment with the program _Trim Galore!_ installed.
+_Trim Galore!_ is a commonly used tool for quality trimming and adapter trimming
+of `FASTQ` files &mdash;
+we'll learn more about it in a later session,
+since we will use it on our RNAseq data.
 
 Here is the command to all at once create a new _Conda_ environment
 and install _Trim Galore!_ into that environment:
@@ -673,11 +699,12 @@ and install _Trim Galore!_ into that environment:
 conda create -y -n trim-galore -c bioconda trim-galore
 ```
 
-Let's break the above command down:
+Let's break that command down:
 
 - **`create`** is the _Conda_ subcommand to create a new environment.
 
-- **`-y`** is a flag that prevents us from being asked to confirm installation.
+- **`-y`** is a flag that prevents us from being asked to confirm installation
+  once _Conda_ has determined what needs to be installed.
 
 - Following the **`-n`** option, we can specify the name of the environment,
   so **`-n trim-galore`** means that we want our environment to be called
@@ -688,7 +715,7 @@ Let's break the above command down:
   it makes sense to simply name it after the program.
   
 - Following the **`-c`** option,
-  we can specify a channel from which we want to install,
+  we can specify a "channel" (repository) from which we want to install,
   so **`-c bioconda`** indicates we want to use the `bioconda` channel.
   (Given that we've done some config above, this is not always necessary,
   but it can be good to be explicit.)
@@ -731,8 +758,10 @@ Now, you should be able to activate the enviroment
 (using just it's name -- see the box below):
 
 ```bash
+# Activate the environment:
 source activate trim-galore
 
+# Test if TrimGalore can be run - note, the command is 'trim_galore': 
 trim_galore --help
 ```
 ```{.bash-out}
@@ -764,7 +793,7 @@ conda create -y -p /fs/scratch/PAS0471/$USER/conda/trim-galore -c bioconda trim-
 
 And when you want to load someone else's _Conda_ environments,
 you'll always have to specify the full path to environment's dir,
-like you did when loading a _Conda_ environment of mine above.
+like you did when loading an MCIC _Conda_ environment above.
 :::
 
 <br>
@@ -804,13 +833,15 @@ You may notice the `install` subcommand, which we haven't yet seen.
 This would install Cutadapt into _the currently activated Conda environment_.
 Since our strategy here --and my general strategy-- is to create a new
 environment each time you're installing a program,
-just installing in whatever environment is currently active is not a great idea.
-You could first create an "empty" environment, and _then_ run the install command,
-but we saw above that we can do all of this in a single command.
+just installing a program into whatever environment is currently active is not a great idea.
+To use the `install` command with a new environment,
+the strategy would be to first create an "empty" environment,
+and _then_ run the install command.
 
+However, we saw above that we can do all of this in a single command.
 To build this create-plus-install command, all we need to do is replace `install`
 in the example command on the _Conda_ website by `create -y -n <env-name>`.
-Then, our full command (without version specification) again will be:
+Then, our full command (without version specification) will be:
 
 ```bash
 conda create -y -n cutadapt -c bioconda cutadapt
@@ -819,9 +850,7 @@ conda create -y -n cutadapt -c bioconda cutadapt
 To see which **version** will be installed by default,
 and to see which older versions are available:
 
-<p align="center">
-<img src=img/conda_website_version.png width="70%">
-</p>
+<p align="center"><img src=img/conda_website_version.png width="70%"></p>
 
 For almost any other program, you can use the exact same procedure to find
 the _Conda_ package and install it!
@@ -829,25 +858,46 @@ the _Conda_ package and install it!
 ::: {.callout-note}
 #### A few more _Conda_ commands to manage your environments
 
+- Export a plain-text "YAML" file that contains the instructions to recreate
+  your environment (useful for reproducibility!)  
+
+  ```bash
+  conda env export > my_env.yml
+  ```
+
+  And you can use the following to create a Conda environment from such a YAML
+  file:
+
+  ```bash
+  conda env create -n my_env --force --file my_env.yml
+  ```
+
 - Remove an environment entirely:
 
-  ```{bash, eval=FALSE}
+  ```bash
   conda env remove -n cutadapt
   ```
 
 - List all your conda environments:
 
-  ```{bash, eval=FALSE}
+  ```bash
   conda env list
   ```
 
+- List all packages (programs) installed in an environment &mdash;
+  due to dependencies, this can be a long list,
+  even if you only actively installed one program:
+
+  ```bash
+  conda list -p /fs/ess/PAS0471/jelmer/conda/multiqc
+  ```
 :::
 
-:::{.callout-note}
-## Use one environment per program (as here) or one per research project
+:::{.callout-tip}
+## Use one environment per program (as here) _or_ one per research project
 
 Below are two reasonable ways to organize your _Conda_ environments,
-and their advantages:
+and their respective advantages:
 
 - **Have one environment per program** (my preference)
   - Easier to keep an overview of what you have installed
@@ -861,13 +911,197 @@ and their advantages:
   - Easier when you need to share your entire project with someone else
     (or yourself) on a different (super)computer.
 
-Even though it might seem easier,
-it's _not_ recommended to simply install all programs across all projects in
-one single environment.
-This doesn't benefit reproducibility and your environment is likely to
-sooner or later stop functioning properly.
+Even though it might seem easier, a third alternative,
+to simply install all programs across all projects in one single environment,
+is _not_ recommended.
+This doesn't benefit reproducibility,
+and your environment is likely to stop functioning properly sooner or later.
 
-A side note is that even when you want to install a single program,
+(A side note: even when you want to install a single program,
 multiple programs _are_ in fact nearly always installed:
-the programs that your target program depends on ("dependencies").
+the programs that your target program depends on, i.e. "dependencies".)
 :::
+
+<br>
+
+## At-home reading: Using _Apptainer_ containers {-}
+
+Besides _Conda_, **containers** are another way to use bioinformatics programs
+at OSC that don't have system-wide installations.
+
+Containers are similar to Virtual Machines and different from _Conda_ environments
+in that they come with an entire _operating system_.
+This makes creating your own container "image" (see box below on terminology)
+much more involved than creating a  _Conda_ environment,
+and we will not cover that here.
+
+However, there are pre-existing container images available for most bioinformatics
+programs, and they can be easily found, downloaded, and used.
+
+::: {.callout-note}
+#### Container terminology
+
+- **Container image**:
+  File (_Apptainer_) or files (_Docker_) that contain the  container application.
+- **Container** (sensu stricto): A _running_ container image.
+- **Definition file** (_Apptainer_) / **Dockerfile** (_Docker_):
+  A plain text file that contains the recipe to build a container image.
+
+:::
+
+Among container platforms, _Apptainer_ (formerly known as _Singularity_)
+and especially _Docker_ are the most widely used ones.
+At supercomputers like OSC, however, only _Apptainer_ containers can be used.
+Luckily, _Apptainer_ can also work with _Docker_ containers. 
+
+### Finding container images online {-}
+
+There are several online repositories with publicly available container images,
+but I would recommend BioContainers <https://biocontainers.pro/registry>
+or Quay.io <https://quay.io/biocontainers>.
+
+For example, let's look on the BioContainers website
+for a _TrimGalore_ container image:
+
+<figure><p align="center">
+<img style="border:1px solid #4e524f;" src=img/biocontainers_search.png width="70%">
+<figcaption>The search result on the BioContainers website after entering "trim galore" in the search box.</figcaption>
+</p></figure>
+
+Click on the only entry that is shown, `trim-galore`,
+which will get you to a page like this:
+
+<figure><p align="center">
+<img style="border:1px solid #4e524f;" src=img/biocontainers_match.png width="80%">
+</p></figure>
+
+As you can see, this website also includes _Conda_ installation instructions &mdash;
+to see the container results, scroll down and you should see this:
+
+<figure><p align="center">
+<img style="border:1px solid #4e524f;" src=img/biocontainers_download.png width="80%">
+<figcaption>After scrolling down on the results page, you should see a recent available container image.<br>
+Note that the command shown is <code>singularity run</code>,
+but we will use the more up-to-date <code>apptainer run</code> later.
+</figcaption>
+</p></figure>
+
+The version tag that is shown (`0.6.9--hdfd78af_0` above)
+pertains to the version of TrimGalore,
+but the result that is shown here is not will always the container image(s) with
+the most recent version.
+To see a list of all available images,
+click on the `Packages and Containers` tab towards the top,
+and then sort by `Last Update`:
+
+<figure><p align="center">
+<img style="border:1px solid #4e524f;" src=img/biocontainers_versions.png width="80%">
+<figcaption>The logo with the large S depicts Singularity/Apptainer containers.</figcaption>
+</p></figure>
+
+Whenever both a Singularity/Apptainer and a Docker image for the desired version
+of the program is available, **use the Singularity/Apptainer image**.
+This is because those don't have to be converted, while Docker images do.
+But when the version you want is only available as a Docker image,
+that will work too:
+it will be automatically converted to the proper format.
+
+<br>
+
+### Running a container image {-}
+
+When you've found a container image that you want to use, copy its URL.
+For example, for the most recent TrimGalore version as of September 2023:
+`https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0`.
+
+You could also copy the full command &mdash;
+however, we will modify that in two ways:
+
+- We will use the more up-to-date `apptainer` command[^6]
+- We'll use the `exec` subcommand instead of `run`,
+  which allows us to enter a custom command to run in the container
+  (the `run` subcommand would only run some preset default action). 
+
+[^6]: Though note that as of September 2023,
+      the `singularity` command does still work,
+      and it will probably continue to work for a while.
+
+As such, our _base_ command to run _TrimGalore_ in the container will be as follows:
+
+```bash
+apptainer exec https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0
+# (Don't run this, we'll need to add a TrimGalore command)
+```
+
+After the code above, we would finish our command by simply entering
+a _TrimGalore_ command in the exact same way as we would when running _TrimGalore_
+outside of the context of a container.
+For example, to just print the help info like we've been doing before,
+the TrimGalore command is:
+
+```bash
+trim_galore --help
+```
+
+And to run that inside the container, our full command will be:
+
+```bash
+apptainer exec https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0 \
+    trim_galore --help
+```
+```{.bash-out}
+INFO:    Downloading network image
+321.4MiB / 321.4MiB [===================================================================================================================================] 100 % 3.0 MiB/s 0s
+WARNING: Environment variable LD_PRELOAD already has value [], will not forward new value [/apps/xalt/xalt/lib64/libxalt_init.so] from parent process environment
+
+ USAGE:
+
+trim_galore [options] <filename(s)>
+
+-h/--help               Print this help message and exits.
+# [...truncated...]
+```
+
+::: {.callout-note}
+- The Apptainer/Singularity software does _not_ need to be loaded at OSC,
+  it is always automatically loaded.
+- The `\` in the code above allows us to continue a command on another line.
+:::
+
+**So, all that is different from running a program inside a container**
+**versus a locally installed program,**
+**is that you prefix `apptainer exec <URL>` when using a container!**
+
+The first time you run this command, the container will be downloaded,
+which can take a few minutes
+(by default it will be downloaded to `~/.apptainer/cache`,
+but you can change this by setting the `$APPTAINER_CACHEDIR` environment variable).
+After that, the downloaded image will be used and the command should be executed
+about as instantaneously as when running `TrimGalore` outside of a container.
+
+You will keep seeing the warning  `WARNING: Environment variable LD_PRELOAD [...]`
+whenever you run a container, but this is nothing to worry about.
+
+And the `--help` option above can also simply be replaced by a host of other 
+_TrimGalore_ options and arguments
+so as to actually trim a pair of FASTQ files, i.e. with input and output files.
+You can just specify the paths to those files in the same way as without a container,
+this will work out of the box!
+
+::: {.callout-note}
+#### When to use a Container versus Conda
+
+- Try a container when installing a program through Conda fails,
+  or your environment misbehaves (e.g., memory errors with dumped cores).
+
+- When you need multiple programs in quick succession or in a single command
+  (e.g., you're piping the output of one program into a second program),
+  it can be more convenient to have those programs installed in a single
+  environmnent or container.
+  Pre-built multi-program containers are not as easy to find.
+  And since building your own Conda environment is easier than building your own
+  container, this is a situation where you might prefer _Conda_.
+
+:::
+
+<br>

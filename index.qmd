@@ -22,7 +22,7 @@ toc-depth: 4
 | 2023-08-11 | [FASTQ files](modules/A05_fastq.qmd)                                             |
 | 2023-08-18 | [Reference genome files (FASTA and GTF)](modules/A06_ref-files.qmd)              |
 | 2023-08-25 | [Overview of next steps, variables, and loops](modules/A07_overview.qmd)         |
-| 2023-09-01 | [Shell scripts](modules/A08_scripts.qmd)                                         |
+| 2023-09-01 | [Shell scripting](modules/A08_scripts.qmd)                                         |
 | 2023-09-08 | [Software at OSC](modules/A09_software.qmd) & recap                              |
 | 2023-09-15 | [Slurm batch jobs](modules/A10_slurm.qmd)                                        |
 

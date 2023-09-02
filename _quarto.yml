@@ -64,7 +64,7 @@ website:
           - href: "modules/A09_software.qmd"
             text: "A9. Software at OSC"
           - href: "modules/A10_slurm.qmd"
-            text: "A10. SLURM compute jobs"
+            text: "A10. SLURM batch jobs"
       - id: reads_to_counts
         title: "B. From reads to counts"
         style: docked
