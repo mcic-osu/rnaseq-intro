@@ -1057,6 +1057,18 @@ apptainer exec https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--h
 # (Don't run this, we'll need to add a TrimGalore command)
 ```
 
+::: {.callout-warning}
+#### You can't use the Docker URL as-is
+If you want to use a Docker container, the listed quasi-URL on BioContainers will
+start with "quay.io".
+In your `apptainer exec` command, you need to preface this URL with `docker://`.
+For instance: 
+
+```bash
+apptainer exec docker://quay.io/biocontainers/trim-galore:0.6.10--hdfd78af_0
+```
+:::
+
 After the code above, we would finish our command by simply entering
 a _TrimGalore_ command in the exact same way as we would when running _TrimGalore_
 outside of the context of a container.

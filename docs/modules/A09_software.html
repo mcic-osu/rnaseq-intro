@@ -1201,11 +1201,25 @@ The logo with the large S depicts Singularity/Apptainer containers.
 <p>As such, our <em>base</em> command to run <em>TrimGalore</em> in the container will be as follows:</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> exec https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0</span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Don't run this, we'll need to add a TrimGalore command)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+You can’t use the Docker URL as-is
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you want to use a Docker container, the listed quasi-URL on BioContainers will start with “quay.io”. In your <code>apptainer exec</code> command, you need to preface this URL with <code>docker://</code>. For instance:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> exec docker://quay.io/biocontainers/trim-galore:0.6.10--hdfd78af_0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
 <p>After the code above, we would finish our command by simply entering a <em>TrimGalore</em> command in the exact same way as we would when running <em>TrimGalore</em> outside of the context of a container. For example, to just print the help info like we’ve been doing before, the TrimGalore command is:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And to run that inside the container, our full command will be:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> exec https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0 <span class="dt">\</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>    trim_galore <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> exec https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0 <span class="dt">\</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>    trim_galore <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>INFO:    Downloading network image
 321.4MiB / 321.4MiB [===================================================================================================================================] 100 % 3.0 MiB/s 0s
 WARNING: Environment variable LD_PRELOAD already has value [], will not forward new value [/apps/xalt/xalt/lib64/libxalt_init.so] from parent process environment
