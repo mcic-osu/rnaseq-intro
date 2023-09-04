@@ -390,8 +390,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="overview-setting-up" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="overview-setting-up">Overview &amp; setting up</h2>
 <p>To analyze RNAseq data and other genomics data sets, a typical workflow includes using a sequence of specialized bioinformatics software.</p>
-<p>At OSC, there are system-wide installations of a number of bioinformatics programs. As we briefly <a href="../modules/A07_overview.html#running-a-cli-program-interactively">saw earlier for FastQC</a>, and will talk about more here, we do need to “load” such programs before we can use them. The collection of bioinformatics programs at OSC is unfortunately not comprehensive, and some of the available programs only come in relatively old versions.</p>
-<p>We therefore also need another way to make bioinformatics programs available to ourselves. Two common methods are using the <em>Conda</em> software management and containers — we will talk about loading MCIC’s <em>Conda</em> enviroments, while there is at-home reading about installing your own software with <em>Conda</em>, and using containers.</p>
+<p>At OSC, there are system-wide installations of a number of bioinformatics programs. As we briefly <a href="../modules/A07_overview.html#running-a-cli-program-interactively">saw earlier for FastQC</a>, and will talk about more here, we do need to “load” such programs before we can use them. However, OSC’s collection of bioinformatics programs is unfortunately not comprehensive, and some of the available programs only come in relatively old versions.</p>
+<p>We therefore also need another way to make bioinformatics programs available to ourselves. Two common methods are the <strong><em>Conda</em></strong> software management program and <strong>containers</strong>. We will talk about loading MCIC’s <em>Conda</em> environments, while the at-home reading covers installing software yourself with <em>Conda</em>, and using containers downloaded from the internet.</p>
 <section id="start-vs-code-and-open-your-folder" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="start-vs-code-and-open-your-folder">Start VS Code and open your folder</h4>
 <p>As always, we’ll be working in VS Code — if you don’t already have a session open, see below how to do so.</p>
@@ -476,16 +476,16 @@ Don’t have your own dir with the data? (Click to expand)
 </section>
 <section id="loading-software-at-osc-with-lmod-modules" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="loading-software-at-osc-with-lmod-modules"><span class="header-section-number">1</span> Loading software at OSC with <em>Lmod</em> modules</h2>
-<p>OSC administrators manage software with the <em>Lmod</em> system of software modules. For us users, this means that even though a lot of software is installed, <strong>most of it can only be used after we explicitly load it.</strong> (That may seem like a drag, but on the upside, this practice enables the use of different versions of the same software, and of mutually incompatible software on a single system.)</p>
+<p>OSC administrators manage software with the “<em>Lmod</em>” system of software modules. For us users, this means that even though a lot of software is installed, <strong>most of it can only be used after we explicitly load it.</strong> That may seem like a drag, but on the upside, this practice enables the use of different versions of the same software, and of mutually incompatible software on a single system.</p>
 <p>We can load, unload, and search for available software modules using the <strong><code>module</code> command</strong> and its various subcommands.</p>
 <section id="checking-whether-a-program-is-available" class="level3" data-number="1.1">
 <h3 data-number="1.1" class="anchored" data-anchor-id="checking-whether-a-program-is-available"><span class="header-section-number">1.1</span> Checking whether a program is available</h3>
-<p>The OSC website has a <a href="https://www.osc.edu/resources/available_software/software_list">list of installed software</a>. You can also search for available software in the shell using two subtly different commands:</p>
+<p>The OSC website has a <a href="https://www.osc.edu/resources/available_software/software_list">list of installed software</a>. You can also search for available software in the shell using two subtly different <code>module</code> subcommands<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <ul>
 <li><code>module spider</code> lists all modules that are installed.</li>
-<li><code>module avail</code> lists modules that <em>can be directly loaded</em>, given the current environment (i.e., depending on which other software has been loaded).</li>
+<li><code>module avail</code> lists modules that <em>can be directly loaded</em> given the current environment (i.e., taking into account which other software has been loaded).</li>
 </ul>
-<p>Simply running <code>module spider</code> or <code>module avail</code> would spit out the full lists of installed/available programs — it is more useful to add a <strong>search term</strong> as an argument to these commands — below, we’ll search for “miniconda” with each of these commands:</p>
+<p>Simply running <code>module spider</code> or <code>module avail</code> would spit out the full lists of installed/available programs — it is more useful to add a <strong>search term</strong> as an argument to these commands — below, we’ll search for the <em>Conda</em> distribution “miniconda”, with each of these two subcommands:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> spider miniconda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   miniconda3:
@@ -513,7 +513,7 @@ Don’t have your own dir with the data? (Click to expand)
 </section>
 <section id="loading-software" class="level3" data-number="1.2">
 <h3 data-number="1.2" class="anchored" data-anchor-id="loading-software"><span class="header-section-number">1.2</span> Loading software</h3>
-<p>All other <em>Lmod</em> software functionality is also accessed using <code>module</code> “subcommands” (we call <code>module</code> the command and e.g.&nbsp;<code>spider</code> the subcommand). For instance, to make a program available to us we use the <code>load</code> subcommand:</p>
+<p>All other <em>Lmod</em> software functionality is also accessed using <code>module</code> subcommands. For instance, to make a program available to us we use the <code>load</code> subcommand:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load a module:</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3               <span class="co"># Load the default version</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3/23.3.1-py310  <span class="co"># Load a specific version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -530,18 +530,18 @@ Modules do not remain loaded across separate shell sessions
 <p>Module loading does <em>not</em> persist across shell sessions. Whenever you get a fresh shell session (including but not limited to after logging into OSC again), you will have to (re)load any modules you want to use!</p>
 </div>
 </div>
-<p>To check which modules have been loaded, use <code>module list</code> — the output will also include <em>automatically</em> loaded modules:</p>
+<p>To check which modules have been loaded, use <code>module list</code>. Its output will also include <em>automatically</em> loaded modules, so for example, if you loaded <code>miniconda3/23.3.1-py310</code>, you should see the following list where the <em>miniconda3</em> module is listed as the 6th entry:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> list</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Currently Loaded Modules:
-  1) xalt/latest   2) gcc-compatibility/8.4.0   3) intel/19.0.5   4) mvapich2/2.3.3   5) modules/sp2020</code></pre>
+  1) xalt/latest   2) gcc-compatibility/8.4.0   3) intel/19.0.5   4) mvapich2/2.3.3   5) modules/sp2020   6) miniconda3/23.3.1-py310</code></pre>
 <p>Occasionally, when you run into conflicting (mutually incompatible) modules, it can be useful to <strong>unload modules</strong>, which you can do as follows:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> unload python        <span class="co"># Unload a module</span></span>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> unload miniconda3    <span class="co"># Unload a specific module</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> purge                <span class="co"># Unload all modules</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 </section>
 <section id="a-practical-example-fastqc-again" class="level3" data-number="1.3">
 <h3 data-number="1.3" class="anchored" data-anchor-id="a-practical-example-fastqc-again"><span class="header-section-number">1.3</span> A practical example: <em>FastQC</em> again</h3>
-<p>First, let’s test that we indeed <em>cannot</em> currently use <em>FastQC</em> by running <code>fastqc</code> with the <code>--help</code> flag:</p>
+<p>Here, we’ll load the module for <em>FastQC</em> again. First, let’s confirm that we indeed <em>cannot</em> currently use <em>FastQC</em> by running the <code>fastqc</code> command with the <code>--help</code> option:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">fastqc</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>bash: fastqc: command not found</code></pre>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -567,16 +567,16 @@ Help!
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-What might still be a reason to specify the version when we load FastQC?
+What might still be a reason to specify the version when we load the <em>FastQC</em> module?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>When we use the <code>module load</code> command inside a script:</p>
+<p>When we use the <code>module load</code> command inside a script, specifying a version would:</p>
 <ul>
-<li><p>This would ensure that when we run the same script a year later, the same version would be used (assuming it hasn’t been removed) — otherwise, it’s possible a newer version would has been installed in the meantime, which might produce different results.</p></li>
-<li><p>It will make it easy to see which version we used, which is something we typically report in papers.</p></li>
+<li><p>Ensure that when we run the same script a year later, the same version would be used (assuming it hasn’t been removed) — otherwise, it’s possible a newer version would has been installed in the meantime, which might produce different results.</p></li>
+<li><p>Make it easy to see which version we used, which is something we typically report in papers.</p></li>
 </ul>
 </div>
 </div>
@@ -596,9 +596,10 @@ SYNOPSIS
 # [...truncated...]</code></pre>
 <section id="on-your-own-load-miniconda3" class="level4 unnumbered exercise">
 <h4 class="unnumbered anchored" data-anchor-id="on-your-own-load-miniconda3">On your own: load <code>miniconda3</code></h4>
-<p>The <code>miniconda3</code> module will allow us to use Conda software environments, which we’ll talk about more below.</p>
+<p>The <code>miniconda3</code> module will allow us to use <em>Conda</em> software environments, which we’ll talk about more below.</p>
 <ul>
-<li>Load the default version of <code>miniconda3</code>, and then check which version was loaded.</li>
+<li><p>Let’s start with a clean sheet by running <code>module purge</code>.</p></li>
+<li><p>Load the default version of <code>miniconda3</code>, and then check which version was loaded.</p></li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
@@ -666,19 +667,20 @@ Other options to install software / get it installed
 <div class="callout-body-container callout-body">
 <ul>
 <li><p>Send an <strong>email to <a href="mailto:oschelp@osc.edu">OSC Help</a></strong>. They might be able to help you with your installation, or in case of commonly used software, might be willing to perform a system-wide installation (that is, making it available through <em>Lmod</em> / <code>module</code> commands).</p></li>
-<li><p><strong>“Manually” install the software</strong>, which in the best case involves downloading a directly functioning binary (executable), but more commonly requires you to “compile” (build) the program. This is sometimes straightforward but can also become extremely tricky, especially at OSC where you don’t have “administrator privileges”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and will often have difficulties with “dependencies”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p></li>
+<li><p><strong>“Manually” install the software</strong>, which in the best case involves downloading a directly functioning binary (executable), but more commonly requires you to “compile” (build) the program. This is sometimes straightforward but can also become extremely tricky, especially at OSC where you don’t have “administrator privileges”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and will often have difficulties with “dependencies”<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p></li>
 </ul>
 </div>
 </div>
 <p><em>Conda</em> and containers are useful not only at OSC, where they bypass issues with dependencies and administrator privileges, but more generally for <strong>reproducible and portable software environments</strong>. They also allow you to easily maintain distinct “environments”, each with a different version of the same software, or with mutually incompatible software.</p>
-<p>Next, we’ll talk about <em>Conda</em> and using the MCIC’s <em>Conda</em> environments. The at-home reading includes installing software yourself with Conda, and using containers.</p>
+<p>Next, we’ll talk about <em>Conda</em> and using the MCIC’s <em>Conda</em> environments. The at-home reading includes installing software yourself with <em>Conda</em>, and using containers downloaded from the internet.</p>
 <p><br></p>
 </section>
 <section id="intro-to-conda-using-mcics-conda-environments" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="intro-to-conda-using-mcics-conda-environments"><span class="header-section-number">3</span> Intro to <em>Conda</em> &amp; using MCIC’s <em>Conda</em> environments</h2>
 <p>The <em>Conda</em> software can create so-called <strong>environments</strong> in which one can install one or more software packages.</p>
-<p>As we’ll see below, as long as a program is available in one of the online <em>Conda</em> repositories, installing it is quite straightforward, doesn’t require admin privileges, and the process is basically identical regardless of the program.</p>
-<p>However, at OSC, you might not even have to install anything yourself, since I maintain an “MCIC collection” of <em>Conda</em> environments that anyone can use. A <em>Conda</em> environment is just a directory, and since all the environments in this collection are in the same place at OSC, you can list them as follows:</p>
+<p>As you can see in the at-home reading below, as long as a program is available in one of the online <em>Conda</em> repositories (which is nearly always for bioinformatics programs), then installing it is quite straightforward, doesn’t require admin privileges, and is done with a procedure that is nearly identical regardless of the program you are installing.</p>
+<p>However, at OSC, you will probably not even have to install anything yourself, at least not if you are following “standard” workflows with common data like RNAseq. To this end, I maintain an “MCIC collection” of <em>Conda</em> environments that anyone can use.</p>
+<p>A <em>Conda</em> environment is just a directory, and since all the environments in this collection are in the same place at OSC, you can list the MCIC <em>Conda</em> environments as follows:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> /fs/ess/PAS0471/jelmer/conda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>abricate-1.0.1  bedops-2.4.39  checkm-1.2.0   entrez-direct    htseq-2.0.2          longstitch-1.0.3  nanopolish-0.13.2    prokka            repeatmasker-4.1.2.p1         samtools                star
 agat-0.9.1      bedtools       clinker        evigene          inspector-1.2.0      mafft             ncbi-datasets        pseudofinder      repeatmodeler-2.0.3           scoary                  subread-2.0.1
@@ -695,7 +697,7 @@ base            bwa-mem-2.2.1  eggnogmapper   gubbins          krona            
 bbmap           cactus         emboss         hisat2           liftoff-1.6.3        nanolyse-1.2.1    plink2               r-deseq           sabre-1.0                     spades-3.15.5           wtdbg-2.5
 bcftools        cgmlst         entap-0.10.8   hmmer            links-2.0.1          nanoplot          porechop             recognizer-1.8.3  salmon                        sra-tools</code></pre>
 <p>This is organized similarly to the <em>Lmod</em> modules in that there’s generally <strong>one separate environment for one program</strong> (and all its dependencies), and the environment is named after that program.</p>
-<p>The naming of the environments is unfortunately not entirely consistent: many environments include the version number of the program, but many others do not. (Generally speaking, for environments without version numbers, you should expect the version of the program to be very recent, as I try to keep these up-to-date<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>).</p>
+<p>The naming of the environments is unfortunately not entirely consistent: many environments include the version number of the program, but many others do not. (Generally speaking, for environments without version numbers, you should expect the version of the program to be very recent, as I try to keep these up-to-date<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>).</p>
 <p>This collection includes <em>Conda</em> environments for several programs we need during RNAseq analysis that are not installed at OSC, such as <em>MultiQC</em>, <em>TrimGalore</em>, and <em>SortMeRNA</em>.</p>
 <p><br></p>
 <section id="activating-conda-environments" class="level3" data-number="3.1">
@@ -716,10 +718,10 @@ bcftools        cgmlst         entap-0.10.8   hmmer            links-2.0.1      
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>When we have an active <em>Conda</em> environment, its name is conveniently displayed in front of our prompt, as depicted above.</p>
+<p>When we have an active <em>Conda</em> environment, its name is displayed in front of our prompt, as depicted above with <code>(multiqc)</code>.</p>
 </div>
 </div>
-<p>After we have activated the <code>multiqc</code> environment, we should be able to actually use the program. To test this, we’ll simply run it with the <code>--help</code> option like we did with <em>FastQC</em>:</p>
+<p>After we have activated the <em>MultiQC</em> environment, we should be able to actually use the program. To test this, we’ll simply run the <code>multiqc</code> command with the <code>--help</code> option like we did for <em>FastQC</em>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">multiqc</span> <span class="at">--help</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -744,11 +746,11 @@ bcftools        cgmlst         entap-0.10.8   hmmer            links-2.0.1      
 ╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
 [...truncated...]</code></pre>
 <p><br></p>
-<p>Unlike <em>Lmod</em> / <code>module load</code>, <em>Conda</em> will by default only keep <strong>a single environment activated</strong>. Therefore, when you have one environment activate and then activate another, you will <em>switch</em> environments:</p>
+<p>Unlike <em>Lmod</em> / <code>module load</code>, <em>Conda</em> will by default only keep <strong>a single environment active</strong>. Therefore, when you have one environment activate and then activate another, you will <em>switch</em> environments:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># After running this command, the multiqc env will be active</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/multiqc</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># After running his command, the trimgalore env will be active</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># After running his command, the trimgalore env will be active...</span></span>
 <span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/trimgalore</span>
 <span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ...but the multiqc env will no longer be:</span></span>
@@ -763,7 +765,7 @@ bcftools        cgmlst         entap-0.10.8   hmmer            links-2.0.1      
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--help</span></span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="co"># (Output not shown, but this should print help info)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Note that it’s <code>conda activate --stack</code> and not <code>source activate --stack</code>!</p>
+<p>Note that the command is <code>conda activate --stack</code> and not <code>source activate --stack</code>!</p>
 <p><br></p>
 </section>
 <section id="lines-to-add-to-your-shell-script" class="level3" data-number="3.2">
@@ -775,7 +777,7 @@ bcftools        cgmlst         entap-0.10.8   hmmer            links-2.0.1      
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load software</span></span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load fastqc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><strong>When the program you will run in a script is in a <em>Conda</em> environment</strong>, this entails a <code>module load</code> command to load <em>Conda</em> itself, followed by a <code>source activate</code> command to load the relevant <em>Conda</em> environment:</p>
+<p><strong>When the program you will run in a script is in a <em>Conda</em> environment</strong>, this entails a <code>module load</code> command to load <em>Conda</em> itself, followed by a <code>source activate</code> command to load the relevant <em>Conda</em> environment — e.g.&nbsp;for <em>MultiQC</em>:</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Load software</span></span>
@@ -795,9 +797,9 @@ Perils of Conda environments inside scripts
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>In the example above, the <code>set -euo pipefail</code> line was moved to <em>below</em> the <code>source activate</code> command, because the <em>Conda</em> activation procedure can otherwise result in <strong>“unbound variable” errors</strong>.</p></li>
+<li><p>In the example above, the <code>set -euo pipefail</code> line was moved <em>below</em> the <code>source activate</code> command, because the <em>Conda</em> activation procedure can otherwise result in <strong>“unbound variable” errors</strong>.</p></li>
 <li><p>Another unfortunate aspect of <em>Conda</em> environments at OSC is the following. Problems can occur when you have a Conda environment active in your interactive shell while you submit a script as a batch job that activates a different environment.</p>
-<p>Therefore, it is generally a good idea to <strong>not have any Conda environments active in your interactive shell</strong> <strong>when submitting batch jobs<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></strong>. To deactivate the currently active <em>Conda</em> environment, simply type <code>conda deactivate</code> without any arguments:</p>
+<p>Therefore, it is generally a good idea to <strong>not have any Conda environments active in your interactive shell</strong> <strong>when submitting batch jobs<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></strong>. To deactivate the currently active <em>Conda</em> environment, simply type <code>conda deactivate</code> without any arguments:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> deactivate   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 </div>
@@ -807,13 +809,13 @@ Perils of Conda environments inside scripts
 </section>
 <section id="at-home-reading-creating-your-own-conda-environments" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="at-home-reading-creating-your-own-conda-environments">At-home reading: Creating your own <em>Conda</em> environments</h2>
-<p>When you want to create your own <em>Conda</em> environments and install programs, make sure to load the most recent <code>miniconda3</code> module, which is currently not the default one. This is because installation has become much quicker and less likely to fail than in earlier versions. (Note that when we are just <em>loading</em> environments, like above, the version doesn’t seem to matter).</p>
-<p>As of August 2023, the most recent version is <code>23.3.1-py310</code> (recall that you can list available versions with <code>module spider</code>):</p>
+<p>When you want to create your own <em>Conda</em> environments and install programs, make sure to load the most recent <code>miniconda3</code> module, which is currently not the default one. This is because installation has become much quicker and less likely to fail than in earlier versions. (Note that when we are just <em>loading</em> environments, like above, the version doesn’t matter).</p>
+<p>As of August 2023, the most recent <em>miniconda</em> version is <code>23.3.1-py310</code> (recall that you can list available versions with <code>module spider</code>):</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3/23.3.1-py310</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="one-time-conda-configuration" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="one-time-conda-configuration">One-time <em>Conda</em> configuration</h3>
-<p>We first have to do some <em>one-time</em> configuration<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, which will set the <strong><em>Conda</em> “channels”</strong> (basically, software repositories) that we want to use when we install programs. This config also includes setting relative <em>priorities</em> among channels, since one program may be available from multiple channels.</p>
-<p>We can do this with the <code>config</code> subcommand — run the following commands in your shell:</p>
+<p>Before we can create our own environments, we first have to do some <em>one-time</em> configuration<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. This will set the <strong><em>Conda</em> “channels”</strong> (basically, software repositories) that we want to use when we install programs, including the relative <em>priorities</em> among channels (since one program may be available from multiple channels).</p>
+<p>We can do this configuration with the <code>config</code> subcommand — run the following commands in your shell:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels defaults     <span class="co"># Added first =&gt; lowest priority</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels bioconda</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> config <span class="at">--add</span> channels conda-forge  <span class="co"># Added last =&gt; highest priority</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -826,7 +828,7 @@ Perils of Conda environments inside scripts
 </section>
 <section id="example-creating-an-environment-for-trim-galore" class="level3" data-number="3.3">
 <h3 data-number="3.3" class="anchored" data-anchor-id="example-creating-an-environment-for-trim-galore"><span class="header-section-number">3.3</span> Example: Creating an environment for <em>Trim Galore!</em></h3>
-<p>To practice using <em>Conda</em>, we will now create a <em>Conda</em> environment with the program <em>Trim Galore!</em> installed. <em>Trim Galore!</em> is a commonly used tool for quality trimming and adapter trimming of <code>FASTQ</code> files — we’ll learn more about it in a later session, since we will use it on our RNAseq data.</p>
+<p>To practice using <em>Conda</em>, we will now create a <em>Conda</em> environment with the program <em>Trim Galore!</em> installed. <em>Trim Galore!</em> is a commonly used tool for quality trimming and adapter trimming of <code>FASTQ</code> files — we’ll learn more about it in a later session, since we will use it on our RNAseq data. It does not have a system-wide installation at OSC, unfortunately.</p>
 <p>Here is the command to all at once create a new <em>Conda</em> environment and install <em>Trim Galore!</em> into that environment:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (Don't run this)</span></span>
@@ -842,7 +844,7 @@ Perils of Conda environments inside scripts
 </ul>
 <section id="specifying-a-version" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="specifying-a-version">Specifying a version</h4>
-<p>If we want to be explicit about the version we want to install, we can add the version after <code>=</code> following the package name, and may also want to include that version number in the <em>Conda</em> environment’s name — try running the command below:</p>
+<p>If we want to be explicit about the version we want to install, we can add the version after <strong><code>=</code></strong> following the package name, and may also want to include that version number in the <em>Conda</em> environment’s name — try running the command below:</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-y</span> <span class="at">-n</span> trim-galore-0.6.10 <span class="at">-c</span> bioconda trim-galore=0.6.10</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>Collecting package metadata (current_repodata.json): done  
 Solving environment: done
@@ -1051,16 +1053,14 @@ Specifying the full path to the environment dir
 <li>Which <em>Conda</em> channel we should use</li>
 <li>Which versions are available</li>
 </ul>
-<p>My strategy to finding these things out is to simply Google the program name together with “conda”, e.g.&nbsp;“cutadapt conda” if I wanted to install the <em>CutAdapt</em> program. Let’s see that in action:</p>
+<p>My strategy to finding this out is to simply Google the program name together with “conda”, e.g.&nbsp;“cutadapt conda” if I wanted to install the <em>CutAdapt</em> program. Let’s see that in action:</p>
 <p align="center">
-<img src="img/conda_google.png" width="85%">
+<img style="border:1px solid gray;" src="img/conda_google.png" width="85%">
 </p>
-<p><br></p>
-<p>We click on that first link (it should always be the first Google hit):</p>
+<p>Click on that first link (it should always be the first Google hit):</p>
 <p align="center">
-<img src="img/conda_website.png" width="85%">
+<img style="border:1px solid gray;" src="img/conda_website.png" width="85%">
 </p>
-<p><br></p>
 <section id="build-the-installation-command" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="build-the-installation-command">Build the installation command</h4>
 <p>I always take the top of the two example installation commands as a template, which is here: <code>conda install -c bioconda cutadapt</code>.</p>
@@ -1069,7 +1069,7 @@ Specifying the full path to the environment dir
 <div class="sourceCode" id="cb47"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-y</span> <span class="at">-n</span> cutadapt <span class="at">-c</span> bioconda cutadapt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To see which <strong>version</strong> will be installed by default, and to see which older versions are available:</p>
 <p align="center">
-<img src="img/conda_website_version.png" width="70%">
+<img style="border:1px solid gray;" src="img/conda_website_version.png" width="70%">
 </p>
 <p>For almost any other program, you can use the exact same procedure to find the <em>Conda</em> package and install it!</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -1083,7 +1083,7 @@ A few more <em>Conda</em> commands to manage your environments
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>Export a plain-text “YAML” file that contains the instructions to recreate your environment (useful for reproducibility!)</p>
+<li><p>Export a plain-text “YAML” file that contains the instructions to recreate your currently-active environment (useful for reproducibility!)</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env export <span class="op">&gt;</span> my_env.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And you can use the following to create a Conda environment from such a YAML file:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> env create <span class="at">-n</span> my_env <span class="at">--force</span> <span class="at">--file</span> my_env.yml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
@@ -1150,14 +1150,14 @@ Container terminology
 </ul>
 </div>
 </div>
-<p>Among container platforms, <em>Apptainer</em> (formerly known as <em>Singularity</em>) and especially <em>Docker</em> are the most widely used ones. At supercomputers like OSC, however, only <em>Apptainer</em> containers can be used. Luckily, <em>Apptainer</em> can also work with <em>Docker</em> containers.</p>
+<p>Among container platforms, <em>Apptainer</em> (formerly known as <em>Singularity</em>) and especially <em>Docker</em> are the most widely used ones. At supercomputers like OSC, however, only <em>Apptainer</em> containers can be used. Luckily, the <em>Apptainer</em> program can work with <em>Docker</em> container images: it will convert them on the fly.</p>
 <section id="finding-container-images-online" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="finding-container-images-online">Finding container images online</h3>
 <p>There are several online repositories with publicly available container images, but I would recommend BioContainers <a href="https://biocontainers.pro/registry" class="uri">https://biocontainers.pro/registry</a> or Quay.io <a href="https://quay.io/biocontainers" class="uri">https://quay.io/biocontainers</a>.</p>
 <p>For example, let’s look on the BioContainers website for a <em>TrimGalore</em> container image:</p>
 <figure class="figure">
 <p align="center">
-<img style="border:1px solid #4e524f;" src="img/biocontainers_search.png" width="70%" class="figure-img">
+<img style="border:1px solid gray;" src="img/biocontainers_search.png" width="75%" class="figure-img">
 </p><figcaption class="figure-caption">
 The search result on the BioContainers website after entering “trim galore” in the search box.
 </figcaption>
@@ -1166,37 +1166,37 @@ The search result on the BioContainers website after entering “trim galore” 
 <p>Click on the only entry that is shown, <code>trim-galore</code>, which will get you to a page like this:</p>
 <figure class="figure">
 <p align="center">
-<img style="border:1px solid #4e524f;" src="img/biocontainers_match.png" width="80%" class="figure-img">
+<img style="border:1px solid gray;" src="img/biocontainers_match.png" width="85%" class="figure-img">
 </p>
 </figure>
 <p>As you can see, this website also includes <em>Conda</em> installation instructions — to see the container results, scroll down and you should see this:</p>
 <figure class="figure">
 <p align="center">
-<img style="border:1px solid #4e524f;" src="img/biocontainers_download.png" width="80%" class="figure-img">
+<img style="border:1px solid gray;" src="img/biocontainers_download.png" width="85%" class="figure-img">
 </p><figcaption class="figure-caption">
 After scrolling down on the results page, you should see a recent available container image.<br> Note that the command shown is <code>singularity run</code>, but we will use the more up-to-date <code>apptainer run</code> later.
 </figcaption>
 <p></p>
 </figure>
-<p>The version tag that is shown (<code>0.6.9--hdfd78af_0</code> above) pertains to the version of TrimGalore, but the result that is shown here is not will always the container image(s) with the most recent version. To see a list of all available images, click on the <code>Packages and Containers</code> tab towards the top, and then sort by <code>Last Update</code>:</p>
+<p>The version tag that is shown (<code>0.6.9--hdfd78af_0</code> above) pertains to the version of <em>TrimGalore</em>, but the result that is shown here is not will always the container image(s) with the most recent version. To see a list of all available images, click on the <code>Packages and Containers</code> tab towards the top, and then sort by <code>Last Update</code>:</p>
 <figure class="figure">
 <p align="center">
-<img style="border:1px solid #4e524f;" src="img/biocontainers_versions.png" width="80%" class="figure-img">
+<img style="border:1px solid gray;" src="img/biocontainers_versions.png" width="85%" class="figure-img">
 </p><figcaption class="figure-caption">
 The logo with the large S depicts Singularity/Apptainer containers.
 </figcaption>
 <p></p>
 </figure>
-<p>Whenever both a Singularity/Apptainer and a Docker image for the desired version of the program is available, <strong>use the Singularity/Apptainer image</strong>. This is because those don’t have to be converted, while Docker images do. But when the version you want is only available as a Docker image, that will work too: it will be automatically converted to the proper format.</p>
+<p>Whenever both a Singularity/Apptainer and a Docker image for the desired version of the program is available, <strong>use the Singularity/Apptainer image</strong>. This is because those don’t have to be converted, while Docker images do. But when the version you want is only available as a Docker image, that will work too: as mentioned above, it will be automatically converted to the proper format.</p>
 <p><br></p>
 </section>
 <section id="running-a-container-image" class="level3 unnumbered">
 <h3 class="unnumbered anchored" data-anchor-id="running-a-container-image">Running a container image</h3>
-<p>When you’ve found a container image that you want to use, copy its URL. For example, for the most recent TrimGalore version as of September 2023: <code>https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0</code>.</p>
+<p>When you’ve found a container image that you want to use, copy its URL from the BioContainers website. For example, for the most recent TrimGalore version as of September 2023: <code>https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0</code>.</p>
 <p>You could also copy the full command — however, we will modify that in two ways:</p>
 <ul>
-<li>We will use the more up-to-date <code>apptainer</code> command<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></li>
-<li>We’ll use the <code>exec</code> subcommand instead of <code>run</code>, which allows us to enter a custom command to run in the container (the <code>run</code> subcommand would only run some preset default action).</li>
+<li>We will use the more up-to-date <code>apptainer</code> command<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></li>
+<li>We’ll use the <code>exec</code> subcommand instead of <code>run</code>, which allows us to enter a custom command to run in the container (the <code>run</code> subcommand would only run some preset default action, which is rarely useful for our purposes).</li>
 </ul>
 <p>As such, our <em>base</em> command to run <em>TrimGalore</em> in the container will be as follows:</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apptainer</span> exec https://depot.galaxyproject.org/singularity/trim-galore:0.6.10--hdfd78af_0</span>
@@ -1232,10 +1232,10 @@ Note
 </ul>
 </div>
 </div>
-<p><strong>So, all that is different from running a program inside a container</strong> <strong>versus a locally installed program,</strong> <strong>is that you prefix <code>apptainer exec &lt;URL&gt;</code> when using a container!</strong></p>
+<p><strong>So, all that is different from running a program inside a container</strong> <strong>versus a locally installed program,</strong> <strong>is that you prefix <code>apptainer exec &lt;URL&gt;</code> when using a container.</strong></p>
 <p>The first time you run this command, the container will be downloaded, which can take a few minutes (by default it will be downloaded to <code>~/.apptainer/cache</code>, but you can change this by setting the <code>$APPTAINER_CACHEDIR</code> environment variable). After that, the downloaded image will be used and the command should be executed about as instantaneously as when running <code>TrimGalore</code> outside of a container.</p>
 <p>You will keep seeing the warning <code>WARNING: Environment variable LD_PRELOAD [...]</code> whenever you run a container, but this is nothing to worry about.</p>
-<p>And the <code>--help</code> option above can also simply be replaced by a host of other <em>TrimGalore</em> options and arguments so as to actually trim a pair of FASTQ files, i.e.&nbsp;with input and output files. You can just specify the paths to those files in the same way as without a container, this will work out of the box!</p>
+<p>Finally, the <code>--help</code> option above can also simply be replaced by a host of other <em>TrimGalore</em> options and arguments so as to actually trim a pair of FASTQ files, i.e.&nbsp;with input and output files. You can just specify the paths to those files in the same way as without a container, this will work out of the box!</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1247,7 +1247,7 @@ When to use a Container versus Conda
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li><p>Try a container when installing a program through Conda fails, or your environment misbehaves (e.g., memory errors with dumped cores).</p></li>
+<li><p>Currently, my default is to first try installation with <em>Conda</em>. But I will try a container when installing a program through <em>Conda</em> fails, or my <em>Conda</em> environment misbehaves (e.g., memory errors with dumped cores).</p></li>
 <li><p>When you need multiple programs in quick succession or in a single command (e.g., you’re piping the output of one program into a second program), it can be more convenient to have those programs installed in a single environmnent or container. Pre-built multi-program containers are not as easy to find. And since building your own Conda environment is easier than building your own container, this is a situation where you might prefer <em>Conda</em>.</p></li>
 </ul>
 </div>
@@ -1262,12 +1262,13 @@ When to use a Container versus Conda
 <a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>When your personal computer asks you to “authenticate” while you are installing something, you are authenticating yourself as a user with administrator privileges. At OSC, you don’t have such privileges.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Other software upon which the software that you are trying to install depends.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>It isn’t feasible to keep separate environments around for many different versions of a program, mostly because <em>Conda</em> environments contain a very large number of files, and OSC has file number quotas. This is why I have in many cases chosen the strategy of just updating the version within the same environment.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Unless you first deactivate any active environments in your script, which the “MCIC scripts” that we’ll talk about later do.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>That is, these settings will be saved somewhere in your OSC home directory, and you never have to set them again unless you need to make changes.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Though note that as of September 2023, the <code>singularity</code> command does still work, and it will probably continue to work for a while.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Here, we call <code>module</code> the command and e.g.&nbsp;<code>spider</code> the subcommand. But sometimes the subcommands are also simply called commands.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>When your personal computer asks you to “authenticate” while you are installing something, you are authenticating yourself as a user with administrator privileges. At OSC, you don’t have such privileges.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Other software upon which the software that you are trying to install depends.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>It isn’t feasible to keep separate environments around for many different versions of a program, mostly because <em>Conda</em> environments contain a very large number of files, and OSC has file number quotas. This is why I have in many cases chosen the strategy of just updating the version within the same environment.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Unless you first deactivate any active environments in your script.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>That is, these settings will be saved somewhere in your OSC home directory, and you never have to set them again unless you need to make changes.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Though note that as of September 2023, the <code>singularity</code> command does still work, and it will probably continue to work for a while.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
