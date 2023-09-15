@@ -135,15 +135,18 @@ You should have at least the following files in this dir:
 
 In requesting _batch jobs_,
 we are asking the Slurm scheduler to **run a script on a compute node**[^1].
-When doing so, we **stay in our current shell at our current node**
+When doing so, _our own prompt stays in our current shell at our current node_
 (whether that's a login or compute node),
-and the script will run on a (different) compute node "out of sight".
+and the script will run on a compute node "out of sight".
+**This means that after we have submitted a batch job,**
+**it would continue running even if we log off from OSC or shut down our computer.**
+
 Also, as we'll discuss in more detail below:
 
 - Script output that would normally be printed to screen ("standard out")
   will end up in a "log" file
 - There are commands for e.g. _monitoring_ whether the job is
-  already/stillrunning, and _cancelling_ the job.
+  already/still running, and _cancelling_ the job.
 
 [^1]: It _is_ also possible to directly submit a command or set of commands
       using the `--wrap` option to `sbatch`, but we won't cover that here.
@@ -173,7 +176,7 @@ Last name: Doe
   
 ```bash
 #!/bin/bash
-set -ueo pipefail
+set -euo pipefail
 
 first_name=$1
 last_name=$2
@@ -282,7 +285,7 @@ such that the first few lines read:
 #!/bin/bash
 #SBATCH --account=PAS0471
 
-set -ueo pipefail
+set -euo pipefail
 
 # (This is a partial script, don't run this directly in the terminal)
 ```
@@ -363,8 +366,9 @@ that a script may have:
 
 - Output that is **printed to screen** when we directly run a script,
   such as what was produced by our `echo` statements,
-  by any errors that may occur,
-  and possibly by a program that we run in the script.[^2]
+  by any errors that may occur, and possibly by a program that we run in the script.
+  These are the so-called "standard output" and "standard error" streams
+  (see the box [further down on this page](#output-slurm-log-files)).
   As we saw, this output ends up in the **Slurm log file** when we submit
   the script as a batch job.
 
@@ -373,9 +377,6 @@ that a script may have:
   This type of output **will always end up in the very same files**
   regardless of whether we run the script directly (with `bash`) or as a batch job
   (with `sbatch`). 
-
-[^2]: Technically, these are two different types of output,
-      as we briefly touch on below: "standard output" and "standard error".
 
 :::{.callout-tip}
 ## The working directory stays the same
@@ -401,7 +402,7 @@ and save it as `sandbox/sleep.sh`, then copy the following into it:
 
 echo "I will sleep for 30 seconds" > sleep.txt
 sleep 30s
-echo "I'm awake!"
+echo "I'm awake! Done with script sleep.sh"
 ```
 
 :::{.exercise}
@@ -429,7 +430,7 @@ Then, can test your predictions by running the script.
     - `sleep.txt`: Containing the output that we redirected to this file in the script
 
 2. They will contain:
-    - `slurm-<job-number>.out`: _I'm awake!_
+    - `slurm-<job-number>.out`: _I'm awake! Done with script sleep.sh_
     - `sleep.txt`: _"I will sleep for 30 seconds"_
 
 3. Both files will end up in your current working directory.
@@ -543,7 +544,13 @@ Mon Aug 21 15:49:26 2023
           23640814 condo-osu ondemand   jelmer  RUNNING       9:02   2:00:00      1 p0133
 ```
 
-But we need to check our output file(s) to see if our script ran _successfully_!
+But we need to make sure our script ran _successfully_!
+We can do so by checking our output file(s) (see also the In Closing section below).
+As is usual also when we submit scripts that run bioinformatics programs,
+we'll have a file that was directly created by the command inside the script
+(here, `sleep.sh`),
+and a Slurm log file with the script's standard output and standard error
+(which would normally be printed to screen):
 
 ```bash
 cat sleep.txt
@@ -556,7 +563,7 @@ I will sleep for 30 seconds
 cat slurm-12520046.out
 ```
 ``` {.bash-out}
-I'm awake!
+I'm awake! Done with script sleep.sh
 ```
 
 <br>
@@ -634,7 +641,8 @@ For clarity, we'll stick to long format options here.
 
 ### `--account`: The OSC project
 
-As seen above. _Always_ specify the project when submitting a batch job.
+As seen above. 
+When submitting a batch job, _always_ specify the OSC project ("account").
 
 ### `--time`: Time limit ("wall time")
 
@@ -707,7 +715,7 @@ where we request 1 minute of walltime while we let the script sleep for 80 secon
 
 echo "I will sleep for 80 seconds" > sleep.txt
 sleep 80s
-echo "I'm awake!"
+echo "I'm awake! Done with script sleep.sh"
 ```
 
 This would result in the following type of error:
@@ -717,32 +725,6 @@ slurmstepd: error: *** JOB 23641567 ON p0133 CANCELLED AT 2023-08-21T16:35:24 DU
 ```
 :::
 :::
-
-<br>
-
-### `--mem`: RAM memory
-
-Use the `--mem` option to specify the maximum amount of RAM (Random Access Memory)
-that your job can use:
-
-- The default amount is 4 GB per core that you reserve.
-  **This is often enough**, so it is fairly common to omit the `--mem` option.
-- The default unit is MB (MegaBytes) &mdash; append `G` for GB
-  (i.e. `100` means 100 MB, `10G` means 10 GB).
-- Like with the time limit, your job gets killed when it hits the memory limit.
-  Whereas you get a very clear Slurm error message when you hit the time limit
-  (as seen in the exercise above),
-  hitting the memory limit can result in a variety of errors,
-  but look for keywords such as `Killed`, `Out of Memory` / `OOM`,
-  and `Core Dumped`, as well as actual "dumped cores" in your working dir
-  (large files with names like `core.<number>`, these can be deleted).
-
-For example, to request 20 GB of RAM:
-
-```sh
-#!/bin/bash
-#SBATCH --mem=20G
-```
 
 <br>
 
@@ -789,6 +771,32 @@ An example, where we ask for 2 CPUs/cores/threads:
 ```{bash}
 #!/bin/bash
 #SBATCH --cpus-per-task=2
+```
+
+<br>
+
+### `--mem`: RAM memory
+
+Use the `--mem` option to specify the maximum amount of RAM (Random Access Memory)
+that your job can use:
+
+- The default amount is 4 GB per core that you reserve.
+  **This is often enough**, so it is fairly common to omit the `--mem` option.
+- The default unit is MB (MegaBytes) &mdash; append `G` for GB
+  (i.e. `100` means 100 MB, `10G` means 10 GB).
+- Like with the time limit, your job gets killed when it hits the memory limit.
+  Whereas you get a very clear Slurm error message when you hit the time limit
+  (as seen in the exercise above),
+  hitting the memory limit can result in a variety of errors,
+  but look for keywords such as `Killed`, `Out of Memory` / `OOM`,
+  and `Core Dumped`, as well as actual "dumped cores" in your working dir
+  (large files with names like `core.<number>`, these can be deleted).
+
+For example, to request 20 GB of RAM:
+
+```sh
+#!/bin/bash
+#SBATCH --mem=20G
 ```
 
 <br>
@@ -844,6 +852,45 @@ Yet other programs use `stdout` or `stderr` for _all_ messages.
 **I therefore usually only specify `--output`, such that both streams**
 **end up in that file.**
 :::
+
+### `--mail-type`: Receive emails upon completion or error
+
+TBA
+
+<br>
+
+## In closing: making sure your jobs ran successfully
+
+Overall strategy to monitor your batch jobs &mdash;
+we'll get some practice with this in the next few sessions!
+
+- Check the queue (with `squeue`) or check for Slurm log files (with `ls`)
+  to see whether your job(s) have started.
+
+- Once the jobs are no longer listed in the queue,
+  they will have finished: either successfully or because of an error.
+
+- When you've submitted many jobs that run the same script for different samples,
+  carefully read the full Slurm log file for at least 1 one of them.
+
+- Then, check whether you have _the expected number of output files_ produced by
+  the script or the program your script ran, like processed FASTQ files.
+  It's also good to check whether they all have at least non-zero file sizes
+  with `ls -lh`.
+
+- The combination of using strict Bash settings (`set -euo pipefail`) and
+  printing a line that marks the end of the script (`echo "Done with script"`)
+  makes it easy to spot scripts that somehow failed,
+  because they won't have that marker line _at the end of the Slurm log file_.
+  We'll see next week how you can quickly check this even when you have a whole
+  bunch of log files.
+
+- Using `mail-type=FAIL` will also make it easy to detect failed jobs,
+  especially in cases where you submitted say 100+ jobs and only one or a few
+  of those failed.
+  Avoid having Slurm send you emails upon regular completion
+  (`mail-type=ALL` / `mail-type=END`) except for jobs that run for hours,
+  otherwise you will get inundated with emails and will quickly srart ignoring them.
 
 <br>
 

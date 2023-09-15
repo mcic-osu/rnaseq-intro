@@ -22,8 +22,8 @@ toc-depth: 4
 | 2023-08-11 | [FASTQ files](modules/A05_fastq.qmd)                                             |
 | 2023-08-18 | [Reference genome files (FASTA and GTF)](modules/A06_ref-files.qmd)              |
 | 2023-08-25 | [Overview of next steps, variables, and loops](modules/A07_overview.qmd)         |
-| 2023-09-01 | [Shell scripting](modules/A08_scripts.qmd)                                         |
-| 2023-09-08 | [Software at OSC](modules/A09_software.qmd) & recap                              |
+| 2023-09-01 | [Shell scripting](modules/A08_scripts.qmd)                                       |
+| 2023-09-08 | [Software at OSC](modules/A09_software.qmd)                                      |
 | 2023-09-15 | [Slurm batch jobs](modules/A10_slurm.qmd)                                        |
 
 <br>
@@ -33,13 +33,14 @@ toc-depth: 4
 | Date       | Topic & link                                                                     |
 |------------|----------------------------------------------------------------------------------|
 | 2023-09-22 | [Read quality control with FastQC](modules/B01_fastqc.qmd)                       |
-| 2023-09-29 | Summarizing QC outputs with MultiQC                                              |
-| 2023-10-06 | Quality and adapter trimming with TrimGalore                                     |
-| 2023-10-13 | Read alignment with STAR                                                         |
-| 2023-10-20 | Quantification with Salmon                                                       |
-| 2023-10-27 | The Nextflow/nf-core rnaseq workflow (Part I)                                    |
-| 2023-11-03 | The Nextflow/nf-core rnaseq workflow (Part II)                                   |
+| 2023-10-06 | Summarizing QC outputs with MultiQC                                              |
+| 2023-10-13 | Quality and adapter trimming with TrimGalore                                     |
+| 2023-10-20 | Read alignment with STAR                                                         |
+| 2023-10-27 | Quantification with Salmon                                                       |
+| 2023-11-03 | The Nextflow/nf-core rnaseq workflow (Part I)                                    |
+| 2023-11-10 | The Nextflow/nf-core rnaseq workflow (Part II)                                   |
 
+_No meeting on Sept 29th_
 
 <br>
 
@@ -47,10 +48,10 @@ toc-depth: 4
 
 | Date       | Topic & link                                                                     |
 |------------|----------------------------------------------------------------------------------|
-| 2023-11-10 | Creating a DESeq2 object                                                         |
-| 2023-11-17 | PCA and overall exploration of the count data                                    |
-| 2023-12-01 | Differential expression analysis (Part I)                                        |
-| 2023-12-08 | Differential expression analysis (Part II)                                       |
-| 2023-12-15 | GO enrichment analysis                                                           |
+| 2023-11-17 | Creating a DESeq2 object                                                         |
+| 2023-12-01 | PCA and overall exploration of the count data                                    |
+| 2023-12-08 | Differential expression analysis (Part I)                                        |
+| 2023-12-15 | Differential expression analysis (Part II)                                       |
+| 2024-01-?? | GO enrichment analysis                                                           |
 
-_No meetings on Nov 24 (Thanksgiving), Dec 22 and Dec 28._
+_No meetings on Nov 24th (Thanksgiving), Dec 22nd and Dec 28th_
