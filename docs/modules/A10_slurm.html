@@ -342,10 +342,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#account-the-osc-project" id="toc-account-the-osc-project" class="nav-link" data-scroll-target="#account-the-osc-project"><span class="header-section-number">3.1</span> <code>--account</code>: The OSC project</a></li>
   <li><a href="#time-time-limit-wall-time" id="toc-time-time-limit-wall-time" class="nav-link" data-scroll-target="#time-time-limit-wall-time"><span class="header-section-number">3.2</span> <code>--time</code>: Time limit (“wall time”)</a></li>
-  <li><a href="#mem-ram-memory" id="toc-mem-ram-memory" class="nav-link" data-scroll-target="#mem-ram-memory"><span class="header-section-number">3.3</span> <code>--mem</code>: RAM memory</a></li>
-  <li><a href="#cores-nodes-and-tasks" id="toc-cores-nodes-and-tasks" class="nav-link" data-scroll-target="#cores-nodes-and-tasks"><span class="header-section-number">3.4</span> Cores (&amp; nodes and tasks)</a></li>
+  <li><a href="#cores-nodes-and-tasks" id="toc-cores-nodes-and-tasks" class="nav-link" data-scroll-target="#cores-nodes-and-tasks"><span class="header-section-number">3.3</span> Cores (&amp; nodes and tasks)</a></li>
+  <li><a href="#mem-ram-memory" id="toc-mem-ram-memory" class="nav-link" data-scroll-target="#mem-ram-memory"><span class="header-section-number">3.4</span> <code>--mem</code>: RAM memory</a></li>
   <li><a href="#output-slurm-log-files" id="toc-output-slurm-log-files" class="nav-link" data-scroll-target="#output-slurm-log-files"><span class="header-section-number">3.5</span> <code>--output</code>: Slurm log files</a></li>
+  <li><a href="#mail-type-receive-emails-upon-completion-or-error" id="toc-mail-type-receive-emails-upon-completion-or-error" class="nav-link" data-scroll-target="#mail-type-receive-emails-upon-completion-or-error"><span class="header-section-number">3.6</span> <code>--mail-type</code>: Receive emails upon completion or error</a></li>
   </ul></li>
+  <li><a href="#in-closing-making-sure-your-jobs-ran-successfully" id="toc-in-closing-making-sure-your-jobs-ran-successfully" class="nav-link" data-scroll-target="#in-closing-making-sure-your-jobs-ran-successfully"><span class="header-section-number">4</span> In closing: making sure your jobs ran successfully</a></li>
   <li><a href="#at-home-reading-sbatch-option-overview-interactive-jobs" id="toc-at-home-reading-sbatch-option-overview-interactive-jobs" class="nav-link" data-scroll-target="#at-home-reading-sbatch-option-overview-interactive-jobs">At-home reading: <code>sbatch</code> option overview &amp; interactive jobs</a>
   <ul class="collapse">
   <li><a href="#table-with-sbatch-options" id="toc-table-with-sbatch-options" class="nav-link" data-scroll-target="#table-with-sbatch-options">Table with <code>sbatch</code> options</a></li>
@@ -484,10 +486,11 @@ Don’t have your own dir with the data? (Click to expand)
 </section>
 <section id="getting-started-with-slurm-batch-jobs" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="getting-started-with-slurm-batch-jobs"><span class="header-section-number">1</span> Getting started with Slurm batch jobs</h2>
-<p>In requesting <em>batch jobs</em>, we are asking the Slurm scheduler to <strong>run a script on a compute node</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. When doing so, we <strong>stay in our current shell at our current node</strong> (whether that’s a login or compute node), and the script will run on a (different) compute node “out of sight”. Also, as we’ll discuss in more detail below:</p>
+<p>In requesting <em>batch jobs</em>, we are asking the Slurm scheduler to <strong>run a script on a compute node</strong><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. When doing so, <em>our own prompt stays in our current shell at our current node</em> (whether that’s a login or compute node), and the script will run on a compute node “out of sight”. <strong>This means that after we have submitted a batch job,</strong> <strong>it would continue running even if we log off from OSC or shut down our computer.</strong></p>
+<p>Also, as we’ll discuss in more detail below:</p>
 <ul>
 <li>Script output that would normally be printed to screen (“standard out”) will end up in a “log” file</li>
-<li>There are commands for e.g.&nbsp;<em>monitoring</em> whether the job is already/stillrunning, and <em>cancelling</em> the job.</li>
+<li>There are commands for e.g.&nbsp;<em>monitoring</em> whether the job is already/still running, and <em>cancelling</em> the job.</li>
 </ul>
 <p><br></p>
 <section id="the-sbatch-command" class="level3" data-number="1.1">
@@ -513,7 +516,7 @@ Can’t find yesterday’s <code>printname.sh</code> script?
 <li>Copy the code below into the script:</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="va">first_name</span><span class="op">=</span><span class="va">$1</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="va">last_name</span><span class="op">=</span><span class="va">$2</span></span>
@@ -571,7 +574,7 @@ srun: error: Unable to allocate resources: Unspecified error</code></pre>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=PAS0471</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-ueo</span> pipefail</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># (This is a partial script, don't run this directly in the terminal)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -639,7 +642,7 @@ Last name: Doe</code></pre>
 <p>This file simply contains the output of the script that was printed to screen when we ran it with <code>bash</code> — nothing more and nothing less.</p>
 <p>It’s important to conceptually distinguish between two overall types of output that a script may have:</p>
 <ul>
-<li><p>Output that is <strong>printed to screen</strong> when we directly run a script, such as what was produced by our <code>echo</code> statements, by any errors that may occur, and possibly by a program that we run in the script.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> As we saw, this output ends up in the <strong>Slurm log file</strong> when we submit the script as a batch job.</p></li>
+<li><p>Output that is <strong>printed to screen</strong> when we directly run a script, such as what was produced by our <code>echo</code> statements, by any errors that may occur, and possibly by a program that we run in the script. These are the so-called “standard output” and “standard error” streams (see the box <a href="#output-slurm-log-files">further down on this page</a>). As we saw, this output ends up in the <strong>Slurm log file</strong> when we submit the script as a batch job.</p></li>
 <li><p>Output of commands inside the script that we redirect to a file (<code>&gt; myfile.txt</code>) or that automatically goes to an output file rather than being printed to screen. This type of output <strong>will always end up in the very same files</strong> regardless of whether we run the script directly (with <code>bash</code>) or as a batch job (with <code>sbatch</code>).</p></li>
 </ul>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -669,7 +672,7 @@ The working directory stays the same
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"I will sleep for 30 seconds"</span> <span class="op">&gt;</span> sleep.txt</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 30s</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"I'm awake!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"I'm awake! Done with script sleep.sh"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="your-turn-batch-job-output-recap" class="level3 unnumbered exercise">
@@ -702,7 +705,7 @@ Solutions (Click to expand)
 </ul></li>
 <li><p>They will contain:</p>
 <ul>
-<li><code>slurm-&lt;job-number&gt;.out</code>: <em>I’m awake!</em></li>
+<li><code>slurm-&lt;job-number&gt;.out</code>: <em>I’m awake! Done with script sleep.sh</em></li>
 <li><code>sleep.txt</code>: <em>“I will sleep for 30 seconds”</em></li>
 </ul></li>
 <li><p>Both files will end up in your current working directory. Slurm log files always go to the directory from which you submitted the job. Slurm jobs also <em>run</em> from the directory from which you submitted your job, and since we redirected the output simply to <code>sleep.txt</code>, that file was created in our working directory.</p></li>
@@ -759,11 +762,11 @@ Solutions (Click to expand)
 <pre class="bash-out"><code>Mon Aug 21 15:49:26 2023
              JOBID PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
           23640814 condo-osu ondemand   jelmer  RUNNING       9:02   2:00:00      1 p0133</code></pre>
-<p>But we need to check our output file(s) to see if our script ran <em>successfully</em>!</p>
+<p>But we need to make sure our script ran <em>successfully</em>! We can do so by checking our output file(s) (see also the In Closing section below). As is usual also when we submit scripts that run bioinformatics programs, we’ll have a file that was directly created by the command inside the script (here, <code>sleep.sh</code>), and a Slurm log file with the script’s standard output and standard error (which would normally be printed to screen):</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> sleep.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>I will sleep for 30 seconds</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> slurm-12520046.out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<pre class="bash-out"><code>I'm awake!</code></pre>
+<pre class="bash-out"><code>I'm awake! Done with script sleep.sh</code></pre>
 <p><br></p>
 </section>
 <section id="cancelling-jobs-and-other-monitoringmanaging-commands" class="level3" data-number="2.3">
@@ -826,7 +829,7 @@ Other job monitoring commands and options
 <p>First off, note that many Slurm options have a corresponding long (<code>--account=PAS0471</code>) and short format (<code>-A PAS0471</code>), which can generally be used interchangeably. For clarity, we’ll stick to long format options here.</p>
 <section id="account-the-osc-project" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="account-the-osc-project"><span class="header-section-number">3.1</span> <code>--account</code>: The OSC project</h3>
-<p>As seen above. <em>Always</em> specify the project when submitting a batch job.</p>
+<p>As seen above. When submitting a batch job, <em>always</em> specify the OSC project (“account”).</p>
 </section>
 <section id="time-time-limit-wall-time" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="time-time-limit-wall-time"><span class="header-section-number">3.2</span> <code>--time</code>: Time limit (“wall time”)</h3>
@@ -884,7 +887,7 @@ Solution (Click to expand)
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"I will sleep for 80 seconds"</span> <span class="op">&gt;</span> sleep.txt</span>
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sleep</span> 80s</span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"I'm awake!"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"I'm awake! Done with script sleep.sh"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This would result in the following type of error:</p>
 <pre class="bash-out"><code>slurmstepd: error: *** JOB 23641567 ON p0133 CANCELLED AT 2023-08-21T16:35:24 DUE TO TIME LIMIT ***</code></pre>
 </div>
@@ -893,24 +896,11 @@ Solution (Click to expand)
 </section>
 <p><br></p>
 </section>
-<section id="mem-ram-memory" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="mem-ram-memory"><span class="header-section-number">3.3</span> <code>--mem</code>: RAM memory</h3>
-<p>Use the <code>--mem</code> option to specify the maximum amount of RAM (Random Access Memory) that your job can use:</p>
-<ul>
-<li>The default amount is 4 GB per core that you reserve. <strong>This is often enough</strong>, so it is fairly common to omit the <code>--mem</code> option.</li>
-<li>The default unit is MB (MegaBytes) — append <code>G</code> for GB (i.e.&nbsp;<code>100</code> means 100 MB, <code>10G</code> means 10 GB).</li>
-<li>Like with the time limit, your job gets killed when it hits the memory limit. Whereas you get a very clear Slurm error message when you hit the time limit (as seen in the exercise above), hitting the memory limit can result in a variety of errors, but look for keywords such as <code>Killed</code>, <code>Out of Memory</code> / <code>OOM</code>, and <code>Core Dumped</code>, as well as actual “dumped cores” in your working dir (large files with names like <code>core.&lt;number&gt;</code>, these can be deleted).</li>
-</ul>
-<p>For example, to request 20 GB of RAM:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=20G</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p><br></p>
-</section>
-<section id="cores-nodes-and-tasks" class="level3" data-number="3.4">
-<h3 data-number="3.4" class="anchored" data-anchor-id="cores-nodes-and-tasks"><span class="header-section-number">3.4</span> Cores (&amp; nodes and tasks)</h3>
+<section id="cores-nodes-and-tasks" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="cores-nodes-and-tasks"><span class="header-section-number">3.3</span> Cores (&amp; nodes and tasks)</h3>
 <p>There are several options to specify the number of nodes (≈ computers), cores, or “tasks” (processes). These are separate but related options, and this is where things can get confusing!</p>
 <ul>
-<li>Slurm for the most part uses “<strong>core</strong>” and “<strong>CPU</strong>” interchangeably<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. More generally, “<strong>thread</strong>” is <em>also</em> commonly used interchangeably with core/CPU<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</li>
+<li>Slurm for the most part uses “<strong>core</strong>” and “<strong>CPU</strong>” interchangeably<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. More generally, “<strong>thread</strong>” is <em>also</em> commonly used interchangeably with core/CPU<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</li>
 </ul>
 <ul>
 <li><p>Running a program that uses multiple threads/cores/CPUs (“multi-threading”) is common. In such cases, specify the number of threads/cores/CPUs <code>n</code> with <strong><code>--cpus-per-task=n</code></strong> (and keep <code>--nodes</code> and <code>--ntasks</code> at their defaults of 1).</p>
@@ -976,9 +966,22 @@ Uncommon cases
 </table>
 <p>An example, where we ask for 2 CPUs/cores/threads:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><br></p>
+</section>
+<section id="mem-ram-memory" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="mem-ram-memory"><span class="header-section-number">3.4</span> <code>--mem</code>: RAM memory</h3>
+<p>Use the <code>--mem</code> option to specify the maximum amount of RAM (Random Access Memory) that your job can use:</p>
+<ul>
+<li>The default amount is 4 GB per core that you reserve. <strong>This is often enough</strong>, so it is fairly common to omit the <code>--mem</code> option.</li>
+<li>The default unit is MB (MegaBytes) — append <code>G</code> for GB (i.e.&nbsp;<code>100</code> means 100 MB, <code>10G</code> means 10 GB).</li>
+<li>Like with the time limit, your job gets killed when it hits the memory limit. Whereas you get a very clear Slurm error message when you hit the time limit (as seen in the exercise above), hitting the memory limit can result in a variety of errors, but look for keywords such as <code>Killed</code>, <code>Out of Memory</code> / <code>OOM</code>, and <code>Core Dumped</code>, as well as actual “dumped cores” in your working dir (large files with names like <code>core.&lt;number&gt;</code>, these can be deleted).</li>
+</ul>
+<p>For example, to request 20 GB of RAM:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=20G</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 </section>
 <section id="output-slurm-log-files" class="level3" data-number="3.5">
@@ -986,7 +989,7 @@ Uncommon cases
 <p>As we saw above, by default, all output from a script that would normally be printed to screen will end up in a Slurm log file when we submit the script as a batch job. This file will be created in the directory from which you submitted the script, and will be called <code>slurm-&lt;job-number&gt;.out</code>, e.g.&nbsp;<code>slurm-12431942.out</code>.</p>
 <p>But it is possible to change the name of this file. For instance, it can be useful to include the <strong>name of the program</strong> that the script runs, so that it’s easier to recognize this file later.</p>
 <p>We can do this with the <code>--output</code> option, e.g.&nbsp;<code>--output=slurm-fastqc.out</code> if we were running FastQC.</p>
-<p>However, you’ll generally want to keep the batch job number in the file name too<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Since we won’t know the batch job number in advance, we need a trick here — and that is to use <strong><code>%j</code>, which represents the batch job number</strong>:</p>
+<p>However, you’ll generally want to keep the batch job number in the file name too<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Since we won’t know the batch job number in advance, we need a trick here — and that is to use <strong><code>%j</code>, which represents the batch job number</strong>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=slurm-fastqc-%j.out</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -1007,8 +1010,25 @@ Uncommon cases
 <p><strong>I therefore usually only specify <code>--output</code>, such that both streams</strong> <strong>end up in that file.</strong></p>
 </div>
 </div>
+</section>
+<section id="mail-type-receive-emails-upon-completion-or-error" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="mail-type-receive-emails-upon-completion-or-error"><span class="header-section-number">3.6</span> <code>--mail-type</code>: Receive emails upon completion or error</h3>
+<p>TBA</p>
 <p><br></p>
 </section>
+</section>
+<section id="in-closing-making-sure-your-jobs-ran-successfully" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="in-closing-making-sure-your-jobs-ran-successfully"><span class="header-section-number">4</span> In closing: making sure your jobs ran successfully</h2>
+<p>Overall strategy to monitor your batch jobs — we’ll get some practice with this in the next few sessions!</p>
+<ul>
+<li><p>Check the queue (with <code>squeue</code>) or check for Slurm log files (with <code>ls</code>) to see whether your job(s) have started.</p></li>
+<li><p>Once the jobs are no longer listed in the queue, they will have finished: either successfully or because of an error.</p></li>
+<li><p>When you’ve submitted many jobs that run the same script for different samples, carefully read the full Slurm log file for at least 1 one of them.</p></li>
+<li><p>Then, check whether you have <em>the expected number of output files</em> produced by the script or the program your script ran, like processed FASTQ files. It’s also good to check whether they all have at least non-zero file sizes with <code>ls -lh</code>.</p></li>
+<li><p>The combination of using strict Bash settings (<code>set -euo pipefail</code>) and printing a line that marks the end of the script (<code>echo "Done with script"</code>) makes it easy to spot scripts that somehow failed, because they won’t have that marker line <em>at the end of the Slurm log file</em>. We’ll see next week how you can quickly check this even when you have a whole bunch of log files.</p></li>
+<li><p>Using <code>mail-type=FAIL</code> will also make it easy to detect failed jobs, especially in cases where you submitted say 100+ jobs and only one or a few of those failed. Avoid having Slurm send you emails upon regular completion (<code>mail-type=ALL</code> / <code>mail-type=END</code>) except for jobs that run for hours, otherwise you will get inundated with emails and will quickly srart ignoring them.</p></li>
+</ul>
+<p><br></p>
 </section>
 <section id="at-home-reading-sbatch-option-overview-interactive-jobs" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="at-home-reading-sbatch-option-overview-interactive-jobs">At-home reading: <code>sbatch</code> option overview &amp; interactive jobs</h2>
@@ -1124,7 +1144,7 @@ Uncommon cases
 <p>Interactive shell jobs will grant you interactive shell access on a compute node. Working in an interactive shell job is operationally identical to working on a login node as we’ve been doing so far, but <strong>the difference is that it’s now okay to use significant computing resources</strong>. (How much and for how long depends on what you reserve.)</p>
 <section id="using-srun" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="using-srun">Using <code>srun</code></h4>
-<p>A couple of different commands can be used to start an interactive shell job. I prefer the general <code>srun</code> command<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>, which we can use with <code>--pty /bin/bash</code> added to get an interactive Bash shell.</p>
+<p>A couple of different commands can be used to start an interactive shell job. I prefer the general <code>srun</code> command<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, which we can use with <code>--pty /bin/bash</code> added to get an interactive Bash shell.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="ex">srun</span> <span class="at">--account</span><span class="op">=</span>PAS0471 <span class="at">--pty</span> /bin/bash</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1150,11 +1170,10 @@ srun: job 12431932 has been allocated resources</p>
 
 <ol>
 <li id="fn1"><p>Other options: <code>salloc</code> works almost identically to <code>srun</code>, whereas <code>sinteractive</code> is an OSC convenience wrapper but with more limited options.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Technically, these are two different types of output, as we briefly touch on below: “standard output” and “standard error”.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Even though technically, one CPU often contains multiple cores.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Even though technically, one core often contains multiple threads.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>For instance, we might be running the FastQC script multiple times, and otherwise those would all have the same name and be overwritten.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Other options: <code>salloc</code> works almost identically to <code>srun</code>, whereas <code>sinteractive</code> is an OSC convenience wrapper but with more limited options.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Even though technically, one CPU often contains multiple cores.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Even though technically, one core often contains multiple threads.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>For instance, we might be running the FastQC script multiple times, and otherwise those would all have the same name and be overwritten.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Other options: <code>salloc</code> works almost identically to <code>srun</code>, whereas <code>sinteractive</code> is an OSC convenience wrapper but with more limited options.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

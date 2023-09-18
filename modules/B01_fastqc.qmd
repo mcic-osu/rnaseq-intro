@@ -41,6 +41,38 @@ it's relatively straightforward to create and submit scripts that run command-li
 programs to analyze our genomics data.
 In this session, we'll apply them to run **_FastQC_**.
 
+::: {.callout-note}
+#### VS Code improvements
+
+**First, we'll add a keyboard shortcut to send code from your editor to the terminal.**
+This is the same type of behavior that you may be familiar with from RStudio,
+and will prevent you from having to copy-and-paste code into the terminal:
+
+- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
+
+- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
+  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
+
+In VS Code's editor pane,
+the entire line that your cursor is on is always selected by default.
+As such, you can send a line to the terminal without explicitly selecting it
+(this also works with copy-paste/cut-paste within the editor!).
+
+<br>
+
+**Second, we'll add the _ShellCheck_ VS Code extension**.
+This extension will check your shell scripts for errors like referencing variables
+that have not been assigned, and not using variables that _have_ been assigned.
+Potential problems will show up as colored squigly lines below the words or lines
+in question.
+
+- Click on the Extensions icon in the far left (narrow) sidebar in VS Code.
+
+- Type "shellcheck" and click the small purple "Install" button next to the entry
+  of this name (the description should include "Timon Wong", who is the author).
+
+:::
+
 <br>
 
 #### _FastQC_: A program for quality control of FASTQ files {-}
@@ -64,7 +96,10 @@ The most important one is the **per-base quality score graph** shown below.
 ![](img/fastqc_bad.png)
 
 A FastQC per-base quality score graph for files with fairly good (left) and
-poor (right) quality reads.
+very poor (right) quality reads.
+The y-axis shows Phred quality scores
+(higher is better, see also the color-coding of the graph)
+and the x-axis shows the position along the read.
 :::
 
 #### Start VS Code and open your folder {-}
@@ -156,16 +191,20 @@ You should have at least the following files in this dir:
 
 ### FastQC syntax
 
-To analyze one (optionally gzipped) FASTQ file with FastQC,
+To analyze one (optionally gzipped) FASTQ file with _FastQC_,
 the syntax can be as simple as:
   
 ```{bash}
 fastqc <fastq-file>
 ```
 
-However, we'll always want to specify the output directory,
+Above, `<fastq-file>` should be replaced by the path to an actual FASTQ file.
+We'll also always want to specify the output directory, though,
 because the unfortunate default for _FastQC_ is to put them in the directory
-that the FASTQ files are in &mdash; we can do so as follows:
+that contains the FASTQ files themselves[^1].
+We can tell _FastQC_ about our desired output directory as follows:
+
+[^1]: And we'd like to separate our data from our results!
 
 ```{bash}
 fastqc --outdir=<output-dir> <fastq-file>
@@ -173,7 +212,7 @@ fastqc --outdir=<output-dir> <fastq-file>
 
 For instance, if we wanted output files to go to the directory `results/fastqc`
 and wanted the program to analyze the file `data/fastq/ASPC1_A178V_R1.fastq.gz`,
-a functional command would like like this:
+a functional command would be:
 
 ```{bash}
 fastqc --outdir=results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz
@@ -190,9 +229,23 @@ The latter contains files with the summary statistics that were computed and
 on which the figures are based &mdash; we generally don't need to look at that.
 :::
 
+<br>
+
 ### A basic script to run _FastQC_
 
-Here is what a basic script to run _FastQC_ could look like:
+Instead of running _FastQC_ interactively,
+we'll want to write a _FastQC_ script that we can submit as a batch job.
+
+Specifically, our script will deliberately run _FastQC_ for **only one FASTQ file**.
+Alternative approaches would be to include multiple FASTQ files in our FastQC command
+(this _is_ possible), or even to loop over FASTQ files inside the FastQC script.
+_However_, given that we have access to OSC's compute cluster,
+it will be much more efficient to submit a separate batch job for each FASTQ file.
+
+This approach means that our script needs to accept an argument with a file name
+(of the focal FASTQ file),
+something that we have practiced with quite a bit in the previous sessions.
+So here is what a basic script along these lines could look like:
   
 ```bash
 #!/bin/bash
@@ -210,6 +263,8 @@ fastqc --outdir="$output_dir" "$input_file"
 # (Don't run this in your terminal, this is an example script)
 ```
 
+<br>
+
 ### A more well-developed _FastQC_ script
 
 We'll add a few things to this script to e.g. make it run it smoothly as a
@@ -221,14 +276,16 @@ batch job at OSC:
   module load fastqc/0.11.8
   ```
   
-- A few `sbatch` options:
+- A few `sbatch` options (we'll keep the time limit and number of cores at their
+  default values of 1 hour and 1 core, respectively):
 
   ```{bash}
   #SBATCH --account=PAS0471
+  #SBATCH --mail-type=FAIL
   #SBATCH --output=slurm-fastqc-%j.out
   ```
 
-- A few `echo` statements to report what's going on
+- Several `echo` statements to report what's going on
 
 - A line to create the output directory if it doesn't yet exist:
 
@@ -280,6 +337,7 @@ Here is what our script looks like with those additions:
 ```{bash}
 #!/bin/bash
 #SBATCH --account=PAS2250
+#SBATCH --mail-type=FAIL
 #SBATCH --output=slurm-fastqc-%j.out
   
 # Strict Bash settings
@@ -329,12 +387,60 @@ mostly standard ("boilerplate") code with
 Therefore, you can adopt this script as a template for scripts that run other
 command-line programs, and will generally only need minor modifications!
 
+:::{.exercise}
+### On Your Own: Use multiple threads {-}
+
+Most bioinformatics programs, including _FastQC_,
+can make use of multiple threads/CPUs/cores
+(which we can all treat as the same unit below the node level, for our purposes),
+and this can speed things up tremendously.
+
+To run FastQC with multiple threads, we need to take two steps &mdash;
+below, `n` is the number of threads that we would like to use.
+
+- Add the `#SBATCH --cpus-per-task=n` option to the script.
+
+- Tell _FastQC_ that it can use `n` threads.
+
+**Include both of these options in your `fastqc.sh` script so as to run _FastQC_**
+**with 8 cores.**
+
+(To find out the name of the _FastQC_ option for the number of threads,
+run `fastqc --help` and search for the relevant option.)
+
+<details><summary>Hint (click here)</summary>
+
+The _FastQC_ option in question is `-t` (short form) or `--threads` (long form).
+For clarity, I would suggest to use the long form option in your script.
+
+</details>
+
+<details><summary>Solution (click here)</summary>
+
+- You should add the following `#SBATCH` line at the top of the script:
+
+``bash
+#SBATCH --cpus-per-task=8
+```
+
+- Your _FastQC_ command in the script should now be as follows
+  (though the order of the `--threads` and `--outdir` options does not matter,
+  as long as the input file positional argument comes last):
+
+``bash
+fastqc --threads 8 --outdir="$output_dir" "$input_file"
+```
+
+</details>
+
+:::
+
 <br>
 
 ## A master / runner "script"
 
 Above, we created a `fastqc.sh` script,
-which we'll eventually want to submit using a `for` loop.
+which we'll eventually want to submit a bunch of times with a `for` loop.
 The code with that loop and the `sbatch` command _could_ be directly typed in the terminal.
 **But it's better to save the commands used for job submission in a file/script as well.**
 
@@ -348,8 +454,8 @@ _your notebook entry that contains **the final protocol** you followed._
 This kind of script is sometimes called a "master" or "runner" script.
 Because it will contain shell code, we will save it as a shell script (`.sh`)
 just like the script to run `fastqc.sh` and other individual analysis steps.
-However, it is important to realize that the runner script is not like the
-scripts to run individual steps.
+**However, it is important to realize that the runner script is conceptually different**
+**from the scripts that run individual steps of your analysis.**
 The latter are meant to be run/submitted in their entirety by the runner script,
 whereas a basic runner script that contains `sbatch` compute job commands for
 multiple steps has to be run step-by-step (see the box below).
@@ -363,25 +469,44 @@ we won't be able to just _run_ the script as is.
 **all at once,**
 **and that later step would start running before the earlier step has finished.**
 
-**TODO include an example**
+For example, consider the following series of two steps,
+in which the second step uses the output of the first step: 
+
+```bash
+# This script will create a genome "index" for STAR, that will be used in the next step
+# ('my_genome.fa' = input genome FASTA, 'results/star_index' = output index dir)
+sbatch scripts/star_index.sh my_genome.fa results/star_index
+
+# This script will align a FASTQ file to the genome index created in the previous step
+# ('results/star_index' = input index dir, 'sampleA.fastq.gz' = input FASTQ file,
+# 'results/star_align' = output dir)
+sbatch scripts/star_align.sh results/star_index sampleA.fastq.gz results/star_align 
+```
+
+If these two lines were included in your runner script,
+and you would run that script,
+the script in the second step would be submitted just a split-second after the
+first one
+(recall: when using `sbatch`, you get your prompt back immediately, there is no waiting),
+and would fail because of the missing output from the first step.
 
 It _is_ possible to make `sbatch` batch jobs wait for earlier steps to finish
 (e.g. with the `--dependency` option), but this quickly gets tricky.
-If you want a fully automatically rerunnable workflow / pipeline,
+If you want to create a workflow/pipeline that can run from start to finish in
+an automated way, 
 you should consider using a workflow management system
 like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
 [NextFlow](https://www.nextflow.io/).
 
 :::
 
-So, we'll **separate** our code into two hierarchical levels of scripts,
+To summarize, we'll **separate our code into two hierarchical levels of scripts**,
 which we'll also save in separate dirs to make this division clear:
 
 - The scripts that run individual steps of your analysis, like `fastqc.sh`.
   We'll save these in a directory called `scripts`.
 - A "runner" script that orchestrates the batch job submission of these individual steps.
-  This script is not run at once in its entirety
-  (unless you turn it into a formal workflow, which is beyond the scope of this material).
+  This script should be run at once in its entirety.
   We'll save this script in a directory called `run`.
 
 {{< fa user-edit >}} Let's go ahead and open a new text file,
@@ -395,11 +520,12 @@ _in the sense that they should generally just run one program_,
 and not a sequence of programs.
 
 Once you get the hang of writing these scripts,
-it may seem appealing to string a number of programs together in a single script,
+it may seem appealing to string a series of programs/steps together in a single script,
 so that it's easier to rerun everything at once &mdash;
 but in practice, that will often end up leading to more difficulties than convenience.
 Once again, if you do want to develop a workflow that can run from start to finish,
-you'll have to bite the bullet and learn a workflow management system.
+you'll have to bite the bullet and learn a workflow management system like
+Snakemake or Nextflow.
 :::
 
 <br>
@@ -417,7 +543,7 @@ sbatch scripts/fastqc.sh data/fastq/ASPC1_A178V_R1.fastq.gz results/fastqc
 Submitted batch job 12521308
 ```
 
-:::{.callout-caution collapse="true"}
+:::{.callout-note collapse="true"}
 ### Once again: Where does our output go? (Click to expand)
 
 - Output that would have been printed to screen if we had run the script directly,
@@ -446,7 +572,8 @@ Fri Aug 25 12:07:54 2023
   23666218 condo-osu fastqc.s   jelmer  RUNNING       0:06   1:00:00      1 p0133
 ```
 
-The job will be finished within 10 seconds, though,
+The job will be finished within 10 seconds, though
+(recall that we are working with small subsets of the full FASTQ files),
 and you might miss its listing in the `squeue` output entirely:
 as soon as it's done, it will be removed from the list.
 
@@ -500,17 +627,8 @@ Fri Aug 25 12:07:56 EDT 2023
 ```
 :::
 
-Our script already listed the output files,
-but let's take a look at those too, and do so in the VS Code file browser in the
-side bar.
-**To actually view FastQC's HTML output file**,
-we unfortunately need to download it with the older version of VS Code
-that's installed at OSC.
-
-Find the HTML file in VS Code's file Explorer on the left-hand side of the screen,
-right-click on it, and **find the "Download..." entry** towards the bottom:
-
-<p align="center"><img src=img/vscode_download.png width="50%"></p>
+At the end of the Slurm log file, our script listed _FastQC_'s output files
+(a ZIP file and an HTML file), so we could see their file names and sizes.
 
 <br>
 
@@ -559,24 +677,24 @@ Submitted batch job 2451096
   tail slurm-fastqc*
   ```
 
-- Take a look at _FastQC_'s output files: are you seeing 8 HTML files?  
+- Take a look at _FastQC_'s output files: are you seeing 8 HTML files?
 
-:::
+- Check your email to see that you didn't receive any emails from Slurm:
+  any emails would mean that the job(s) in question failed. 
 
-::: {.callout-note}
-#### Add keyboard shortcut to run shell commands from the editor
-
-**TODO - expand on this**
-
-- Click the <i class="fa fa-cog"></i> (bottom-left) => `Keyboard Shortcuts`.
-
-- Find `Terminal: Run Selected Text in Active Terminal`, click on it,
-  then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
 :::
 
 <br>
 
 ## Interpreting the FastQC output
+
+To view FastQC's HTML output files, we unfortunately need to _download_ them
+with the older version of VS Code that's installed at OSC.
+Find the `results/fastqc` dir in VS Code's file Explorer on the left-hand side of the screen,
+right-click on it, and find and use the **"Download..."** entry towards the bottom
+(the screenshot just has a single file selected, but please select the dir instead):
+
+<p align="center"><img src=img/vscode_download.png width="50%"></p>
 
 **TODO**
 
