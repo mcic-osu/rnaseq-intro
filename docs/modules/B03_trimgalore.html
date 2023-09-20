@@ -246,11 +246,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#usinggetting-trimgalore-at-osc" id="toc-usinggetting-trimgalore-at-osc" class="nav-link" data-scroll-target="#usinggetting-trimgalore-at-osc"><span class="header-section-number">2</span> Using/Getting TrimGalore at OSC</a></li>
-  <li><a href="#trimgalore-syntax" id="toc-trimgalore-syntax" class="nav-link" data-scroll-target="#trimgalore-syntax"><span class="header-section-number">3</span> TrimGalore syntax</a></li>
-  <li><a href="#variables-in-a-script-to-run-trimgalore" id="toc-variables-in-a-script-to-run-trimgalore" class="nav-link" data-scroll-target="#variables-in-a-script-to-run-trimgalore"><span class="header-section-number">4</span> Variables in a script to run TrimGalore</a></li>
-  <li><a href="#a-script-to-run-trimgalore" id="toc-a-script-to-run-trimgalore" class="nav-link" data-scroll-target="#a-script-to-run-trimgalore"><span class="header-section-number">5</span> A script to run TrimGalore</a></li>
+  <li><a href="#overview-setting-up" id="toc-overview-setting-up" class="nav-link active" data-scroll-target="#overview-setting-up">Overview &amp; setting up</a></li>
+  <li><a href="#using-trimgalore-at-osc" id="toc-using-trimgalore-at-osc" class="nav-link" data-scroll-target="#using-trimgalore-at-osc"><span class="header-section-number">1</span> Using TrimGalore at OSC</a></li>
+  <li><a href="#trimgalore-syntax" id="toc-trimgalore-syntax" class="nav-link" data-scroll-target="#trimgalore-syntax"><span class="header-section-number">2</span> TrimGalore syntax</a></li>
+  <li><a href="#variables-in-a-script-to-run-trimgalore" id="toc-variables-in-a-script-to-run-trimgalore" class="nav-link" data-scroll-target="#variables-in-a-script-to-run-trimgalore"><span class="header-section-number">3</span> Variables in a script to run TrimGalore</a></li>
+  <li><a href="#a-script-to-run-trimgalore" id="toc-a-script-to-run-trimgalore" class="nav-link" data-scroll-target="#a-script-to-run-trimgalore"><span class="header-section-number">4</span> A script to run TrimGalore</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/mcic-osu/rnaseq-intro/edit/main/modules/B03_trimgalore.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/mcic-osu/rnaseq-intro/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -286,45 +286,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Under construction
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This page is still under construction.</p>
+</div>
+</div>
 <hr>
 <p><br></p>
-<section id="introduction" class="level2" data-number="1">
-<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>In this step, we will remove:</p>
+<section id="overview-setting-up" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="overview-setting-up">Overview &amp; setting up</h2>
+<p>In this session, we will run <em>TrimGalore</em> to filter our FASTQ files, removing:</p>
 <ul>
 <li>Any adapter sequences that are present in the reads</li>
 <li>Poor-quality bases at the start and of the reads</li>
 <li>Reads that have become excessively short after the prior two steps</li>
 </ul>
-<p>[Discuss a bit how this step is sometimes considered optional: mappers should be able to deal with poor-quality bases and adapter sequences.]</p>
+<p>[Discuss that this step is sometimes considered optional: mappers should be able to deal with poor-quality bases and adapter sequences.]</p>
 <p>[Discuss how there are several programs commonly used for this, including <code>TrimGalore</code>, <code>Trimmomatic</code>, and <code>fastp</code> – and that in general, these are exchangeable.]</p>
-<p>[Discuss how TrimGalore is “just” a wrapper around <code>CutAdapt</code>, and how it will can also run FastQC on the processed sequences.]</p>
+<p>[Discuss how TrimGalore is “just” a wrapper around <code>CutAdapt</code>, and that it can also run FastQC on the processed sequences.]</p>
 <p><br></p>
 </section>
-<section id="usinggetting-trimgalore-at-osc" class="level2" data-number="2">
-<h2 data-number="2" class="anchored" data-anchor-id="usinggetting-trimgalore-at-osc"><span class="header-section-number">2</span> Using/Getting TrimGalore at OSC</h2>
-<p>We can use my Conda environment as follows:</p>
+<section id="using-trimgalore-at-osc" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="using-trimgalore-at-osc"><span class="header-section-number">1</span> Using TrimGalore at OSC</h2>
+<p><em>TrimGalore</em> isn’t installed at OSC, so we’ll use my <em>Conda</em> environment for <em>TrimGalore</em> like we did with <em>MultiQC</em>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/trimgalore</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">```</span><span class="fu">bash</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/trimgalore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Let’s see if we can now run it — not that the command is <code>trim_galore</code> with an underscore:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code>
             Quality-/Adapter-/RRBS-/Speciality-Trimming
                     [powered by Cutadapt]
                         version 0.6.10
 
                     Last update: 02 02 2023</code></pre>
-<p>But if you needed/wanted to install it for yourself, you could do so as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3/23.3.1-py310 <span class="co"># Load the latest version for installations</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-y</span> <span class="at">-n</span> trimgalore <span class="at">-c</span> bioconda trim-galore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+How you can create your own TrimGalore Conda environment (click to expand)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make sure the load the latest miniconda version when doing installations</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3/23.3.1-py310</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a new environment called 'trimgalore' and install the program into it</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-y</span> <span class="at">-n</span> trimgalore <span class="at">-c</span> bioconda trim-galore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
 <p><br></p>
 </section>
-<section id="trimgalore-syntax" class="level2" data-number="3">
-<h2 data-number="3" class="anchored" data-anchor-id="trimgalore-syntax"><span class="header-section-number">3</span> TrimGalore syntax</h2>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--help</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">NOTE</span><span class="co">: Below I am only showing (truncated) output for the key options!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="trimgalore-syntax" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="trimgalore-syntax"><span class="header-section-number">2</span> TrimGalore syntax</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="at">--help</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: Below I am only showing (truncated) output for the key options!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre class="bash-out"><code> USAGE:
 trim_galore [options] &lt;filename(s)&gt;
 
@@ -340,108 +369,123 @@ trim_galore [options] &lt;filename(s)&gt;
 --length &lt;INT&gt;          Discard reads that became shorter than length INT because of either
                         quality or adapter trimming. A value of '0' effectively disables
                         this behaviour. Default: 20 bp.</code></pre>
-<p>The line under “USAGE:” tells us that the FASTQ file names should be specified as arguments at the end of the command. <em>It is important to realize that we will run TrimGalore for one <strong>sample</strong> at a time</em> <em>and therefore for two FASTQ files (forward/R1 and reverse/R2) at a time.</em> By comparison, we were able to run FastQC simply for one FASTQ file at a time. So, without any options, and fictional FASTQ files <code>A_R1.fastq.gz</code> and <code>A_R2.fastq.gz</code>, our command would be <strong><code>trim_galore A_R1.fastq.gz A_R2.fastq.gz</code></strong>.</p>
-<p>We will use TrimGalore with <strong>default settings for</strong> trimming of adapters (i.e.&nbsp;auto-detect, seems to always work), quality-trimming (minimum Phred quality score of 20), and read length (minimum of 20 bp), but it’s good to know we could easily change those if we wanted to.</p>
-<p>We do want to specify the <strong>output directory</strong>, since it’s pretty annoying to get output files in the current working dir: we could for instance use <strong><code>--output_dir results/trimgalore</code></strong>.</p>
-<p>We’ll typically also want to have TrimGalore <strong>run FastQC</strong>, since it will be good to check if adapter sequences were successfully removed and so on. We’ll also have to tell FastQC about the output dir or its files, too, will end up in our working dir — we can do so via <code>--fastqc_args</code> and when we use that argument, FastQC will already be run (no need to also use <code>--fastqc</code>). We could use <strong><code>--fastqc_args --outdir results/trimgalore/fastqc</code></strong>.</p>
-<p>Finally, we’ll usually want to specify the number of cores, and it should correspond to what we have available for our compute job. Since we have 1 core in the VS Code session, we’ll use <strong><code>--cores 1</code></strong> in the test-run, but something else in our final script.</p>
+<p>The line under “USAGE:” tells us that the FASTQ file names should be specified as <strong>positional arguments at the end of the command</strong>. Any of options (like <code>--output_dir</code>) that we may want to use should come in between the <code>trim_galore</code> command and the FASTQ file names.</p>
+<p><em>It is important to realize that we will run TrimGalore for one <strong>sample</strong> at a time</em> <em>and therefore for two FASTQ files (forward/R1 and reverse/R2) at a time.</em> By comparison, we were able to run FastQC simply for one FASTQ file at a time. So, without any options, and fictional FASTQ files <code>A_R1.fastq.gz</code> and <code>A_R2.fastq.gz</code>, our command would be:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># (Don't run this, fictional example command)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> A_R1.fastq.gz A_R2.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>As for the options:</p>
+<ul>
+<li><p>We will use TrimGalore with <strong>default settings</strong> for:</p>
+<ul>
+<li><p>The trimming of adapters (<code>--adapter</code> option, default: auto-detect the adapters used)</p></li>
+<li><p>The minimum base quality threshold (<code>--quality</code> option, default: Phred score of 20)</p></li>
+<li><p>The minimum read length threshold (<code>--length</code> option, default: 20 bp)</p>
+<p>…but it’s good to know we could easily change those if we wanted to.</p></li>
+</ul></li>
+<li><p>We do want to specify the <strong>output directory</strong>, since it’s pretty annoying to get output files in the current working dir: we could for instance use <strong><code>--output_dir results/trimgalore</code></strong>.</p></li>
+<li><p>We’ll typically also want to have TrimGalore <strong>run FastQC</strong> on the filtered FASTQ files, since it will be good to check if adapter sequences were successfully removed and so on.</p>
+<p>When we do so, we’ll also have to tell FastQC about the output dir of its files: we can do so via <code>--fastqc_args</code> (and using that option will trigger the running of FastQC, i.e., there is no need to also use <code>--fastqc</code>).</p>
+<p>So, we could use <strong><code>--fastqc_args "--outdir results/trimgalore/fastqc"</code></strong>.</p></li>
+<li><p>Finally, we’ll usually want to specify the number of cores, and it should correspond to what we have available for our compute job.</p>
+<p>Since we have 1 core in the VS Code session, we’ll use <strong><code>--cores 1</code></strong> in the test-run, but something else in our final script.</p></li>
+</ul>
 <p>A final test command to run TrimGalore on our actual (but small, subsetted) FASTQ files in <code>data/fastq</code> could therefore look as follows:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For clarity, using one argument/option per line</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="dt">\</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output_dir</span> results/trimgalore <span class="dt">\</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cores</span> 1 <span class="dt">\</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqc_args</span> <span class="st">"--outdir results/trimgalore/fastqc"</span> <span class="dt">\</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--paired</span> data/fastq/ASPC1_A178V_R1.fastq.gz data/fastq/ASPC1_A178V_R2.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For clarity, using one argument/option per line</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="dt">\</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output_dir</span> results/trimgalore <span class="dt">\</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cores</span> 1 <span class="dt">\</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqc_args</span> <span class="st">"--outdir results/trimgalore/fastqc"</span> <span class="dt">\</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">--paired</span> data/fastq/ASPC1_A178V_R1.fastq.gz data/fastq/ASPC1_A178V_R2.fastq.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Let’s try that out.</p>
 <p>You should have gotten <em>a lot</em> of logging output, which was also saved …</p>
 <p>Let’s look at what the output files are:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lhR</span> results/trimgalore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lhR</span> results/trimgalore</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 </section>
-<section id="variables-in-a-script-to-run-trimgalore" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="variables-in-a-script-to-run-trimgalore"><span class="header-section-number">4</span> Variables in a script to run TrimGalore</h2>
+<section id="variables-in-a-script-to-run-trimgalore" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="variables-in-a-script-to-run-trimgalore"><span class="header-section-number">3</span> Variables in a script to run TrimGalore</h2>
 <p>To run TrimGalore efficiently at OSC, we will submit a compute job to run TrimGalore separately for each sample.</p>
 <p>We’ll have to make our TrimGalore flexible such that it is able to take one or two <strong>arguments</strong> to specify the input FASTQ files. This can be one in several ways, but we’ll do it as follows: we’ll only pass an R1 FASTQ file to the script, which will then infer the name of the R2 file (by replacing <code>_R1</code> with <code>_R2</code>). This is generally easiest because it allows us to simply loop over the R1 FASTQ files in our “runner script”.</p>
-<p>While we’re at it, we can also let the script accept an argument with the output directory name, something that is also good practice not to hardcode.</p>
+<p>Like we’ve done with out FastQC and MultiQC script, we’ll also include an argument with the output directory name, something that is also good practice to not hardcode in your script.</p>
 <p>Let’s start by just thinking about we would define this variables for a single sample, and how the TrimGalore command would change:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables defined upfront - passed as arguments to the script</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span>data/fastq/ASPC1_A178V_R1.fastq.gz</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="va">outdir</span><span class="op">=</span>results/trimgalore</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># "Derived" variables</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="va">n_cores</span><span class="op">=</span><span class="va">$SLURM_CPUS_ON_NODE</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${R1</span><span class="op">/</span><span class="ss">_R1</span><span class="op">/</span>_R2<span class="va">}</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># The Trimgalore call:</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="dt">\</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output_dir</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cores</span> <span class="st">"</span><span class="va">$n_cores</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqc_args</span> <span class="st">"--outdir "</span><span class="va">$outdir</span><span class="st">"/fastqc"</span> <span class="dt">\</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">--paired</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Variables defined upfront - passed as arguments to the script</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span>data/fastq/ASPC1_A178V_R1.fastq.gz</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="va">outdir</span><span class="op">=</span>results/trimgalore</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># "Derived" variables</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="va">n_cores</span><span class="op">=</span><span class="va">$SLURM_CPUS_ON_NODE</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${R1</span><span class="op">/</span><span class="ss">_R1</span><span class="op">/</span>_R2<span class="va">}</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># The Trimgalore call:</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="dt">\</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output_dir</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cores</span> <span class="st">"</span><span class="va">$n_cores</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqc_args</span> <span class="st">"--outdir "</span><span class="va">$outdir</span><span class="st">"/fastqc"</span> <span class="dt">\</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">--paired</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 </section>
-<section id="a-script-to-run-trimgalore" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="a-script-to-run-trimgalore"><span class="header-section-number">5</span> A script to run TrimGalore</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=PAS0471</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=8</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=32G</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=trimgalore</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=slurm-trimgalore-%j.out</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-assign positional parameters</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span><span class="va">$1</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="va">outdir</span><span class="op">=</span><span class="va">$2</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Conda environment</span></span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/trimgalore</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Use strict Bash settings</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Infer derived variables</span></span>
-<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="va">n_cores</span><span class="op">=</span><span class="va">$SLURM_CPUS_ON_NODE</span></span>
-<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${R1</span><span class="op">/</span><span class="ss">_R1</span><span class="op">/</span>_R2<span class="va">}</span></span>
-<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Report</span></span>
-<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"# Starting script trimgalore.sh"</span></span>
-<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span>
-<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"# Input R1 FASTQ file:      </span><span class="va">$R1</span><span class="st">"</span></span>
-<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"# Output dir:               </span><span class="va">$outdir</span><span class="st">"</span></span>
-<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span></span>
-<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the output dir isn't the same as the input dir</span></span>
-<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="co"># This is because we will let the output files have the same name as the input files</span></span>
-<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span><span class="va">)</span> <span class="ot">==</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="kw">]];</span> <span class="cf">then</span></span>
-<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"# ERROR: Input dir is the same as the output dir (</span><span class="va">$outdir</span><span class="st">)"</span> </span>
-<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
-<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
-<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the output dir</span></span>
-<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/fastqc</span>
-<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Run TrimGalore</span></span>
-<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="dt">\</span></span>
-<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output_dir</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cores</span> <span class="st">"</span><span class="va">$n_cores</span><span class="st">"</span> <span class="dt">\</span></span>
-<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqc_args</span> <span class="st">"--outdir </span><span class="va">$outdir</span><span class="st">/fastqc"</span> <span class="dt">\</span></span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">--paired</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename output files</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\n# Renaming the output files:"</span></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="va">file_id</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> _R1.fastq.gz<span class="va">)</span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="va">R1_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R1_val_1.fq.gz</span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a><span class="va">R2_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R2_val_2.fq.gz</span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> <span class="st">"</span><span class="va">$R1_out</span><span class="st">"</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R1.fastq.gz</span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> <span class="st">"</span><span class="va">$R2_out</span><span class="st">"</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R2.fastq.gz</span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Report</span></span>
-<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\n# Done with script trimgalore.sh"</span></span>
-<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\n# Listing files in the output dir:"</span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="a-script-to-run-trimgalore" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="a-script-to-run-trimgalore"><span class="header-section-number">4</span> A script to run TrimGalore</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --account=PAS0471</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=1:00:00</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=8</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --mem=32G</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=trimgalore</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=slurm-trimgalore-%j.out</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-assign positional parameters</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="va">R1</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="va">outdir</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Conda environment</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="ex">module</span> load miniconda3</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> activate /fs/ess/PAS0471/jelmer/conda/trimgalore</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Use strict Bash settings</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span> <span class="at">-euo</span> pipefail</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Infer derived variables</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="va">n_cores</span><span class="op">=</span><span class="va">$SLURM_CPUS_ON_NODE</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="va">R2</span><span class="op">=</span><span class="va">${R1</span><span class="op">/</span><span class="ss">_R1</span><span class="op">/</span>_R2<span class="va">}</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Report</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"# Starting script trimgalore.sh"</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"# Input R1 FASTQ file:      </span><span class="va">$R1</span><span class="st">"</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"# Output dir:               </span><span class="va">$outdir</span><span class="st">"</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the output dir isn't the same as the input dir</span></span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a><span class="co"># This is because we will let the output files have the same name as the input files</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">[[</span> <span class="va">$(</span><span class="fu">dirname</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span><span class="va">)</span> <span class="ot">==</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="kw">]];</span> <span class="cf">then</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="bu">echo</span> <span class="st">"# ERROR: Input dir is the same as the output dir (</span><span class="va">$outdir</span><span class="st">)"</span> </span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    <span class="bu">exit</span> 1</span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a><span class="cf">fi</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the output dir</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/fastqc</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Run TrimGalore</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="ex">trim_galore</span> <span class="dt">\</span></span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">--output_dir</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>    <span class="at">--cores</span> <span class="st">"</span><span class="va">$n_cores</span><span class="st">"</span> <span class="dt">\</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">--fastqc_args</span> <span class="st">"--outdir </span><span class="va">$outdir</span><span class="st">/fastqc"</span> <span class="dt">\</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">--paired</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> <span class="st">"</span><span class="va">$R2</span><span class="st">"</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename output files</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\n# Renaming the output files:"</span></span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a><span class="va">file_id</span><span class="op">=</span><span class="va">$(</span><span class="fu">basename</span> <span class="st">"</span><span class="va">$R1</span><span class="st">"</span> _R1.fastq.gz<span class="va">)</span></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a><span class="va">R1_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R1_val_1.fq.gz</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="va">R2_out</span><span class="op">=</span><span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R2_val_2.fq.gz</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> <span class="st">"</span><span class="va">$R1_out</span><span class="st">"</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R1.fastq.gz</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="at">-v</span> <span class="st">"</span><span class="va">$R2_out</span><span class="st">"</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span>/<span class="st">"</span><span class="va">$file_id</span><span class="st">"</span>_R2.fastq.gz</span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Report</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\n# Done with script trimgalore.sh"</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"\n# Listing files in the output dir:"</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-lh</span> <span class="st">"</span><span class="va">$outdir</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 
 </section>

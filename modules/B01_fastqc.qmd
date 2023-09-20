@@ -52,19 +52,22 @@ and will prevent you from having to copy-and-paste code into the terminal:
 
 - Find `Terminal: Run Selected Text in Active Terminal`, click on it,
   then add a shortcut, e.g. <kbd>Ctrl</kbd>+<kbd>Enter</kbd>.
+  (Don't worry about the warning that other bindings exist for this shortcut.)
 
 In VS Code's editor pane,
 the entire line that your cursor is on is always selected by default.
-As such, you can send a line to the terminal without explicitly selecting it
-(this also works with copy-paste/cut-paste within the editor!).
-
-<br>
+As such, your keyboard shortcut will by default send the line that your cursor
+is in to the terminal;
+you can also send multiple lines to the terminal after selecting them.
 
 **Second, we'll add the _ShellCheck_ VS Code extension**.
 This extension will check your shell scripts for errors like referencing variables
 that have not been assigned, and not using variables that _have_ been assigned.
-Potential problems will show up as colored squigly lines below the words or lines
+Potential problems will show up as colored squiggly lines below the words or lines
 in question.
+You can also click on the links that will appear when you hover over a problematic
+piece of code, and find information about how to fix this mistake and improve
+your code. All in all, this extension is incredibly useful!
 
 - Click on the Extensions icon in the far left (narrow) sidebar in VS Code.
 
@@ -72,8 +75,6 @@ in question.
   of this name (the description should include "Timon Wong", who is the author).
 
 :::
-
-<br>
 
 #### _FastQC_: A program for quality control of FASTQ files {-}
 
@@ -207,7 +208,7 @@ We can tell _FastQC_ about our desired output directory as follows:
 [^1]: And we'd like to separate our data from our results!
 
 ```{bash}
-fastqc --outdir=<output-dir> <fastq-file>
+fastqc --outdir <output-dir> <fastq-file>
 ```
 
 For instance, if we wanted output files to go to the directory `results/fastqc`
@@ -215,7 +216,7 @@ and wanted the program to analyze the file `data/fastq/ASPC1_A178V_R1.fastq.gz`,
 a functional command would be:
 
 ```{bash}
-fastqc --outdir=results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz
+fastqc --outdir results/fastqc data/fastq/ASPC1_A178V_R1.fastq.gz
 ```
 
 :::{.callout-tip}
@@ -258,7 +259,7 @@ input_file=$1
 output_dir=$2
 
 # Run FastQC
-fastqc --outdir="$output_dir" "$input_file"
+fastqc --outdir "$output_dir" "$input_file"
 
 # (Don't run this in your terminal, this is an example script)
 ```
@@ -419,7 +420,7 @@ For clarity, I would suggest to use the long form option in your script.
 
 - You should add the following `#SBATCH` line at the top of the script:
 
-``bash
+```bash
 #SBATCH --cpus-per-task=8
 ```
 
@@ -427,8 +428,8 @@ For clarity, I would suggest to use the long form option in your script.
   (though the order of the `--threads` and `--outdir` options does not matter,
   as long as the input file positional argument comes last):
 
-``bash
-fastqc --threads 8 --outdir="$output_dir" "$input_file"
+```bash
+fastqc --threads 8 --outdir "$output_dir" "$input_file"
 ```
 
 </details>
@@ -473,11 +474,11 @@ For example, consider the following series of two steps,
 in which the second step uses the output of the first step: 
 
 ```bash
-# This script will create a genome "index" for STAR, that will be used in the next step
+# This script would create a genome "index" for STAR, that will be used in the next step
 # ('my_genome.fa' = input genome FASTA, 'results/star_index' = output index dir)
 sbatch scripts/star_index.sh my_genome.fa results/star_index
 
-# This script will align a FASTQ file to the genome index created in the previous step
+# This script would align a FASTQ file to the genome index created in the previous step
 # ('results/star_index' = input index dir, 'sampleA.fastq.gz' = input FASTQ file,
 # 'results/star_align' = output dir)
 sbatch scripts/star_align.sh results/star_index sampleA.fastq.gz results/star_align 
@@ -554,6 +555,8 @@ Submitted batch job 12521308
   we specified, in this case `results/fastqc`.
 :::
 
+<br>
+
 If we take a look at the queue,
 you may catch the job while it's still pending
 (note below that the job's `NAME` will by default be the filename of the script):
@@ -576,6 +579,8 @@ The job will be finished within 10 seconds, though
 (recall that we are working with small subsets of the full FASTQ files),
 and you might miss its listing in the `squeue` output entirely:
 as soon as it's done, it will be removed from the list.
+
+<br>
 
 Of course, just because a job has finished does not mean that it has ran
 _successfully_, and we should always check this.
@@ -627,8 +632,13 @@ Fri Aug 25 12:07:56 EDT 2023
 ```
 :::
 
-At the end of the Slurm log file, our script listed _FastQC_'s output files
-(a ZIP file and an HTML file), so we could see their file names and sizes.
+The Slurm log file shown in the box above looks good,
+we can see that FastQC ran and finished and that there are  no errors.
+Make sure you log looks similar.
+
+At the end of the log file, our script listed _FastQC_'s output files
+(a ZIP file and an HTML file), so we could see their file names and sizes:
+another useful check that everything went well.
 
 <br>
 
@@ -639,23 +649,68 @@ Now, we will write a loop that iterates over all of our FASTQ files
 (only 8 files in our case, but this could be 100s of files just the same),
 and **submits a batch job for each of them.**
 
-Let's type the following into our `run.sh` script,
-and then copy-and-paste it into the terminal to run the loop:
+In our `run.sh` script, let's start by writing a loop that iterates over our
+FASTQ files and simply prints their names
+(the `-e` option to `echo` will allow us to insert an extra new line with `\n`,
+resulting in an empty line):
 
 ```bash
 for fastq_file in data/fastq/*fastq.gz; do
+    echo -e "\nFASTQ file: $fastq_file"
+done
+```
+```{.bash-out}
+
+FASTQ file: data/fastq/ASPC1_A178V_R1.fastq.gz
+
+FASTQ file: data/fastq/ASPC1_A178V_R2.fastq.gz
+
+FASTQ file: data/fastq/ASPC1_G31V_R1.fastq.gz
+
+FASTQ file: data/fastq/ASPC1_G31V_R2.fastq.gz
+
+FASTQ file: data/fastq/Miapaca2_A178V_R1.fastq.gz
+
+FASTQ file: data/fastq/Miapaca2_A178V_R2.fastq.gz
+
+FASTQ file: data/fastq/Miapaca2_G31V_R1.fastq.gz
+
+FASTQ file: data/fastq/Miapaca2_G31V_R2.fastq.gz
+```
+
+Now that we're succesfully looping over our files,
+we can submit a batch job in every iteration:
+
+```bash
+for fastq_file in data/fastq/*fastq.gz; do
+    echo -e "\nFASTQ file: $fastq_file"
     sbatch scripts/fastqc.sh "$fastq_file" results/fastqc
 done
 ```
 ``` {.bash-out}
-Submitted batch job 2451089  
-Submitted batch job 2451090  
-Submitted batch job 2451091  
-Submitted batch job 2451092   
-Submitted batch job 2451093  
-Submitted batch job 2451094  
-Submitted batch job 2451095  
-Submitted batch job 2451096
+FASTQ file: data/fastq/ASPC1_A178V_R1.fastq.gz
+Submitted batch job 24048031
+
+FASTQ file: data/fastq/ASPC1_A178V_R2.fastq.gz
+Submitted batch job 24048032
+
+FASTQ file: data/fastq/ASPC1_G31V_R1.fastq.gz
+Submitted batch job 24048033
+
+FASTQ file: data/fastq/ASPC1_G31V_R2.fastq.gz
+Submitted batch job 24048034
+
+FASTQ file: data/fastq/Miapaca2_A178V_R1.fastq.gz
+Submitted batch job 24048035
+
+FASTQ file: data/fastq/Miapaca2_A178V_R2.fastq.gz
+Submitted batch job 24048036
+
+FASTQ file: data/fastq/Miapaca2_G31V_R1.fastq.gz
+Submitted batch job 24048037
+
+FASTQ file: data/fastq/Miapaca2_G31V_R2.fastq.gz
+Submitted batch job 24048038
 ```
 
 :::{.exercise}
@@ -688,16 +743,38 @@ Submitted batch job 2451096
 
 ## Interpreting the FastQC output
 
-To view FastQC's HTML output files, we unfortunately need to _download_ them
-with the older version of VS Code that's installed at OSC.
+### Downloading the HTML files
+
+In the older version of VS Code that's installed at OSC,
+we unfortunately can't view HTML files.
+So we'll have to _download_ FastQC's HTML output files to our own computers and
+then take a look at them.
+
 Find the `results/fastqc` dir in VS Code's file Explorer on the left-hand side of the screen,
 right-click on it, and find and use the **"Download..."** entry towards the bottom
 (the screenshot just has a single file selected, but please select the dir instead):
 
 <p align="center"><img src=img/vscode_download.png width="50%"></p>
 
-**TODO**
+Once you've downloaded the files,
+go to the folder you've downloaded them to in your computer's file explorer / Finder.
 
-For now see, <https://biodash.github.io/tutorials/2021-01_rnaseq/03-fastqc-output.html>
+We will look at just two of the HTML files:
+those for the R1 and R2 files of the first sample, `ASPC1_A178V`.
+It would be a bit tedious to have to go through all HTML files,
+and this would especially be the case if we have dozens of files,
+which would be the case for most full datasets.
+_After looking at these two FastQC HTML files,_
+_we will use **MultiQC** to summarize all FastQC outputs into a single file_,
+and examine the MultiQC output to look for differences among samples.
+
+In your file explorer,
+double-click on the first file (`ASPC1_A178V_R1_fastqc.html`) and it should open
+inside your browser.
+
+### Interpreting the results
+
+TBA -- for now,
+see these [slides](https://biodash.github.io/tutorials/2021-01_rnaseq/03-fastqc-output.html).
 
 <br>
