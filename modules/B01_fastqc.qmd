@@ -32,7 +32,7 @@ at OSC:
 - Unix (Bash) **shell** basics to work at a supercomputer,
   and learn the language used in our scripts
 - The bells and whistles needed to turn our commands into a **shell script**
-- Loading and installing the **software** (command-line programs) that we want to run
+- Loading and the **software** (command-line programs) that we want to run
 - Working with the **Slurm** job scheduler, so we can submit scripts as batch jobs
 - The ability to **loop** over commands, so that we can submit many scripts at once
 
@@ -43,6 +43,8 @@ In this session, we'll apply them to run **_FastQC_**.
 
 ::: {.callout-note}
 #### VS Code improvements
+
+These two settings will make life easier when writing shell scripts in VS Code.
 
 **First, we'll add a keyboard shortcut to send code from your editor to the terminal.**
 This is the same type of behavior that you may be familiar with from RStudio,
@@ -255,11 +257,11 @@ So here is what a basic script along these lines could look like:
 set -euo pipefail
 
 # Copy the placeholder variables
-input_file=$1
-output_dir=$2
+fastq_file=$1
+outdir=$2
 
 # Run FastQC
-fastqc --outdir "$output_dir" "$input_file"
+fastqc --outdir "$outdir" "$fastq_file"
 
 # (Don't run this in your terminal, this is an example script)
 ```
@@ -268,7 +270,7 @@ fastqc --outdir "$output_dir" "$input_file"
 
 ### A more well-developed _FastQC_ script
 
-We'll add a few things to this script to e.g. make it run it smoothly as a
+We should add a few things to this script to e.g. make it run it smoothly as a
 batch job at OSC:
 
 - A line to load the relevant OSC software module:
@@ -291,7 +293,7 @@ batch job at OSC:
 - A line to create the output directory if it doesn't yet exist:
 
   ```bash
-  mkdir -p "$output_dir"
+  mkdir -p "$outdir"
   ```
 
 :::{.callout-tip collapse="true"}
@@ -348,26 +350,26 @@ set -euo pipefail
 module load fastqc
 
 # Copy the placeholder variables
-input_file="$1"
-output_dir="$2" 
+fastq_file="$1"
+outdir="$2" 
 
 # Initial reporting
 echo "# Starting script fastqc.ch"
 date
-echo "# Input FASTQ file:   $input_file"
-echo "# Output dir:         $output_dir"
+echo "# Input FASTQ file:   $fastq_file"
+echo "# Output dir:         $outdir"
 echo
 
 # Create the output dir if needed
-mkdir -p "$output_dir"
+mkdir -p "$outdir"
 
 # Run FastQC
-fastqc --outdir="$output_dir" "$input_file"
+fastqc --outdir="$outdir" "$fastq_file"
 
 # Final reporting
 echo
 echo "# Listing the output files:"
-ls -lh "$output_dir"
+ls -lh "$outdir"
 
 echo
 echo "# Done with script fastqc.sh"
@@ -429,7 +431,7 @@ For clarity, I would suggest to use the long form option in your script.
   as long as the input file positional argument comes last):
 
 ```bash
-fastqc --threads 8 --outdir "$output_dir" "$input_file"
+fastqc --threads 8 --outdir "$outdir" "$fastq_file"
 ```
 
 </details>
@@ -450,7 +452,7 @@ which has the overall purpose of documenting the steps we took
 and the batch jobs we submitted.
 _You can think of this file as your analysis lab notebook,_
 _or perhaps more accurately,_
-_your notebook entry that contains **the final protocol** you followed._
+_your notebook entry that contains the final protocol you followed._
 
 This kind of script is sometimes called a "master" or "runner" script.
 Because it will contain shell code, we will save it as a shell script (`.sh`)
@@ -461,8 +463,8 @@ The latter are meant to be run/submitted in their entirety by the runner script,
 whereas a basic runner script that contains `sbatch` compute job commands for
 multiple steps has to be run step-by-step (see the box below).
 
-::: {.callout-warning}
-#### The runner script can't itself be run at once in its entirety
+::: {.callout-warning collapse="true"}
+#### The runner script can't itself be run at once in its entirety (Click to expand)
 Once we've added multiple batch job steps,
 and the input of a later step uses the output of an earlier step,
 we won't be able to just _run_ the script as is.
@@ -485,11 +487,11 @@ sbatch scripts/star_align.sh results/star_index sampleA.fastq.gz results/star_al
 ```
 
 If these two lines were included in your runner script,
-and you would run that script,
+and you would run that script in its entirety all at once,
 the script in the second step would be submitted just a split-second after the
 first one
-(recall: when using `sbatch`, you get your prompt back immediately, there is no waiting),
-and would fail because of the missing output from the first step.
+(recall: when using `sbatch`, you get your prompt back immediately -- there is no waiting).
+As such, it would fail because of the missing output from the first step.
 
 It _is_ possible to make `sbatch` batch jobs wait for earlier steps to finish
 (e.g. with the `--dependency` option), but this quickly gets tricky.
@@ -504,15 +506,15 @@ like [Snakemake](https://snakemake.readthedocs.io/en/stable/) or
 To summarize, we'll **separate our code into two hierarchical levels of scripts**,
 which we'll also save in separate dirs to make this division clear:
 
-- The scripts that run individual steps of your analysis, like `fastqc.sh`.
+- The scripts that run _individual steps of your analysis_, like `fastqc.sh`.
   We'll save these in a directory called `scripts`.
-- A "runner" script that orchestrates the batch job submission of these individual steps.
-  This script should be run at once in its entirety.
+- An _overarching "runner" script_ that orchestrates the batch job submission
+  of these individual steps.
   We'll save this script in a directory called `run`.
 
 {{< fa user-edit >}} Let's go ahead and open a new text file,
 and save it as `run/run.sh`
-(VS Code should create that directory on the fly as needed).
+(_VS Code_ should create that directory on the fly as needed).
 
 ::: {.callout-tip}
 #### Keep the scripts for individual steps simple
@@ -634,7 +636,7 @@ Fri Aug 25 12:07:56 EDT 2023
 
 The Slurm log file shown in the box above looks good,
 we can see that FastQC ran and finished and that there are  no errors.
-Make sure you log looks similar.
+Make sure your log file looks similar.
 
 At the end of the log file, our script listed _FastQC_'s output files
 (a ZIP file and an HTML file), so we could see their file names and sizes:
@@ -651,7 +653,7 @@ and **submits a batch job for each of them.**
 
 In our `run.sh` script, let's start by writing a loop that iterates over our
 FASTQ files and simply prints their names
-(the `-e` option to `echo` will allow us to insert an extra new line with `\n`,
+(note: the `-e` option to `echo` will allow us to insert an extra new line with `\n`,
 resulting in an empty line):
 
 ```bash
@@ -678,8 +680,8 @@ FASTQ file: data/fastq/Miapaca2_G31V_R1.fastq.gz
 FASTQ file: data/fastq/Miapaca2_G31V_R2.fastq.gz
 ```
 
-Now that we're succesfully looping over our files,
-we can submit a batch job in every iteration:
+Now that we've confirmed that we are succesfully looping over our files,
+let's add the code to submit a batch job in every iteration:
 
 ```bash
 for fastq_file in data/fastq/*fastq.gz; do
