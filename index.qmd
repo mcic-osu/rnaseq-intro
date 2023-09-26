@@ -34,7 +34,7 @@ toc-depth: 4
 |------------|----------------------------------------------------------------------------------|
 | 2023-09-22 | [Read quality control with FastQC](modules/B01_fastqc.qmd)                       |
 | 2023-10-06 | Summarizing QC outputs with MultiQC                                              |
-| 2023-10-13 | Quality and adapter trimming with TrimGalore                                     |
+| 2023-10-13 | [Quality and adapter trimming with TrimGalore](modules/B03_trimgalore.qmd)       |
 | 2023-10-20 | Read alignment with STAR                                                         |
 | 2023-10-27 | Quantification with Salmon                                                       |
 | 2023-11-03 | The Nextflow/nf-core rnaseq workflow (Part I)                                    |
