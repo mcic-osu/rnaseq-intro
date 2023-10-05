@@ -26,7 +26,7 @@ website:
           - href: info/osc_transfer.qmd
             text: "- File transfer to and from OSC"
           - href: info/osc_ssh.qmd
-            text: "- Using OSC with SSH"
+            text: "- Connecting to OSC with SSH"
           - text: General info
           - href: info/shell_commands.qmd
             text: "- Shell commands overview"

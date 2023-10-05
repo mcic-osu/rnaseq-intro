@@ -212,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
- <span class="dropdown-text">- Using OSC with SSH</span></a>
+ <span class="dropdown-text">- Connecting to OSC with SSH</span></a>
   </li>  
         <li class="dropdown-header">General info</li>
         <li>
@@ -982,12 +982,12 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 </section>
 <section id="at-home-reading-command-substitution" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="at-home-reading-command-substitution"><span class="header-section-number">4</span> At-home reading: Command substitution</h2>
-<p>If you want to, for excample, store the result of a command in a variable, or be able to print this result in an <code>echo</code> statement, you can use a construct called “<strong>command substitution</strong>”. To do so, you just need to wrap the command inside <code>$()</code>.</p>
+<p>If you want to, for example, store the result of a command in a variable, or be able to print this result in an <code>echo</code> statement, you can use a construct called “<strong>command substitution</strong>”. To do so, you just need to wrap the command inside <code>$()</code>.</p>
 <p>Let’s see an example. As you know, the <code>date</code> command will print the current date and time:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Fri Aug 25 14:26:12 EDT 2023</code></pre>
+<pre class="bash-out"><code>Thu Oct  5 16:29:15 EDT 2023</code></pre>
 </div>
 </div>
 <p>If we try to <em>store the date in a variable</em> directly, it doesn’t work: the literal string “date” is stored, not the output of the command:</p>
@@ -1003,7 +1003,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="sourceCode cell-code" id="cb61"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="va">today</span><span class="op">=</span><span class="va">$(</span><span class="fu">date</span><span class="va">)</span></span>
 <span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"</span><span class="va">$today</span><span class="st">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>Fri Aug 25 14:26:12 EDT 2023</code></pre>
+<pre class="bash-out"><code>Thu Oct  5 16:29:15 EDT 2023</code></pre>
 </div>
 </div>
 <hr>
@@ -1011,7 +1011,7 @@ Now processing FASTQ file data/fastq/Miapaca2_G31V_R2.fastq.gz...</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb63"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">date</span> +%F</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre class="bash-out"><code>2023-08-25</code></pre>
+<pre class="bash-out"><code>2023-10-05</code></pre>
 </div>
 </div>
 <p>Let’s use that in a command substitution — but a bit differently than before: we use the command substitution <code>$(date +%F)</code> <em>directly</em> in our <code>touch</code> command, rather than first assigning it to a variable:</p>

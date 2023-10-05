@@ -809,7 +809,7 @@ You could also use your globbing / wild card skills to narrow down the file sele
 
 ## At-home reading: Command substitution
 
-If you want to, for excample,
+If you want to, for example,
 store the result of a command in a variable,
 or be able to print this result in an `echo` statement,
 you can use a construct called "**command substitution**".

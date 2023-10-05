@@ -138,13 +138,25 @@ Both steps should be done in a terminal *on your local machine*:
 
 2.  **Transfer the public key to OSC's clusters:**
 
-    ```bash
-    # Replace <user> by your username, e.g. "ssh-copy-id jelmer@owens.osc.edu"
-    ssh-copy-id <user>@owens.osc.edu
-    ssh-copy-id <user>@pitzer.osc.edu
-    ```
+::: {.panel-tabset}
+### Windows
 
-Test if it works by runnning:
+```bash
+cat ~/.ssh/id_rsa.pub | ssh <user>@owens.osc.edu 'mkdir -p .ssh && cat >> .ssh/authorized_keys'
+
+cat ~/.ssh/id_rsa.pub | ssh <user>@pitzer.osc.edu 'mkdir -p .ssh && cat >> .ssh/authorized_keys'
+```
+
+### Mac
+```bash
+# Replace <user> by your username, e.g. "ssh-copy-id jelmer@owens.osc.edu"
+ssh-copy-id <user>@owens.osc.edu
+
+ssh-copy-id <user>@pitzer.osc.edu
+```
+:::
+
+All done! Test if it works by runnning:
 
 ```bash
 # Try connecting to Owens (once again, replace '<user>' by your username):
@@ -241,24 +253,35 @@ and should also work on Windows:
     on your computer, and open it.
 
 2.  Install the VS Code ["Remote Development extension pack"](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack):
-    open the Extensions side bar (click the icon with the four squared in the far left),
-    search for "Remote Development extension pack", and click "Install".
+    open the Extensions side bar (click the icon with the four squares in the far left),
+    and in that side bar, search for "_Remote Development extension pack_".
+    That extension should appear with an `Install` button next to it: click that.
 
 3.  Open the Command Palette (<kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd><kbd>P</kbd>)
     and start typing "_Remote SSH_".
     
-    Then, select `Remote-SSH: Connect to Host…` and specify your SSH connection:
-    e.g. `ssh jelmer@pitzer.osc.edu`
-    (you'll have to do this separately for Pitzer and Owens if you want to be
-    able to connect to both).
+    Then, select `Remote-SSH: Add New SSH Host…` and specify your SSH connection:
+    for Pitzer, this is `ssh <osc-username>@pitzer.osc.edu`, e.g. `ssh jelmer@pitzer.osc.edu`
+    (you'll have to do this separately for Owens if you want to be able to connect to both this way).
+
+    In the "Select SSH configuration file to update" dialog, just select the first (top) option that shows up.
+
+4.  You'll get a "Host Added!" pop-up in the bottom-right of your screen:
+    in that pop-up, click `Connect`.
 
 4.  If you did the [no-password setup described above](#avoid-being-prompted-for-your-osc-password)
     (recommended!),
     you shouldn't be prompted for a password and VS Code will connect to OSC!
     
-    If you're asked about the operating system of the host, **select Linux**,
-    which is the operating system of the OSC clusters.
-    
+    - If you're asked about the operating system of the host, **select Linux**,
+      which is the operating system of the OSC clusters.
+
+    - If you're asked whether you "Trust the Authors" of such-and-such directory,
+      click Yes.
+
+    - If there is a pop-up in the bottom-right asking you to update Git,
+      click No and check "Don't show again".
+
 ::: {.callout-warning}
 Just be aware that you'll now be on a Login node
 (and not on a Compute node like when you use VS Code through OnDemand),

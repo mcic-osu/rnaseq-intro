@@ -210,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
         <li>
     <a class="dropdown-item" href="../info/osc_ssh.html" rel="" target="">
- <span class="dropdown-text">- Using OSC with SSH</span></a>
+ <span class="dropdown-text">- Connecting to OSC with SSH</span></a>
   </li>  
         <li class="dropdown-header">General info</li>
         <li>
@@ -372,17 +372,30 @@ SSH shortcuts
 <li><p><strong>Generate a public-private SSH key-pair:</strong></p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> rsa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You’ll get some output and will then be asked several questions, but in each case, you can just press <kbd>Enter</kbd> to select the default answer.</p></li>
-<li><p><strong>Transfer the public key to OSC’s clusters:</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace &lt;user&gt; by your username, e.g. "ssh-copy-id jelmer@owens.osc.edu"</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@pitzer.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Transfer the public key to OSC’s clusters:</strong></p></li>
 </ol>
-<p>Test if it works by runnning:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try connecting to Owens (once again, replace '&lt;user&gt;' by your username):</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Windows</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Mac</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_rsa.pub <span class="kw">|</span> <span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu <span class="st">'mkdir -p .ssh &amp;&amp; cat &gt;&gt; .ssh/authorized_keys'</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> ~/.ssh/id_rsa.pub <span class="kw">|</span> <span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@pitzer.osc.edu <span class="st">'mkdir -p .ssh &amp;&amp; cat &gt;&gt; .ssh/authorized_keys'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace &lt;user&gt; by your username, e.g. "ssh-copy-id jelmer@owens.osc.edu"</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Try connecting to Pitzer (once again, replace '&lt;user&gt;' by your username):</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">ssh-copy-id</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@pitzer.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<p>All done! Test if it works by runnning:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Try connecting to Owens (once again, replace '&lt;user&gt;' by your username):</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Try connecting to Pitzer (once again, replace '&lt;user&gt;' by your username):</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="op">&lt;</span>user<span class="op">&gt;</span>@owens.osc.edu</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -404,7 +417,7 @@ More instructions
 <p>These two steps should both be done <em>on your local machine</em>:</p>
 <ol type="1">
 <li><p><strong>Create a file called <code>~/.ssh/config</code>:</strong></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> ~/.ssh/config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> ~/.ssh/config</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 <li><p><strong>Open the file in a text editor and add your alias(es) in the following format:</strong></p>
 <pre><code>Host &lt;arbitrary-alias-name&gt;    
     HostName &lt;remote-address&gt;
@@ -420,9 +433,9 @@ Host jo
 </ol>
 <p><br></p>
 <p>Now, you just need to use your, preferably very short, alias to log in — and if you did the previous no-password setup, you won’t even be prompted for your password!</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> jp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> jp</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Perhaps even more conveniently, these shortcuts will also work with <code>scp</code> and <code>rsync</code>! For example:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> ~/scripts op:/fs/scratch/PAS0471</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rsync</span> ~/scripts op:/fs/scratch/PAS0471</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 </section>
 <section id="set-up-your-local-vs-code-to-ssh-tunnel-into-osc" class="level2" data-number="5">
@@ -432,11 +445,17 @@ Host jo
 <p>The set-up is pretty simple (see also <a href="https://code.visualstudio.com/docs/remote/ssh">these instructions</a> if you get stuck), and should also work on Windows:</p>
 <ol type="1">
 <li><p>If necessary, install VS Code (instructions for <a href="https://code.visualstudio.com/docs/setup/windows">Windows</a> / <a href="https://code.visualstudio.com/docs/setup/mac">Mac</a> / <a href="https://code.visualstudio.com/docs/setup/linux">Linux</a>) on your computer, and open it.</p></li>
-<li><p>Install the VS Code <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">“Remote Development extension pack”</a>: open the Extensions side bar (click the icon with the four squared in the far left), search for “Remote Development extension pack”, and click “Install”.</p></li>
+<li><p>Install the VS Code <a href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">“Remote Development extension pack”</a>: open the Extensions side bar (click the icon with the four squares in the far left), and in that side bar, search for “<em>Remote Development extension pack</em>”. That extension should appear with an <code>Install</code> button next to it: click that.</p></li>
 <li><p>Open the Command Palette (<kbd>F1</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd><kbd>P</kbd>) and start typing “<em>Remote SSH</em>”.</p>
-<p>Then, select <code>Remote-SSH: Connect to Host…</code> and specify your SSH connection: e.g.&nbsp;<code>ssh jelmer@pitzer.osc.edu</code> (you’ll have to do this separately for Pitzer and Owens if you want to be able to connect to both).</p></li>
+<p>Then, select <code>Remote-SSH: Add New SSH Host…</code> and specify your SSH connection: for Pitzer, this is <code>ssh &lt;osc-username&gt;@pitzer.osc.edu</code>, e.g.&nbsp;<code>ssh jelmer@pitzer.osc.edu</code> (you’ll have to do this separately for Owens if you want to be able to connect to both this way).</p>
+<p>In the “Select SSH configuration file to update” dialog, just select the first (top) option that shows up.</p></li>
+<li><p>You’ll get a “Host Added!” pop-up in the bottom-right of your screen: in that pop-up, click <code>Connect</code>.</p></li>
 <li><p>If you did the <a href="#avoid-being-prompted-for-your-osc-password">no-password setup described above</a> (recommended!), you shouldn’t be prompted for a password and VS Code will connect to OSC!</p>
-<p>If you’re asked about the operating system of the host, <strong>select Linux</strong>, which is the operating system of the OSC clusters.</p></li>
+<ul>
+<li><p>If you’re asked about the operating system of the host, <strong>select Linux</strong>, which is the operating system of the OSC clusters.</p></li>
+<li><p>If you’re asked whether you “Trust the Authors” of such-and-such directory, click Yes.</p></li>
+<li><p>If there is a pop-up in the bottom-right asking you to update Git, click No and check “Don’t show again”.</p></li>
+</ul></li>
 </ol>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
