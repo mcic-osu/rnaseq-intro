@@ -277,7 +277,7 @@ Next, we'll take a peak inside one of these files.
 It's worth mentioning that during actual FASTQ file analysis (QC, trimming, alignment),
 you're at most very rarely interacting with the raw contents of the file,
 since bioinformatics programs take care of the details.
-While it is therefore possible to run your analyis while treating FASTQ 
+While it is therefore possible to run your analysis while treating FASTQ 
 (and other genomic) files as "black boxes",
 _it is helpful to at least have a rough idea of what a FASTQ file looks like_,
 _and how you can get some quick stats on them using basic shell commands_.
@@ -468,7 +468,7 @@ _Two extra pieces of information:_
 <details><summary>Solution</summary>
 
 ```bash
-zcat data/fastq/ASPC1_A178V_R1.fastq.gz | head -n 2 | tail -n 1 | wc -l
+zcat data/fastq/ASPC1_A178V_R1.fastq.gz | head -n 2 | tail -n 1 | wc -c
 ```
 ```{.bash-out}
 102

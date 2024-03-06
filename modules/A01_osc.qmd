@@ -41,7 +41,7 @@ or desktop:
 - Your analyses require specialized hardware, such as GPUs.
 - Your analyses require software available only for the Linux operating system, but you use Windows.
 
-When you're working RNAseq data or other kinds of genomic data,
+When you're working with RNAseq data or other kinds of genomic data,
 many of these reasons apply.
 This can make it hard or simply impossible to do all your
 work on your personal workstation, and supercomputers provide a solution.

@@ -100,7 +100,7 @@ but let's highlight a few interrelated terms you're likely to run across:
   
 While it might not fly for a computer science class,
 for day-to-day computing/bioinformatics,
-you'll probably hear all these terms used somewhat interchangably.
+you'll probably hear all these terms used somewhat interchangeably.
 Basically, we're talking about the process of interacting with your computer by
 giving it commands as opposed to the point-and-click way you're likely more familiar with.
 

@@ -1,6 +1,6 @@
 ---
-title: "RNAseq data analysis"
-subtitle: "Using the command line and R"
+title: "RNA-Seq data analysis"
+subtitle: "Using the Unix shell and R"
 toc: true
 toc-depth: 4
 ---
@@ -33,25 +33,4 @@ toc-depth: 4
 | Date       | Topic & link                                                                     |
 |------------|----------------------------------------------------------------------------------|
 | 2023-09-22 | [Read quality control with FastQC](modules/B01_fastqc.qmd)                       |
-| 2023-10-06 | Summarizing QC outputs with MultiQC                                              |
 | 2023-10-13 | [Quality and adapter trimming with TrimGalore](modules/B03_trimgalore.qmd)       |
-| 2023-10-20 | Read alignment with STAR                                                         |
-| 2023-10-27 | Quantification with Salmon                                                       |
-| 2023-11-03 | The Nextflow/nf-core rnaseq workflow (Part I)                                    |
-| 2023-11-10 | The Nextflow/nf-core rnaseq workflow (Part II)                                   |
-
-_No meeting on Sept 29th_
-
-<br>
-
-#### Block C: Analyzing the counts
-
-| Date       | Topic & link                                                                     |
-|------------|----------------------------------------------------------------------------------|
-| 2023-11-17 | Creating a DESeq2 object                                                         |
-| 2023-12-01 | PCA and overall exploration of the count data                                    |
-| 2023-12-08 | Differential expression analysis (Part I)                                        |
-| 2023-12-15 | Differential expression analysis (Part II)                                       |
-| 2024-01-?? | GO enrichment analysis                                                           |
-
-_No meetings on Nov 24th (Thanksgiving), Dec 22nd and Dec 28th_
