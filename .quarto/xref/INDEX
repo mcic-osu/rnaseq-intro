@@ -145,5 +145,8 @@
   },
   "modules/A09_software.qmd": {
     "A09_software.html": "688dba06"
+  },
+  "modules/C01_DE.qmd": {
+    "C01_DE.html": "e0c4c4fe"
   }
 }

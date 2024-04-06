@@ -18,6 +18,7 @@ website:
         text: Introduction
       - sidebar:computing_skills
       - sidebar:reads_to_counts
+      - sidebar:count_analysis
     right:
       - text: Reference material
         menu:
@@ -74,8 +75,16 @@ website:
             text: "B1. Read QC with _FastQC_"
           - href: "modules/B03_trimgalore.qmd"
             text: "B2. Trimming with _TrimGalore_"
+      - id: count_analysis
+        title: "C. Count table analysis"
+        style: docked
+        background: light
+        collapse-level: 2
+        contents:
+          - href: "modules/C01_DE.qmd"
+            text: "C1. Count table analysis"
   page-footer:
-    left: "2023, Jelmer Poelstra"
+    left: "2023-2024, Jelmer Poelstra"
     right:
       - icon: github
         href: https://github.com/mcic-osu/rnaseq-intro
